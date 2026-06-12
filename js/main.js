@@ -165,12 +165,19 @@
     },
   };
 
-  /* ---------- 6.1 Сэтгэл ханамжийн үнэлгээ (5 од) ----------
-     <div data-rating="нэр"> доторх .rating-д 5 од үүсгэнэ.
+  /* ---------- 6.1 Сэтгэл ханамжийн үнэлгээ (1–10 оноо) ----------
+     <div data-rating="нэр"> доторх .rating-д 1–10 оноо үүсгэнэ.
      data-persist байвал localStorage-д хадгална (нэг хөтөчид нэг үнэлгээ).
      Доторх hidden input-д утга бичигдэх тул форм дотор шууд ажиллана. */
   const Rating = {
-    LABELS: ["", "Муу", "Дунд зэрэг", "Зүгээр", "Сайн", "Маш сайн"],
+    MAX: 10,
+    label(n) {
+      if (n <= 2) return "Маш муу";
+      if (n <= 4) return "Муу";
+      if (n <= 6) return "Дунд зэрэг";
+      if (n <= 8) return "Сайн";
+      return "Маш сайн";
+    },
     init() {
       document.querySelectorAll("[data-rating]").forEach((box) => {
         const wrap = box.querySelector(".rating");
@@ -180,18 +187,19 @@
         const persist = box.hasAttribute("data-persist");
         const key = "rating-" + box.dataset.rating;
         let current = persist ? parseInt(localStorage.getItem(key), 10) || 0 : 0;
-        const stars = [];
-        const paint = (n) => stars.forEach((s, i) => s.classList.toggle("on", i < n));
+        if (current > Rating.MAX) current = Rating.MAX;
+        const scores = [];
+        const paint = (n) => scores.forEach((s, i) => s.classList.toggle("on", i < n));
         const show = (n, saved) => {
           if (!msg) return;
           msg.textContent = n
-            ? "Таны үнэлгээ: " + n + "/5 — " + Rating.LABELS[n] + (saved ? ". Баярлалаа! 🙏" : "")
-            : "Од дээр дарж үнэлнэ үү";
+            ? "Таны үнэлгээ: " + n + "/10 — " + Rating.label(n) + (saved ? ". Баярлалаа! 🙏" : "")
+            : "Оноо дээр дарж үнэлнэ үү (1–10)";
         };
-        for (let i = 1; i <= 5; i++) {
+        for (let i = 1; i <= Rating.MAX; i++) {
           const b = document.createElement("button");
-          b.type = "button"; b.className = "star"; b.textContent = "★";
-          b.setAttribute("aria-label", i + " од — " + Rating.LABELS[i]);
+          b.type = "button"; b.className = "score"; b.textContent = i;
+          b.setAttribute("aria-label", i + " оноо — " + Rating.label(i));
           b.addEventListener("mouseenter", () => paint(i));
           b.addEventListener("focus", () => paint(i));
           b.addEventListener("mouseleave", () => paint(current));
@@ -202,7 +210,7 @@
             if (persist) localStorage.setItem(key, i);
             paint(i); show(i, true);
           });
-          stars.push(b); wrap.appendChild(b);
+          scores.push(b); wrap.appendChild(b);
         }
         if (hidden && current) hidden.value = current;
         box._resetRating = () => { current = 0; if (hidden) hidden.value = ""; paint(0); show(0, false); };
@@ -324,7 +332,7 @@
           if (files.length) parts.push(`${files.length} зураг`);
           if (latIn && latIn.value) parts.push("GPS байршил");
           const ratingIn = form.querySelector("#f-rating");
-          if (ratingIn && ratingIn.value) parts.push(`үнэлгээ ${ratingIn.value}/5`);
+          if (ratingIn && ratingIn.value) parts.push(`үнэлгээ ${ratingIn.value}/10`);
           success.classList.add("show");
           success.textContent = "✓ Таны санал хүсэлт" + (parts.length ? ` (${parts.join(", ")} хавсралттай)` : "") + " амжилттай илгээгдлээ. Бид удахгүй хариу өгөх болно.";
         }
