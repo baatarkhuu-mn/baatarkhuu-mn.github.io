@@ -144,11 +144,14 @@
     },
   };
 
-  /* ---------- 6. Видео thumbnail → embed ---------- */
+  /* ---------- 6. Видео thumbnail → embed / гадаад линк ----------
+     data-yt="ID"   → дарахад YouTube embed болж тоглоно
+     data-href="…"  → дарахад гадаад линк (жишээ нь Facebook видео) шинэ цонхонд нээнэ */
   const Video = {
     init() {
-      document.querySelectorAll(".video-thumb[data-yt]").forEach((thumb) => {
+      document.querySelectorAll(".video-thumb[data-yt], .video-thumb[data-href]").forEach((thumb) => {
         thumb.addEventListener("click", () => {
+          if (thumb.dataset.href) { window.open(thumb.dataset.href, "_blank", "noopener"); return; }
           const id = thumb.dataset.yt;
           const wrap = document.createElement("div");
           wrap.className = "video-embed";
