@@ -165,6 +165,52 @@
     },
   };
 
+  /* ---------- 6.1 Сэтгэл ханамжийн үнэлгээ (5 од) ----------
+     <div data-rating="нэр"> доторх .rating-д 5 од үүсгэнэ.
+     data-persist байвал localStorage-д хадгална (нэг хөтөчид нэг үнэлгээ).
+     Доторх hidden input-д утга бичигдэх тул форм дотор шууд ажиллана. */
+  const Rating = {
+    LABELS: ["", "Муу", "Дунд зэрэг", "Зүгээр", "Сайн", "Маш сайн"],
+    init() {
+      document.querySelectorAll("[data-rating]").forEach((box) => {
+        const wrap = box.querySelector(".rating");
+        if (!wrap) return;
+        const msg = box.querySelector(".rating-msg");
+        const hidden = box.querySelector('input[type="hidden"]');
+        const persist = box.hasAttribute("data-persist");
+        const key = "rating-" + box.dataset.rating;
+        let current = persist ? parseInt(localStorage.getItem(key), 10) || 0 : 0;
+        const stars = [];
+        const paint = (n) => stars.forEach((s, i) => s.classList.toggle("on", i < n));
+        const show = (n, saved) => {
+          if (!msg) return;
+          msg.textContent = n
+            ? "Таны үнэлгээ: " + n + "/5 — " + Rating.LABELS[n] + (saved ? ". Баярлалаа! 🙏" : "")
+            : "Од дээр дарж үнэлнэ үү";
+        };
+        for (let i = 1; i <= 5; i++) {
+          const b = document.createElement("button");
+          b.type = "button"; b.className = "star"; b.textContent = "★";
+          b.setAttribute("aria-label", i + " од — " + Rating.LABELS[i]);
+          b.addEventListener("mouseenter", () => paint(i));
+          b.addEventListener("focus", () => paint(i));
+          b.addEventListener("mouseleave", () => paint(current));
+          b.addEventListener("blur", () => paint(current));
+          b.addEventListener("click", () => {
+            current = i;
+            if (hidden) hidden.value = i;
+            if (persist) localStorage.setItem(key, i);
+            paint(i); show(i, true);
+          });
+          stars.push(b); wrap.appendChild(b);
+        }
+        if (hidden && current) hidden.value = current;
+        box._resetRating = () => { current = 0; if (hidden) hidden.value = ""; paint(0); show(0, false); };
+        paint(current); show(current, current > 0);
+      });
+    },
+  };
+
   /* ---------- 7. Санал хүсэлтийн форм ----------
      Дүүрэг/хороо сонголт, зураг хавсаргах, GPS байршил */
   const Forms = {
@@ -277,12 +323,16 @@
           const parts = [];
           if (files.length) parts.push(`${files.length} зураг`);
           if (latIn && latIn.value) parts.push("GPS байршил");
+          const ratingIn = form.querySelector("#f-rating");
+          if (ratingIn && ratingIn.value) parts.push(`үнэлгээ ${ratingIn.value}/5`);
           success.classList.add("show");
           success.textContent = "✓ Таны санал хүсэлт" + (parts.length ? ` (${parts.join(", ")} хавсралттай)` : "") + " амжилттай илгээгдлээ. Бид удахгүй хариу өгөх болно.";
         }
         form.reset();
         files = []; renderPreviews();
         resetGeo(); resetKhoroo();
+        const ratingBox = form.querySelector("[data-rating]");
+        if (ratingBox && ratingBox._resetRating) ratingBox._resetRating();
         setTimeout(() => success && success.classList.remove("show"), 8000);
       });
     },
@@ -368,7 +418,7 @@
   /* ---------- Бүгдийг эхлүүлэх ---------- */
   document.addEventListener("DOMContentLoaded", () => {
     Theme.init(); Nav.init(); Search.init(); Reveal.init();
-    Counters.init(); Video.init(); Forms.init(); Filter.init();
+    Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
     Share.init(); Misc.init();
   });
 })();

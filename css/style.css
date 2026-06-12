@@ -465,6 +465,18 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .geo-status strong { color: var(--color-accent); }
 #geo-map { border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--color-border); }
 
+/* ---------- 13.2 Сэтгэл ханамжийн үнэлгээ (5 од) ---------- */
+.rating { display: flex; gap: 6px; align-items: center; }
+.rating .star {
+  background: none; border: none; cursor: pointer; padding: 4px;
+  font-size: 2.1rem; line-height: 1; color: var(--color-border);
+  transition: color .15s ease, transform .15s ease, text-shadow .15s ease;
+}
+.rating .star:hover { transform: scale(1.18); }
+.rating .star.on { color: var(--color-accent); text-shadow: 0 0 16px rgba(224, 182, 83, .65); }
+.rating .star:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; border-radius: 6px; }
+.rating-msg { min-height: 1.4em; }
+
 /* ---------- 14. Page hero (дотоод хуудас) ---------- */
 .page-hero {
   position: relative;
