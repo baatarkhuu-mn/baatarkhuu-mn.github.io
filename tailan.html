@@ -20,13 +20,23 @@
       background: linear-gradient(90deg, var(--color-primary-dark), var(--color-primary), var(--color-accent));
       box-shadow: var(--glow-blue); transition: width 1.2s cubic-bezier(.2,.7,.3,1); }
     .bar-row .bar-val { font-weight: 700; color: var(--color-accent); font-size: .92rem; }
-    .report-item { display: flex; justify-content: space-between; align-items: center; gap: 14px;
-      padding: 16px 20px; background: var(--color-bg-card); border: 1px solid var(--color-border);
-      border-radius: var(--radius); transition: border-color var(--transition), box-shadow var(--transition); }
-    .report-item:hover { border-color: var(--color-primary-dark); box-shadow: var(--glow-blue); }
-    .report-item .r-name { font-weight: 600; }
-    .report-item .r-meta { font-size: .82rem; color: var(--color-text-soft); }
+    /* Тайлангийн карт — зурган нүүр + Үзэх/Татах */
+    .report-card { display: grid; grid-template-columns: 112px 1fr; gap: 16px;
+      background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: var(--radius);
+      padding: 16px; transition: border-color var(--transition), box-shadow var(--transition); }
+    .report-card:hover { border-color: var(--color-primary-dark); box-shadow: var(--shadow); }
+    .rc-cover { aspect-ratio: 3/4; border-radius: var(--radius-sm); overflow: hidden; position: relative;
+      border: 1px solid var(--color-border); background: linear-gradient(160deg, #15294e, #0b1830); display: grid; place-items: center; }
+    [data-theme="light"] .rc-cover { background: linear-gradient(160deg, #d6e3f7, #eef3fb); }
+    .rc-cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .rc-ph { font-size: 2rem; opacity: .5; }
+    .rc-body { display: flex; flex-direction: column; min-width: 0; }
+    .rc-cat { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--color-accent); font-weight: 700; margin-bottom: 6px; }
+    .report-card h4 { font-size: 1.02rem; margin-bottom: 6px; line-height: 1.3; }
+    .rc-meta { font-size: .8rem; color: var(--color-text-soft); margin-bottom: auto; }
+    .rc-actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
     @media (max-width: 640px) { .bar-row { grid-template-columns: 1fr; gap: 6px; } .bar-row .bar-label { text-align: left; } }
+    @media (max-width: 420px) { .report-card { grid-template-columns: 84px 1fr; gap: 12px; } }
   </style>
 </head>
 <body>
@@ -112,23 +122,72 @@
     <!-- Жилийн тайлан -->
     <section class="section">
       <div class="container">
-        <div class="grid grid-2" style="gap:40px;align-items:start">
-          <div class="reveal">
-            <h3 style="margin-bottom:18px">📑 Жилийн тайлан</h3>
-            <div style="display:grid;gap:12px">
-              <div class="report-item"><div><div class="r-name">2025 оны үйл ажиллагааны тайлан</div><div class="r-meta">PDF · Бүрэн эхээр</div></div><a class="btn btn-primary btn-sm" href="assets/pdf/tailan-2025.pdf" download>⬇ Татах</a></div>
-              <div class="report-item"><div><div class="r-name">2024 оны үйл ажиллагааны тайлан</div><div class="r-meta">PDF · Бүрэн эхээр</div></div><a class="btn btn-primary btn-sm" href="assets/pdf/tailan-2024.pdf" download>⬇ Татах</a></div>
+        <div class="section-head reveal">
+          <span class="eyebrow">Татаж авах</span>
+          <h2>Жилийн тайлан</h2>
+          <p>Гишүүний бүрэн эрхийн хугацааны үйл ажиллагааны тайлан.</p>
+        </div>
+        <div class="grid grid-2">
+          <article class="report-card reveal">
+            <div class="rc-cover"><img src="assets/img/tailan-2025-cover.jpg" alt="2025 оны тайлан" onerror="this.remove()" /><span class="rc-ph">📄</span></div>
+            <div class="rc-body">
+              <div class="rc-cat">Жилийн тайлан · 2025</div>
+              <h4>2025 оны үйл ажиллагааны тайлан</h4>
+              <div class="rc-meta">PDF бичиг баримт</div>
+              <div class="rc-actions">
+                <a class="btn btn-primary btn-sm" href="assets/pdf/tailan-2025.pdf" target="_blank" rel="noopener">👁 Үзэх</a>
+                <a class="btn btn-ghost btn-sm" href="assets/pdf/tailan-2025.pdf" download>⬇ Татах</a>
+              </div>
             </div>
-          </div>
-          <div class="reveal">
-            <h3 style="margin-bottom:18px">🗓️ Сар бүрийн тайлан (2026)</h3>
-            <div style="display:grid;gap:12px">
-              <div class="report-item"><div><div class="r-name">2026 оны 5-р сарын тайлан</div><div class="r-meta">PDF</div></div><a class="btn btn-ghost btn-sm" href="assets/pdf/tailan-2026-05.pdf" download>⬇ Татах</a></div>
-              <div class="report-item"><div><div class="r-name">2026 оны 4-р сарын тайлан</div><div class="r-meta">PDF</div></div><a class="btn btn-ghost btn-sm" href="assets/pdf/tailan-2026-04.pdf" download>⬇ Татах</a></div>
-              <div class="report-item"><div><div class="r-name">2026 оны 3-р сарын тайлан</div><div class="r-meta">PDF</div></div><a class="btn btn-ghost btn-sm" href="assets/pdf/tailan-2026-03.pdf" download>⬇ Татах</a></div>
-              <div class="report-item"><div><div class="r-name">2026 оны 2-р сарын тайлан</div><div class="r-meta">PDF</div></div><a class="btn btn-ghost btn-sm" href="assets/pdf/tailan-2026-02.pdf" download>⬇ Татах</a></div>
+          </article>
+          <article class="report-card reveal">
+            <div class="rc-cover"><img src="assets/img/tailan-2024-cover.jpg" alt="2024 оны тайлан" onerror="this.remove()" /><span class="rc-ph">📄</span></div>
+            <div class="rc-body">
+              <div class="rc-cat">Жилийн тайлан · 2024</div>
+              <h4>2024 оны үйл ажиллагааны тайлан</h4>
+              <div class="rc-meta">PDF бичиг баримт</div>
+              <div class="rc-actions">
+                <a class="btn btn-primary btn-sm" href="assets/pdf/tailan-2024.pdf" target="_blank" rel="noopener">👁 Үзэх</a>
+                <a class="btn btn-ghost btn-sm" href="assets/pdf/tailan-2024.pdf" download>⬇ Татах</a>
+              </div>
             </div>
-          </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Сар бүрийн тайлан -->
+    <section class="section section-soft">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">2026 он</span>
+          <h2>Сар бүрийн тайлан</h2>
+        </div>
+        <div class="grid grid-2">
+          <article class="report-card reveal">
+            <div class="rc-cover"><img src="assets/img/tailan-2026-05-cover.jpg" alt="" onerror="this.remove()" /><span class="rc-ph">🗓️</span></div>
+            <div class="rc-body"><div class="rc-cat">Сарын тайлан · 5-р сар</div><h4>2026 оны 5-р сарын тайлан</h4><div class="rc-meta">PDF бичиг баримт</div>
+              <div class="rc-actions"><a class="btn btn-primary btn-sm" href="assets/pdf/tailan-2026-05.pdf" target="_blank" rel="noopener">👁 Үзэх</a><a class="btn btn-ghost btn-sm" href="assets/pdf/tailan-2026-05.pdf" download>⬇ Татах</a></div>
+            </div>
+          </article>
+          <article class="report-card reveal">
+            <div class="rc-cover"><img src="assets/img/tailan-2026-04-cover.jpg" alt="" onerror="this.remove()" /><span class="rc-ph">🗓️</span></div>
+            <div class="rc-body"><div class="rc-cat">Сарын тайлан · 4-р сар</div><h4>2026 оны 4-р сарын тайлан</h4><div class="rc-meta">PDF бичиг баримт</div>
+              <div class="rc-actions"><a class="btn btn-primary btn-sm" href="assets/pdf/tailan-2026-04.pdf" target="_blank" rel="noopener">👁 Үзэх</a><a class="btn btn-ghost btn-sm" href="assets/pdf/tailan-2026-04.pdf" download>⬇ Татах</a></div>
+            </div>
+          </article>
+          <article class="report-card reveal">
+            <div class="rc-cover"><img src="assets/img/tailan-2026-03-cover.jpg" alt="" onerror="this.remove()" /><span class="rc-ph">🗓️</span></div>
+            <div class="rc-body"><div class="rc-cat">Сарын тайлан · 3-р сар</div><h4>2026 оны 3-р сарын тайлан</h4><div class="rc-meta">PDF бичиг баримт</div>
+              <div class="rc-actions"><a class="btn btn-primary btn-sm" href="assets/pdf/tailan-2026-03.pdf" target="_blank" rel="noopener">👁 Үзэх</a><a class="btn btn-ghost btn-sm" href="assets/pdf/tailan-2026-03.pdf" download>⬇ Татах</a></div>
+            </div>
+          </article>
+          <article class="report-card reveal">
+            <div class="rc-cover"><img src="assets/img/tailan-2026-02-cover.jpg" alt="" onerror="this.remove()" /><span class="rc-ph">🗓️</span></div>
+            <div class="rc-body"><div class="rc-cat">Сарын тайлан · 2-р сар</div><h4>2026 оны 2-р сарын тайлан</h4><div class="rc-meta">PDF бичиг баримт</div>
+              <div class="rc-actions"><a class="btn btn-primary btn-sm" href="assets/pdf/tailan-2026-02.pdf" target="_blank" rel="noopener">👁 Үзэх</a><a class="btn btn-ghost btn-sm" href="assets/pdf/tailan-2026-02.pdf" download>⬇ Татах</a></div>
+            </div>
+          </article>
         </div>
       </div>
     </section>
