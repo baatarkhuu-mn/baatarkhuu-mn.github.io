@@ -183,8 +183,96 @@
       </div>
     </section>
 
+    <!-- ============ ИРГЭН ТӨВТЭЙ ФЛОУ ДИАГРАМ ============ -->
+    <section class="section flow-section">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Иргэн төвтэй тогтолцоо</span>
+          <h2>Таны дуу хоолой хэрхэн ажил болж хувирдаг вэ</h2>
+          <p>Иргэдийн санал, хүсэлт нь гишүүний өдөр тутмын ажлын эх сурвалж болж, хууль санаачилга, төсөл хэрэгжилт, ил тод тайлан болж буцдаг.</p>
+        </div>
+        <div class="flow-diagram reveal">
+          <svg viewBox="0 0 760 470" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Иргэн төвтэй ажлын урсгалын диаграм">
+            <defs>
+              <linearGradient id="hubgrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#3fd2e6"/><stop offset="1" stop-color="#2f6ad1"/>
+              </linearGradient>
+              <filter id="nglow" x="-40%" y="-40%" width="180%" height="180%">
+                <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#3fd2e6" flood-opacity="0.45"/>
+              </filter>
+              <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0 0 L10 5 L0 10 z" fill="#3fd2e6" opacity="0.8"/>
+              </marker>
+            </defs>
+
+            <!-- Холбоос шугамууд -->
+            <g fill="none" stroke="#3fd2e6" stroke-opacity="0.45" stroke-width="1.6" marker-end="url(#arrow)">
+              <path d="M178 223 H210"/>
+              <path d="M392 223 H414 V108 H428"/>
+              <path d="M560 138 V162 H452 V236 H468"/>
+              <path d="M452 236 V318 H468"/>
+              <path d="M452 318 V400 H468"/>
+            </g>
+            <!-- Ил тод байдлын буцах гогцоо -->
+            <path d="M470 400 H440 V448 H100 V250" fill="none" stroke="#3fd2e6" stroke-opacity="0.35" stroke-width="1.5" stroke-dasharray="5 5" marker-end="url(#arrow)"/>
+            <text x="250" y="441" fill="#9fd6e6" font-size="12.5" font-family="inherit">Ил тод байдал · хариу</text>
+            <text x="186" y="206" fill="#9fd6e6" font-size="12.5" font-family="inherit" text-anchor="middle">санал</text>
+
+            <!-- Зангилаанууд -->
+            <!-- Иргэн -->
+            <g filter="url(#nglow)">
+              <rect x="24" y="196" width="154" height="54" rx="27" fill="rgba(20,42,74,.55)" stroke="#3fd2e6" stroke-opacity="0.55" stroke-width="1.4"/>
+            </g>
+            <circle cx="58" cy="223" r="14" fill="rgba(63,210,230,.16)" stroke="#3fd2e6" stroke-opacity=".6"/>
+            <text x="58" y="223" font-size="15" text-anchor="middle" dominant-baseline="central">👤</text>
+            <text x="115" y="223" fill="#e8eef8" font-size="16.5" font-weight="600" font-family="inherit" text-anchor="middle" dominant-baseline="central">Иргэн</text>
+
+            <!-- Санал хүсэлт -->
+            <g filter="url(#nglow)">
+              <rect x="210" y="196" width="182" height="54" rx="27" fill="rgba(20,42,74,.55)" stroke="#3fd2e6" stroke-opacity="0.55" stroke-width="1.4"/>
+            </g>
+            <circle cx="244" cy="223" r="14" fill="rgba(63,210,230,.16)" stroke="#3fd2e6" stroke-opacity=".6"/>
+            <text x="244" y="223" font-size="14" text-anchor="middle" dominant-baseline="central">✉</text>
+            <text x="310" y="223" fill="#e8eef8" font-size="16" font-weight="600" font-family="inherit" text-anchor="middle" dominant-baseline="central">Санал хүсэлт</text>
+
+            <!-- HUB: Гишүүний үйл ажиллагаа -->
+            <g filter="url(#nglow)">
+              <rect x="428" y="78" width="304" height="60" rx="30" fill="url(#hubgrad)"/>
+            </g>
+            <circle cx="466" cy="108" r="15" fill="rgba(6,18,31,.35)"/>
+            <text x="466" y="108" font-size="15" text-anchor="middle" dominant-baseline="central">★</text>
+            <text x="592" y="108" fill="#06121f" font-size="17" font-weight="800" font-family="inherit" text-anchor="middle" dominant-baseline="central">Гишүүний үйл ажиллагаа</text>
+
+            <!-- Хууль, санаачилга -->
+            <g filter="url(#nglow)">
+              <rect x="468" y="210" width="268" height="52" rx="26" fill="rgba(20,42,74,.55)" stroke="#3fd2e6" stroke-opacity="0.5" stroke-width="1.3"/>
+            </g>
+            <circle cx="500" cy="236" r="13" fill="rgba(63,210,230,.16)" stroke="#3fd2e6" stroke-opacity=".55"/>
+            <text x="500" y="236" font-size="13" text-anchor="middle" dominant-baseline="central">⚖</text>
+            <text x="612" y="236" fill="#e8eef8" font-size="15.5" font-weight="600" font-family="inherit" text-anchor="middle" dominant-baseline="central">Хууль, санаачилга</text>
+
+            <!-- Хэрэгжүүлсэн төсөл -->
+            <g filter="url(#nglow)">
+              <rect x="468" y="292" width="268" height="52" rx="26" fill="rgba(20,42,74,.55)" stroke="#3fd2e6" stroke-opacity="0.5" stroke-width="1.3"/>
+            </g>
+            <circle cx="500" cy="318" r="13" fill="rgba(63,210,230,.16)" stroke="#3fd2e6" stroke-opacity=".55"/>
+            <text x="500" y="318" font-size="13" text-anchor="middle" dominant-baseline="central">🏗</text>
+            <text x="614" y="318" fill="#e8eef8" font-size="15.5" font-weight="600" font-family="inherit" text-anchor="middle" dominant-baseline="central">Хэрэгжүүлсэн төсөл</text>
+
+            <!-- Тайлан, ил тод байдал -->
+            <g filter="url(#nglow)">
+              <rect x="468" y="374" width="268" height="52" rx="26" fill="rgba(20,42,74,.55)" stroke="#3fd2e6" stroke-opacity="0.5" stroke-width="1.3"/>
+            </g>
+            <circle cx="500" cy="400" r="13" fill="rgba(63,210,230,.16)" stroke="#3fd2e6" stroke-opacity=".55"/>
+            <text x="500" y="400" font-size="13" text-anchor="middle" dominant-baseline="central">📊</text>
+            <text x="612" y="400" fill="#e8eef8" font-size="15.5" font-weight="600" font-family="inherit" text-anchor="middle" dominant-baseline="central">Тайлан, ил тод</text>
+          </svg>
+        </div>
+      </div>
+    </section>
+
     <!-- ============ СҮҮЛИЙН ВИДЕО ============ -->
-    <section class="section">
+    <section class="section section-soft">
       <div class="container">
         <div class="section-head reveal">
           <span class="eyebrow">Видео сан</span>
