@@ -57,19 +57,8 @@
 
     <section class="section">
       <div class="container">
-        <div class="toolbar reveal">
-          <div class="field"><input type="text" id="filter-search" placeholder="🔍 Мэдээ хайх…" aria-label="Мэдээ хайх" /></div>
-          <select id="filter-category" aria-label="Ангилал">
-            <option value="all">Бүх ангилал</option>
-            <option value="tsahim">Цахим хөгжил</option>
-            <option value="uulzalt">Уулзалт</option>
-            <option value="chuulgan">Чуулган</option>
-            <option value="toirog">Тойргийн ажил</option>
-          </select>
-        </div>
-
-        <!-- CMS-ээс динамикаар үүсгэх жагсаалт. Жишээ бичилтүүд — бодит мэдээгээр шинэчилнэ. -->
-        <div class="grid grid-3" data-filterable>
+        <!-- CMS-ээс динамикаар үүсгэх жагсаалт -->
+        <div class="grid grid-3">
           <article class="card reveal" data-item data-category="chuulgan" data-title="Нийслэлд олгосон газрын асуудлаар Хянан шалгах түр хороо байгуулахыг санаачиллаа">
             <div class="card-media"><span class="tag">Хяналт шалгалт</span><img src="assets/img/news-1.jpg" alt="" onerror="this.remove()" /><span class="placeholder">💻</span></div>
             <div class="card-body"><div class="card-date">📅 2026.04</div><h3><a href="https://eguur.mn/667724/" target="_blank" rel="noopener">Нийслэлд олгосон газрын асуудлаар Хянан шалгах түр хороо байгуулахыг санаачиллаа</a></h3><p>Ц.Баатархүү гишүүн тэргүүтэй УИХ-ын 35 гишүүн 1992–2025 онд нийслэлд олгосон газрын асуудлыг шалгах түр хороо байгуулах саналыг өргөн барив.</p><a href="https://eguur.mn/667724/" target="_blank" rel="noopener" class="card-link">Эх сурвалж: Eguur.mn →</a></div>
@@ -95,7 +84,6 @@
             <div class="card-body"><div class="card-date">📅 2026.04.15</div><h3><a href="#">Залуучуудтай «Манлайлал» сэдвээр нээлттэй яриа өрнүүллээ</a></h3><p>«Манлайллын мөрдлөг» номын уншигчидтай уулзаж, залуу үеийн манлайллын ур чадварын талаар ярилцлаа.</p><a href="#" class="card-link">Дэлгэрэнгүй →</a></div>
           </article>
         </div>
-        <div class="filter-empty search-empty" style="display:none">Илэрц олдсонгүй.</div>
       </div>
     </section>
   </main>
