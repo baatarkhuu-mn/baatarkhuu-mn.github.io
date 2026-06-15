@@ -532,6 +532,17 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 }
 .greet-sign { margin-top: 22px !important; font-weight: 700; color: var(--color-text); font-size: 1.05rem; }
 
+/* ---------- 13.4 Парламентын ирц ---------- */
+.attendance { display: flex; flex-wrap: wrap; gap: 26px; justify-content: center; align-items: flex-start; margin-bottom: 30px; }
+.att-item { text-align: center; }
+.att-circle { width: 100px; height: 100px; border-radius: 50%; display: grid; place-items: center;
+  color: #fff; font-weight: 800; font-size: 1.35rem; box-shadow: var(--shadow); }
+.att-item .att-label { margin-top: 12px; font-size: .92rem; color: var(--color-text-soft); }
+.att-green { background: linear-gradient(135deg, #2aa86a, #34c97c); }
+.att-gold  { background: linear-gradient(135deg, #d9a72f, #f0c14a); color: #2a1c03; }
+.att-red   { background: linear-gradient(135deg, #c53434, #e05656); }
+.att-navy  { background: linear-gradient(135deg, #13245a, #2a3f8f); }
+
 /* ---------- 14. Page hero (дотоод хуудас) ---------- */
 .page-hero {
   position: relative;

@@ -567,6 +567,11 @@
       "Хүсэлт, өргөдөл, санал гомдлоо илгээгээрэй. Сонгогч бүрийн дуу хоолой надад чухал.":
         "Send your requests, petitions, suggestions and complaints. Every constituent's voice matters to me.",
       "Санал хүсэлт илгээх": "Send feedback",
+      "Ил тод байдал": "Transparency",
+      "Парламентын чуулганы ирц": "Parliamentary session attendance",
+      "2025 оны намрын чуулган. Эх сурвалж: Улсын Их Хурал.": "2025 autumn session. Source: State Great Khural.",
+      "Ирсэн": "Attended", "Чөлөөтэй": "On leave", "Тасалсан": "Missed", "Хоцорсон минут": "Minutes late",
+      "Бодит ирцийн мэдээлэл (УИХ) →": "Live attendance data (Parliament) →",
       "Мэндчилгээ": "Greeting",
       "Эрхэм хүндэт иргэн та бүхэнд энэ өдрийн мэнд хүргэе": "Warm greetings to every respected citizen",
       "Намайг Улсын Их Хурлын гишүүнээр сонгож, итгэл хүлээлгэсэн Чингэлтэй, Сүхбаатар дүүргийн иргэд та бүхэндээ чин сэтгэлийн талархал илэрхийлье. Таны итгэл бол миний өдөр тутмын ажлын хөдөлгөгч хүч юм.":
