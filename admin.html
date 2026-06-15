@@ -164,13 +164,16 @@
                ${r.email ? `<a href="mailto:${esc(r.email)}">✉ ${esc(r.email)}</a>` : ""}
                ${r.phone ? `<a href="tel:${esc(r.phone)}">☎ ${esc(r.phone)}</a>` : ""}
              </div>
-             <label style="font-size:.82rem;color:var(--color-text-soft)">Төлөв:
-               <select class="status-sel" data-id="${r.id}">
-                 <option value="new" ${r.status === "new" ? "selected" : ""}>Шинэ</option>
-                 <option value="in_progress" ${r.status === "in_progress" ? "selected" : ""}>Шийдвэрлэж буй</option>
-                 <option value="done" ${r.status === "done" ? "selected" : ""}>Шийдвэрлэсэн</option>
-               </select>
-             </label>
+             <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+               <label style="font-size:.82rem;color:var(--color-text-soft)">Төлөв:
+                 <select class="status-sel" data-id="${r.id}">
+                   <option value="new" ${r.status === "new" ? "selected" : ""}>Шинэ</option>
+                   <option value="in_progress" ${r.status === "in_progress" ? "selected" : ""}>Шийдвэрлэж буй</option>
+                   <option value="done" ${r.status === "done" ? "selected" : ""}>Шийдвэрлэсэн</option>
+                 </select>
+               </label>
+               <button class="btn btn-ghost btn-sm del-btn" data-id="${r.id}" style="color:var(--color-danger)">🗑 Устгах</button>
+             </div>
            </div>`;
         listEl.appendChild(card);
 
@@ -186,6 +189,21 @@
             box.appendChild(img);
           });
         }
+
+        // Устгах
+        card.querySelector(".del-btn").addEventListener("click", async (e) => {
+          if (!confirm("Энэ саналыг бүрмөсөн устгах уу?")) return;
+          const id = e.target.dataset.id;
+          e.target.disabled = true;
+          // Хавсралт зургуудыг мөн устгах
+          if (r.photos && r.photos.length) { try { await sb.storage.from("feedback-photos").remove(r.photos); } catch (_) {} }
+          const { error } = await sb.from("feedback").delete().eq("id", id);
+          if (error) { alert("Алдаа: " + error.message); e.target.disabled = false; return; }
+          allRows = allRows.filter((x) => x.id !== id);
+          computeStats(allRows);
+          card.remove();
+          if (!allRows.length) emptyEl.style.display = "block";
+        });
 
         // Төлөв шинэчлэх
         card.querySelector(".status-sel").addEventListener("change", async (e) => {
