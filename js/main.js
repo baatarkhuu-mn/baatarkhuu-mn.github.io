@@ -62,6 +62,7 @@
     { cat: "Нүүр", title: "Нүүр хуудас", url: "index.html" },
     { cat: "Намтар", title: "Гишүүний намтар, боловсрол, туршлага", url: "namtar.html" },
     { cat: "Хууль", title: "Өргөн барьсан болон хамтран санаачилсан хуулиуд", url: "huuli.html" },
+    { cat: "Төслүүд", title: "Тойрогт хэрэгжүүлсэн төслүүд", url: "tusul.html" },
     { cat: "Мэдээ", title: "Сүүлийн үеийн мэдээ мэдээлэл", url: "medee.html" },
     { cat: "Видео", title: "Ярилцлага, чуулганы үг хэлсэн бичлэгүүд", url: "video.html" },
     { cat: "Тайлан", title: "Сар бүрийн ба жилийн тайлан, инфографик", url: "tailan.html" },
@@ -419,25 +420,28 @@
       const search = document.querySelector("#filter-search");
       const select = document.querySelector("#filter-category");
       const statusSel = document.querySelector("#filter-status");
+      const districtSel = document.querySelector("#filter-district");
       const empty = document.querySelector(".filter-empty");
 
       const apply = () => {
         const q = (search?.value || "").trim().toLowerCase();
         const cat = select?.value || "all";
         const status = statusSel?.value || "all";
+        const district = districtSel?.value || "all";
         let shown = 0;
         items.forEach((it) => {
           const text = it.dataset.title?.toLowerCase() || it.textContent.toLowerCase();
           const okText = !q || text.includes(q);
           const okCat = cat === "all" || it.dataset.category === cat;
           const okStatus = status === "all" || it.dataset.status === status;
-          const visible = okText && okCat && okStatus;
+          const okDistrict = district === "all" || it.dataset.district === district;
+          const visible = okText && okCat && okStatus && okDistrict;
           it.style.display = visible ? "" : "none";
           if (visible) shown++;
         });
         if (empty) empty.style.display = shown ? "none" : "block";
       };
-      [search, select, statusSel].forEach((el) => el && el.addEventListener("input", apply));
+      [search, select, statusSel, districtSel].forEach((el) => el && el.addEventListener("input", apply));
     },
   };
 
