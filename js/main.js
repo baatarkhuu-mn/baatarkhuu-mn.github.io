@@ -230,7 +230,7 @@
       /* --- Дүүрэг → хороо сонголт --- */
       const district = form.querySelector("#f-district");
       const khoroo = form.querySelector("#f-khoroo");
-      const KHOROO_COUNT = { "Чингэлтэй": 19, "Сүхбаатар": 20 };
+      const KHOROO_COUNT = { "Чингэлтэй": 24, "Сүхбаатар": 20 };
       const resetKhoroo = () => {
         if (!khoroo) return;
         khoroo.disabled = true;
