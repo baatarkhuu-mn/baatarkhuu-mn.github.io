@@ -491,10 +491,55 @@
     },
   };
 
+  /* ---------- 11. Хэл солих (MN / EN) ----------
+     Интерфейсийн ерөнхий хэсэг (цэс, footer, толгой)-ийг англиар сольдог.
+     Урт агуулга (мэдээ, намтар) Монголоор үлдэнэ. localStorage-д хадгална. */
+  const I18n = {
+    navEN: {
+      "index.html": "Home", "namtar.html": "Biography", "huuli.html": "Laws & Initiatives",
+      "tusul.html": "Projects", "medee.html": "News", "video.html": "Video",
+      "tailan.html": "Reports", "holboo.html": "Contact",
+    },
+    txtEN: {
+      "УИХ-ын гишүүн": "Member of Parliament",
+      "Цэс": "Menu", "Холбоос": "Links", "Холбоо барих": "Contact",
+      "Сайтаас хайх": "Search the site",
+    },
+    init() {
+      const btn = document.getElementById("lang-toggle");
+      if (!btn) return;
+      this.items = [];
+      document.querySelectorAll(".main-nav a, .footer-links a").forEach((a) => {
+        const file = (a.getAttribute("href") || "").split("/").pop();
+        if (this.navEN[file]) this.items.push({ el: a, mn: a.textContent, en: this.navEN[file] });
+      });
+      document.querySelectorAll(".brand-text span, .site-footer h4, .search-box label").forEach((el) => {
+        const t = el.textContent.trim();
+        if (this.txtEN[t]) this.items.push({ el, mn: el.textContent, en: this.txtEN[t] });
+      });
+      this.search = document.getElementById("site-search");
+      this.lang = localStorage.getItem("lang") || "mn";
+      this.apply();
+      btn.addEventListener("click", () => {
+        this.lang = this.lang === "mn" ? "en" : "mn";
+        localStorage.setItem("lang", this.lang);
+        this.apply();
+      });
+    },
+    apply() {
+      document.documentElement.setAttribute("lang", this.lang);
+      const en = this.lang === "en";
+      this.items.forEach((o) => { o.el.textContent = en ? o.en : o.mn; });
+      const code = document.querySelector("#lang-toggle .lang-code");
+      if (code) code.textContent = this.lang.toUpperCase();
+      if (this.search) this.search.placeholder = en ? "Type a keyword…" : "Түлхүүр үг бичнэ үү…";
+    },
+  };
+
   /* ---------- Бүгдийг эхлүүлэх ---------- */
   document.addEventListener("DOMContentLoaded", () => {
     Theme.init(); Nav.init(); Search.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
-    Share.init(); Misc.init();
+    Share.init(); I18n.init(); Misc.init();
   });
 })();
