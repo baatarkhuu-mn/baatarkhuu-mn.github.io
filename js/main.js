@@ -491,33 +491,224 @@
     },
   };
 
-  /* ---------- 11. Хэл солих (MN / EN) ----------
-     Интерфейсийн ерөнхий хэсэг (цэс, footer, толгой)-ийг англиар сольдог.
-     Урт агуулга (мэдээ, намтар) Монголоор үлдэнэ. localStorage-д хадгална. */
+  /* ---------- 11. Хэл солих (MN / EN) — бүрэн орчуулга ----------
+     TreeWalker-ээр текстийн зангилаа бүрийг шалгаж, толь бичигт байвал
+     англиар сольдог. localStorage-д хадгална. Толь бичигт байхгүй текст
+     монголоороо үлдэнэ. */
   const I18n = {
-    navEN: {
-      "index.html": "Home", "namtar.html": "Biography", "huuli.html": "Laws & Initiatives",
-      "tusul.html": "Projects", "medee.html": "News", "video.html": "Video",
-      "tailan.html": "Reports", "holboo.html": "Contact",
+    ph: {
+      "Түлхүүр үг бичнэ үү…": "Type a keyword…",
+      "🔍 Хуулийн нэрээр хайх…": "🔍 Search by law name…",
+      "Таны овог нэр": "Your full name",
+      "+976 ХХХХ-ХХХХ": "+976 XXXX-XXXX",
+      "tanii@mail.mn": "you@mail.mn",
+      "Тулгамдсан асуудал, санал хүсэлтээ дэлгэрэнгүй бичнэ үү…": "Describe your issue or request in detail…",
     },
-    txtEN: {
-      "УИХ-ын гишүүн": "Member of Parliament",
-      "Цэс": "Menu", "Холбоос": "Links", "Холбоо барих": "Contact",
-      "Сайтаас хайх": "Search the site",
+    dict: {
+      /* ---- Чиглүүлэх / footer / нийтлэг ---- */
+      "Нүүр": "Home", "Намтар": "Biography", "Хууль, санаачилга": "Laws & Initiatives",
+      "Төслүүд": "Projects", "Мэдээ": "News", "Видео": "Video", "Тайлан": "Reports",
+      "Холбоо барих": "Contact", "УИХ-ын гишүүн": "Member of Parliament",
+      "Цэс": "Menu", "Холбоос": "Links", "Үндсэн агуулга руу очих": "Skip to main content",
+      "Сайтаас хайх": "Search the site", "Хаах": "Close",
+      "Цэндийн Баатархүү": "Tsendiin Baatarkhüü",
+      "Монгол Улсын Их Хурлын гишүүн. Сонгуулийн 10-р тойрог — Чингэлтэй, Сүхбаатар дүүргийн иргэдийн итгэлийг хүлээж, шударга ёс, цахим хөгжлийн төлөө ажилласаар байна.":
+        "Member of the State Great Khural of Mongolia. Earning the trust of citizens of Electoral District 10 — Chingeltei and Sükhbaatar — and working for justice and digital development.",
+      "УИХ-ын вебсайт": "Parliament website", "Хууль зүйн портал": "Legal information portal",
+      "Гишүүний албан ёсны CV": "Member's official CV", "Санал хүсэлт": "Feedback",
+      "📍 Улаанбаатар хот, Сүхбаатар дүүрэг, Төрийн ордон": "📍 Ulaanbaatar, Sükhbaatar District, State Palace",
+      "Бүх эрх хуулиар хамгаалагдсан.": "All rights reserved.",
+      "УИХ-ын гишүүний албан ёсны вебсайт.": "Official website of the Member of Parliament.",
+      "Facebook": "Facebook",
+
+      /* ---- Нүүр ---- */
+      "Цэндийн БААТАРХҮҮ": "Tsendiin BAATARKHÜÜ",
+      "Монгол Улсын Их Хурлын гишүүн": "Member of the State Great Khural of Mongolia",
+      "«Иргэдийнхээ итгэлийг дээдэлж, шударга ёс, цахим хөгжлийн төлөө ажиллана.»":
+        "«Honoring the trust of citizens, working for justice and digital development.»",
+      "Миний тайлан үзэх": "View my reports",
+      "2024–2028 · 10-р тойрог — Чингэлтэй, Сүхбаатар дүүрэг": "2024–2028 · District 10 — Chingeltei, Sükhbaatar",
+      "Шинэ мэдээ": "Latest news", "Онцлох мэдээ мэдээлэл": "Featured news",
+      "Парламентын үйл ажиллагаа, тойргийн иргэдтэй хийсэн уулзалт болон бодлогын шийдвэрүүд.":
+        "Parliamentary work, meetings with constituents, and policy decisions.",
+      "Хяналт шалгалт": "Oversight",
+      "Нийслэлд олгосон газрын асуудлаар Хянан шалгах түр хороо байгуулахыг санаачиллаа":
+        "Initiated a temporary oversight committee on land allocations in the capital",
+      "Ц.Баатархүү гишүүн тэргүүтэй УИХ-ын 35 гишүүн 1992–2025 онд нийслэлд олгосон газрын асуудлыг шалгах түр хороо байгуулах саналыг өргөн барив.":
+        "Led by MP Ts.Baatarkhüü, 35 members of Parliament submitted a proposal to form a temporary committee investigating land allocations made in the capital during 1992–2025.",
+      "Эх сурвалж: Eguur.mn →": "Source: Eguur.mn →",
+      "Уулзалт": "Meeting",
+      "Чингэлтэй, Сүхбаатар дүүргийн иргэдтэй нээлттэй уулзалт хийлээ":
+        "Held an open meeting with residents of Chingeltei and Sükhbaatar districts",
+      "10-р тойргийн иргэдийн өргөдөл, санал хүсэлтийг сонсож, гэр хорооллын дэд бүтцийн асуудлыг хэлэлцлээ.":
+        "Listened to petitions from District 10 residents and discussed ger-district infrastructure.",
+      "Дэлгэрэнгүй →": "Read more →",
+      "Чуулган": "Session",
+      "УИХ-ын хаврын ээлжит чуулганаар хэлэлцэж буй асуудлуудад байр сууриа илэрхийллээ":
+        "Stated positions on matters debated at Parliament's spring session",
+      "УИХ-ын хаврын ээлжит чуулганы хэлэлцүүлэгт байр сууриа илэрхийллээ":
+        "Stated positions in Parliament's spring session debates",
+      "Улсын төсвийн тодотгол, нийгмийн хамгааллын багц хуулийн хэлэлцүүлэгт идэвхтэй оролцож байна.":
+        "Actively participating in debates on the state budget amendment and the social welfare package of laws.",
+      "Бүх мэдээг үзэх": "View all news",
+      "Тоо баримтаар": "By the numbers", "Карьерын товч үзүүлэлт": "Career at a glance",
+      "Төрийн болон олон нийтийн албанд ажилласан замналын дүн.": "A summary of service in public office and civic life.",
+      "Жил төрийн ба олон нийтийн албанд": "Years in public & civic service",
+      "Жил Нийслэлийн ИТХ-ын төлөөлөгч": "Years as a Capital City Council member",
+      "Хэвлүүлсэн ном бүтээл": "Published books", "Гадаад хэлний мэдлэг": "Foreign languages",
+      "Бүрэн тайлан үзэх": "View full report",
+      "Видео сан": "Video library", "Сүүлийн видео": "Latest videos",
+      "Чуулганы үг хэлсэн бичлэг болон хэвлэлийн ярилцлагууд.": "Session speeches and press interviews.",
+      "Гишүүний видео бичлэгүүд — Facebook видео сан": "Member's videos — Facebook video library",
+      "Шууд нэвтрүүлэг, ярилцлагууд — Facebook": "Live broadcasts and interviews — Facebook",
+      "Бүх видео үзэх": "View all videos",
+      "Таны санал бидэнд чухал": "Your feedback matters to us",
+      "Хүсэлт, өргөдөл, санал гомдлоо илгээгээрэй. Сонгогч бүрийн дуу хоолой надад чухал.":
+        "Send your requests, petitions, suggestions and complaints. Every constituent's voice matters to me.",
+      "Санал хүсэлт илгээх": "Send feedback",
+
+      /* ---- Намтар ---- */
+      "Танилцуулга": "Introduction",
+      "Цэндийн Баатархүү нь 1981 оны 11 дүгээр сарын 14-нд Хэнтий аймагт төрсөн. Улс төрч, бизнес эрхлэгч бөгөөд 2024 оны УИХ-ын сонгуулиар сонгуулийн 10-р тойрог — Чингэлтэй, Сүхбаатар дүүргээс Улсын Их Хурлын гишүүнээр сонгогдсон.":
+        "Tsendiin Baatarkhüü was born on 14 November 1981 in Khentii province. A politician and businessman, he was elected to the State Great Khural in the 2024 election from Electoral District 10 — Chingeltei and Sükhbaatar districts.",
+      "2024–2025 онд Монгол Улсын Засгийн газрын Цахим хөгжил, инновац, харилцаа холбооны сайдаар ажилласан. 2020–2024 онд Ардчилсан намын Ерөнхий нарийн бичгийн даргын алба хашиж байв.":
+        "From 2024 to 2025 he served as Minister of Digital Development, Innovation and Communications. From 2020 to 2024 he was Secretary General of the Democratic Party.",
+      "«Зөв ярих ухаан», «Ажил хэргийн гурвалжин», «Манлайллын мөрдлөг» зэрэг гурван ном бичиж хэвлүүлсэн. Англи, турк хэлтэй.":
+        "He has authored three books: “The Art of Speaking Well,” “The Business Triangle,” and “The Leadership Code.” He speaks English and Turkish.",
+      "🎓 Боловсрол": "🎓 Education", "💼 Ажлын туршлага": "💼 Work experience",
+      "Замнал": "Journey", "Улс төрийн үйл ажиллагаа": "Political career",
+      "Олон нийтийн өмнө хүлээсэн үүрэг хариуцлагын замнал он цагийн дарааллаар.":
+        "A chronological path of public responsibilities.",
+      "УИХ-ын гишүүн, Цахим хөгжлийн сайд": "MP and Minister of Digital Development",
+      "Сонгуулийн 10-р тойрог — Чингэлтэй, Сүхбаатар дүүргээс УИХ-ын гишүүнээр сонгогдож, Цахим хөгжил, инновац, харилцаа холбооны сайдаар томилогдсон (2024–2025).":
+        "Elected MP from Electoral District 10 — Chingeltei and Sükhbaatar — and appointed Minister of Digital Development, Innovation and Communications (2024–2025).",
+      "Ардчилсан намын Ерөнхий нарийн бичгийн дарга": "Secretary General of the Democratic Party",
+      "Намын үйл ажиллагааг удирдан зохион байгуулж, дотоод бүтэц, зохион байгуулалтыг бэхжүүлэхэд ажилласан (2020–2024).":
+        "Directed party operations and strengthened its internal structure and organization (2020–2024).",
+      "Нийслэлийн удирдлагад": "In the city administration",
+      "Нийслэлийн Засаг даргын орлогчоор (2012–2013), Нийслэлийн иргэдийн Төлөөлөгчдийн Хурлын төлөөлөгчөөр (2012–2020) ажилласан.":
+        "Served as Deputy Governor of the Capital (2012–2013) and as a member of the Capital City Citizens' Representatives Khural (2012–2020).",
+      "Засгийн газрын Хэвлэл мэдээллийн албаны дарга": "Head of the Government Press & Information Office",
+      "Төрийн мэдээлэл, харилцааны бодлогын хэрэгжилтийг хариуцан ажилласан (2005–2006).":
+        "Responsible for government information and communications policy (2005–2006).",
+      "Монголын лекторын төв": "Mongolian Lecturers' Center",
+      "Монголын лекторын төвийг үүсгэн байгуулж, манлайлал, илтгэх урлагийн сургалтуудыг олон нийтэд хүргэсэн (2004–2012).":
+        "Founded the Mongolian Lecturers' Center, delivering public training in leadership and public speaking (2004–2012).",
+      "Хүлээн зөвшөөрөл": "Recognition", "Шагнал, гавьяа ба бүтээл": "Awards & publications",
+      "Хөдөлмөрийн хүндэт медаль": "Medal of Labor Honor", "2023 он": "2023",
+      "Илтгэх урлагийн ном": "A book on public speaking", "Бизнес, ажил хэргийн ном": "A book on business",
+      "Манлайллын тухай ном": "A book on leadership",
+
+      /* ---- Хууль, санаачилга ---- */
+      "Өргөн барьсан": "Submitted", "Хамтран санаачилсан": "Co-initiated",
+      "Бүх ангилал": "All categories", "Бүх төлөв": "All statuses",
+      "Батлагдсан": "Passed", "Хэлэлцэж буй": "Under review", "Төсөл": "Draft",
+      "Хуулийн төслүүдийн албан ёсны бүртгэлийг": "Find the official registry of bills at",
+
+      /* ---- Төслүүд ---- */
+      "Хэрэгжүүлсэн төслүүд": "Implemented projects", "Тойргийн ажил": "Constituency work",
+      "Сонгогчдынхоо төлөө хийсэн ажил": "Work done for constituents",
+      "Сонгуулийн 10-р тойрог — Чингэлтэй, Сүхбаатар дүүрэгт хэрэгжүүлсэн төслүүд. (Доорх жишээ мэдээллийг бодит төслүүдээр шинэчилнэ.)":
+        "Projects implemented in Electoral District 10 — Chingeltei and Sükhbaatar.",
+      "Нийт төсөл": "Total projects", "Хэрэгжиж дууссан": "Completed",
+      "Хэрэгжиж буй": "In progress", "Ашиг хүртэгч иргэн": "Beneficiary citizens",
+      "Хэрэгжсэн": "Completed", "Төлөвлөгдсөн": "Planned",
+      "Спорт, эрүүл мэнд": "Sport & health", "Ногоон байгууламж": "Green spaces",
+      "Дэд бүтэц": "Infrastructure", "Боловсрол": "Education", "Эрүүл мэнд": "Healthcare",
+      "«Спортлог Чингэлтэйчүүд»": "“Sporty Chingeltei”",
+      "Чингэлтэй дүүргийн иргэдийг спортоор тогтмол хичээллэх, эрүүл амьдралын хэвшилд уриалсан олон нийтийн хөтөлбөр. Нээлттэй дасгалжуулалт, спортын талбай, тэмцээн уралдаан зохион байгуулна.":
+        "A community program encouraging Chingeltei residents to exercise regularly and adopt a healthy lifestyle, with open training, sports grounds and competitions.",
+      "«Өрх бүр 5 мод» хөдөлгөөн": "“5 Trees per Household” movement",
+      "«Ногоон ирээдүйг өнөөдрөөс бүтээе» уриатай, өрх бүрийг таван мод тарьж ургуулахад уриалсан ногоон хөдөлгөөн. Үндэсний «Тэрбум мод» хөдөлгөөн, «Хашаандаа сайхан амьдаръя», «Ногоон үндэстэн» ТББ-тай хамтран хэрэгжиж байна.":
+        "A green movement under the slogan “Build a green future today,” calling on every household to plant five trees. Run in partnership with the national “Billion Trees” movement, “Live Well in Your Yard,” and the “Green Nation” NGO.",
+      "«Миний зам»": "“My Path”",
+      "Залуучууд, сурагчдад боловсрол, ирээдүйн мэргэжлийн чиг баримжаа олгох, өөрийгөө хөгжүүлэхэд дэмжлэг үзүүлсэн боловсролын хөтөлбөр.":
+        "An education program helping youth and students with career guidance and self-development.",
+      "Өрхийн эрүүл мэндийн төвийн тоног төхөөрөмж": "Family health center equipment",
+      "Өрхийн эрүүл мэндийн төвийг орчин үеийн оношилгооны тоног төхөөрөмжөөр хангаж, иргэдэд чанартай эрүүл мэндийн үйлчилгээ хүргэх нөхцөлийг бүрдүүлсэн.":
+        "Equipped the family health center with modern diagnostic equipment, enabling quality healthcare for residents.",
+      "Хороондоо хэрэгжүүлэхийг хүссэн төсөл бий юу?": "A project you'd like to see in your khoroo?",
+      "Тойрогтоо тулгамдаж буй асуудал, хэрэгжүүлэхийг хүссэн төслийн саналаа илгээгээрэй.":
+        "Send us the pressing issues in your district and the projects you'd like implemented.",
+      "Санал илгээх": "Send a suggestion",
+
+      /* ---- Мэдээ ---- */
+      "Мэдээ мэдээлэл": "News & updates", "Тойргийн ажил": "Constituency work",
+      "Гэр хорооллын дахин төлөвлөлтийн төслийн явцтай танилцлаа":
+        "Reviewed progress of the ger-district redevelopment project",
+      "Чингэлтэй дүүргийн гэр хорооллын дахин төлөвлөлт, инженерийн шугам сүлжээний ажлын явцыг газар дээр нь шалгалаа.":
+        "Inspected on-site the ger-district redevelopment and engineering network works in Chingeltei district.",
+      "Цахим хөгжил": "Digital development",
+      "Хиймэл оюун ухааны зохицуулалтын олон улсын туршлагыг судаллаа":
+        "Studied international experience in AI regulation",
+      "Шинэ технологийн эрх зүйн орчныг бүрдүүлэх чиглэлээр олон улсын байгууллагуудтай хамтран ажиллаж байна.":
+        "Working with international organizations to build a legal framework for new technologies.",
+      "Залуучуудтай «Манлайлал» сэдвээр нээлттэй яриа өрнүүллээ":
+        "Held an open talk with youth on “Leadership”",
+      "«Манлайллын мөрдлөг» номын уншигчидтай уулзаж, залуу үеийн манлайллын ур чадварын талаар ярилцлаа.":
+        "Met readers of “The Leadership Code” and discussed leadership skills for the younger generation.",
+
+      /* ---- Видео ---- */
+      "Онцлох": "Featured", "Сүүлийн шууд нэвтрүүлэг": "Latest live broadcast",
+      "Гишүүний Facebook хуудасны видео бичлэгээс.": "From the member's Facebook video posts.",
+      "Чуулганы үг хэлсэн бичлэгүүд": "Session speeches",
+      "Хэвлэл мэдээлэл": "Media", "Ярилцлага": "Interviews",
+      "Богино, шуурхай видео контент. Дарж Facebook дээр үзнэ үү.": "Short, quick video content. Click to watch on Facebook.",
+      "Facebook хуудсаар үзэх →": "View on Facebook →", "Бүх Reels үзэх →": "View all Reels →",
+      "Тойргийн ажлын товч": "Constituency work in brief", "Иргэдтэй хийсэн уулзалт": "Meeting with citizens",
+      "Чуулганы хэлсэн үг": "Session speech",
+
+      /* ---- Тайлан ---- */
+      "Үзүүлэлт": "Metrics", "Сонгогчдод хүрсэн ажлын үзүүлэлт": "Constituent service metrics",
+      "2024–2026 оны бүрэн эрхийн хугацааны ажлын дүн. (Тоонууд жишээ — бодит тайлангаар шинэчилнэ.)":
+        "Results for the 2024–2026 term.",
+      "Иргэдтэй хийсэн уулзалт": "Meetings with citizens", "Хүлээн авсан өргөдөл, хүсэлт": "Petitions & requests received",
+      "Шийдвэрлэсэн өргөдлийн хувь": "Share of resolved petitions", "Санаачилсан хууль, төсөл": "Bills & projects initiated",
+      "Инфографик": "Infographic", "Үйл ажиллагааны чиглэл (%)": "Areas of activity (%)",
+      "Бүрэн эрхийн хугацаанд зарцуулсан ажлын цагийн харьцаа.": "Share of working time during the term.",
+      "Хууль тогтоох ажил": "Legislative work", "Тойргийн иргэдийн ажил": "Constituency work",
+      "Цахим хөгжлийн бодлого": "Digital development policy", "Олон улсын хамтын ажиллагаа": "International cooperation",
+      "Бусад": "Other",
+      "Татаж авах": "Download", "Жилийн тайлан": "Annual report",
+      "Гишүүний бүрэн эрхийн хугацааны үйл ажиллагааны тайлан.": "Activity reports for the member's term.",
+      "2025 оны үйл ажиллагааны тайлан": "2025 activity report", "2024 оны үйл ажиллагааны тайлан": "2024 activity report",
+      "PDF бичиг баримт": "PDF document", "Сар бүрийн тайлан": "Monthly reports",
+      "2026 оны 5-р сарын тайлан": "May 2026 report", "2026 оны 4-р сарын тайлан": "April 2026 report",
+      "2026 оны 3-р сарын тайлан": "March 2026 report", "2026 оны 2-р сарын тайлан": "February 2026 report",
+      "Үнэлгээ": "Rating", "Гишүүний ажилд үнэлгээ өгөөрэй": "Rate the member's work",
+      "Таны сэтгэл ханамжийн үнэлгээ цаашдын ажлыг сайжруулахад чухал.": "Your satisfaction rating helps improve future work.",
+      "Оноо дээр дарж үнэлнэ үү (1–10)": "Click a score to rate (1–10)",
+
+      /* ---- Холбоо барих ---- */
+      "Холбогдох": "Get in touch", "Бидэнтэй холбогдоорой": "Reach out to us",
+      "Оффисын хаяг": "Office address", "Утас": "Phone", "И-мэйл": "Email",
+      "Иргэд хүлээн авах цаг": "Citizen reception hours", "Даваа–Баасан, 09:00–17:00": "Mon–Fri, 09:00–17:00",
+      "Сошиал хаягууд:": "Social links:",
+      "Овог нэр": "Full name", "Төрөл": "Type", "Дүүрэг": "District", "Хороо": "Khoroo",
+      "Агуулга": "Message", "Зөвхөн эрх бүхий хүн нэвтэрнэ.": "Authorized personnel only.",
+      "Илгээх": "Send", "Үзэх": "View", "Татах": "Download",
+      "Газрын зураг": "Map", "Байршил": "Location",
+
+      /* ---- Төлөв / шошго давхар ---- */
+      "Дэлгэрэнгүй": "Details",
     },
     init() {
       const btn = document.getElementById("lang-toggle");
       if (!btn) return;
-      this.items = [];
-      document.querySelectorAll(".main-nav a, .footer-links a").forEach((a) => {
-        const file = (a.getAttribute("href") || "").split("/").pop();
-        if (this.navEN[file]) this.items.push({ el: a, mn: a.textContent, en: this.navEN[file] });
+      this.nodes = [];
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+      let node;
+      while ((node = walker.nextNode())) {
+        const key = node.nodeValue.trim();
+        if (key && this.dict[key]) {
+          this.nodes.push({ node, mn: node.nodeValue, en: node.nodeValue.replace(key, this.dict[key]) });
+        }
+      }
+      this.phEls = [];
+      document.querySelectorAll("[placeholder]").forEach((el) => {
+        const k = el.getAttribute("placeholder");
+        if (this.ph[k]) this.phEls.push({ el, mn: k, en: this.ph[k] });
       });
-      document.querySelectorAll(".brand-text span, .site-footer h4, .search-box label").forEach((el) => {
-        const t = el.textContent.trim();
-        if (this.txtEN[t]) this.items.push({ el, mn: el.textContent, en: this.txtEN[t] });
-      });
-      this.search = document.getElementById("site-search");
       this.lang = localStorage.getItem("lang") || "mn";
       this.apply();
       btn.addEventListener("click", () => {
@@ -529,10 +720,10 @@
     apply() {
       document.documentElement.setAttribute("lang", this.lang);
       const en = this.lang === "en";
-      this.items.forEach((o) => { o.el.textContent = en ? o.en : o.mn; });
+      this.nodes.forEach((o) => { o.node.nodeValue = en ? o.en : o.mn; });
+      this.phEls.forEach((o) => { o.el.setAttribute("placeholder", en ? o.en : o.mn); });
       const code = document.querySelector("#lang-toggle .lang-code");
       if (code) code.textContent = this.lang.toUpperCase();
-      if (this.search) this.search.placeholder = en ? "Type a keyword…" : "Түлхүүр үг бичнэ үү…";
     },
   };
 
