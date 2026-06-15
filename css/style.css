@@ -276,6 +276,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .hero {
   position: relative; overflow: hidden;
   background:
+    radial-gradient(ellipse 65% 13% at 42% 44%, rgba(150, 212, 255, .22), transparent 72%),
     radial-gradient(ellipse 70% 90% at 75% 20%, rgba(77, 141, 240, .18), transparent 60%),
     radial-gradient(ellipse 50% 60% at 15% 85%, rgba(224, 182, 83, .10), transparent 60%),
     linear-gradient(150deg, #050d1d, #0a1c3c 55%, #06122a);
@@ -283,9 +284,15 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
   border-bottom: 1px solid var(--color-border);
 }
 [data-theme="light"] .hero {
-  background: linear-gradient(135deg, #072a63, #0a3d8f 60%, #1e63c9);
+  background:
+    radial-gradient(ellipse 60% 14% at 45% 46%, rgba(185, 228, 255, .34), transparent 72%),
+    linear-gradient(135deg, #072a63, #0a3d8f 60%, #1e63c9);
   border-bottom: none;
 }
+/* Гэрлийн туяа — нимгэн гэрэлтсэн шугам (брэнд видеоны хэв) */
+.hero .light-beam { position: absolute; left: 0; right: 0; top: 46%; height: 2px; z-index: 1; pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(160, 216, 255, .85), transparent);
+  filter: blur(.5px); box-shadow: 0 0 24px 4px rgba(140, 205, 255, .35); }
 /* Цахим хээ — тойргийн шугам */
 .hero::before {
   content: ""; position: absolute; inset: 0; opacity: .22; pointer-events: none;
@@ -610,6 +617,22 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
   background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary)); color: #fff; border: 1px solid var(--color-primary-light); cursor: pointer; display: grid; place-items: center;
   box-shadow: var(--glow-blue); opacity: 0; pointer-events: none; transform: translateY(12px); transition: all var(--transition); z-index: 900; }
 .to-top.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
+.to-top { bottom: 88px; } /* Хөвөгч Санал хүсэлт товчны дээр */
+
+/* Хөвөгч "Санал хүсэлт" товч (чатбот маяг) */
+.fab-feedback {
+  position: fixed; right: 24px; bottom: 24px; z-index: 950;
+  display: inline-flex; align-items: center; gap: 9px; padding: 14px 22px; border-radius: 32px;
+  background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary)); color: #fff;
+  font-weight: 600; font-size: .92rem; text-decoration: none; cursor: pointer; border: none;
+  box-shadow: var(--shadow), var(--glow-blue); transition: transform var(--transition), box-shadow var(--transition);
+}
+.fab-feedback:hover { transform: translateY(-2px); color: #fff; box-shadow: var(--shadow-lg); }
+.fab-feedback svg { width: 20px; height: 20px; }
+@media (max-width: 560px) {
+  .fab-feedback { padding: 15px; border-radius: 50%; }
+  .fab-feedback .fab-label { display: none; }
+}
 
 /* ---------- 18. Reveal анимаци ---------- */
 .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }

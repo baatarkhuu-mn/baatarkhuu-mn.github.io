@@ -764,9 +764,20 @@
   };
 
   /* ---------- Бүгдийг эхлүүлэх ---------- */
+  // Хөвөгч "Санал хүсэлт" товч — холбоо барих хуудаснаас бусад бүх хуудсанд
+  function injectFeedbackFab() {
+    if (location.pathname.includes("holboo")) return;
+    const a = document.createElement("a");
+    a.href = "holboo.html";
+    a.className = "fab-feedback";
+    a.setAttribute("aria-label", "Санал хүсэлт илгээх");
+    a.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="fab-label">Санал хүсэлт</span>';
+    document.body.appendChild(a);
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     Theme.init(); Nav.init(); Search.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
-    Share.init(); I18n.init(); Misc.init();
+    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init();
   });
 })();
