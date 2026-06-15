@@ -10,26 +10,26 @@
 /* ---------- 1. CSS хувьсагч (Design Tokens) ---------- */
 /* Үндсэн горим — ХАР ХӨХ ДИЖИТАЛ (dark) */
 :root {
-  --color-primary: #7c3aed;          /* Электрик violet (Tecway) */
-  --color-primary-dark: #5b21b6;
-  --color-primary-light: #a78bfa;
-  --color-accent: #a78bfa;           /* Lavender гэрэлтэлт */
-  --color-accent-soft: rgba(167, 139, 250, .16);
-  --color-bg: #0a0518;               /* Гүн ягаан-хар */
-  --color-bg-soft: #120a28;
-  --color-bg-card: #160d33;
-  --color-border: #2a1d52;
-  --color-text: #ece8f6;
-  --color-text-soft: #a99fc6;
-  --color-text-invert: #0a0518;
+  --color-primary: #4d8df0;          /* Гэрэлтсэн цэнхэр */
+  --color-primary-dark: #2f6ad1;
+  --color-primary-light: #74a8f7;
+  --color-accent: #3fd2e6;           /* Цахим цэнхэр (брэнд «90 секундэд») */
+  --color-accent-soft: rgba(63, 210, 230, .14);
+  --color-bg: #060b16;               /* Гүн хар хөх */
+  --color-bg-soft: #0a1224;
+  --color-bg-card: #0e1830;
+  --color-border: #1c2b4a;
+  --color-text: #e8eef8;
+  --color-text-soft: #93a5c0;
+  --color-text-invert: #06101f;
   --color-success: #34c97c;
   --color-warning: #f0a437;
   --color-danger: #f06262;
 
-  /* Violet glow эффект (Tecway gradient) */
-  --glow-blue: 0 0 30px rgba(124, 58, 237, .34);
-  --glow-gold: 0 0 26px rgba(167, 139, 250, .42);
-  --grid-line: rgba(124, 58, 237, .06);
+  /* Цахим гэрэлтэлт — брэнд видеоны хэв */
+  --glow-blue: 0 0 26px rgba(77, 141, 240, .28);
+  --glow-gold: 0 0 24px rgba(63, 210, 230, .38);
+  --grid-line: rgba(77, 141, 240, .05);
 
   /* Хэмжээ ба зай */
   --container: 1200px;
@@ -49,25 +49,25 @@
 
 /* Цайвар (light) горим — төрийн цэнхэр + цагаан */
 [data-theme="light"] {
-  --color-primary: #6d28f0;
-  --color-primary-dark: #4c1d95;
-  --color-primary-light: #8b5cf6;
-  --color-accent: #7c3aed;
-  --color-accent-soft: rgba(124, 58, 237, .10);
+  --color-primary: #0a3d8f;
+  --color-primary-dark: #072a63;
+  --color-primary-light: #1e63c9;
+  --color-accent: #b0892f;
+  --color-accent-soft: rgba(176, 137, 47, .10);
   --color-bg: #ffffff;
-  --color-bg-soft: #f6f2ff;
+  --color-bg-soft: #f5f8fc;
   --color-bg-card: #ffffff;
-  --color-border: #e9e1fb;
-  --color-text: #1b1340;
-  --color-text-soft: #5f5680;
+  --color-border: #e7edf5;
+  --color-text: #16202e;
+  --color-text-soft: #5b6b7e;
   --color-text-invert: #ffffff;
-  /* Violet — зөөлөн сүүдэр, gradient аяс */
-  --glow-blue: 0 8px 24px rgba(109, 40, 240, .10);
-  --glow-gold: 0 6px 16px rgba(124, 58, 237, .12);
-  --grid-line: rgba(109, 40, 240, .04);
-  --shadow-sm: 0 1px 2px rgba(40, 16, 76, .06);
-  --shadow: 0 4px 18px rgba(40, 16, 76, .08);
-  --shadow-lg: 0 18px 44px rgba(40, 16, 76, .12);
+  /* Trust-centered — neon биш, маш зөөлөн сүүдэр */
+  --glow-blue: 0 8px 24px rgba(10, 61, 143, .08);
+  --glow-gold: 0 6px 16px rgba(176, 137, 47, .14);
+  --grid-line: rgba(10, 61, 143, .04);
+  --shadow-sm: 0 1px 2px rgba(16, 42, 76, .06);
+  --shadow: 0 4px 18px rgba(16, 42, 76, .08);
+  --shadow-lg: 0 18px 44px rgba(16, 42, 76, .12);
 }
 
 /* ---------- 2. Reset / Үндэс ---------- */
@@ -177,7 +177,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 
 .topbar {
   display: none; /* Дээд мөрийг нуусан — холбоо барих/сошиал нь footer-т байгаа */
-  background: linear-gradient(90deg, #0c0626, #1a0d3e, #0c0626); color: #c9d8ef; font-size: .82rem;
+  background: linear-gradient(90deg, #04101f, #0a1d3d, #04101f); color: #c9d8ef; font-size: .82rem;
   border-bottom: 1px solid var(--color-border);
 }
 [data-theme="light"] .topbar { background: var(--color-primary-dark); }
@@ -192,7 +192,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .brand { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 .brand .emblem {
   width: 50px; height: 50px; flex-shrink: 0;
-  filter: drop-shadow(0 0 8px rgba(167, 139, 250, .4));
+  filter: drop-shadow(0 0 8px rgba(224, 182, 83, .4));
 }
 .brand .emblem img { width: 100%; height: 100%; object-fit: contain; }
 .brand .brand-text strong { display: block; font-size: 1.05rem; color: var(--color-text); line-height: 1.15; letter-spacing: .02em; }
@@ -276,36 +276,29 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .hero {
   position: relative; overflow: hidden;
   background:
-    radial-gradient(ellipse 65% 13% at 42% 44%, rgba(167, 139, 250, .26), transparent 72%),
-    radial-gradient(ellipse 75% 95% at 78% 12%, rgba(124, 58, 237, .40), transparent 58%),
-    radial-gradient(ellipse 55% 65% at 12% 88%, rgba(91, 33, 182, .30), transparent 62%),
-    linear-gradient(150deg, #0a0518, #23124f 52%, #0c0626);
+    radial-gradient(ellipse 65% 13% at 42% 44%, rgba(150, 212, 255, .22), transparent 72%),
+    radial-gradient(ellipse 70% 90% at 75% 20%, rgba(77, 141, 240, .18), transparent 60%),
+    radial-gradient(ellipse 50% 60% at 15% 85%, rgba(224, 182, 83, .10), transparent 60%),
+    linear-gradient(150deg, #050d1d, #0a1c3c 55%, #06122a);
   color: #fff;
   border-bottom: 1px solid var(--color-border);
 }
 [data-theme="light"] .hero {
   background:
-    radial-gradient(ellipse 60% 14% at 45% 46%, rgba(220, 205, 255, .40), transparent 72%),
-    radial-gradient(ellipse 70% 90% at 80% 8%, rgba(167, 139, 250, .55), transparent 60%),
-    linear-gradient(135deg, #4c1d95, #6d28f0 58%, #8b5cf6);
+    radial-gradient(ellipse 60% 14% at 45% 46%, rgba(185, 228, 255, .34), transparent 72%),
+    linear-gradient(135deg, #072a63, #0a3d8f 60%, #1e63c9);
   border-bottom: none;
 }
-/* Hero gradient бөмбөг (orb) — Tecway маяг */
-.hero-orb { position: absolute; z-index: 0; pointer-events: none; border-radius: 50%;
-  width: 640px; height: 640px; right: -130px; top: -240px; filter: blur(46px);
-  background: radial-gradient(circle, rgba(139, 92, 246, .6), rgba(91, 33, 182, .28) 45%, transparent 70%); }
-[data-theme="light"] .hero-orb { background: radial-gradient(circle, rgba(167, 139, 250, .5), rgba(139, 92, 246, .22) 45%, transparent 72%); }
-@media (max-width: 640px) { .hero-orb { width: 380px; height: 380px; right: -120px; top: -160px; } }
 /* Гэрлийн туяа — нимгэн гэрэлтсэн шугам (брэнд видеоны хэв) */
 .hero .light-beam { position: absolute; left: 0; right: 0; top: 46%; height: 2px; z-index: 1; pointer-events: none;
-  background: linear-gradient(90deg, transparent, rgba(183, 148, 255, .85), transparent);
-  filter: blur(.5px); box-shadow: 0 0 24px 4px rgba(160, 130, 255, .35); }
+  background: linear-gradient(90deg, transparent, rgba(160, 216, 255, .85), transparent);
+  filter: blur(.5px); box-shadow: 0 0 24px 4px rgba(140, 205, 255, .35); }
 /* Цахим хээ — тойргийн шугам */
 .hero::before {
   content: ""; position: absolute; inset: 0; opacity: .22; pointer-events: none;
   background-image:
-    linear-gradient(rgba(124,58,237,.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(124,58,237,.08) 1px, transparent 1px);
+    linear-gradient(rgba(77,141,240,.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(77,141,240,.08) 1px, transparent 1px);
   background-size: 48px 48px;
   mask-image: radial-gradient(ellipse at 70% 40%, #000 20%, transparent 75%);
   -webkit-mask-image: radial-gradient(ellipse at 70% 40%, #000 20%, transparent 75%);
@@ -335,9 +328,9 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .hero-portrait { justify-self: center; position: relative; }
 .hero-portrait .frame {
   width: 340px; max-width: 80vw; aspect-ratio: 4/5; border-radius: var(--radius-lg);
-  background: linear-gradient(160deg, #1c1142, #100a2e); overflow: hidden;
+  background: linear-gradient(160deg, #122448, #0a1730); overflow: hidden;
   border: 1px solid var(--color-border);
-  outline: 2px solid rgba(167, 139, 250, .45); outline-offset: 6px;
+  outline: 2px solid rgba(224, 182, 83, .45); outline-offset: 6px;
   box-shadow: var(--shadow-lg), var(--glow-blue);
   display: grid; place-items: center; color: var(--color-primary-light);
 }
@@ -350,27 +343,19 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 
 /* ---------- 8. Карт (Card) ---------- */
 .card {
-  position: relative;
   background: var(--color-bg-card); border: 1px solid var(--color-border);
   border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm);
   transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
   display: flex; flex-direction: column;
 }
-/* Картын дээд gradient ирмэг (Tecway маяг) */
-.card::after {
-  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; z-index: 2;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
-  opacity: 0; transition: opacity var(--transition);
-}
-.card:hover { transform: translateY(-5px); box-shadow: var(--shadow), var(--glow-blue); border-color: var(--color-primary-dark); }
-.card:hover::after { opacity: 1; }
-.card .card-media { aspect-ratio: 16/9; background: linear-gradient(135deg, #1c1142, #0e0826); position: relative; overflow: hidden; }
-[data-theme="light"] .card .card-media { background: linear-gradient(135deg, #e6ddfb, #f3eeff); }
+.card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--color-border); }
+.card .card-media { aspect-ratio: 16/9; background: linear-gradient(135deg, #15294e, #0b1830); position: relative; overflow: hidden; }
+[data-theme="light"] .card .card-media { background: linear-gradient(135deg, #d6e3f7, #eef3fb); }
 .card .card-media img { width: 100%; height: 100%; object-fit: cover; }
 .card .card-media .placeholder { position: absolute; inset: 0; display: grid; place-items: center; font-size: 2.2rem; opacity: .55; }
 .card .tag {
   position: absolute; top: 12px; left: 12px; background: rgba(6, 11, 22, .82); color: var(--color-accent);
-  border: 1px solid rgba(167, 139, 250, .5);
+  border: 1px solid rgba(224, 182, 83, .5);
   font-size: .72rem; padding: 5px 12px; border-radius: 30px; font-weight: 600; backdrop-filter: blur(4px); z-index: 1;
 }
 .card .card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
@@ -405,17 +390,17 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .video-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .video-thumb {
   position: relative; aspect-ratio: 16/9; border-radius: var(--radius); overflow: hidden;
-  cursor: pointer; background: linear-gradient(135deg, #1c1142, #0a0622); box-shadow: var(--shadow-sm);
+  cursor: pointer; background: linear-gradient(135deg, #112548, #081530); box-shadow: var(--shadow-sm);
   border: 1px solid var(--color-border); transition: border-color var(--transition), box-shadow var(--transition);
 }
 .video-thumb:hover { border-color: var(--color-primary); box-shadow: var(--glow-blue); }
 .video-thumb img { width: 100%; height: 100%; object-fit: cover; opacity: .85; }
 .video-thumb .play {
   position: absolute; inset: 0; margin: auto; width: 64px; height: 64px; border-radius: 50%;
-  background: rgba(167, 139, 250, .94); display: grid; place-items: center; transition: transform var(--transition), box-shadow var(--transition);
+  background: rgba(224, 182, 83, .94); display: grid; place-items: center; transition: transform var(--transition), box-shadow var(--transition);
 }
 .video-thumb:hover .play { transform: scale(1.1); box-shadow: var(--glow-gold); }
-.video-thumb .play svg { width: 26px; height: 26px; color: #0a0518; margin-left: 4px; }
+.video-thumb .play svg { width: 26px; height: 26px; color: #1d1503; margin-left: 4px; }
 .video-thumb .vtitle { position: absolute; left: 0; right: 0; bottom: 0; padding: 30px 16px 14px;
   background: linear-gradient(transparent, rgba(2, 7, 16, .92)); color: #fff; font-weight: 600; font-size: .95rem; }
 
@@ -536,8 +521,8 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .rating .score:hover { transform: scale(1.12); border-color: var(--color-accent); }
 .rating .score.on {
   background: linear-gradient(135deg, #c79a35, var(--color-accent));
-  border-color: var(--color-accent); color: #0a0518;
-  box-shadow: 0 0 14px rgba(167, 139, 250, .5);
+  border-color: var(--color-accent); color: #1d1503;
+  box-shadow: 0 0 14px rgba(224, 182, 83, .5);
 }
 .rating .score:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
 .rating-msg { min-height: 1.4em; }
@@ -557,19 +542,19 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
   color: #fff; font-weight: 800; font-size: 1.35rem; box-shadow: var(--shadow); }
 .att-item .att-label { margin-top: 12px; font-size: .92rem; color: var(--color-text-soft); }
 .att-green { background: linear-gradient(135deg, #2aa86a, #34c97c); }
-.att-gold  { background: linear-gradient(135deg, #d9a72f, #f0c14a); color: #0a0518; }
+.att-gold  { background: linear-gradient(135deg, #d9a72f, #f0c14a); color: #2a1c03; }
 .att-red   { background: linear-gradient(135deg, #c53434, #e05656); }
-.att-navy  { background: linear-gradient(135deg, #2a1252, #5b21b6); }
+.att-navy  { background: linear-gradient(135deg, #13245a, #2a3f8f); }
 
 /* ---------- 14. Page hero (дотоод хуудас) ---------- */
 .page-hero {
   position: relative;
   background:
-    radial-gradient(ellipse 60% 100% at 80% 0%, rgba(124,58,237,.16), transparent 60%),
-    linear-gradient(150deg, #0a0518, #1a0d3e);
+    radial-gradient(ellipse 60% 100% at 80% 0%, rgba(77,141,240,.16), transparent 60%),
+    linear-gradient(150deg, #050d1d, #0a1c3c);
   color: #fff; padding: 56px 0; border-bottom: 1px solid var(--color-border);
 }
-[data-theme="light"] .page-hero { background: linear-gradient(135deg, #4c1d95, #6d28f0); border-bottom: none; }
+[data-theme="light"] .page-hero { background: linear-gradient(135deg, #072a63, #0a3d8f); border-bottom: none; }
 .page-hero::after {
   content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px;
   background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
@@ -589,7 +574,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .share svg { width: 18px; height: 18px; }
 
 /* ---------- 16. Footer ---------- */
-.site-footer { background: #070313; color: #9db0cc; padding: 56px 0 0; margin-top: 40px;
+.site-footer { background: #040a15; color: #9db0cc; padding: 56px 0 0; margin-top: 40px;
   border-top: 1px solid var(--color-border); position: relative; }
 .site-footer::before {
   content: ""; position: absolute; top: -1px; left: 0; right: 0; height: 2px;
@@ -602,7 +587,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 [data-theme="light"] .site-footer a { color: #c8d6ec; }
 .site-footer a:hover { color: var(--color-accent); }
 .site-footer .f-brand .emblem { display: block; width: 56px; height: 56px; margin-bottom: 14px;
-  filter: drop-shadow(0 0 10px rgba(167, 139, 250, .45)); }
+  filter: drop-shadow(0 0 10px rgba(224, 182, 83, .45)); }
 .site-footer .f-brand .emblem img { width: 100%; height: 100%; object-fit: contain; }
 .site-footer .f-brand p { font-size: .92rem; line-height: 1.7; opacity: .9; }
 .footer-links li { margin-bottom: 9px; }
@@ -611,7 +596,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .footer-social a { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,.07);
   border: 1px solid var(--color-border);
   display: grid; place-items: center; transition: all var(--transition); }
-.footer-social a:hover { background: var(--color-accent); color: #0a0518; box-shadow: var(--glow-gold); }
+.footer-social a:hover { background: var(--color-accent); color: #1d1503; box-shadow: var(--glow-gold); }
 .footer-social svg { width: 18px; height: 18px; }
 .footer-bottom { border-top: 1px solid rgba(255,255,255,.1); margin-top: 40px; padding: 20px 0;
   display: flex; justify-content: space-between; gap: 14px; flex-wrap: wrap; font-size: .85rem; }

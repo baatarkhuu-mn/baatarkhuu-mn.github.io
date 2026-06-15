@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0a0518" />
+  <meta name="theme-color" content="#060b16" />
   <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");</script>
   <title>Тайлан — Ц.Баатархүү | УИХ-ын гишүүн</title>
   <meta name="description" content="УИХ-ын гишүүн Ц.Баатархүүгийн сар бүрийн болон жилийн тайлан, инфографик, сонгогчдод хүрсэн ажлын үзүүлэлтүүд. PDF татах боломжтой." />
@@ -26,15 +26,15 @@
       transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition); }
     .report-card:hover { border-color: var(--color-primary-dark); box-shadow: var(--shadow); transform: translateY(-4px); }
     .rc-cover { display: block; aspect-ratio: 3/4; position: relative; overflow: hidden; cursor: pointer;
-      background: linear-gradient(160deg, #1c1142, #0e0826); }
-    [data-theme="light"] .rc-cover { background: linear-gradient(160deg, #e6ddfb, #f3eeff); }
+      background: linear-gradient(160deg, #15294e, #0b1830); }
+    [data-theme="light"] .rc-cover { background: linear-gradient(160deg, #d6e3f7, #eef3fb); }
     .rc-cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; }
     /* Нүүр зураг дээрх брэндийн давхарга — тайлангийн нүүр маяг */
     .rc-cover-brand { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center;
       justify-content: center; gap: 8px; text-align: center; padding: 18px; color: #fff;
-      background: linear-gradient(165deg, rgba(20, 8, 48,.84), rgba(20, 8, 48,.66)); transition: background .2s; }
-    .rc-cover:hover .rc-cover-brand { background: linear-gradient(165deg, rgba(20, 8, 48,.72), rgba(20, 8, 48,.5)); }
-    .rc-emblem { width: 46px; height: 46px; filter: drop-shadow(0 0 8px rgba(167,139,250,.45)); }
+      background: linear-gradient(165deg, rgba(7, 26, 55,.84), rgba(7, 26, 55,.66)); transition: background .2s; }
+    .rc-cover:hover .rc-cover-brand { background: linear-gradient(165deg, rgba(7, 26, 55,.72), rgba(7, 26, 55,.5)); }
+    .rc-emblem { width: 46px; height: 46px; filter: drop-shadow(0 0 8px rgba(224,182,83,.45)); }
     .rc-policy { font-size: .72rem; letter-spacing: .05em; color: var(--color-accent); font-weight: 700; text-transform: uppercase; }
     .rc-month { font-size: 1.5rem; font-weight: 800; line-height: 1.15; }
     .rc-hint { margin-top: 6px; font-size: .76rem; border: 1px solid rgba(255,255,255,.4); padding: 5px 13px; border-radius: 30px; }
