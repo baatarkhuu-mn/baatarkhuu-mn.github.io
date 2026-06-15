@@ -86,6 +86,7 @@
         <select id="f-status"><option value="all">Бүх төлөв</option><option value="new">Шинэ</option><option value="in_progress">Шийдвэрлэж буй</option><option value="done">Шийдвэрлэсэн</option></select>
         <select id="f-subject"><option value="all">Бүх төрөл</option><option value="sanal">Санал</option><option value="urgudul">Өргөдөл</option><option value="gomdol">Гомдол</option><option value="asuudal">Тулгамдсан асуудал</option><option value="uulzalt">Уулзалт</option><option value="busad">Бусад</option></select>
         <button id="refresh-btn" class="btn btn-ghost btn-sm">↻ Сэргээх</button>
+        <button id="export-btn" class="btn btn-gold btn-sm">⬇ Excel рүү татах</button>
       </div>
 
       <div id="fb-list"></div>
@@ -105,7 +106,7 @@
     const $ = (s) => document.querySelector(s);
     const loginView = $("#login-view"), dashView = $("#dash-view"), logoutBtn = $("#logout-btn");
     const listEl = $("#fb-list"), emptyEl = $("#fb-empty"), loadingEl = $("#fb-loading");
-    let sb = null, allRows = [];
+    let sb = null, allRows = [], currentRows = [];
 
     function esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
     function fmtDate(s) { const d = new Date(s); return d.toLocaleString("mn-MN", { year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" }); }
@@ -133,7 +134,46 @@
         if (q && !((r.name || "") + (r.message || "")).toLowerCase().includes(q)) return false;
         return true;
       });
+      currentRows = rows;
       render(rows);
+    }
+
+    // ---- Excel/CSV рүү татах (одоо шүүгдсэн саналуудыг) ----
+    function csvCell(v) {
+      const s = v == null ? "" : String(v);
+      return '"' + s.replace(/"/g, '""') + '"';
+    }
+    function exportCSV() {
+      const rows = currentRows.length ? currentRows : allRows;
+      if (!rows.length) { alert("Татах санал алга байна."); return; }
+      const headers = ["Огноо","Нэр","И-мэйл","Утас","Төрөл","Дүүрэг","Хороо","Агуулга","Үнэлгээ (1-10)","Байршил (Google Maps)","Зургийн тоо","Төлөв"];
+      const lines = [headers.map(csvCell).join(",")];
+      rows.forEach((r) => {
+        const maps = (r.lat && r.lng) ? `https://www.google.com/maps?q=${r.lat},${r.lng}` : "";
+        lines.push([
+          fmtDate(r.created_at),
+          r.name || "",
+          r.email || "",
+          r.phone || "",
+          SUBJECT_LABEL[r.subject] || r.subject || "",
+          r.district || "",
+          r.khoroo ? r.khoroo + "-р хороо" : "",
+          r.message || "",
+          r.rating != null ? r.rating : "",
+          maps,
+          r.photos ? r.photos.length : 0,
+          STATUS_LABEL[r.status] || r.status || "",
+        ].map(csvCell).join(","));
+      });
+      // UTF-8 BOM — Excel дээр кирилл үсэг зөв гарахын тулд
+      const blob = new Blob(["﻿" + lines.join("\r\n")], { type: "text/csv;charset=utf-8;" });
+      const now = new Date();
+      const stamp = now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, "0") + "-" + String(now.getDate()).padStart(2, "0");
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `sanal-huselt-${stamp}.csv`;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
     }
 
     function render(rows) {
@@ -253,6 +293,7 @@
 
     logoutBtn.addEventListener("click", async () => { await sb.auth.signOut(); showLogin(); });
     $("#refresh-btn").addEventListener("click", loadFeedback);
+    $("#export-btn").addEventListener("click", exportCSV);
     ["#f-q", "#f-district", "#f-status", "#f-subject"].forEach((s) => {
       $(s).addEventListener(s === "#f-q" ? "input" : "change", applyFilters);
     });
