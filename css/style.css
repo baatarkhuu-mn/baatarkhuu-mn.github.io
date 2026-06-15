@@ -199,8 +199,8 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 
 .main-nav ul { display: flex; gap: 2px; }
 .main-nav a {
-  display: block; padding: 10px 12px; border-radius: var(--radius-sm);
-  color: var(--color-text); font-weight: 600; font-size: .9rem; white-space: nowrap;
+  display: block; padding: 9px 10px; border-radius: var(--radius-sm);
+  color: var(--color-text); font-weight: 500; font-size: .82rem; letter-spacing: .005em; white-space: nowrap;
 }
 .main-nav a:hover { background: var(--color-bg-soft); color: var(--color-primary-light); }
 .main-nav a.active { color: var(--color-primary-light); }
