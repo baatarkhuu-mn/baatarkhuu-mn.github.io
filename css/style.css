@@ -52,21 +52,22 @@
   --color-primary: #0a3d8f;
   --color-primary-dark: #072a63;
   --color-primary-light: #1e63c9;
-  --color-accent: #b8923c;
-  --color-accent-soft: rgba(184, 146, 60, .12);
+  --color-accent: #b0892f;
+  --color-accent-soft: rgba(176, 137, 47, .10);
   --color-bg: #ffffff;
-  --color-bg-soft: #f4f7fb;
+  --color-bg-soft: #f5f8fc;
   --color-bg-card: #ffffff;
-  --color-border: #e1e8f0;
-  --color-text: #1a2533;
-  --color-text-soft: #5a6b7e;
+  --color-border: #e7edf5;
+  --color-text: #16202e;
+  --color-text-soft: #5b6b7e;
   --color-text-invert: #ffffff;
-  --glow-blue: 0 6px 20px rgba(10, 61, 143, .14);
-  --glow-gold: 0 6px 18px rgba(184, 146, 60, .22);
-  --grid-line: rgba(10, 61, 143, .05);
-  --shadow-sm: 0 1px 3px rgba(10, 61, 143, .08);
-  --shadow: 0 6px 20px rgba(10, 61, 143, .10);
-  --shadow-lg: 0 14px 40px rgba(10, 61, 143, .16);
+  /* Trust-centered — neon биш, маш зөөлөн сүүдэр */
+  --glow-blue: 0 8px 24px rgba(10, 61, 143, .08);
+  --glow-gold: 0 6px 16px rgba(176, 137, 47, .14);
+  --grid-line: rgba(10, 61, 143, .04);
+  --shadow-sm: 0 1px 2px rgba(16, 42, 76, .06);
+  --shadow: 0 4px 18px rgba(16, 42, 76, .08);
+  --shadow-lg: 0 18px 44px rgba(16, 42, 76, .12);
 }
 
 /* ---------- 2. Reset / Үндэс ---------- */
@@ -302,6 +303,12 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 }
 .hero .container { position: relative; z-index: 2; display: grid; grid-template-columns: 1.1fr .9fr;
   align-items: center; gap: 50px; padding-block: 70px; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 6px; margin-bottom: 18px;
+  background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.3);
+  color: #fff; font-size: .78rem; font-weight: 600; letter-spacing: .04em;
+  padding: 6px 14px; border-radius: 30px; backdrop-filter: blur(4px);
+}
 .hero-content h1 {
   color: #fff; font-size: clamp(2rem, 4.5vw, 3.3rem); margin-bottom: 8px; letter-spacing: .01em;
 }

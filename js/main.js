@@ -9,9 +9,9 @@
   /* ---------- 1. Dark / Light Theme ---------- */
   const Theme = {
     init() {
-      // Үндсэн горим — хар хөх (dark). Хэрэглэгч light сонговол хадгална.
+      // Үндсэн горим — цайвар (light, trust-centered). Хэрэглэгч dark сонговол хадгална.
       const saved = localStorage.getItem("theme");
-      const theme = saved || "dark";
+      const theme = saved || "light";
       document.documentElement.setAttribute("data-theme", theme);
 
       const btn = document.querySelector(".theme-toggle");
@@ -524,6 +524,7 @@
 
       /* ---- Нүүр ---- */
       "Цэндийн БААТАРХҮҮ": "Tsendiin BAATARKHÜÜ",
+      "✓ Албан ёсны вебсайт": "✓ Official website",
       "Монгол Улсын Их Хурлын гишүүн": "Member of the State Great Khural of Mongolia",
       "«Иргэдийнхээ итгэлийг дээдэлж, шударга ёс, цахим хөгжлийн төлөө ажиллана.»":
         "«Honoring the trust of citizens, working for justice and digital development.»",
