@@ -81,15 +81,7 @@
           <h2>Facebook Reels</h2>
           <p>Богино, шуурхай видео контент. Дарж Facebook дээр үзнэ үү.</p>
         </div>
-        <div class="reels-embed">
-          <div class="reel-embed reveal"><iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F929813136768362&show_text=true&width=320" title="Facebook Reel 1" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>
-          <div class="reel-embed reveal"><iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F892002133925904&show_text=true&width=320" title="Facebook Reel 2" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>
-          <div class="reel-embed reveal"><iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1580547490067595&show_text=true&width=320" title="Facebook Reel 3" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>
-          <div class="reel-embed reveal"><iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1661846501604259&show_text=true&width=320" title="Facebook Reel 4" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>
-          <div class="reel-embed reveal"><iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F847149951289238&show_text=true&width=320" title="Facebook Reel 5" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>
-          <div class="reel-embed reveal"><iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F2020788562199165&show_text=true&width=320" title="Facebook Reel 6" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>
-          <div class="reel-embed reveal"><iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F2001497997404291&show_text=true&width=320" title="Facebook Reel 7" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>
-        </div>
+        <div class="grid grid-3" id="reels-list"></div>
         <div style="text-align:center;margin-top:36px" class="reveal">
           <a href="https://www.facebook.com/ts.baatarkhuu/reels/" target="_blank" rel="noopener" class="btn btn-primary">Бүх Reels үзэх →</a>
         </div>
@@ -140,5 +132,38 @@
 
   <button class="to-top" aria-label="Дээш гарах"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="m18 15-6-6-6 6"/></svg></button>
   <script src="js/main.js"></script>
+  <script>
+    // Facebook Reels — цэвэр карт (богино гарчиг + огноо). Эможи, hashtag-гүй.
+    // Засах/нэмэхдээ доорх { id, date, title } мөрийг өөрчилнө.
+    (function () {
+      const REELS = [
+        { id: "929813136768362",  date: "2026.06.10", title: "Ахмад настны тэтгэврийн шударга ёсны төлөө" },
+        { id: "892002133925904",  date: "2026.06.04", title: "Төрийн худалдан авалтыг хиймэл оюун ухаанаар ил тод болгоё" },
+        { id: "1580547490067595", date: "2026.06.03", title: "«Чөлөөлье» бодлого — эрх чөлөөний дөрвөн зам" },
+        { id: "1661846501604259", date: "",           title: "Тендер үнэхээр шударга өрсөлдөөн бий болгож байна уу?" },
+        { id: "847149951289238",  date: "",           title: "Ногоон хот уу, цементэн ширэнгэн ой уу?" },
+        { id: "2020788562199165", date: "",           title: "Богино видео" },
+        { id: "2001497997404291", date: "",           title: "Богино видео" },
+      ];
+      const list = document.getElementById("reels-list");
+      if (!list) return;
+      const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+      list.innerHTML = REELS.map((r) => {
+        const url = "https://www.facebook.com/reel/" + r.id;
+        const date = r.date ? `<div class="card-date">📅 ${esc(r.date)}</div>` : "";
+        return `<article class="card reel-card reveal">
+          <a class="card-media" href="${url}" target="_blank" rel="noopener" aria-label="${esc(r.title)}">
+            <span class="reel-tag">▶ Reel</span>
+            <span class="reel-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+          </a>
+          <div class="card-body">
+            ${date}
+            <h3><a href="${url}" target="_blank" rel="noopener">${esc(r.title)}</a></h3>
+            <a class="card-link" href="${url}" target="_blank" rel="noopener">Үзэх →</a>
+          </div>
+        </article>`;
+      }).join("");
+    })();
+  </script>
 </body>
 </html>
