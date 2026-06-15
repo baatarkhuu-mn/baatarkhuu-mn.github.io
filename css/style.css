@@ -175,6 +175,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .site-header.scrolled { box-shadow: var(--shadow-sm); border-bottom-color: var(--color-primary-dark); }
 
 .topbar {
+  display: none; /* Дээд мөрийг нуусан — холбоо барих/сошиал нь footer-т байгаа */
   background: linear-gradient(90deg, #04101f, #0a1d3d, #04101f); color: #c9d8ef; font-size: .82rem;
   border-bottom: 1px solid var(--color-border);
 }
