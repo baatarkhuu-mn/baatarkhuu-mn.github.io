@@ -276,19 +276,26 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .hero {
   position: relative; overflow: hidden;
   background:
-    radial-gradient(ellipse 65% 13% at 42% 44%, rgba(167, 139, 250, .22), transparent 72%),
-    radial-gradient(ellipse 70% 90% at 75% 20%, rgba(124, 58, 237, .18), transparent 60%),
-    radial-gradient(ellipse 50% 60% at 15% 85%, rgba(167, 139, 250, .10), transparent 60%),
-    linear-gradient(150deg, #0a0518, #1a0d3e 55%, #0c0626);
+    radial-gradient(ellipse 65% 13% at 42% 44%, rgba(167, 139, 250, .26), transparent 72%),
+    radial-gradient(ellipse 75% 95% at 78% 12%, rgba(124, 58, 237, .40), transparent 58%),
+    radial-gradient(ellipse 55% 65% at 12% 88%, rgba(91, 33, 182, .30), transparent 62%),
+    linear-gradient(150deg, #0a0518, #23124f 52%, #0c0626);
   color: #fff;
   border-bottom: 1px solid var(--color-border);
 }
 [data-theme="light"] .hero {
   background:
-    radial-gradient(ellipse 60% 14% at 45% 46%, rgba(200, 180, 255, .34), transparent 72%),
-    linear-gradient(135deg, #4c1d95, #6d28f0 60%, #8b5cf6);
+    radial-gradient(ellipse 60% 14% at 45% 46%, rgba(220, 205, 255, .40), transparent 72%),
+    radial-gradient(ellipse 70% 90% at 80% 8%, rgba(167, 139, 250, .55), transparent 60%),
+    linear-gradient(135deg, #4c1d95, #6d28f0 58%, #8b5cf6);
   border-bottom: none;
 }
+/* Hero gradient бөмбөг (orb) — Tecway маяг */
+.hero-orb { position: absolute; z-index: 0; pointer-events: none; border-radius: 50%;
+  width: 640px; height: 640px; right: -130px; top: -240px; filter: blur(46px);
+  background: radial-gradient(circle, rgba(139, 92, 246, .6), rgba(91, 33, 182, .28) 45%, transparent 70%); }
+[data-theme="light"] .hero-orb { background: radial-gradient(circle, rgba(167, 139, 250, .5), rgba(139, 92, 246, .22) 45%, transparent 72%); }
+@media (max-width: 640px) { .hero-orb { width: 380px; height: 380px; right: -120px; top: -160px; } }
 /* Гэрлийн туяа — нимгэн гэрэлтсэн шугам (брэнд видеоны хэв) */
 .hero .light-beam { position: absolute; left: 0; right: 0; top: 46%; height: 2px; z-index: 1; pointer-events: none;
   background: linear-gradient(90deg, transparent, rgba(183, 148, 255, .85), transparent);
@@ -297,8 +304,8 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .hero::before {
   content: ""; position: absolute; inset: 0; opacity: .22; pointer-events: none;
   background-image:
-    linear-gradient(rgba(77,141,240,.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(77,141,240,.08) 1px, transparent 1px);
+    linear-gradient(rgba(124,58,237,.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124,58,237,.08) 1px, transparent 1px);
   background-size: 48px 48px;
   mask-image: radial-gradient(ellipse at 70% 40%, #000 20%, transparent 75%);
   -webkit-mask-image: radial-gradient(ellipse at 70% 40%, #000 20%, transparent 75%);
@@ -343,12 +350,20 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 
 /* ---------- 8. Карт (Card) ---------- */
 .card {
+  position: relative;
   background: var(--color-bg-card); border: 1px solid var(--color-border);
   border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm);
   transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
   display: flex; flex-direction: column;
 }
-.card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--color-border); }
+/* Картын дээд gradient ирмэг (Tecway маяг) */
+.card::after {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; z-index: 2;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  opacity: 0; transition: opacity var(--transition);
+}
+.card:hover { transform: translateY(-5px); box-shadow: var(--shadow), var(--glow-blue); border-color: var(--color-primary-dark); }
+.card:hover::after { opacity: 1; }
 .card .card-media { aspect-ratio: 16/9; background: linear-gradient(135deg, #1c1142, #0e0826); position: relative; overflow: hidden; }
 [data-theme="light"] .card .card-media { background: linear-gradient(135deg, #e6ddfb, #f3eeff); }
 .card .card-media img { width: 100%; height: 100%; object-fit: cover; }
@@ -561,7 +576,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .page-hero {
   position: relative;
   background:
-    radial-gradient(ellipse 60% 100% at 80% 0%, rgba(77,141,240,.16), transparent 60%),
+    radial-gradient(ellipse 60% 100% at 80% 0%, rgba(124,58,237,.16), transparent 60%),
     linear-gradient(150deg, #0a0518, #1a0d3e);
   color: #fff; padding: 56px 0; border-bottom: 1px solid var(--color-border);
 }
