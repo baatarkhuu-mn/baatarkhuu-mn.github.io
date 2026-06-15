@@ -163,6 +163,11 @@
                 <p class="rating-msg form-note" style="margin-top:6px">Оноо дээр дарж үнэлнэ үү (1–10)</p>
                 <input type="hidden" name="rating" id="f-rating" />
               </div>
+              <!-- Спам шүүлтүүр (хүн харахгүй, бот л бөглөнө) -->
+              <div style="position:absolute;left:-9999px" aria-hidden="true">
+                <label for="f-website">Вебсайт (бичихгүй)</label>
+                <input type="text" id="f-website" name="website" tabindex="-1" autocomplete="off" />
+              </div>
               <button type="submit" class="btn btn-gold" style="width:100%">Илгээх</button>
               <p class="form-note" style="margin-top:10px">* Заавал бөглөх талбар. Таны мэдээллийг зөвхөн хариу өгөх зорилгоор ашиглана.</p>
               <div class="form-success" role="status" aria-live="polite"></div>
@@ -213,6 +218,8 @@
   </footer>
 
   <button class="to-top" aria-label="Дээш гарах"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="m18 15-6-6-6 6"/></svg></button>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

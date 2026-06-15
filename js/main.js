@@ -319,29 +319,93 @@
         });
       }
 
-      /* --- Илгээх --- */
-      form.addEventListener("submit", (e) => {
+      /* --- Илгээх (Supabase руу хадгална) --- */
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const honeypot = form.querySelector("#f-website"); // спам шүүлтүүр
+      const showError = (txt) => {
+        if (!success) return;
+        success.classList.add("show");
+        success.style.background = "rgba(240,98,98,.12)";
+        success.style.borderColor = "rgba(240,98,98,.4)";
+        success.style.color = "var(--color-danger)";
+        success.textContent = txt;
+      };
+      const resetSuccessStyle = () => {
+        if (!success) return;
+        success.style.background = ""; success.style.borderColor = ""; success.style.color = "";
+      };
+
+      form.addEventListener("submit", async (e) => {
         e.preventDefault();
         if (!form.checkValidity()) { form.reportValidity(); return; }
-        // Backend/CMS руу илгээх цэг — зураг + байршил FormData-д багтана:
-        // const data = new FormData(form);
-        // files.forEach((f) => data.append("photos[]", f));
-        // fetch("/api/feedback", { method: "POST", body: data });
-        if (success) {
+        if (honeypot && honeypot.value) return; // бот бол чимээгүй таслана
+
+        const sb = window.getSB && window.getSB();
+        const ratingIn = form.querySelector("#f-rating");
+
+        // Supabase холбогдоогүй бол (демо горим) — хуучнаар амжилттай гэж харуулна
+        if (!sb) {
           const parts = [];
           if (files.length) parts.push(`${files.length} зураг`);
           if (latIn && latIn.value) parts.push("GPS байршил");
-          const ratingIn = form.querySelector("#f-rating");
           if (ratingIn && ratingIn.value) parts.push(`үнэлгээ ${ratingIn.value}/10`);
-          success.classList.add("show");
-          success.textContent = "✓ Таны санал хүсэлт" + (parts.length ? ` (${parts.join(", ")} хавсралттай)` : "") + " амжилттай илгээгдлээ. Бид удахгүй хариу өгөх болно.";
+          resetSuccessStyle();
+          success && success.classList.add("show");
+          if (success) success.textContent = "✓ Таны санал хүсэлт" + (parts.length ? ` (${parts.join(", ")} хавсралттай)` : "") + " амжилттай илгээгдлээ. (Демо горим — backend холбогдоогүй)";
+          form.reset(); files = []; renderPreviews(); resetGeo(); resetKhoroo();
+          const rb = form.querySelector("[data-rating]"); if (rb && rb._resetRating) rb._resetRating();
+          setTimeout(() => success && success.classList.remove("show"), 8000);
+          return;
         }
-        form.reset();
-        files = []; renderPreviews();
-        resetGeo(); resetKhoroo();
-        const ratingBox = form.querySelector("[data-rating]");
-        if (ratingBox && ratingBox._resetRating) ratingBox._resetRating();
-        setTimeout(() => success && success.classList.remove("show"), 8000);
+
+        // Жинхэнэ илгээлт
+        const origBtnText = submitBtn ? submitBtn.textContent : "";
+        if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Илгээж байна…"; }
+        resetSuccessStyle();
+        try {
+          // 1) Зургуудыг storage руу хуулах
+          const photoPaths = [];
+          for (let i = 0; i < files.length; i++) {
+            const f = files[i];
+            const ext = (f.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "");
+            const path = `${Date.now()}-${i}-${Math.round(performance.now())}.${ext}`;
+            const { error: upErr } = await sb.storage.from("feedback-photos").upload(path, f, { contentType: f.type });
+            if (upErr) throw upErr;
+            photoPaths.push(path);
+          }
+          // 2) Мөр оруулах
+          const fd = new FormData(form);
+          const row = {
+            name: (fd.get("name") || "").toString().trim(),
+            email: (fd.get("email") || "").toString().trim(),
+            phone: (fd.get("phone") || "").toString().trim() || null,
+            subject: (fd.get("subject") || "").toString(),
+            district: (fd.get("district") || "").toString() || null,
+            khoroo: (fd.get("khoroo") || "").toString() || null,
+            message: (fd.get("message") || "").toString().trim(),
+            lat: latIn && latIn.value ? parseFloat(latIn.value) : null,
+            lng: lngIn && lngIn.value ? parseFloat(lngIn.value) : null,
+            rating: ratingIn && ratingIn.value ? parseInt(ratingIn.value, 10) : null,
+            photos: photoPaths,
+          };
+          const { error: insErr } = await sb.from("feedback").insert(row);
+          if (insErr) throw insErr;
+
+          // Амжилт
+          const parts = [];
+          if (photoPaths.length) parts.push(`${photoPaths.length} зураг`);
+          if (row.lat) parts.push("GPS байршил");
+          if (row.rating) parts.push(`үнэлгээ ${row.rating}/10`);
+          success && success.classList.add("show");
+          if (success) success.textContent = "✓ Таны санал хүсэлт" + (parts.length ? ` (${parts.join(", ")} хавсралттай)` : "") + " амжилттай хүлээн авлаа. Бид удахгүй хариу өгөх болно.";
+          form.reset(); files = []; renderPreviews(); resetGeo(); resetKhoroo();
+          const rb = form.querySelector("[data-rating]"); if (rb && rb._resetRating) rb._resetRating();
+          setTimeout(() => { success && success.classList.remove("show"); resetSuccessStyle(); }, 9000);
+        } catch (err) {
+          showError("⚠ Илгээхэд алдаа гарлаа: " + (err.message || "сүлжээний асуудал") + ". Дахин оролдох эсвэл утсаар холбогдоно уу.");
+        } finally {
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = origBtnText; }
+        }
       });
     },
   };
