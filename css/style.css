@@ -23,10 +23,10 @@
   --color-warning: #f0a437;
   --color-danger: #f06262;
 
-  /* Цахим glow эффект */
-  --glow-blue: 0 0 24px rgba(77, 141, 240, .30);
-  --glow-gold: 0 0 22px rgba(224, 182, 83, .35);
-  --grid-line: rgba(77, 141, 240, .07);
+  /* Намуухан туяа — минимал (neon биш, зөөлөн сүүдэр) */
+  --glow-blue: 0 8px 26px rgba(77, 141, 240, .10);
+  --glow-gold: 0 8px 22px rgba(224, 182, 83, .12);
+  --grid-line: rgba(77, 141, 240, .028);
 
   /* Хэмжээ ба зай */
   --container: 1200px;
@@ -81,16 +81,17 @@ body {
   overflow-x: hidden;
 }
 
-/* Дижитал торон дэвсгэр */
+/* Дижитал торон дэвсгэр — минимал горимд маш намуухан, зөвхөн дээд хэсэгт */
 body::before {
   content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
   background-image:
     linear-gradient(var(--grid-line) 1px, transparent 1px),
     linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-  background-size: 56px 56px;
-  mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 30%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 30%, transparent 100%);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse 80% 50% at 50% 0%, #000 10%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 50% at 50% 0%, #000 10%, transparent 80%);
 }
+[data-theme="light"] body::before { display: none; }
 
 img { max-width: 100%; display: block; }
 a { color: var(--color-primary); text-decoration: none; transition: color var(--transition); }
@@ -136,20 +137,19 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 /* ---------- 3. Layout туслахууд ---------- */
 .container { width: 100%; max-width: var(--container); margin-inline: auto; padding-inline: 20px; }
 
-.section { padding: 72px 0; }
+.section { padding: 96px 0; }
 .section-soft { background: var(--color-bg-soft); border-block: 1px solid var(--color-border); }
 [data-theme="light"] .section-soft { border-block: none; }
 
-.section-head { text-align: center; max-width: 720px; margin: 0 auto 48px; }
+.section-head { text-align: center; max-width: 720px; margin: 0 auto 60px; }
 .section-head .eyebrow, .eyebrow {
   display: inline-block; color: var(--color-accent); font-weight: 700;
   letter-spacing: .16em; text-transform: uppercase; font-size: .78rem; margin-bottom: 10px;
 }
 .section-head h2 { font-size: clamp(1.6rem, 3vw, 2.3rem); margin-bottom: 14px; }
 .section-head h2::after {
-  content: ""; display: block; width: 64px; height: 3px; margin: 14px auto 0;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
-  border-radius: 3px; box-shadow: var(--glow-gold);
+  content: ""; display: block; width: 44px; height: 2px; margin: 16px auto 0;
+  background: var(--color-accent); border-radius: 3px;
 }
 .section-head p { color: var(--color-text-soft); }
 
@@ -281,7 +281,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 }
 /* Цахим хээ — тойргийн шугам */
 .hero::before {
-  content: ""; position: absolute; inset: 0; opacity: .5; pointer-events: none;
+  content: ""; position: absolute; inset: 0; opacity: .22; pointer-events: none;
   background-image:
     linear-gradient(rgba(77,141,240,.08) 1px, transparent 1px),
     linear-gradient(90deg, rgba(77,141,240,.08) 1px, transparent 1px);
@@ -298,7 +298,6 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
   align-items: center; gap: 50px; padding-block: 70px; }
 .hero-content h1 {
   color: #fff; font-size: clamp(2rem, 4.5vw, 3.3rem); margin-bottom: 8px; letter-spacing: .01em;
-  text-shadow: 0 0 40px rgba(77, 141, 240, .45);
 }
 .hero-content .role { color: var(--color-accent); font-weight: 700; letter-spacing: .1em; margin-bottom: 18px; display: block; font-size: 1rem; text-transform: uppercase; }
 .hero-content .slogan { font-size: 1.22rem; font-weight: 300; max-width: 540px; margin-bottom: 30px; opacity: .95; color: #d7e3f5; }
@@ -329,7 +328,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
   transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
   display: flex; flex-direction: column;
 }
-.card:hover { transform: translateY(-5px); box-shadow: var(--shadow), var(--glow-blue); border-color: var(--color-primary-dark); }
+.card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--color-border); }
 .card .card-media { aspect-ratio: 16/9; background: linear-gradient(135deg, #15294e, #0b1830); position: relative; overflow: hidden; }
 [data-theme="light"] .card .card-media { background: linear-gradient(135deg, #d6e3f7, #eef3fb); }
 .card .card-media img { width: 100%; height: 100%; object-fit: cover; }
@@ -359,9 +358,8 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
   content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
   background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
 }
-.stat:hover { border-color: var(--color-primary-dark); box-shadow: var(--glow-blue); }
-.stat .num { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 800; color: var(--color-primary-light); line-height: 1;
-  text-shadow: 0 0 26px rgba(77, 141, 240, .5); }
+.stat:hover { border-color: var(--color-border); box-shadow: var(--shadow-sm); }
+.stat .num { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 800; color: var(--color-primary-light); line-height: 1; }
 [data-theme="light"] .stat .num { color: var(--color-primary); text-shadow: none; }
 .stat .num .suffix { font-size: 1.4rem; color: var(--color-accent); }
 .stat .label { color: var(--color-text-soft); margin-top: 8px; font-size: .92rem; }
