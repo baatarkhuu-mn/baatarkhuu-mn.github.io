@@ -25,7 +25,7 @@
       overflow: hidden; display: flex; flex-direction: column;
       transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition); }
     .report-card:hover { border-color: var(--color-primary-dark); box-shadow: var(--shadow); transform: translateY(-4px); }
-    .rc-cover { aspect-ratio: 3/4; position: relative; overflow: hidden; cursor: pointer;
+    .rc-cover { display: block; aspect-ratio: 3/4; position: relative; overflow: hidden; cursor: pointer;
       background: linear-gradient(160deg, #15294e, #0b1830); }
     [data-theme="light"] .rc-cover { background: linear-gradient(160deg, #d6e3f7, #eef3fb); }
     .rc-cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; }
@@ -149,45 +149,36 @@
           <p>Гишүүний сар бүрийн үйл ажиллагааны зурагт тайлан. «Үзэх» дарж бүх хуудсыг үзнэ үү.</p>
         </div>
         <div class="grid grid-3">
-          <article class="report-card reveal" data-gallery="report-5" data-count="7" data-title="2026 оны 5-р сарын тайлан">
-            <div class="rc-cover rc-view"><img src="assets/img/report-5/1.jpg" alt="2026 оны 5-р сарын тайлан" loading="lazy" /><div class="rc-cover-brand"><img class="rc-emblem" src="assets/img/logo.svg" alt="" /><span class="rc-policy">Өөр Бодлого Бүтээгч Монгол</span><span class="rc-month">5-р сарын тайлан</span><span class="rc-hint">👁 Үзэх</span></div></div>
+          <article class="report-card reveal">
+            <a class="rc-cover" href="assets/pdf/tailan-2026-5.pdf" target="_blank" rel="noopener"><img src="assets/img/report-5/1.jpg" alt="2026 оны 5-р сарын тайлан" loading="lazy" /><span class="rc-cover-brand"><img class="rc-emblem" src="assets/img/logo.svg" alt="" /><span class="rc-policy">Өөр Бодлого Бүтээгч Монгол</span><span class="rc-month">5-р сарын тайлан</span><span class="rc-hint">👁 PDF үзэх</span></span></a>
             <div class="rc-body">
               <div class="rc-cat">Сарын тайлан · 5-р сар</div>
               <h4>2026 оны 5-р сарын тайлан</h4>
-              <div class="rc-meta">7 хуудас</div>
-              <div class="rc-actions"><button type="button" class="btn btn-primary btn-sm rc-view">👁 Үзэх</button><button type="button" class="btn btn-ghost btn-sm rc-download">⬇ Татах</button></div>
+              <div class="rc-meta">PDF · 7 хуудас</div>
+              <div class="rc-actions"><a class="btn btn-primary btn-sm" href="assets/pdf/tailan-2026-5.pdf" target="_blank" rel="noopener">👁 Үзэх</a><a class="btn btn-ghost btn-sm" href="assets/pdf/tailan-2026-5.pdf" download>⬇ Татах</a></div>
             </div>
           </article>
-          <article class="report-card reveal" data-gallery="report-4" data-count="5" data-title="2026 оны 4-р сарын тайлан">
-            <div class="rc-cover rc-view"><img src="assets/img/report-4/1.jpg" alt="2026 оны 4-р сарын тайлан" loading="lazy" /><div class="rc-cover-brand"><img class="rc-emblem" src="assets/img/logo.svg" alt="" /><span class="rc-policy">Өөр Бодлого Бүтээгч Монгол</span><span class="rc-month">4-р сарын тайлан</span><span class="rc-hint">👁 Үзэх</span></div></div>
+          <article class="report-card reveal">
+            <a class="rc-cover" href="assets/pdf/tailan-2026-4.pdf" target="_blank" rel="noopener"><img src="assets/img/report-4/1.jpg" alt="2026 оны 4-р сарын тайлан" loading="lazy" /><span class="rc-cover-brand"><img class="rc-emblem" src="assets/img/logo.svg" alt="" /><span class="rc-policy">Өөр Бодлого Бүтээгч Монгол</span><span class="rc-month">4-р сарын тайлан</span><span class="rc-hint">👁 PDF үзэх</span></span></a>
             <div class="rc-body">
               <div class="rc-cat">Сарын тайлан · 4-р сар</div>
               <h4>2026 оны 4-р сарын тайлан</h4>
-              <div class="rc-meta">5 хуудас</div>
-              <div class="rc-actions"><button type="button" class="btn btn-primary btn-sm rc-view">👁 Үзэх</button><button type="button" class="btn btn-ghost btn-sm rc-download">⬇ Татах</button></div>
+              <div class="rc-meta">PDF · 5 хуудас</div>
+              <div class="rc-actions"><a class="btn btn-primary btn-sm" href="assets/pdf/tailan-2026-4.pdf" target="_blank" rel="noopener">👁 Үзэх</a><a class="btn btn-ghost btn-sm" href="assets/pdf/tailan-2026-4.pdf" download>⬇ Татах</a></div>
             </div>
           </article>
-          <article class="report-card reveal" data-gallery="report-1-2" data-count="5" data-title="2026 оны 1-2 сарын тайлан">
-            <div class="rc-cover rc-view"><img src="assets/img/report-1-2/1.jpg" alt="2026 оны 1-2 сарын тайлан" loading="lazy" /><div class="rc-cover-brand"><img class="rc-emblem" src="assets/img/logo.svg" alt="" /><span class="rc-policy">Өөр Бодлого Бүтээгч Монгол</span><span class="rc-month">1-2 сарын тайлан</span><span class="rc-hint">👁 Үзэх</span></div></div>
+          <article class="report-card reveal">
+            <a class="rc-cover" href="assets/pdf/tailan-2026-1-2.pdf" target="_blank" rel="noopener"><img src="assets/img/report-1-2/1.jpg" alt="2026 оны 1-2 сарын тайлан" loading="lazy" /><span class="rc-cover-brand"><img class="rc-emblem" src="assets/img/logo.svg" alt="" /><span class="rc-policy">Өөр Бодлого Бүтээгч Монгол</span><span class="rc-month">1-2 сарын тайлан</span><span class="rc-hint">👁 PDF үзэх</span></span></a>
             <div class="rc-body">
               <div class="rc-cat">Сарын тайлан · 1-2 сар</div>
               <h4>2026 оны 1-2 сарын тайлан</h4>
-              <div class="rc-meta">5 хуудас</div>
-              <div class="rc-actions"><button type="button" class="btn btn-primary btn-sm rc-view">👁 Үзэх</button><button type="button" class="btn btn-ghost btn-sm rc-download">⬇ Татах</button></div>
+              <div class="rc-meta">PDF · 5 хуудас</div>
+              <div class="rc-actions"><a class="btn btn-primary btn-sm" href="assets/pdf/tailan-2026-1-2.pdf" target="_blank" rel="noopener">👁 Үзэх</a><a class="btn btn-ghost btn-sm" href="assets/pdf/tailan-2026-1-2.pdf" download>⬇ Татах</a></div>
             </div>
           </article>
         </div>
       </div>
     </section>
-
-    <!-- Тайлан үзэх галерей (lightbox) -->
-    <div class="gallery-lb" id="gallery-lb" role="dialog" aria-modal="true" aria-label="Тайлан үзэх">
-      <button class="glb-close" aria-label="Хаах">✕</button>
-      <button class="glb-nav glb-prev" aria-label="Өмнөх">‹</button>
-      <figure class="glb-stage"><img id="glb-img" src="" alt="" /><figcaption class="glb-cap" id="glb-cap"></figcaption>
-        <a class="btn btn-gold btn-sm" id="glb-dl" download>⬇ Энэ хуудсыг татах</a></figure>
-      <button class="glb-nav glb-next" aria-label="Дараах">›</button>
-    </div>
 
     <!-- Сэтгэл ханамжийн үнэлгээ -->
     <section class="section section-soft">
@@ -233,52 +224,6 @@
         if (en.isIntersecting) { en.target.style.width = en.target.dataset.bar + "%"; io.unobserve(en.target); }
       }), { threshold: 0.4 });
       bars.forEach((b) => io.observe(b));
-    })();
-
-    // Тайлангийн зургийн галерей (lightbox)
-    (function () {
-      const lb = document.getElementById("gallery-lb");
-      if (!lb) return;
-      const img = document.getElementById("glb-img");
-      const cap = document.getElementById("glb-cap");
-      const dl = document.getElementById("glb-dl");
-      let dir = "", count = 0, idx = 0, title = "";
-      const show = () => {
-        const src = `assets/img/${dir}/${idx + 1}.jpg`;
-        img.src = src;
-        cap.textContent = `${title} — ${idx + 1} / ${count}`;
-        if (dl) { dl.href = src; dl.setAttribute("download", `${dir}-${idx + 1}.jpg`); }
-      };
-      const open = (card) => {
-        dir = card.dataset.gallery; count = +card.dataset.count; title = card.dataset.title; idx = 0;
-        show(); lb.classList.add("open"); document.body.style.overflow = "hidden";
-      };
-      const close = () => { lb.classList.remove("open"); document.body.style.overflow = ""; };
-      const move = (d) => { idx = (idx + d + count) % count; show(); };
-      // Бүх хуудсыг татах
-      const downloadAll = (card) => {
-        const d = card.dataset.gallery, n = +card.dataset.count;
-        for (let i = 1; i <= n; i++) {
-          const a = document.createElement("a");
-          a.href = `assets/img/${d}/${i}.jpg`; a.download = `${d}-${i}.jpg`;
-          document.body.appendChild(a); a.click(); a.remove();
-        }
-      };
-      document.querySelectorAll(".report-card[data-gallery]").forEach((card) => {
-        card.querySelectorAll(".rc-view").forEach((el) => el.addEventListener("click", (e) => { e.stopPropagation(); open(card); }));
-        const dlBtn = card.querySelector(".rc-download");
-        if (dlBtn) dlBtn.addEventListener("click", (e) => { e.stopPropagation(); downloadAll(card); });
-      });
-      lb.querySelector(".glb-close").addEventListener("click", close);
-      lb.querySelector(".glb-prev").addEventListener("click", (e) => { e.stopPropagation(); move(-1); });
-      lb.querySelector(".glb-next").addEventListener("click", (e) => { e.stopPropagation(); move(1); });
-      lb.addEventListener("click", (e) => { if (e.target === lb) close(); });
-      document.addEventListener("keydown", (e) => {
-        if (!lb.classList.contains("open")) return;
-        if (e.key === "Escape") close();
-        else if (e.key === "ArrowLeft") move(-1);
-        else if (e.key === "ArrowRight") move(1);
-      });
     })();
   </script>
 </body>
