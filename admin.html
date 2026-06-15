@@ -144,7 +144,7 @@
       const rows = currentRows.length ? currentRows : allRows;
       if (!rows.length) { alert("Татах санал алга байна."); return; }
       if (typeof XLSX === "undefined") { alert("Excel сан ачаалагдаагүй байна. Интернэт холболтоо шалгаад дахин оролдоно уу."); return; }
-      const headers = ["Огноо","Нэр","И-мэйл","Утас","Төрөл","Дүүрэг","Хороо","Агуулга","Үнэлгээ (1-10)","Байршил (Google Maps)","Зургийн тоо","Төлөв"];
+      const headers = ["Огноо","Нэр","И-мэйл","Утас","Төрөл","Дүүрэг","Хороо","Агуулга","Оноо / Үнэлгээ (1-10)","Байршил (Google Maps)","Зургийн тоо","Төлөв"];
       const aoa = [headers];
       rows.forEach((r) => {
         aoa.push([
