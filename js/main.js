@@ -512,24 +512,24 @@
       "Цэс": "Menu", "Холбоос": "Links", "Сошиал": "Social", "Видео сан": "Video library",
       "X (Twitter)": "X (Twitter)", "Үндсэн агуулга руу очих": "Skip to main content",
       "Сайтаас хайх": "Search the site", "Хаах": "Close",
-      "Цэндийн Баатархүү": "Tsendiin Baatarkhüü",
+      "Цэндийн Баатархүү": "Tsendiin Baatarkhuu",
       "Монгол Улсын Их Хурлын гишүүн. Сонгуулийн 10-р тойрог — Чингэлтэй, Сүхбаатар дүүргийн иргэдийн итгэлийг хүлээж, шударга ёс, цахим хөгжлийн төлөө ажилласаар байна.":
-        "Member of the State Great Khural of Mongolia. Earning the trust of citizens of Electoral District 10 — Chingeltei and Sükhbaatar — and working for justice and digital development.",
+        "Member of the State Great Khural of Mongolia. Earning the trust of citizens of Electoral District 10 — Chingeltei and Sukhbaatar — and working for justice and digital development.",
       "УИХ-ын вебсайт": "Parliament website", "Хууль зүйн портал": "Legal information portal",
       "Гишүүний албан ёсны CV": "Member's official CV", "Санал хүсэлт": "Feedback",
-      "📍 Улаанбаатар хот, Сүхбаатар дүүрэг, Төрийн ордон": "📍 Ulaanbaatar, Sükhbaatar District, State Palace",
+      "📍 Улаанбаатар хот, Сүхбаатар дүүрэг, Төрийн ордон": "📍 Ulaanbaatar, Sukhbaatar District, State Palace",
       "Бүх эрх хуулиар хамгаалагдсан.": "All rights reserved.",
       "УИХ-ын гишүүний албан ёсны вебсайт.": "Official website of the Member of Parliament.",
       "Facebook": "Facebook",
 
       /* ---- Нүүр ---- */
-      "Цэндийн БААТАРХҮҮ": "Tsendiin BAATARKHÜÜ",
+      "Цэндийн БААТАРХҮҮ": "Tsendiin BAATARKHUU",
       "✓ Албан ёсны вебсайт": "✓ Official website",
       "Монгол Улсын Их Хурлын гишүүн": "Member of the State Great Khural of Mongolia",
       "«Иргэдийнхээ итгэлийг дээдэлж, шударга ёс, цахим хөгжлийн төлөө ажиллана.»":
         "«Honoring the trust of citizens, working for justice and digital development.»",
       "Миний тайлан үзэх": "View my reports",
-      "2024–2028 · 10-р тойрог — Чингэлтэй, Сүхбаатар дүүрэг": "2024–2028 · District 10 — Chingeltei, Sükhbaatar",
+      "2024–2028 · 10-р тойрог — Чингэлтэй, Сүхбаатар дүүрэг": "2024–2028 · District 10 — Chingeltei, Sukhbaatar",
       "Шинэ мэдээ": "Latest news", "Онцлох мэдээ мэдээлэл": "Featured news",
       "Парламентын үйл ажиллагаа, тойргийн иргэдтэй хийсэн уулзалт болон бодлогын шийдвэрүүд.":
         "Parliamentary work, meetings with constituents, and policy decisions.",
@@ -537,11 +537,11 @@
       "Нийслэлд олгосон газрын асуудлаар Хянан шалгах түр хороо байгуулахыг санаачиллаа":
         "Initiated a temporary oversight committee on land allocations in the capital",
       "Ц.Баатархүү гишүүн тэргүүтэй УИХ-ын 35 гишүүн 1992–2025 онд нийслэлд олгосон газрын асуудлыг шалгах түр хороо байгуулах саналыг өргөн барив.":
-        "Led by MP Ts.Baatarkhüü, 35 members of Parliament submitted a proposal to form a temporary committee investigating land allocations made in the capital during 1992–2025.",
+        "Led by MP Ts.Baatarkhuu, 35 members of Parliament submitted a proposal to form a temporary committee investigating land allocations made in the capital during 1992–2025.",
       "Эх сурвалж: Eguur.mn →": "Source: Eguur.mn →",
       "Уулзалт": "Meeting",
       "Чингэлтэй, Сүхбаатар дүүргийн иргэдтэй нээлттэй уулзалт хийлээ":
-        "Held an open meeting with residents of Chingeltei and Sükhbaatar districts",
+        "Held an open meeting with residents of Chingeltei and Sukhbaatar districts",
       "10-р тойргийн иргэдийн өргөдөл, санал хүсэлтийг сонсож, гэр хорооллын дэд бүтцийн асуудлыг хэлэлцлээ.":
         "Listened to petitions from District 10 residents and discussed ger-district infrastructure.",
       "Дэлгэрэнгүй →": "Read more →",
@@ -576,18 +576,18 @@
       "Мэндчилгээ": "Greeting",
       "Эрхэм хүндэт иргэн та бүхэнд энэ өдрийн мэнд хүргэе": "Warm greetings to every respected citizen",
       "Намайг Улсын Их Хурлын гишүүнээр сонгож, итгэл хүлээлгэсэн Чингэлтэй, Сүхбаатар дүүргийн иргэд та бүхэндээ чин сэтгэлийн талархал илэрхийлье. Таны итгэл бол миний өдөр тутмын ажлын хөдөлгөгч хүч юм.":
-        "I sincerely thank the residents of Chingeltei and Sükhbaatar districts who elected me to the State Great Khural and placed their trust in me. Your trust is the driving force behind my daily work.",
+        "I sincerely thank the residents of Chingeltei and Sukhbaatar districts who elected me to the State Great Khural and placed their trust in me. Your trust is the driving force behind my daily work.",
       "«Өөр Бодлого Бүтээгч Монгол»": "“A Mongolia That Builds a Different Policy”",
       "Бид энэхүү зорилтын хүрээнд хуучирсан хандлагыг өөрчилж, иргэн төвтэй, шударга, цахим хөгжилд тулгуурласан шинэ бодлогыг бүтээхээр ажиллаж байна. Боловсрол, ногоон хөгжил, дэд бүтэц, эрүүл мэндийн салбарт тойргийнхоо иргэдийн амьдралд бодит өөрчлөлт авчрахыг эрхэм зорилгоо болгосон.":
         "Under this vision, we are working to replace outdated approaches and build a new, citizen-centered and fair policy grounded in digital development. Our mission is to bring real change to constituents' lives in education, green development, infrastructure and healthcare.",
       "Таны санал, шүүмжлэл, дэмжлэг бүхэн надад үнэ цэнэтэй. Хамтдаа өөр, илүү сайхан Монголыг бүтээцгээе.":
         "Every suggestion, critique and show of support matters to me. Together, let us build a different and better Mongolia.",
-      "— Цэндийн Баатархүү": "— Tsendiin Baatarkhüü",
+      "— Цэндийн Баатархүү": "— Tsendiin Baatarkhuu",
 
       /* ---- Намтар ---- */
       "Танилцуулга": "Introduction",
       "Цэндийн Баатархүү нь 1981 оны 11 дүгээр сарын 14-нд Хэнтий аймагт төрсөн. Улс төрч, бизнес эрхлэгч бөгөөд 2024 оны УИХ-ын сонгуулиар сонгуулийн 10-р тойрог — Чингэлтэй, Сүхбаатар дүүргээс Улсын Их Хурлын гишүүнээр сонгогдсон.":
-        "Tsendiin Baatarkhüü was born on 14 November 1981 in Khentii province. A politician and businessman, he was elected to the State Great Khural in the 2024 election from Electoral District 10 — Chingeltei and Sükhbaatar districts.",
+        "Tsendiin Baatarkhuu was born on 14 November 1981 in Khentii province. A politician and businessman, he was elected to the State Great Khural in the 2024 election from Electoral District 10 — Chingeltei and Sukhbaatar districts.",
       "2024–2025 онд Монгол Улсын Засгийн газрын Цахим хөгжил, инновац, харилцаа холбооны сайдаар ажилласан. 2020–2024 онд Ардчилсан намын Ерөнхий нарийн бичгийн даргын алба хашиж байв.":
         "From 2024 to 2025 he served as Minister of Digital Development, Innovation and Communications. From 2020 to 2024 he was Secretary General of the Democratic Party.",
       "«Зөв ярих ухаан», «Ажил хэргийн гурвалжин», «Манлайллын мөрдлөг» зэрэг гурван ном бичиж хэвлүүлсэн. Англи, турк хэлтэй.":
@@ -598,7 +598,7 @@
         "A chronological path of public responsibilities.",
       "УИХ-ын гишүүн, Цахим хөгжлийн сайд": "MP and Minister of Digital Development",
       "Сонгуулийн 10-р тойрог — Чингэлтэй, Сүхбаатар дүүргээс УИХ-ын гишүүнээр сонгогдож, Цахим хөгжил, инновац, харилцаа холбооны сайдаар томилогдсон (2024–2025).":
-        "Elected MP from Electoral District 10 — Chingeltei and Sükhbaatar — and appointed Minister of Digital Development, Innovation and Communications (2024–2025).",
+        "Elected MP from Electoral District 10 — Chingeltei and Sukhbaatar — and appointed Minister of Digital Development, Innovation and Communications (2024–2025).",
       "Ардчилсан намын Ерөнхий нарийн бичгийн дарга": "Secretary General of the Democratic Party",
       "Намын үйл ажиллагааг удирдан зохион байгуулж, дотоод бүтэц, зохион байгуулалтыг бэхжүүлэхэд ажилласан (2020–2024).":
         "Directed party operations and strengthened its internal structure and organization (2020–2024).",
@@ -626,7 +626,7 @@
       "Хэрэгжүүлсэн төслүүд": "Implemented projects", "Тойргийн ажил": "Constituency work",
       "Сонгогчдынхоо төлөө хийсэн ажил": "Work done for constituents",
       "Сонгуулийн 10-р тойрог — Чингэлтэй, Сүхбаатар дүүрэгт хэрэгжүүлсэн төслүүд. (Доорх жишээ мэдээллийг бодит төслүүдээр шинэчилнэ.)":
-        "Projects implemented in Electoral District 10 — Chingeltei and Sükhbaatar.",
+        "Projects implemented in Electoral District 10 — Chingeltei and Sukhbaatar.",
       "Нийт төсөл": "Total projects", "Хэрэгжиж дууссан": "Completed",
       "Хэрэгжиж буй": "In progress", "Ашиг хүртэгч иргэн": "Beneficiary citizens",
       "Хэрэгжсэн": "Completed", "Төлөвлөгдсөн": "Planned",
