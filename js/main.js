@@ -566,6 +566,16 @@
       "Хүсэлт, өргөдөл, санал гомдлоо илгээгээрэй. Сонгогч бүрийн дуу хоолой надад чухал.":
         "Send your requests, petitions, suggestions and complaints. Every constituent's voice matters to me.",
       "Санал хүсэлт илгээх": "Send feedback",
+      "Мэндчилгээ": "Greeting",
+      "Эрхэм хүндэт иргэн та бүхэнд энэ өдрийн мэнд хүргэе": "Warm greetings to every respected citizen",
+      "Намайг Улсын Их Хурлын гишүүнээр сонгож, итгэл хүлээлгэсэн Чингэлтэй, Сүхбаатар дүүргийн иргэд та бүхэндээ чин сэтгэлийн талархал илэрхийлье. Таны итгэл бол миний өдөр тутмын ажлын хөдөлгөгч хүч юм.":
+        "I sincerely thank the residents of Chingeltei and Sükhbaatar districts who elected me to the State Great Khural and placed their trust in me. Your trust is the driving force behind my daily work.",
+      "«Өөр Бодлого Бүтээгч Монгол»": "“A Mongolia That Builds a Different Policy”",
+      "Бид энэхүү зорилтын хүрээнд хуучирсан хандлагыг өөрчилж, иргэн төвтэй, шударга, цахим хөгжилд тулгуурласан шинэ бодлогыг бүтээхээр ажиллаж байна. Боловсрол, ногоон хөгжил, дэд бүтэц, эрүүл мэндийн салбарт тойргийнхоо иргэдийн амьдралд бодит өөрчлөлт авчрахыг эрхэм зорилгоо болгосон.":
+        "Under this vision, we are working to replace outdated approaches and build a new, citizen-centered and fair policy grounded in digital development. Our mission is to bring real change to constituents' lives in education, green development, infrastructure and healthcare.",
+      "Таны санал, шүүмжлэл, дэмжлэг бүхэн надад үнэ цэнэтэй. Хамтдаа өөр, илүү сайхан Монголыг бүтээцгээе.":
+        "Every suggestion, critique and show of support matters to me. Together, let us build a different and better Mongolia.",
+      "— Цэндийн Баатархүү": "— Tsendiin Baatarkhüü",
 
       /* ---- Намтар ---- */
       "Танилцуулга": "Introduction",
