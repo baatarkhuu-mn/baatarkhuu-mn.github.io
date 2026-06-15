@@ -116,6 +116,13 @@
       const { data } = await sb.storage.from("feedback-photos").createSignedUrl(path, 3600);
       return data ? data.signedUrl : "";
     }
+    // Нийтэд ил саналын зураг public сангаас, бусад нь хаалттай сангаас
+    async function photoUrl(path, isPublic) {
+      if (isPublic) {
+        try { return sb.storage.from("feedback-public").getPublicUrl(path).data.publicUrl; } catch (_) { return ""; }
+      }
+      return await signedUrl(path);
+    }
 
     function computeStats(rows) {
       $("#st-total").textContent = rows.length;
@@ -189,6 +196,7 @@
                <div class="fb-meta"><span>📅 ${fmtDate(r.created_at)}</span>${loc ? `<span>📍 ${esc(loc)}</span>` : ""}</div>
              </div>
              <div class="fb-badges">
+               ${r.is_public ? `<span class="rate-pill" style="background:rgba(63,210,230,.14);color:var(--color-accent)">🌐 Нийтэд ил</span>` : ""}
                <span class="badge-status ${r.status === "done" ? "status-passed" : r.status === "in_progress" ? "status-review" : "status-draft"}">${STATUS_LABEL[r.status] || r.status}</span>
                <span class="tag" style="position:static;background:var(--color-bg-soft);color:var(--color-accent);border:1px solid var(--color-border)">${SUBJECT_LABEL[r.subject] || r.subject || "—"}</span>
                ${r.rating != null ? `<span class="rate-pill">⭐ ${r.rating}/10</span>` : ""}
@@ -210,16 +218,61 @@
                    <option value="done" ${r.status === "done" ? "selected" : ""}>Шийдвэрлэсэн</option>
                  </select>
                </label>
+               <button class="btn btn-ghost btn-sm pub-btn" data-id="${r.id}">${r.is_public ? "🙈 Нийтээс нуух" : "🌐 Нийтэд ил болгох"}</button>
+               ${r.is_public ? `<button class="btn btn-ghost btn-sm cmt-btn" data-id="${r.id}">💬 Коммент</button>` : ""}
                <button class="btn btn-ghost btn-sm del-btn" data-id="${r.id}" style="color:var(--color-danger)">🗑 Устгах</button>
              </div>
-           </div>`;
+           </div>
+           <div class="fb-comments" data-comments style="display:none;margin-top:12px"></div>`;
         listEl.appendChild(card);
 
-        // Зургуудыг signed URL-ээр ачаалах
+        // Нийтэд ил / нуух toggle
+        card.querySelector(".pub-btn").addEventListener("click", async (e) => {
+          const btn = e.currentTarget; btn.disabled = true;
+          const next = !r.is_public;
+          if (next && !confirm("Энэ саналыг нийтэд ил болгох уу? Асуудал, зураг, дүүрэг/хороо, үнэлгээ нь сайтад харагдана (нэр/утас/имэйл/байршил харагдахгүй).")) { btn.disabled = false; return; }
+          const { error } = await sb.from("feedback").update({ is_public: next }).eq("id", r.id);
+          if (error) { alert("Алдаа: " + error.message); btn.disabled = false; return; }
+          r.is_public = next;
+          render(currentRows.length ? currentRows : allRows);
+        });
+
+        // Коммент модерац
+        const cmtBtn = card.querySelector(".cmt-btn");
+        if (cmtBtn) {
+          cmtBtn.addEventListener("click", async () => {
+            const box = card.querySelector("[data-comments]");
+            if (box.style.display === "block") { box.style.display = "none"; return; }
+            box.style.display = "block";
+            box.innerHTML = '<p style="color:var(--color-text-soft);font-size:.85rem">Ачаалж байна…</p>';
+            const { data: cm, error } = await sb.from("feedback_comments").select("*").eq("feedback_id", r.id).order("created_at", { ascending: true });
+            if (error) { box.innerHTML = '<p style="color:var(--color-danger)">Коммент ачаалахад алдаа.</p>'; return; }
+            if (!cm || !cm.length) { box.innerHTML = '<p style="color:var(--color-text-soft);font-size:.85rem">Коммент алга.</p>'; return; }
+            box.innerHTML = "";
+            cm.forEach((c) => {
+              const row = document.createElement("div");
+              row.style.cssText = "display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border:1px solid var(--color-border);border-radius:8px;margin-bottom:6px;background:var(--color-bg-soft)";
+              row.innerHTML = `<div style="flex:1"><div style="font-size:.74rem;color:var(--color-text-soft)">Зочин · ${fmtDate(c.created_at)}</div><div style="font-size:.9rem">${esc(c.body)}</div></div>`;
+              const del = document.createElement("button");
+              del.className = "btn btn-ghost btn-sm"; del.style.color = "var(--color-danger)"; del.textContent = "🗑";
+              del.addEventListener("click", async () => {
+                if (!confirm("Энэ комментыг устгах уу?")) return;
+                del.disabled = true;
+                const { error: de } = await sb.from("feedback_comments").delete().eq("id", c.id);
+                if (de) { alert("Алдаа: " + de.message); del.disabled = false; return; }
+                row.remove();
+              });
+              row.appendChild(del);
+              box.appendChild(row);
+            });
+          });
+        }
+
+        // Зургуудыг ачаалах (нийтэд ил бол public, эс бөгөөс signed URL)
         if (r.photos && r.photos.length) {
           const box = card.querySelector("[data-photos]");
           r.photos.forEach(async (p) => {
-            const url = await signedUrl(p);
+            const url = await photoUrl(p, r.is_public);
             if (!url) return;
             const img = document.createElement("img");
             img.src = url; img.alt = "Хавсаргасан зураг"; img.loading = "lazy";
@@ -233,8 +286,8 @@
           if (!confirm("Энэ саналыг бүрмөсөн устгах уу?")) return;
           const id = e.target.dataset.id;
           e.target.disabled = true;
-          // Хавсралт зургуудыг мөн устгах
-          if (r.photos && r.photos.length) { try { await sb.storage.from("feedback-photos").remove(r.photos); } catch (_) {} }
+          // Хавсралт зургуудыг мөн устгах (зөв сангаас)
+          if (r.photos && r.photos.length) { try { await sb.storage.from(r.is_public ? "feedback-public" : "feedback-photos").remove(r.photos); } catch (_) {} }
           const { error } = await sb.from("feedback").delete().eq("id", id);
           if (error) { alert("Алдаа: " + error.message); e.target.disabled = false; return; }
           allRows = allRows.filter((x) => x.id !== id);

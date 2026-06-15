@@ -364,13 +364,19 @@
         if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Илгээж байна…"; }
         resetSuccessStyle();
         try {
+          // Иргэн нийтэд харуулахыг зөвшөөрсөн эсэх
+          const publicChk = form.querySelector("#f-public");
+          const isPublic = !!(publicChk && publicChk.checked);
+          // Зөвшөөрсөн бол нийтийн (public) сан руу, эс бөгөөс хаалттай сан руу
+          const bucket = isPublic ? "feedback-public" : "feedback-photos";
+
           // 1) Зургуудыг storage руу хуулах
           const photoPaths = [];
           for (let i = 0; i < files.length; i++) {
             const f = files[i];
             const ext = (f.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "");
             const path = `${Date.now()}-${i}-${Math.round(performance.now())}.${ext}`;
-            const { error: upErr } = await sb.storage.from("feedback-photos").upload(path, f, { contentType: f.type });
+            const { error: upErr } = await sb.storage.from(bucket).upload(path, f, { contentType: f.type });
             if (upErr) throw upErr;
             photoPaths.push(path);
           }
@@ -388,6 +394,7 @@
             lng: lngIn && lngIn.value ? parseFloat(lngIn.value) : null,
             rating: ratingIn && ratingIn.value ? parseInt(ratingIn.value, 10) : null,
             photos: photoPaths,
+            is_public: isPublic,
           };
           const { error: insErr } = await sb.from("feedback").insert(row);
           if (insErr) throw insErr;
@@ -512,6 +519,10 @@
       "Цэс": "Menu", "Холбоос": "Links", "Сошиал": "Social", "Видео сан": "Video library",
       "X (Twitter)": "X (Twitter)", "Үндсэн агуулга руу очих": "Skip to main content",
       "Сайтаас хайх": "Search the site", "Хаах": "Close",
+      "Ил тод байдал": "Transparency",
+      "Иргэдийн нийтэлсэн санал": "Citizens' published feedback",
+      "Иргэд өөрсдөө зөвшөөрсний дагуу нийтэлсэн асуудлууд. Дэмжвэл ❤ дарж, саналаа коммент хэлбэрээр үлдээгээрэй.":
+        "Issues published with citizens' own consent. Show support with ❤ and leave your thoughts as a comment.",
       "Цэндийн Баатархүү": "Tsendiin Baatarkhuu",
       "Монгол Улсын Их Хурлын гишүүн. Сонгуулийн 10-р тойрог — Чингэлтэй, Сүхбаатар дүүргийн иргэдийн итгэлийг хүлээж, шударга ёс, цахим хөгжлийн төлөө ажилласаар байна.":
         "Member of the State Great Khural of Mongolia. Earning the trust of citizens of Electoral District 10 — Chingeltei and Sukhbaatar — and working for justice and digital development.",
@@ -763,6 +774,147 @@
     },
   };
 
+  /* ---------- 12. Ил тод санал самбар (public feed) ---------- */
+  const PublicFeed = {
+    SUBJ: { sanal: "Санал", urgudul: "Өргөдөл", gomdol: "Гомдол", asuudal: "Тулгамдсан асуудал", uulzalt: "Уулзалтын хүсэлт", busad: "Бусад" },
+    esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
+    fmt(s) { try { return new Date(s).toLocaleString("mn-MN", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }); } catch (_) { return ""; } },
+
+    clientId() {
+      let id = localStorage.getItem("fb_client");
+      if (!id) { id = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.round(performance.now())); localStorage.setItem("fb_client", id); }
+      return id;
+    },
+    likedSet() { try { return new Set(JSON.parse(localStorage.getItem("fb_liked") || "[]")); } catch (_) { return new Set(); } },
+    saveLiked(set) { localStorage.setItem("fb_liked", JSON.stringify([...set])); },
+
+    async init() {
+      const wrap = document.querySelector("[data-feed]");
+      if (!wrap) return;
+      const sb = window.getSB && window.getSB();
+      if (!sb) { wrap.innerHTML = '<p class="feed-state">Самбар одоогоор боломжгүй байна.</p>'; return; }
+
+      try {
+        const { data: rows, error } = await sb
+          .from("public_feedback").select("*").order("created_at", { ascending: false }).limit(50);
+        if (error) throw error;
+        if (!rows || !rows.length) {
+          wrap.innerHTML = '<p class="feed-state">Одоогоор нийтэлсэн санал алга. Та формоор санал илгээж, «олон нийтэд харуулах»-ыг сонгож болно.</p>';
+          return;
+        }
+
+        // Лайкны тоо + коммент (нэг дор)
+        const likeMap = {};
+        try { const { data: lc } = await sb.rpc("like_counts"); (lc || []).forEach((r) => { likeMap[r.feedback_id] = r.cnt; }); } catch (_) {}
+        const cmtMap = {};
+        try {
+          const { data: cm } = await sb.from("feedback_comments").select("*").in("feedback_id", rows.map((r) => r.id)).order("created_at", { ascending: true });
+          (cm || []).forEach((c) => { (cmtMap[c.feedback_id] = cmtMap[c.feedback_id] || []).push(c); });
+        } catch (_) {}
+
+        const liked = this.likedSet();
+        wrap.innerHTML = "";
+        rows.forEach((r) => wrap.appendChild(this.card(sb, r, likeMap[r.id] || 0, cmtMap[r.id] || [], liked)));
+      } catch (err) {
+        wrap.innerHTML = '<p class="feed-state">Самбар ачаалахад алдаа гарлаа.</p>';
+      }
+    },
+
+    card(sb, r, likeCount, comments, liked) {
+      const el = document.createElement("article");
+      el.className = "feed-card reveal is-visible";
+      const loc = [r.district ? r.district + " дүүрэг" : "", r.khoroo ? r.khoroo + "-р хороо" : ""].filter(Boolean).join(", ");
+      const isLiked = liked.has(r.id);
+      el.innerHTML =
+        `<div class="fc-top">
+           <span class="fc-subject">${this.esc(this.SUBJ[r.subject] || r.subject || "Санал")}</span>
+           ${r.rating != null ? `<span class="fc-tag fc-rate">⭐ ${r.rating}/10</span>` : ""}
+         </div>
+         <div class="fc-meta">
+           <span>📅 ${this.fmt(r.created_at)}</span>
+           ${loc ? `<span>📍 ${this.esc(loc)}</span>` : ""}
+         </div>
+         <div class="fc-msg">${this.esc(r.message)}</div>
+         <div class="fc-photos"></div>
+         <div class="fc-actions">
+           <button class="fc-like${isLiked ? " liked" : ""}" type="button" aria-pressed="${isLiked}">
+             <span class="heart">${isLiked ? "❤" : "🤍"}</span><span class="cnt">${likeCount}</span>
+           </button>
+           <button class="fc-comment-toggle" type="button">💬 Коммент <span class="ccnt">(${comments.length})</span></button>
+         </div>
+         <div class="fc-comments">
+           <div class="fc-comment-box"></div>
+           <form class="fc-comment-form">
+             <textarea placeholder="Зочин болж сэтгэгдэл бичих…" maxlength="1000" required></textarea>
+             <button type="submit" class="btn btn-gold btn-sm">Илгээх</button>
+           </form>
+         </div>`;
+
+      // Зургууд (нийтийн сангаас)
+      const pbox = el.querySelector(".fc-photos");
+      (r.photos || []).forEach((p) => {
+        let url = "";
+        try { url = sb.storage.from("feedback-public").getPublicUrl(p).data.publicUrl; } catch (_) {}
+        if (!url) return;
+        const a = document.createElement("a");
+        a.href = url; a.target = "_blank"; a.rel = "noopener";
+        a.innerHTML = `<img src="${url}" alt="Иргэний хавсаргасан зураг" loading="lazy">`;
+        pbox.appendChild(a);
+      });
+      if (!pbox.children.length) pbox.remove();
+
+      // Лайк
+      const likeBtn = el.querySelector(".fc-like");
+      likeBtn.addEventListener("click", async () => {
+        likeBtn.disabled = true;
+        try {
+          const { data, error } = await sb.rpc("toggle_like", { p_feedback: r.id, p_client: this.clientId() });
+          if (error) throw error;
+          const set = this.likedSet();
+          const nowLiked = !set.has(r.id);
+          if (nowLiked) set.add(r.id); else set.delete(r.id);
+          this.saveLiked(set);
+          likeBtn.classList.toggle("liked", nowLiked);
+          likeBtn.setAttribute("aria-pressed", String(nowLiked));
+          likeBtn.querySelector(".heart").textContent = nowLiked ? "❤" : "🤍";
+          likeBtn.querySelector(".cnt").textContent = (typeof data === "number" ? data : likeCount);
+        } catch (_) {} finally { likeBtn.disabled = false; }
+      });
+
+      // Коммент нээх/хаах
+      const cWrap = el.querySelector(".fc-comments");
+      const cBox = el.querySelector(".fc-comment-box");
+      const renderComments = (list) => {
+        cBox.innerHTML = list.length
+          ? list.map((c) => `<div class="fc-comment"><div class="who">Зочин<span class="when">${this.fmt(c.created_at)}</span></div><div class="body">${this.esc(c.body)}</div></div>`).join("")
+          : '<p class="fc-comment-empty">Хараахан сэтгэгдэл алга. Эхэлж бичээрэй.</p>';
+      };
+      renderComments(comments);
+      el.querySelector(".fc-comment-toggle").addEventListener("click", () => cWrap.classList.toggle("open"));
+
+      // Коммент илгээх
+      const cForm = el.querySelector(".fc-comment-form");
+      cForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const ta = cForm.querySelector("textarea");
+        const body = ta.value.trim();
+        if (!body) return;
+        const btn = cForm.querySelector("button");
+        btn.disabled = true;
+        try {
+          const { data, error } = await sb.from("feedback_comments").insert({ feedback_id: r.id, body }).select().single();
+          if (error) throw error;
+          comments.push(data);
+          renderComments(comments);
+          el.querySelector(".ccnt").textContent = `(${comments.length})`;
+          ta.value = "";
+        } catch (_) { alert("Сэтгэгдэл илгээхэд алдаа гарлаа. Дахин оролдоно уу."); } finally { btn.disabled = false; }
+      });
+
+      return el;
+    },
+  };
+
   /* ---------- Бүгдийг эхлүүлэх ---------- */
   // Хөвөгч "Санал хүсэлт" товч — холбоо барих хуудаснаас бусад бүх хуудсанд
   function injectFeedbackFab() {
@@ -778,6 +930,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     Theme.init(); Nav.init(); Search.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
-    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init();
+    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init();
   });
 })();

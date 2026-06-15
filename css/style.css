@@ -734,6 +734,64 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
   .footer-bottom { flex-direction: column; text-align: center; }
 }
 
+/* ---------- 20. Ил тод санал самбар (public feed) ---------- */
+.consent-check { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; font-size: .92rem; line-height: 1.5; }
+.consent-check input { width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; accent-color: var(--color-accent); cursor: pointer; }
+.consent-check u { text-decoration-color: var(--color-accent); }
+
+.feed-list { display: grid; gap: 22px; max-width: 760px; margin: 0 auto; }
+.feed-state { text-align: center; color: var(--color-text-soft); padding: 30px 0; }
+
+.feed-card {
+  background: var(--color-bg-card); border: 1px solid var(--color-border);
+  border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow-sm);
+}
+.feed-card .fc-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.feed-card .fc-subject { font-weight: 700; color: var(--color-text); font-size: 1.08rem; }
+.feed-card .fc-tag {
+  font-size: .74rem; font-weight: 700; letter-spacing: .04em; padding: 3px 10px; border-radius: 20px;
+  background: var(--color-accent-soft); color: var(--color-accent); border: 1px solid var(--color-border);
+}
+.feed-card .fc-meta { display: flex; gap: 14px; flex-wrap: wrap; font-size: .82rem; color: var(--color-text-soft); margin-bottom: 12px; }
+.feed-card .fc-msg { color: var(--color-text); margin-bottom: 14px; white-space: pre-wrap; }
+.feed-card .fc-photos { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.feed-card .fc-photos img {
+  width: 120px; height: 120px; object-fit: cover; border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border); cursor: pointer; transition: transform var(--transition);
+}
+.feed-card .fc-photos img:hover { transform: scale(1.04); }
+.feed-card .fc-rate { color: var(--color-warning); font-weight: 700; }
+
+.fc-actions { display: flex; align-items: center; gap: 16px; padding-top: 12px; border-top: 1px solid var(--color-border); }
+.fc-like, .fc-comment-toggle {
+  display: inline-flex; align-items: center; gap: 7px; background: none; border: none; cursor: pointer;
+  color: var(--color-text-soft); font-family: inherit; font-size: .92rem; font-weight: 600; padding: 4px 6px;
+  border-radius: var(--radius-sm); transition: color var(--transition), background var(--transition);
+}
+.fc-like:hover, .fc-comment-toggle:hover { color: var(--color-text); background: var(--color-bg-soft); }
+.fc-like .heart { font-size: 1.15rem; line-height: 1; transition: transform var(--transition); }
+.fc-like.liked { color: #f0496b; }
+.fc-like.liked .heart { transform: scale(1.15); }
+
+.fc-comments { margin-top: 14px; display: none; }
+.fc-comments.open { display: block; }
+.fc-comment {
+  background: var(--color-bg-soft); border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm); padding: 10px 14px; margin-bottom: 8px;
+}
+.fc-comment .who { font-weight: 700; font-size: .82rem; color: var(--color-accent); margin-bottom: 2px; }
+.fc-comment .when { font-weight: 400; color: var(--color-text-soft); font-size: .76rem; margin-left: 8px; }
+.fc-comment .body { color: var(--color-text); font-size: .92rem; white-space: pre-wrap; }
+.fc-comment-empty { color: var(--color-text-soft); font-size: .86rem; padding: 4px 0 10px; }
+.fc-comment-form { display: flex; gap: 8px; margin-top: 10px; }
+.fc-comment-form textarea {
+  flex: 1; min-height: 42px; max-height: 140px; resize: vertical; padding: 10px 12px;
+  border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-bg);
+  color: var(--color-text); font-family: inherit; font-size: .92rem;
+}
+.fc-comment-form textarea:focus { outline: none; border-color: var(--color-primary); }
+.fc-comment-form button { flex-shrink: 0; align-self: flex-end; }
+
 /* Хэвлэх (Print) */
 @media print {
   .site-header, .site-footer, .to-top, .hero-actions, .share, .nav-tools { display: none !important; }
