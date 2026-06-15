@@ -81,33 +81,8 @@
           <div class="stat"><div class="num"><span data-count="25">0</span><span class="suffix">мянга+</span></div><div class="label">Ашиг хүртэгч иргэн</div></div>
         </div>
 
-        <!-- Шүүлтүүр -->
-        <div class="toolbar reveal">
-          <div class="field"><input type="text" id="filter-search" placeholder="🔍 Төсөл хайх…" aria-label="Төсөл хайх" /></div>
-          <select id="filter-district" aria-label="Дүүрэг">
-            <option value="all">Бүх дүүрэг</option>
-            <option value="Чингэлтэй">Чингэлтэй</option>
-            <option value="Сүхбаатар">Сүхбаатар</option>
-          </select>
-          <select id="filter-category" aria-label="Чиглэл">
-            <option value="all">Бүх чиглэл</option>
-            <option value="sport">Спорт, эрүүл мэнд</option>
-            <option value="nogoon">Ногоон байгууламж</option>
-            <option value="des-butets">Дэд бүтэц</option>
-            <option value="bolovsrol">Боловсрол</option>
-            <option value="tsahim">Цахим үйлчилгээ</option>
-            <option value="emnelg">Эрүүл мэнд</option>
-          </select>
-          <select id="filter-status" aria-label="Төлөв">
-            <option value="all">Бүх төлөв</option>
-            <option value="done">Хэрэгжсэн</option>
-            <option value="ongoing">Хэрэгжиж буй</option>
-            <option value="planned">Төлөвлөгдсөн</option>
-          </select>
-        </div>
-
-        <!-- Төслүүд (CMS/админаас удирдах боломжтой бүтэц. Жишээ мэдээлэл.) -->
-        <div class="grid grid-3" data-filterable>
+        <!-- Төслүүд (CMS/админаас удирдах боломжтой бүтэц) -->
+        <div class="grid grid-3">
           <article class="card reveal" data-item data-district="Чингэлтэй" data-category="sport" data-status="ongoing" data-title="Спортлог Чингэлтэйчүүд">
             <div class="card-media"><span class="tag">Спорт, эрүүл мэнд</span><span class="tag status-tag badge-status status-review" style="background:rgba(240,164,55,.92);color:#2a1c03">Хэрэгжиж буй</span><span class="placeholder">🏃</span></div>
             <div class="card-body">
@@ -149,7 +124,6 @@
             </div>
           </article>
         </div>
-        <div class="filter-empty search-empty" style="display:none">Илэрц олдсонгүй. Шүүлтүүрээ өөрчилнө үү.</div>
       </div>
     </section>
 
