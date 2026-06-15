@@ -9,9 +9,9 @@
   /* ---------- 1. Dark / Light Theme ---------- */
   const Theme = {
     init() {
-      // Үндсэн горим — цайвар (light, trust-centered). Хэрэглэгч dark сонговол хадгална.
+      // Үндсэн горим — хар хөх (dark, брэнд өнгө). Хэрэглэгч light сонговол хадгална.
       const saved = localStorage.getItem("theme");
-      const theme = saved || "light";
+      const theme = saved || "dark";
       document.documentElement.setAttribute("data-theme", theme);
 
       const btn = document.querySelector(".theme-toggle");
