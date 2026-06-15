@@ -710,20 +710,39 @@
         if (this.ph[k]) this.phEls.push({ el, mn: k, en: this.ph[k] });
       });
       this.lang = localStorage.getItem("lang") || "mn";
-      this.apply();
-      btn.addEventListener("click", () => {
-        this.lang = this.lang === "mn" ? "en" : "mn";
-        localStorage.setItem("lang", this.lang);
-        this.apply();
+      const sw = document.getElementById("lang-switch");
+      // Dropdown нээх/хаах
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const open = sw.classList.toggle("open");
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
       });
+      // Хэл сонгох
+      document.querySelectorAll(".lang-menu [data-lang]").forEach((mi) => {
+        mi.addEventListener("click", () => {
+          this.lang = mi.dataset.lang;
+          localStorage.setItem("lang", this.lang);
+          sw.classList.remove("open");
+          btn.setAttribute("aria-expanded", "false");
+          this.apply();
+        });
+      });
+      // Гадна дарахад хаах
+      document.addEventListener("click", (e) => {
+        if (sw && !sw.contains(e.target)) { sw.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); }
+      });
+      this.apply();
     },
     apply() {
       document.documentElement.setAttribute("lang", this.lang);
       const en = this.lang === "en";
       this.nodes.forEach((o) => { o.node.nodeValue = en ? o.en : o.mn; });
       this.phEls.forEach((o) => { o.el.setAttribute("placeholder", en ? o.en : o.mn); });
+      const flag = document.querySelector("#lang-toggle .lang-flag");
       const code = document.querySelector("#lang-toggle .lang-code");
-      if (code) code.textContent = this.lang.toUpperCase();
+      if (flag) flag.src = en ? "https://flagcdn.com/w40/gb.png" : "https://flagcdn.com/w40/mn.png";
+      if (code) code.textContent = en ? "Eng" : "Мон";
+      document.querySelectorAll(".lang-menu [data-lang]").forEach((mi) => mi.setAttribute("aria-current", mi.dataset.lang === this.lang ? "true" : "false"));
     },
   };
 

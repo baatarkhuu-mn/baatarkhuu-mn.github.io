@@ -222,10 +222,27 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 
 .nav-toggle { display: none; }
 
-/* Хэл солих товч */
-.lang-btn { width: auto; gap: 5px; padding: 0 12px; font-weight: 700; }
-.lang-btn svg { width: 17px; height: 17px; }
-.lang-btn .lang-code { font-size: .82rem; letter-spacing: .03em; }
+/* Хэл солих dropdown */
+.lang-switch { position: relative; }
+.lang-btn { width: auto; gap: 6px; padding: 0 10px; font-weight: 600; }
+.lang-btn .lang-flag { width: 20px; height: 14px; border-radius: 2px; object-fit: cover; }
+.lang-btn .lang-code { font-size: .85rem; letter-spacing: .02em; }
+.lang-btn .lang-caret { transition: transform var(--transition); flex-shrink: 0; }
+.lang-switch.open .lang-btn .lang-caret { transform: rotate(180deg); }
+.lang-menu {
+  position: absolute; top: calc(100% + 8px); right: 0; min-width: 170px;
+  background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 6px; display: none; z-index: 1100;
+}
+.lang-switch.open .lang-menu { display: block; animation: fadeIn .15s ease; }
+.lang-menu button {
+  display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px;
+  background: none; border: none; cursor: pointer; border-radius: var(--radius-sm);
+  color: var(--color-text); font-family: inherit; font-size: .92rem; text-align: left; transition: background var(--transition);
+}
+.lang-menu button:hover { background: var(--color-bg-soft); }
+.lang-menu button img { width: 22px; height: 15px; border-radius: 2px; object-fit: cover; }
+.lang-menu button[aria-current="true"] { color: var(--color-primary-light); font-weight: 700; }
 
 /* ---------- 6. Хайлтын модал ---------- */
 .search-overlay {
