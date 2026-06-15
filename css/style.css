@@ -285,16 +285,15 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
   color: #fff;
   border-bottom: 1px solid var(--color-border);
 }
+/* Hero нь цагаан тексттэй тул гэрэл горимд ч гүн дижитал навигэй өнгөтэй (dark-тай ижил) */
 [data-theme="light"] .hero {
   background:
-    radial-gradient(ellipse 62% 14% at 45% 46%, rgba(200, 233, 255, .45), transparent 72%),
-    radial-gradient(ellipse 70% 90% at 78% 16%, rgba(120, 182, 255, .38), transparent 60%),
-    radial-gradient(ellipse 50% 60% at 12% 88%, rgba(224, 182, 83, .18), transparent 60%),
-    linear-gradient(150deg, #0a3d8f, #1e63c9 55%, #0a3d8f);
-  border-bottom: none;
+    radial-gradient(ellipse 65% 13% at 42% 44%, rgba(150, 212, 255, .22), transparent 72%),
+    radial-gradient(ellipse 70% 90% at 75% 20%, rgba(77, 141, 240, .18), transparent 60%),
+    radial-gradient(ellipse 50% 60% at 15% 85%, rgba(63, 210, 230, .12), transparent 60%),
+    linear-gradient(150deg, #050d1d, #0a1c3c 55%, #06122a);
+  border-bottom: 1px solid #14233f;
 }
-/* Дижитал торон хээ — гэрэл горимд ч hero дээр харагдана */
-[data-theme="light"] .hero::before { opacity: .35; }
 /* Гэрлийн туяа — нимгэн гэрэлтсэн шугам (брэнд видеоны хэв) */
 .hero .light-beam { position: absolute; left: 0; right: 0; top: 46%; height: 2px; z-index: 1; pointer-events: none;
   background: linear-gradient(90deg, transparent, rgba(160, 216, 255, .85), transparent);
@@ -625,12 +624,13 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
     linear-gradient(150deg, #050d1d, #0a1c3c);
   color: #fff; padding: 56px 0; border-bottom: 1px solid var(--color-border);
 }
+/* Банер ч цагаан тексттэй — хоёр горимд ижил гүн дижитал өнгө */
 [data-theme="light"] .page-hero {
   background:
-    radial-gradient(ellipse 60% 120% at 80% 0%, rgba(200,233,255,.45), transparent 62%),
-    radial-gradient(ellipse 55% 95% at 8% 100%, rgba(224,182,83,.16), transparent 60%),
-    linear-gradient(135deg, #0a3d8f, #1e63c9);
-  border-bottom: none;
+    radial-gradient(ellipse 60% 110% at 80% 0%, rgba(77,141,240,.20), transparent 60%),
+    radial-gradient(ellipse 55% 90% at 8% 100%, rgba(63,210,230,.12), transparent 60%),
+    linear-gradient(150deg, #050d1d, #0a1c3c);
+  border-bottom: 1px solid #14233f;
 }
 /* Дижитал торон хээ — нийтлэг банер */
 .page-hero::before {
@@ -672,17 +672,18 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
   content: ""; position: absolute; top: -1px; left: 0; right: 0; height: 2px;
   background: linear-gradient(90deg, transparent, var(--color-primary), var(--color-accent), transparent);
 }
+/* Footer ч хоёр горимд ижил гүн дижитал өнгө */
 [data-theme="light"] .site-footer {
-  color: #c8d6ec; border-top: none;
+  color: #9db0cc; border-top: none;
   background:
-    radial-gradient(ellipse 50% 130% at 85% 0%, rgba(120,182,255,.30), transparent 60%),
-    radial-gradient(ellipse 42% 110% at 8% 100%, rgba(224,182,83,.14), transparent 60%),
-    linear-gradient(160deg, #072a63, #0a3d8f);
+    radial-gradient(ellipse 50% 130% at 85% 0%, rgba(77,141,240,.14), transparent 60%),
+    radial-gradient(ellipse 40% 110% at 8% 100%, rgba(63,210,230,.08), transparent 60%),
+    linear-gradient(160deg, #050b16, #040a15);
 }
 .footer-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1.2fr; gap: 36px; }
 .site-footer h4 { color: #fff; margin-bottom: 16px; font-size: 1.05rem; }
 .site-footer a { color: #9db0cc; }
-[data-theme="light"] .site-footer a { color: #c8d6ec; }
+[data-theme="light"] .site-footer a { color: #9db0cc; }
 .site-footer a:hover { color: var(--color-accent); }
 .site-footer .f-brand .emblem { display: block; width: 56px; height: 56px; margin-bottom: 14px;
   filter: drop-shadow(0 0 10px rgba(224, 182, 83, .45)); }
