@@ -16,8 +16,8 @@ alter table public.feedback
 -- Зөвшөөрсөн саналын зургийг ЭНД хуулна (нийтэд харагдана).
 -- Зөвшөөрөөгүй саналын зураг хуучин "feedback-photos" (хаалттай) дотор хэвээр.
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-values ('feedback-public', 'feedback-public', true, 8388608,
-        array['image/jpeg','image/png','image/webp','image/gif','image/heic'])
+values ('feedback-public', 'feedback-public', true, 52428800,
+        array['image/jpeg','image/png','image/webp','image/gif','image/heic','video/mp4','video/quicktime','video/webm'])
 on conflict (id) do update
   set public = excluded.public,
       file_size_limit = excluded.file_size_limit,

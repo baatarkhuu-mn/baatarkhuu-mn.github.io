@@ -191,19 +191,18 @@
       <div class="container">
         <div class="section-head reveal" style="margin-bottom:38px">
           <span class="eyebrow">Санал хүсэлт</span>
-          <h2>Саналаа илгээ — таны дуу хоолой чухал</h2>
+          <h2>Санал хүсэлтээ хэрхэн илгээх вэ?</h2>
         </div>
         <div class="fb-split">
           <!-- ЗҮҮН: заавар -->
           <div class="fb-guide reveal">
-            <h3>Хэрхэн илгээх вэ?</h3>
             <ol class="guide-steps">
-              <li><b>Нэрээ</b> бичнэ (утас заавал биш, имэйл шаардлагагүй).</li>
+              <li><b>Нэрээ</b> бичнэ, <b>утас заавал</b> бичнэ.</li>
               <li>Төрлөө сонгож, <b>асуудал/саналаа</b> дэлгэрэнгүй бичнэ.</li>
-              <li>Хүсвэл <b>зураг</b> хавсаргаж, <b>байршлаа</b> тогтооно.</li>
+              <li><b>Зураг, бичлэг</b> хавсаргаж, <b>байршлаа</b> тогтооно.</li>
               <li>Гишүүний ажилд <b>үнэлгээ</b> өгч болно (заавал биш).</li>
               <li>«Олон нийтэд харуулах» сонговол доорх <b>самбарт нийтлэгдэнэ</b>.</li>
-              <li><b>«Илгээх»</b> дарна — гишүүний баг хүлээн авч хариу өгнө.</li>
+              <li><b>«Илгээх»</b> дарна.</li>
             </ol>
             <p class="form-note">Таны мэдээллийг зөвхөн хариу өгөх зорилгоор ашиглана. Хувийн мэдээлэл (нэр, утас, байршил) нийтэд харагдахгүй.</p>
           </div>
@@ -216,8 +215,8 @@
                   <input type="text" id="f-name" name="name" required autocomplete="name" placeholder="Таны овог нэр" />
                 </div>
                 <div class="form-group">
-                  <label for="f-phone">Утас</label>
-                  <input type="tel" id="f-phone" name="phone" autocomplete="tel" placeholder="+976 ХХХХ-ХХХХ" />
+                  <label for="f-phone">Утас <span aria-hidden="true" style="color:var(--color-danger)">*</span></label>
+                  <input type="tel" id="f-phone" name="phone" required autocomplete="tel" placeholder="+976 ХХХХ-ХХХХ" />
                 </div>
               </div>
               <div class="form-group">
@@ -236,11 +235,11 @@
                 <textarea id="f-message" name="message" required placeholder="Тулгамдсан асуудал, санал хүсэлтээ дэлгэрэнгүй бичнэ үү…"></textarea>
               </div>
               <div class="form-group">
-                <label for="f-photos">Зураг хавсаргах</label>
+                <label for="f-photos">Зураг, бичлэг хавсаргах</label>
                 <label class="upload-zone" for="f-photos">
-                  Энд дарж зураг оруулах эсвэл чирч тавина уу
-                  <span class="up-hint">Утаснаас шууд зураг авах боломжтой · Дээд тал нь 5 зураг, тус бүр 8MB хүртэл</span>
-                  <input type="file" id="f-photos" name="photos" accept="image/*" capture="environment" multiple />
+                  Энд дарж зураг, бичлэг оруулах эсвэл чирч тавина уу
+                  <span class="up-hint">Утаснаас шууд авах боломжтой · Зураг 8MB, бичлэг 50MB хүртэл · нийт 5 хүртэл</span>
+                  <input type="file" id="f-photos" name="photos" accept="image/*,video/*" multiple />
                 </label>
                 <div class="photo-previews" id="photo-previews"></div>
               </div>

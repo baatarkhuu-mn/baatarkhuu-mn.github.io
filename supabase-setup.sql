@@ -56,8 +56,8 @@ create policy "only admin can delete"
 -- 3) Зургийн сан (storage bucket) -------------------------------
 -- Дээд тал нь 8MB, зөвхөн зураг. Нийтэд унших боломжгүй (хувийн).
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-values ('feedback-photos', 'feedback-photos', false, 8388608,
-        array['image/jpeg','image/png','image/webp','image/gif','image/heic'])
+values ('feedback-photos', 'feedback-photos', false, 52428800,
+        array['image/jpeg','image/png','image/webp','image/gif','image/heic','video/mp4','video/quicktime','video/webm'])
 on conflict (id) do update
   set file_size_limit = excluded.file_size_limit,
       allowed_mime_types = excluded.allowed_mime_types;

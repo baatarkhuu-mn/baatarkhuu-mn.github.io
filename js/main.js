@@ -262,6 +262,7 @@
       const zone = form.querySelector(".upload-zone");
       let files = [];
 
+      const VID_MB = 50;
       const renderPreviews = () => {
         if (!previews) return;
         previews.innerHTML = "";
@@ -269,16 +270,21 @@
           const url = URL.createObjectURL(f);
           const div = document.createElement("div");
           div.className = "ph";
-          div.innerHTML = `<img src="${url}" alt="Хавсаргасан зураг ${idx + 1}" /><button type="button" aria-label="Зураг устгах">✕</button>`;
+          const media = f.type.startsWith("video/")
+            ? `<video src="${url}" muted playsinline></video>`
+            : `<img src="${url}" alt="Хавсралт ${idx + 1}" />`;
+          div.innerHTML = `${media}<button type="button" aria-label="Устгах">✕</button>`;
           div.querySelector("button").addEventListener("click", () => { files.splice(idx, 1); renderPreviews(); });
           previews.appendChild(div);
         });
       };
       const addFiles = (list) => {
         for (const f of list) {
-          if (!f.type.startsWith("image/")) continue;
-          if (f.size > MAX_MB * 1024 * 1024) { alert(`"${f.name}" хэт том байна — ${MAX_MB}MB-аас бага зураг оруулна уу.`); continue; }
-          if (files.length >= MAX_FILES) { alert(`Дээд тал нь ${MAX_FILES} зураг хавсаргах боломжтой.`); break; }
+          const isImg = f.type.startsWith("image/"), isVid = f.type.startsWith("video/");
+          if (!isImg && !isVid) continue;
+          const lim = isVid ? VID_MB : MAX_MB;
+          if (f.size > lim * 1024 * 1024) { alert(`"${f.name}" хэт том байна — ${lim}MB-аас бага байх ёстой.`); continue; }
+          if (files.length >= MAX_FILES) { alert(`Дээд тал нь ${MAX_FILES} файл хавсаргах боломжтой.`); break; }
           files.push(f);
         }
         renderPreviews();

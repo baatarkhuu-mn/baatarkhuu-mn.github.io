@@ -187,8 +187,8 @@
                   <input type="text" id="f-name" name="name" required autocomplete="name" placeholder="Таны овог нэр" />
                 </div>
                 <div class="form-group">
-                  <label for="f-phone">Утас</label>
-                  <input type="tel" id="f-phone" name="phone" autocomplete="tel" placeholder="+976 ХХХХ-ХХХХ" />
+                  <label for="f-phone">Утас <span aria-hidden="true" style="color:var(--color-danger)">*</span></label>
+                  <input type="tel" id="f-phone" name="phone" required autocomplete="tel" placeholder="+976 ХХХХ-ХХХХ" />
                 </div>
               </div>
               <div class="form-group">
@@ -207,11 +207,11 @@
                 <textarea id="f-message" name="message" required placeholder="Тулгамдсан асуудал, санал хүсэлтээ дэлгэрэнгүй бичнэ үү…"></textarea>
               </div>
               <div class="form-group">
-                <label for="f-photos">Зураг хавсаргах</label>
+                <label for="f-photos">Зураг, бичлэг хавсаргах</label>
                 <label class="upload-zone" for="f-photos">
-                  Энд дарж зураг оруулах эсвэл чирч тавина уу
-                  <span class="up-hint">Утаснаас шууд зураг авах боломжтой · Дээд тал нь 5 зураг, тус бүр 8MB хүртэл</span>
-                  <input type="file" id="f-photos" name="photos" accept="image/*" capture="environment" multiple />
+                  Энд дарж зураг, бичлэг оруулах эсвэл чирч тавина уу
+                  <span class="up-hint">Утаснаас шууд авах боломжтой · Зураг 8MB, бичлэг 50MB хүртэл · нийт 5 хүртэл</span>
+                  <input type="file" id="f-photos" name="photos" accept="image/*,video/*" multiple />
                 </label>
                 <div class="photo-previews" id="photo-previews"></div>
               </div>
