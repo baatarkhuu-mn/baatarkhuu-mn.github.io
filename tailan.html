@@ -25,10 +25,15 @@
       overflow: hidden; display: flex; flex-direction: column;
       transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition); }
     .report-card:hover { border-color: var(--color-primary-dark); box-shadow: var(--shadow); transform: translateY(-4px); }
-    .rc-cover { display: block; aspect-ratio: 3/4; position: relative; overflow: hidden; cursor: pointer;
+    .rc-cover { display: block; aspect-ratio: 1/1; position: relative; overflow: hidden; cursor: pointer;
       background: linear-gradient(160deg, #15294e, #0b1830); }
     [data-theme="light"] .rc-cover { background: linear-gradient(160deg, #d6e3f7, #eef3fb); }
-    .rc-cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+    .rc-cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform .5s ease; }
+    .rc-cover:hover img { transform: scale(1.05); }
+    /* Зураг дээрх hover сэжүүр (PDF үзэх) */
+    .rc-hover { position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: center; padding: 16px;
+      opacity: 0; transition: opacity .25s; background: linear-gradient(to top, rgba(7,26,55,.72), transparent 55%); }
+    .rc-cover:hover .rc-hover { opacity: 1; }
     /* Нүүр зураг дээрх брэндийн давхарга — тайлангийн нүүр маяг */
     .rc-cover-brand { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center;
       justify-content: center; gap: 8px; text-align: center; padding: 18px; color: #fff;
@@ -140,8 +145,33 @@
       </div>
     </section>
 
-    <!-- Сар бүрийн тайлан (зургийн галерей) -->
+    <!-- Жилийн тайлан -->
     <section class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Жилийн тайлан</span>
+          <h2>Бүтэн жилийн тайлан</h2>
+          <p>Гишүүний нэг жилийн үйл ажиллагааны нэгдсэн тайлан.</p>
+        </div>
+        <div class="grid grid-3" style="max-width:380px;margin:0 auto">
+          <article class="report-card reveal">
+            <a class="rc-cover" href="assets/pdf/tailan-2025-jiliin.pdf" target="_blank" rel="noopener">
+              <img src="assets/img/cover-2025-jiliin.jpg" alt="2025 оны жилийн тайлан" loading="lazy" onerror="this.remove()" />
+              <span class="rc-cover-brand"><img class="rc-emblem" src="assets/img/logo.svg" alt="" /><span class="rc-policy">Өөр Бодлого Бүтээгч Монгол</span><span class="rc-month">Жилийн тайлан</span><span class="rc-hint">PDF үзэх</span></span>
+            </a>
+            <div class="rc-body">
+              <div class="rc-cat">Жилийн тайлан · 2025</div>
+              <h4>2025 оны бүтэн жилийн тайлан</h4>
+              <div class="rc-meta">PDF</div>
+              <div class="rc-actions"><a class="btn btn-primary btn-sm" href="assets/pdf/tailan-2025-jiliin.pdf" target="_blank" rel="noopener">Үзэх</a><a class="btn btn-ghost btn-sm" href="assets/pdf/tailan-2025-jiliin.pdf" download>Татах</a></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Сар бүрийн тайлан -->
+    <section class="section section-soft">
       <div class="container">
         <div class="section-head reveal">
           <span class="eyebrow">Татаж авах</span>
@@ -150,7 +180,7 @@
         </div>
         <div class="grid grid-3">
           <article class="report-card reveal">
-            <a class="rc-cover" href="assets/pdf/tailan-2026-5.pdf" target="_blank" rel="noopener"><img src="assets/img/report-5/1.jpg" alt="2026 оны 5-р сарын тайлан" loading="lazy" /><span class="rc-cover-brand"><img class="rc-emblem" src="assets/img/logo.svg" alt="" /><span class="rc-policy">Өөр Бодлого Бүтээгч Монгол</span><span class="rc-month">5-р сарын тайлан</span><span class="rc-hint">PDF үзэх</span></span></a>
+            <a class="rc-cover" href="assets/pdf/tailan-2026-5.pdf" target="_blank" rel="noopener"><img src="assets/img/cover-2026-5.jpg" alt="2026 оны 5-р сарын тайлан" loading="lazy" onerror="this.onerror=null;this.src='assets/img/report-5/1.jpg'" /><span class="rc-hover"><span class="rc-hint">PDF үзэх</span></span></a>
             <div class="rc-body">
               <div class="rc-cat">Сарын тайлан · 5-р сар</div>
               <h4>2026 оны 5-р сарын тайлан</h4>
@@ -159,7 +189,7 @@
             </div>
           </article>
           <article class="report-card reveal">
-            <a class="rc-cover" href="assets/pdf/tailan-2026-4.pdf" target="_blank" rel="noopener"><img src="assets/img/report-4/1.jpg" alt="2026 оны 4-р сарын тайлан" loading="lazy" /><span class="rc-cover-brand"><img class="rc-emblem" src="assets/img/logo.svg" alt="" /><span class="rc-policy">Өөр Бодлого Бүтээгч Монгол</span><span class="rc-month">4-р сарын тайлан</span><span class="rc-hint">PDF үзэх</span></span></a>
+            <a class="rc-cover" href="assets/pdf/tailan-2026-4.pdf" target="_blank" rel="noopener"><img src="assets/img/cover-2026-4.jpg" alt="2026 оны 4-р сарын тайлан" loading="lazy" onerror="this.onerror=null;this.src='assets/img/report-4/1.jpg'" /><span class="rc-hover"><span class="rc-hint">PDF үзэх</span></span></a>
             <div class="rc-body">
               <div class="rc-cat">Сарын тайлан · 4-р сар</div>
               <h4>2026 оны 4-р сарын тайлан</h4>
@@ -168,7 +198,7 @@
             </div>
           </article>
           <article class="report-card reveal">
-            <a class="rc-cover" href="assets/pdf/tailan-2026-1-2.pdf" target="_blank" rel="noopener"><img src="assets/img/report-1-2/1.jpg" alt="2026 оны 1-2 сарын тайлан" loading="lazy" /><span class="rc-cover-brand"><img class="rc-emblem" src="assets/img/logo.svg" alt="" /><span class="rc-policy">Өөр Бодлого Бүтээгч Монгол</span><span class="rc-month">1-2 сарын тайлан</span><span class="rc-hint">PDF үзэх</span></span></a>
+            <a class="rc-cover" href="assets/pdf/tailan-2026-1-2.pdf" target="_blank" rel="noopener"><img src="assets/img/cover-2026-1-2.jpg" alt="2026 оны 1-2 сарын тайлан" loading="lazy" onerror="this.onerror=null;this.src='assets/img/report-1-2/1.jpg'" /><span class="rc-hover"><span class="rc-hint">PDF үзэх</span></span></a>
             <div class="rc-body">
               <div class="rc-cat">Сарын тайлан · 1-2 сар</div>
               <h4>2026 оны 1-2 сарын тайлан</h4>
