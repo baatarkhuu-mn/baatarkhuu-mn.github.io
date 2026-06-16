@@ -525,7 +525,7 @@
         "Issues published with citizens' own consent. Show support with ❤ and leave your thoughts as a comment.",
       "Цэндийн Баатархүү": "Tsendiin Baatarkhuu",
       "Монгол Улсын Их Хурлын гишүүн. Сонгуулийн 10-р тойрог — Чингэлтэй, Сүхбаатар дүүргийн иргэдийн итгэлийг хүлээж, шударга ёс, цахим хөгжлийн төлөө ажилласаар байна.":
-        "Member of the State Great Khural of Mongolia. Earning the trust of citizens of Electoral District 10 — Chingeltei and Sukhbaatar — and working for justice and digital development.",
+        "Member of the Parliament of Mongolia. Earning the trust of citizens of Electoral District 10 — Chingeltei and Sukhbaatar — and working for justice and digital development.",
       "УИХ-ын вебсайт": "Parliament website", "Хууль зүйн портал": "Legal information portal",
       "Гишүүний албан ёсны CV": "Member's official CV", "Санал хүсэлт": "Feedback",
       "📍 Улаанбаатар хот, Сүхбаатар дүүрэг, Төрийн ордон": "📍 Ulaanbaatar, Sukhbaatar District, State Palace",
@@ -536,7 +536,7 @@
       /* ---- Нүүр ---- */
       "Цэндийн БААТАРХҮҮ": "Tsendiin BAATARKHUU",
       "✓ Албан ёсны вебсайт": "✓ Official website",
-      "Монгол Улсын Их Хурлын гишүүн": "Member of the State Great Khural of Mongolia",
+      "Монгол Улсын Их Хурлын гишүүн": "Member of the Parliament of Mongolia",
       "«Иргэдийнхээ итгэлийг дээдэлж, шударга ёс, цахим хөгжлийн төлөө ажиллана.»":
         "«Honoring the trust of citizens, working for justice and digital development.»",
       "Миний тайлан үзэх": "View my reports",
@@ -581,13 +581,13 @@
       "Санал хүсэлт илгээх": "Send feedback",
       "Ил тод байдал": "Transparency",
       "Парламентын чуулганы ирц": "Parliamentary session attendance",
-      "2025 оны намрын чуулган. Эх сурвалж: Улсын Их Хурал.": "2025 autumn session. Source: State Great Khural.",
+      "2025 оны намрын чуулган. Эх сурвалж: Улсын Их Хурал.": "2025 autumn session. Source: Parliament of Mongolia.",
       "Ирсэн": "Attended", "Чөлөөтэй": "On leave", "Тасалсан": "Missed", "Хоцорсон минут": "Minutes late",
       "Бодит ирцийн мэдээлэл (УИХ) →": "Live attendance data (Parliament) →",
       "Мэндчилгээ": "Greeting",
       "Эрхэм хүндэт иргэн та бүхэнд энэ өдрийн мэнд хүргэе": "Warm greetings to every respected citizen",
       "Намайг Улсын Их Хурлын гишүүнээр сонгож, итгэл хүлээлгэсэн Чингэлтэй, Сүхбаатар дүүргийн иргэд та бүхэндээ чин сэтгэлийн талархал илэрхийлье. Таны итгэл бол миний өдөр тутмын ажлын хөдөлгөгч хүч юм.":
-        "I sincerely thank the residents of Chingeltei and Sukhbaatar districts who elected me to the State Great Khural and placed their trust in me. Your trust is the driving force behind my daily work.",
+        "I sincerely thank the residents of Chingeltei and Sukhbaatar districts who elected me to the Parliament of Mongolia and placed their trust in me. Your trust is the driving force behind my daily work.",
       "«Өөр Бодлого Бүтээгч Монгол»": "“A Mongolia That Builds a Different Policy”",
       "Бид энэхүү зорилтын хүрээнд хуучирсан хандлагыг өөрчилж, иргэн төвтэй, шударга, цахим хөгжилд тулгуурласан шинэ бодлогыг бүтээхээр ажиллаж байна. Боловсрол, ногоон хөгжил, дэд бүтэц, эрүүл мэндийн салбарт тойргийнхоо иргэдийн амьдралд бодит өөрчлөлт авчрахыг эрхэм зорилгоо болгосон.":
         "Under this vision, we are working to replace outdated approaches and build a new, citizen-centered and fair policy grounded in digital development. Our mission is to bring real change to constituents' lives in education, green development, infrastructure and healthcare.",
@@ -598,7 +598,7 @@
       /* ---- Намтар ---- */
       "Танилцуулга": "Introduction",
       "Цэндийн Баатархүү нь 1981 оны 11 дүгээр сарын 14-нд Хэнтий аймагт төрсөн. Улс төрч, бизнес эрхлэгч бөгөөд 2024 оны УИХ-ын сонгуулиар сонгуулийн 10-р тойрог — Чингэлтэй, Сүхбаатар дүүргээс Улсын Их Хурлын гишүүнээр сонгогдсон.":
-        "Tsendiin Baatarkhuu was born on 14 November 1981 in Khentii province. A politician and businessman, he was elected to the State Great Khural in the 2024 election from Electoral District 10 — Chingeltei and Sukhbaatar districts.",
+        "Tsendiin Baatarkhuu was born on 14 November 1981 in Khentii province. A politician and businessman, he was elected to the Parliament of Mongolia in the 2024 election from Electoral District 10 — Chingeltei and Sukhbaatar districts.",
       "2024–2025 онд Монгол Улсын Засгийн газрын Цахим хөгжил, инновац, харилцаа холбооны сайдаар ажилласан. 2020–2024 онд Ардчилсан намын Ерөнхий нарийн бичгийн даргын алба хашиж байв.":
         "From 2024 to 2025 he served as Minister of Digital Development, Innovation and Communications. From 2020 to 2024 he was Secretary General of the Democratic Party.",
       "«Зөв ярих ухаан», «Ажил хэргийн гурвалжин», «Манлайллын мөрдлөг» зэрэг гурван ном бичиж хэвлүүлсэн. Англи, турк хэлтэй.":
