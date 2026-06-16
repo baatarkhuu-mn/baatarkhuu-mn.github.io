@@ -926,6 +926,33 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
   .bio-tab { justify-content: flex-start; }
 }
 
+/* ---------- Нүүр: мэдээ + арга хэмжээ (2 багана) ---------- */
+.home-split { display: grid; grid-template-columns: 1.5fr 1fr; gap: 44px; align-items: start; }
+.hs-head { margin-bottom: 22px; }
+.hs-head .eyebrow { display: block; margin-bottom: 6px; }
+.hs-head h2 { font-size: clamp(1.4rem, 2.6vw, 1.9rem); }
+/* Зүүн: мэдээний жагсаалт — том гарчигтай */
+.news-list-home { display: flex; flex-direction: column; }
+.news-item { display: block; padding: 18px 0; border-bottom: 1px solid var(--color-border); transition: padding-left var(--transition); }
+.news-item:first-child { padding-top: 0; }
+.news-item:hover { padding-left: 8px; }
+.ni-meta { font-size: .8rem; color: var(--color-accent); font-weight: 600; letter-spacing: .03em; margin-bottom: 6px; }
+.ni-title { font-size: clamp(1.15rem, 2vw, 1.5rem); line-height: 1.3; color: var(--color-text); font-weight: 700; }
+.news-item:hover .ni-title { color: var(--color-primary-light); }
+/* Баруун: арга хэмжээ, бүртгэл */
+.events-list { display: flex; flex-direction: column; gap: 14px; }
+.event-card { display: flex; gap: 16px; align-items: center; background: var(--color-bg-card);
+  border: 1px solid var(--color-border); border-radius: var(--radius); padding: 16px; transition: border-color var(--transition), box-shadow var(--transition); }
+.event-card:hover { border-color: var(--color-primary-dark); box-shadow: var(--shadow-sm); }
+.ev-date { flex-shrink: 0; width: 60px; height: 60px; border-radius: var(--radius-sm); display: grid; place-items: center;
+  background: linear-gradient(160deg, var(--color-primary-dark), var(--color-primary)); color: #fff; line-height: 1; }
+.ev-date .d { font-size: 1.5rem; font-weight: 800; }
+.ev-date .m { font-size: .68rem; margin-top: 2px; opacity: .9; }
+.ev-body { flex: 1; min-width: 0; }
+.ev-body h4 { font-size: 1.02rem; margin-bottom: 4px; }
+.ev-meta { font-size: .82rem; color: var(--color-text-soft); margin-bottom: 10px; }
+@media (max-width: 860px) { .home-split { grid-template-columns: 1fr; gap: 40px; } }
+
 /* ---------- Хуудаслалт (pagination) ---------- */
 .pager { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 40px; flex-wrap: wrap; }
 .pager button { min-width: 42px; height: 42px; padding: 0 12px; border: 1px solid var(--color-border);

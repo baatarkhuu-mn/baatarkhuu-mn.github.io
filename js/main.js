@@ -969,15 +969,25 @@
     esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
     async init() {
       const grid = document.querySelector("[data-news-feed]");
-      if (!grid) return;
+      const home = document.querySelector("[data-news-home]");
+      if (!grid && !home) return;
       const sb = window.getSB && window.getSB();
       if (!sb) return; // Supabase алга бол статик мэдээ хэвээр
       try {
         const { data, error } = await sb.from("news").select("*").eq("published", true).order("created_at", { ascending: false }).limit(60);
         if (error) throw error;
         if (!data || !data.length) return; // мэдээ ороогүй бол статик хэвээр
-        grid.innerHTML = data.map((n) => this.card(n)).join("");
+        if (grid) grid.innerHTML = data.map((n) => this.card(n)).join("");
+        if (home) home.innerHTML = data.slice(0, 4).map((n) => this.homeItem(n)).join("");
       } catch (_) { /* алдаа гарвал статик хэвээр үлдээнэ */ }
+    },
+    homeItem(n) {
+      const link = n.link ? this.esc(n.link) : "";
+      const meta = [this.CAT[n.category] || n.category || "Мэдээ", n.date].filter(Boolean).map((s) => this.esc(s)).join(" · ");
+      const inner = `<div class="ni-meta">${meta}</div><h3 class="ni-title">${this.esc(n.title)}</h3>`;
+      return link
+        ? `<a class="news-item" href="${link}" target="_blank" rel="noopener">${inner}</a>`
+        : `<div class="news-item">${inner}</div>`;
     },
     card(n) {
       const tag = this.CAT[n.category] || n.category || "Мэдээ";
