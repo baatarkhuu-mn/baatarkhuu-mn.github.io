@@ -850,7 +850,7 @@
            </button>
            <button class="fc-comment-toggle" type="button">Коммент <span class="ccnt">(${comments.length})</span></button>
          </div>
-         <div class="fc-comments">
+         <div class="fc-comments open">
            <div class="fc-comment-box"></div>
            <form class="fc-comment-form">
              <textarea placeholder="Зочин болж сэтгэгдэл бичих…" maxlength="1000" required></textarea>

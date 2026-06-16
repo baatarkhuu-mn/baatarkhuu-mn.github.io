@@ -118,28 +118,6 @@
   </div>
 
   <main id="main">
-    <!-- ============ HERO ============ -->
-    <section class="hero">
-      <div class="container">
-        <div class="hero-content">
-          <h1>Цэндийн БААТАРХҮҮ</h1>
-          <span class="role">Монгол Улсын Их Хурлын гишүүн</span>
-          <p class="slogan">«Иргэдийнхээ итгэлийг дээдэлж, шударга ёс, цахим хөгжлийн төлөө ажиллана.»</p>
-          <div class="hero-actions">
-            <a href="tailan.html" class="btn btn-gold">Миний тайлан үзэх</a>
-            <a href="holboo.html" class="btn btn-outline">Холбоо барих</a>
-          </div>
-        </div>
-        <div class="hero-portrait">
-          <div class="frame">
-            <!-- Гишүүний зураг: assets/img/member.jpg файл байршуулна -->
-            <img src="assets/img/member.jpg" alt="УИХ-ын гишүүн Ц.Баатархүү" onerror="this.style.display='none';this.parentNode.insertAdjacentHTML('beforeend','<img src=&quot;assets/img/logo.svg&quot; alt=&quot;&quot; style=&quot;width:55%;opacity:.9&quot;>')" />
-          </div>
-          <span class="badge">2024–2028 · 10-р тойрог — Чингэлтэй, Сүхбаатар дүүрэг</span>
-        </div>
-      </div>
-    </section>
-
     <!-- ============ МЭДЭЭ + АРГА ХЭМЖЭЭ (2 багана) ============ -->
     <section class="section section-soft">
       <div class="container">
@@ -205,24 +183,16 @@
       </div>
     </section>
 
-    <!-- ============ ГИШҮҮНИЙ МЭНДЧИЛГЭЭ ============ -->
-    <section class="section">
+    <!-- ============ ИЛ ТОД САНАЛ САМБАР (ирцийн дээр) ============ -->
+    <section class="section" id="public-feed">
       <div class="container">
-        <div class="grid grid-2" style="align-items:center;gap:50px">
-          <div class="reveal">
-            <div style="width:100%;max-width:400px;aspect-ratio:4/5;border-radius:var(--radius-lg);overflow:hidden;background:linear-gradient(160deg,#122448,#0a1730);box-shadow:var(--shadow);border:1px solid var(--color-border);outline:2px solid rgba(224,182,83,.4);outline-offset:6px;display:grid;place-items:center">
-              <img src="assets/img/greeting.jpg" alt="Ц.Баатархүү" style="width:100%;height:100%;object-fit:cover;object-position:top" onerror="this.onerror=null;this.src='assets/img/member-portrait.jpg'" />
-            </div>
-          </div>
-          <div class="prose reveal">
-            <span class="eyebrow">Мэндчилгээ</span>
-            <h2 style="font-size:clamp(1.6rem,3vw,2.2rem);margin:10px 0 18px">Эрхэм хүндэт иргэн та бүхэнд энэ өдрийн мэнд хүргэе</h2>
-            <p>Намайг Улсын Их Хурлын гишүүнээр сонгож, итгэл хүлээлгэсэн Чингэлтэй, Сүхбаатар дүүргийн иргэд та бүхэндээ чин сэтгэлийн талархал илэрхийлье. Таны итгэл бол миний өдөр тутмын ажлын хөдөлгөгч хүч юм.</p>
-            <p class="greet-policy">«Өөр Бодлого Бүтээгч Монгол»</p>
-            <p>Бид энэхүү зорилтын хүрээнд хуучирсан хандлагыг өөрчилж, иргэн төвтэй, шударга, цахим хөгжилд тулгуурласан шинэ бодлогыг бүтээхээр ажиллаж байна. Боловсрол, ногоон хөгжил, дэд бүтэц, эрүүл мэндийн салбарт тойргийнхоо иргэдийн амьдралд бодит өөрчлөлт авчрахыг эрхэм зорилгоо болгосон.</p>
-            <p>Таны санал, шүүмжлэл, дэмжлэг бүхэн надад үнэ цэнэтэй. Хамтдаа өөр, илүү сайхан Монголыг бүтээцгээе.</p>
-            <p class="greet-sign">— Цэндийн Баатархүү</p>
-          </div>
+        <div class="section-head reveal">
+          <span class="eyebrow">ӨӨР БОДЛОГО</span>
+          <h2>Иргэдийн нийтэлсэн санал</h2>
+          <p>Иргэд өөрсдөө зөвшөөрсний дагуу нийтэлсэн асуудлууд байнга шинэчлэгдэнэ. Саналыг дэмжиж, коммент хэлбэрээр үлдээгээрэй.</p>
+        </div>
+        <div class="feed-list" data-feed>
+          <p class="feed-state">Ачаалж байна…</p>
         </div>
       </div>
     </section>
@@ -301,19 +271,6 @@
       </div>
     </section>
 
-    <!-- ============ ИЛ ТОД САНАЛ САМБАР ============ -->
-    <section class="section" id="public-feed">
-      <div class="container">
-        <div class="section-head reveal">
-          <span class="eyebrow">ӨӨР БОДЛОГО</span>
-          <h2>Иргэдийн нийтэлсэн санал</h2>
-          <p>Иргэд өөрсдөө зөвшөөрсний дагуу нийтэлсэн асуудлууд байнга шинэчлэгдэнэ. Саналыг дэмжиж, коммент хэлбэрээр үлдээгээрэй.</p>
-        </div>
-        <div class="feed-list" data-feed>
-          <p class="feed-state">Ачаалж байна…</p>
-        </div>
-      </div>
-    </section>
   </main>
 
   <!-- ============ FOOTER ============ -->
