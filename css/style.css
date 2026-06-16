@@ -424,6 +424,11 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .reels-scroll::-webkit-scrollbar-track { background: transparent; }
 @media (max-width: 560px) { .reels-scroll .reel-embed { flex-basis: 80vw; width: 80vw; height: 500px; } }
 
+/* Хуудаслалттай Reels (нүүр хуудас) */
+.reels-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 18px; }
+.reels-grid .reel-embed { flex: 0 0 300px; width: 300px; height: 520px; }
+@media (max-width: 560px) { .reels-grid .reel-embed { flex-basis: 86vw; width: 86vw; height: 500px; } }
+
 /* ---------- 10.1 Флоу диаграм (гэрэлтсэн зангилаа) ---------- */
 .flow-section {
   color: #fff; border-block: 1px solid var(--color-border);

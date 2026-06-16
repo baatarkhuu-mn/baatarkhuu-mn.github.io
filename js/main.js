@@ -997,33 +997,43 @@
   const Pager = {
     init() {
       document.querySelectorAll("[data-paginate]").forEach((grid) => {
-        const size = parseInt(grid.dataset.pageSize || "6", 10);
+        const sizeLg = parseInt(grid.dataset.pageSize || "6", 10);
+        const sizeSm = parseInt(grid.dataset.pageSizeSm || "0", 10) || sizeLg;
         const items = Array.prototype.filter.call(grid.children, (c) => c.nodeType === 1);
-        if (items.length <= size) return; // нэг хуудас бол хуудаслалт хэрэггүй
-        const pages = Math.ceil(items.length / size);
-        const pager = document.createElement("nav");
-        pager.className = "pager"; pager.setAttribute("aria-label", "Хуудаслалт");
-        grid.after(pager);
-        let cur = 1;
-        const render = (scroll) => {
-          items.forEach((el, i) => { el.style.display = (i >= (cur - 1) * size && i < cur * size) ? "" : "none"; });
-          pager.innerHTML = "";
-          const mk = (label, target, dis, active) => {
-            const b = document.createElement("button");
-            b.type = "button"; b.textContent = label;
-            if (active) b.classList.add("active");
-            if (dis) b.disabled = true;
-            else b.addEventListener("click", () => { cur = target; render(true); });
-            pager.appendChild(b);
+        const sizeNow = () => (window.innerWidth <= 640 ? sizeSm : sizeLg);
+        let pager = null, cur = 1;
+        const build = () => {
+          const size = sizeNow();
+          if (items.length <= size) { // нэг хуудас — pager хэрэггүй
+            if (pager) { pager.remove(); pager = null; }
+            items.forEach((el) => { el.style.display = ""; });
+            return;
+          }
+          const pages = Math.ceil(items.length / size);
+          if (cur > pages) cur = pages;
+          if (!pager) { pager = document.createElement("nav"); pager.className = "pager"; pager.setAttribute("aria-label", "Хуудаслалт"); grid.after(pager); }
+          const draw = (scroll) => {
+            items.forEach((el, i) => { el.style.display = (i >= (cur - 1) * size && i < cur * size) ? "" : "none"; });
+            pager.innerHTML = "";
+            const mk = (label, target, dis, active) => {
+              const b = document.createElement("button");
+              b.type = "button"; b.textContent = label;
+              if (active) b.classList.add("active");
+              if (dis) b.disabled = true;
+              else b.addEventListener("click", () => { cur = target; draw(true); });
+              pager.appendChild(b);
+            };
+            mk("«", 1, cur === 1);
+            mk("‹", cur - 1, cur === 1);
+            for (let i = 1; i <= pages; i++) mk(String(i), i, false, i === cur);
+            mk("›", cur + 1, cur === pages);
+            mk("»", pages, cur === pages);
+            if (scroll) grid.scrollIntoView({ behavior: "smooth", block: "start" });
           };
-          mk("«", 1, cur === 1);
-          mk("‹", cur - 1, cur === 1);
-          for (let i = 1; i <= pages; i++) mk(String(i), i, false, i === cur);
-          mk("›", cur + 1, cur === pages);
-          mk("»", pages, cur === pages);
-          if (scroll) grid.scrollIntoView({ behavior: "smooth", block: "start" });
+          draw(false);
         };
-        render(false);
+        build();
+        let t; window.addEventListener("resize", () => { clearTimeout(t); t = setTimeout(build, 200); });
       });
     },
   };
