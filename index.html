@@ -186,8 +186,101 @@
       </div>
     </section>
 
+    <!-- ============ САНАЛ АВАХ (заавар | форм) ============ -->
+    <section class="section" id="feedback">
+      <div class="container">
+        <div class="section-head reveal" style="margin-bottom:38px">
+          <span class="eyebrow">Санал хүсэлт</span>
+          <h2>Саналаа илгээ — таны дуу хоолой чухал</h2>
+        </div>
+        <div class="fb-split">
+          <!-- ЗҮҮН: заавар -->
+          <div class="fb-guide reveal">
+            <h3>Хэрхэн илгээх вэ?</h3>
+            <ol class="guide-steps">
+              <li><b>Нэрээ</b> бичнэ (утас заавал биш, имэйл шаардлагагүй).</li>
+              <li>Төрлөө сонгож, <b>асуудал/саналаа</b> дэлгэрэнгүй бичнэ.</li>
+              <li>Хүсвэл <b>зураг</b> хавсаргаж, <b>байршлаа</b> тогтооно.</li>
+              <li>Гишүүний ажилд <b>үнэлгээ</b> өгч болно (заавал биш).</li>
+              <li>«Олон нийтэд харуулах» сонговол доорх <b>самбарт нийтлэгдэнэ</b>.</li>
+              <li><b>«Илгээх»</b> дарна — гишүүний баг хүлээн авч хариу өгнө.</li>
+            </ol>
+            <p class="form-note">Таны мэдээллийг зөвхөн хариу өгөх зорилгоор ашиглана. Хувийн мэдээлэл (нэр, утас, байршил) нийтэд харагдахгүй.</p>
+          </div>
+          <!-- БАРУУН: форм -->
+          <div class="form-card reveal">
+            <form id="contact-form" novalidate>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="f-name">Овог нэр <span aria-hidden="true" style="color:var(--color-danger)">*</span></label>
+                  <input type="text" id="f-name" name="name" required autocomplete="name" placeholder="Таны овог нэр" />
+                </div>
+                <div class="form-group">
+                  <label for="f-phone">Утас</label>
+                  <input type="tel" id="f-phone" name="phone" autocomplete="tel" placeholder="+976 ХХХХ-ХХХХ" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="f-subject">Төрөл</label>
+                <select id="f-subject" name="subject">
+                  <option value="sanal">Санал</option>
+                  <option value="urgudul">Өргөдөл</option>
+                  <option value="gomdol">Гомдол</option>
+                  <option value="asuudal">Тулгамдсан асуудал мэдээлэх</option>
+                  <option value="uulzalt">Уулзалтын хүсэлт</option>
+                  <option value="busad">Бусад</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="f-message">Агуулга <span aria-hidden="true" style="color:var(--color-danger)">*</span></label>
+                <textarea id="f-message" name="message" required placeholder="Тулгамдсан асуудал, санал хүсэлтээ дэлгэрэнгүй бичнэ үү…"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="f-photos">Зураг хавсаргах</label>
+                <label class="upload-zone" for="f-photos">
+                  Энд дарж зураг оруулах эсвэл чирч тавина уу
+                  <span class="up-hint">Утаснаас шууд зураг авах боломжтой · Дээд тал нь 5 зураг, тус бүр 8MB хүртэл</span>
+                  <input type="file" id="f-photos" name="photos" accept="image/*" capture="environment" multiple />
+                </label>
+                <div class="photo-previews" id="photo-previews"></div>
+              </div>
+              <div class="form-group">
+                <label>Асуудлын байршил</label>
+                <div class="geo-box">
+                  <button type="button" class="btn btn-outline btn-sm" id="geo-btn">Байршлаа тогтоох</button>
+                  <span class="geo-status" id="geo-status" aria-live="polite">Байршил тогтоогоогүй</span>
+                </div>
+                <div id="geo-map" style="display:none;margin-top:12px"></div>
+                <input type="hidden" name="lat" id="f-lat" />
+                <input type="hidden" name="lng" id="f-lng" />
+              </div>
+              <div class="form-group" data-rating="form">
+                <label>Гишүүний ажилд өгөх таны үнэлгээ <span class="form-note">(заавал биш)</span></label>
+                <div class="rating" role="group" aria-label="Сэтгэл ханамжийн үнэлгээ"></div>
+                <p class="rating-msg form-note" style="margin-top:6px">Оноо дээр дарж үнэлнэ үү (1–10)</p>
+                <input type="hidden" name="rating" id="f-rating" />
+              </div>
+              <div class="form-group">
+                <label class="consent-check">
+                  <input type="checkbox" id="f-public" name="is_public" />
+                  <span>Миний <strong>асуудлыг олон нийтэд ил харуулахыг</strong> зөвшөөрч байна. <span class="form-note" style="display:block;margin-top:2px">Нэр, утас, яг байршил <u>харагдахгүй</u> — зөвхөн асуудал, зураг, үнэлгээ. Бусад иргэд дэмжиж, коммент бичиж болно.</span></span>
+                </label>
+              </div>
+              <div style="position:absolute;left:-9999px" aria-hidden="true">
+                <label for="f-website">Вебсайт (бичихгүй)</label>
+                <input type="text" id="f-website" name="website" tabindex="-1" autocomplete="off" />
+              </div>
+              <button type="submit" class="btn btn-gold" style="width:100%">Илгээх</button>
+              <p class="form-note" style="margin-top:10px">* Заавал бөглөх талбар.</p>
+              <div class="form-success" role="status" aria-live="polite"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ============ ИЛ ТОД САНАЛ САМБАР (ирцийн дээр) ============ -->
-    <section class="section" id="public-feed">
+    <section class="section section-soft" id="public-feed">
       <div class="container">
         <div class="section-head reveal">
           <span class="eyebrow">Ил тод байдал</span>

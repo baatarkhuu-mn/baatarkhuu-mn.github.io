@@ -392,11 +392,8 @@
           const fd = new FormData(form);
           const row = {
             name: (fd.get("name") || "").toString().trim(),
-            email: (fd.get("email") || "").toString().trim(),
             phone: (fd.get("phone") || "").toString().trim() || null,
             subject: (fd.get("subject") || "").toString(),
-            district: (fd.get("district") || "").toString() || null,
-            khoroo: (fd.get("khoroo") || "").toString() || null,
             message: (fd.get("message") || "").toString().trim(),
             lat: latIn && latIn.value ? parseFloat(latIn.value) : null,
             lng: lngIn && lngIn.value ? parseFloat(lngIn.value) : null,
