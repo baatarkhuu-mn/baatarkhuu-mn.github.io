@@ -62,17 +62,14 @@
     <section class="section">
       <div class="container">
         <div class="bio-layout">
-          <!-- ЗҮҮН: зураг + доор нь танилцуулга -->
+          <!-- ЗҮҮН: зөвхөн зураг + нэр -->
           <aside class="bio-profile reveal">
             <div class="bio-portrait">
               <img src="assets/img/member-portrait.jpg" alt="Ц.Баатархүү" onerror="this.style.display='none';this.parentNode.insertAdjacentHTML('beforeend','<img src=&quot;assets/img/logo.svg&quot; alt=&quot;&quot; style=&quot;width:55%;opacity:.9&quot;>')" />
             </div>
-            <div class="bio-intro">
-              <span class="eyebrow">Танилцуулга</span>
+            <div class="bio-name">
               <h2>Цэндийн Баатархүү</h2>
-              <p>Цэндийн Баатархүү нь 1981 оны 11 дүгээр сарын 14-нд Хэнтий аймагт төрсөн. Улс төрч, бизнес эрхлэгч бөгөөд 2024 оны УИХ-ын сонгуулиар сонгуулийн 10-р тойрог — Чингэлтэй, Сүхбаатар дүүргээс Улсын Их Хурлын гишүүнээр сонгогдсон.</p>
-              <p>2024–2025 онд Монгол Улсын Засгийн газрын Цахим хөгжил, инновац, харилцаа холбооны сайдаар ажилласан. 2020–2024 онд Ардчилсан намын Ерөнхий нарийн бичгийн даргын алба хашиж байв.</p>
-              <p>«Зөв ярих ухаан», «Ажил хэргийн гурвалжин», «Манлайллын мөрдлөг» зэрэг гурван ном бичиж хэвлүүлсэн. Англи, турк хэлтэй.</p>
+              <p class="role">Монгол Улсын Их Хурлын гишүүн</p>
             </div>
           </aside>
 
@@ -90,11 +87,16 @@
               </button>
             </div>
 
-            <!-- Панель: Намтар → товч баримт -->
+            <!-- Панель: Намтар → танилцуулга + товч баримт -->
             <div class="bio-panel active" data-panel="bio" role="tabpanel">
               <div class="bio-panel-head reveal">
-                <span class="eyebrow">Товч баримт</span>
-                <h3>Хувийн мэдээлэл</h3>
+                <span class="eyebrow">Танилцуулга</span>
+                <h3>Товч намтар</h3>
+              </div>
+              <div class="bio-intro reveal" style="margin-top:0;margin-bottom:26px">
+                <p>Цэндийн Баатархүү нь 1981 оны 11 дүгээр сарын 14-нд Хэнтий аймагт төрсөн. Улс төрч, бизнес эрхлэгч бөгөөд 2024 оны УИХ-ын сонгуулиар сонгуулийн 10-р тойрог — Чингэлтэй, Сүхбаатар дүүргээс Улсын Их Хурлын гишүүнээр сонгогдсон.</p>
+                <p>2024–2025 онд Монгол Улсын Засгийн газрын Цахим хөгжил, инновац, харилцаа холбооны сайдаар ажилласан. 2020–2024 онд Ардчилсан намын Ерөнхий нарийн бичгийн даргын алба хашиж байв.</p>
+                <p>«Зөв ярих ухаан», «Ажил хэргийн гурвалжин», «Манлайллын мөрдлөг» зэрэг гурван ном бичиж хэвлүүлсэн. Англи, турк хэлтэй.</p>
               </div>
               <div class="card reveal" style="padding:30px">
                 <ul class="facts">
@@ -133,30 +135,22 @@
                 <h3>Ажилласан байдал</h3>
               </div>
               <div class="timeline">
-                <div class="tl-item reveal"><div class="tl-year">2024</div><h4>УИХ-ын гишүүн · Цахим хөгжлийн сайд</h4><p>Сонгуулийн 10-р тойрог — Чингэлтэй, Сүхбаатар дүүргээс УИХ-ын гишүүнээр сонгогдсон (2024–одоо). Цахим хөгжил, инновац, харилцаа холбооны сайдаар ажилласан (2024–2025).</p></div>
-                <div class="tl-item reveal"><div class="tl-year">2020</div><h4>Ардчилсан намын Ерөнхий нарийн бичгийн дарга</h4><p>Намын дотоод бүтэц, зохион байгуулалтыг бэхжүүлэхэд ажилласан (2020–2024). Мөн «МИГ даатгал» ХХК-ийн ТУЗ-ийн гишүүн (2020–2024).</p></div>
-                <div class="tl-item reveal"><div class="tl-year">2012</div><h4>Нийслэлийн удирдлагад</h4><p>Нийслэлийн иргэдийн Төлөөлөгчдийн Хурлын төлөөлөгч (2012–2020), Нийслэлийн Засаг даргын орлогч (2012–2013).</p></div>
-                <div class="tl-item reveal"><div class="tl-year">2005</div><h4>Засгийн газрын Хэвлэл мэдээллийн албаны дарга</h4><p>Төрийн мэдээлэл, харилцааны бодлогын хэрэгжилтийг хариуцан ажилласан (2005–2006).</p></div>
-                <div class="tl-item reveal"><div class="tl-year">2004</div><h4>Монголын лекторын төв — үүсгэн байгуулагч, захирал</h4><p>Манлайлал, илтгэх урлагийн сургалтуудыг олон нийтэд хүргэсэн (2004–2012).</p></div>
+                <div class="tl-item reveal"><div class="tl-year">2024 оноос</div><h4>Монгол Улсын Их Хурлын гишүүн</h4></div>
+                <div class="tl-item reveal"><div class="tl-year">2024–2025</div><h4>Монгол Улсын Засгийн газрын гишүүн, Цахим хөгжил, инновац, харилцаа холбооны сайд</h4></div>
+                <div class="tl-item reveal"><div class="tl-year">2020–2024</div><h4>Бизнес, боловсрол, технологийн салбарт</h4>
+                  <ul>
+                    <li>«МИГ даатгал» ХХК-д Төлөөлөн Удирдах Зөвлөлийн гишүүн</li>
+                    <li>MLC Business School болон MLC Content компанийн үүсгэн байгуулагч, Удирдах зөвлөлийн дарга</li>
+                    <li>«20K Programmer» — IT инженер бэлтгэх Олон Улсын хөтөлбөрийн Монгол дахь удирдагч</li>
+                    <li>Болгарт төвтэй SoftUni Global…</li>
+                  </ul>
+                </div>
+                <div class="tl-item reveal"><div class="tl-year">2012–2020</div><h4>Нийслэлийн Иргэдийн Төлөөлөгчдийн Хурлын төлөөлөгч, Тэргүүлэгч</h4></div>
+                <div class="tl-item reveal"><div class="tl-year">2012–2013</div><h4>Нийслэлийн Засаг даргын Нийгмийн хөгжил хариуцсан орлогч</h4></div>
+                <div class="tl-item reveal"><div class="tl-year">2005–2006</div><h4>Монгол Улсын Засгийн газрын Хэвлэл, мэдээллийн албаны дарга</h4></div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Шагнал, гавьяа ба бүтээл — бүтэн өргөн -->
-    <section class="section section-soft">
-      <div class="container">
-        <div class="section-head reveal">
-          <span class="eyebrow">Хүлээн зөвшөөрөл</span>
-          <h2>Шагнал, гавьяа ба бүтээл</h2>
-        </div>
-        <div class="grid grid-4">
-          <div class="card reveal" style="padding:26px;text-align:center"><div style="font-size:2.4rem">🏅</div><h3 style="margin:12px 0 6px;font-size:1.05rem">Хөдөлмөрийн хүндэт медаль</h3><p style="color:var(--color-text-soft)">2023 он</p></div>
-          <div class="card reveal" style="padding:26px;text-align:center"><div style="font-size:2.4rem">📘</div><h3 style="margin:12px 0 6px;font-size:1.05rem">«Зөв ярих ухаан»</h3><p style="color:var(--color-text-soft)">Илтгэх урлагийн ном</p></div>
-          <div class="card reveal" style="padding:26px;text-align:center"><div style="font-size:2.4rem">📗</div><h3 style="margin:12px 0 6px;font-size:1.05rem">«Ажил хэргийн гурвалжин»</h3><p style="color:var(--color-text-soft)">Бизнес, ажил хэргийн ном</p></div>
-          <div class="card reveal" style="padding:26px;text-align:center"><div style="font-size:2.4rem">📙</div><h3 style="margin:12px 0 6px;font-size:1.05rem">«Манлайллын мөрдлөг»</h3><p style="color:var(--color-text-soft)">Манлайллын тухай ном</p></div>
         </div>
       </div>
     </section>
