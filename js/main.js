@@ -963,6 +963,36 @@
     },
   };
 
+  /* ---------- 15. Мэдээ (CMS-ээс уншина) ---------- */
+  const NewsFeed = {
+    CAT: { chuulgan: "Чуулган", uulzalt: "Уулзалт", toirog: "Тойргийн ажил", tsahim: "Цахим хөгжил", hyanalt: "Хяналт шалгалт", busad: "Бусад" },
+    esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
+    async init() {
+      const grid = document.querySelector("[data-news-feed]");
+      if (!grid) return;
+      const sb = window.getSB && window.getSB();
+      if (!sb) return; // Supabase алга бол статик мэдээ хэвээр
+      try {
+        const { data, error } = await sb.from("news").select("*").eq("published", true).order("created_at", { ascending: false }).limit(60);
+        if (error) throw error;
+        if (!data || !data.length) return; // мэдээ ороогүй бол статик хэвээр
+        grid.innerHTML = data.map((n) => this.card(n)).join("");
+      } catch (_) { /* алдаа гарвал статик хэвээр үлдээнэ */ }
+    },
+    card(n) {
+      const tag = this.CAT[n.category] || n.category || "Мэдээ";
+      const link = n.link ? this.esc(n.link) : "";
+      const title = this.esc(n.title);
+      const img = n.image ? `<img src="${this.esc(n.image)}" alt="" loading="lazy" onerror="this.remove()">` : "";
+      const titleHtml = link ? `<a href="${link}" target="_blank" rel="noopener">${title}</a>` : title;
+      const more = link ? `<a href="${link}" target="_blank" rel="noopener" class="card-link">Дэлгэрэнгүй →</a>` : "";
+      return `<article class="card reveal visible" data-item data-category="${this.esc(n.category || "")}" data-title="${title}">
+        <div class="card-media"><span class="tag">${this.esc(tag)}</span>${img}<span class="placeholder"><img src="assets/img/logo.svg" alt="" style="width:46%;opacity:.4"></span></div>
+        <div class="card-body"><div class="card-date">${this.esc(n.date || "")}</div><h3>${titleHtml}</h3><p>${this.esc(n.excerpt || "")}</p>${more}</div>
+      </article>`;
+    },
+  };
+
   /* ---------- Бүгдийг эхлүүлэх ---------- */
   // Хөвөгч "Санал хүсэлт" товч — холбоо барих хуудаснаас бусад бүх хуудсанд
   function injectFeedbackFab() {
@@ -978,6 +1008,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     Theme.init(); Nav.init(); Search.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
-    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init();
+    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init();
   });
 })();

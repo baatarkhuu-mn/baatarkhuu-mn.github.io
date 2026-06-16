@@ -901,6 +901,16 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
   .bio-tab { justify-content: flex-start; }
 }
 
+/* ---------- Админ таб ---------- */
+.admin-tabs { display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid var(--color-border); }
+.atab { padding: 11px 22px; border: none; background: none; cursor: pointer; font-family: inherit; font-size: .96rem; font-weight: 600; color: var(--color-text-soft); border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color var(--transition), border-color var(--transition); }
+.atab.active { color: var(--color-primary); border-bottom-color: var(--color-primary); }
+.atab:hover { color: var(--color-text); }
+.news-row { display: flex; gap: 14px; align-items: flex-start; padding: 14px; border: 1px solid var(--color-border); border-radius: var(--radius); margin-bottom: 12px; background: var(--color-bg-card); }
+.news-row img { width: 84px; height: 84px; object-fit: cover; border-radius: var(--radius-sm); flex-shrink: 0; border: 1px solid var(--color-border); }
+.news-row .nr-body { flex: 1; min-width: 0; }
+.news-row .nr-actions { display: flex; gap: 8px; flex-shrink: 0; }
+
 /* ---------- 22. Амьд хөдөлгөөн (transitions) ---------- */
 /* Hero — нээгдэхэд дараалан гарч ирэх */
 .hero-content > * { animation: heroUp .7s cubic-bezier(.22,.61,.36,1) both; }

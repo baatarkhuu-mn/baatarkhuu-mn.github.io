@@ -58,8 +58,8 @@
 
     <section class="section">
       <div class="container">
-        <!-- CMS-ээс динамикаар үүсгэх жагсаалт -->
-        <div class="grid grid-3">
+        <!-- Мэдээ (админаас удирддаг). Supabase-д мэдээ байвал доорхыг солино. -->
+        <div class="grid grid-3" data-news-feed>
           <article class="card reveal" data-item data-category="chuulgan" data-title="Нийслэлд олгосон газрын асуудлаар Хянан шалгах түр хороо байгуулахыг санаачиллаа">
             <div class="card-media"><span class="tag">Хяналт шалгалт</span><img src="assets/img/news-1.jpg" alt="" onerror="this.remove()" /><span class="placeholder"><img src="assets/img/logo.svg" alt="" style="width:46%;opacity:.4" /></span></div>
             <div class="card-body"><div class="card-date">2026.04</div><h3><a href="https://eguur.mn/667724/" target="_blank" rel="noopener">Нийслэлд олгосон газрын асуудлаар Хянан шалгах түр хороо байгуулахыг санаачиллаа</a></h3><p>Ц.Баатархүү гишүүн тэргүүтэй УИХ-ын 35 гишүүн 1992–2025 онд нийслэлд олгосон газрын асуудлыг шалгах түр хороо байгуулах саналыг өргөн барив.</p><a href="https://eguur.mn/667724/" target="_blank" rel="noopener" class="card-link">Эх сурвалж: Eguur.mn →</a></div>
@@ -106,6 +106,8 @@
   </footer>
 
   <button class="to-top" aria-label="Дээш гарах"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="m18 15-6-6-6 6"/></svg></button>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

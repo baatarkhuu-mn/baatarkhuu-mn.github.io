@@ -73,6 +73,12 @@
 
     <!-- САМБАР -->
     <div id="dash-view" style="display:none">
+      <div class="admin-tabs">
+        <button type="button" class="atab active" data-view="fb">Санал хүсэлт</button>
+        <button type="button" class="atab" data-view="news">Мэдээ</button>
+      </div>
+
+      <div id="fb-view">
       <div class="stat-row">
         <div class="mini-stat"><div class="n" id="st-total">—</div><div class="l">Нийт санал</div></div>
         <div class="mini-stat"><div class="n" id="st-new">—</div><div class="l">Шинэ (хариугүй)</div></div>
@@ -92,6 +98,42 @@
       <div id="fb-list"></div>
       <div id="fb-empty" class="search-empty" style="display:none">Илэрц алга.</div>
       <div id="fb-loading" class="search-empty">Ачааллаж байна…</div>
+      </div><!-- /fb-view -->
+
+      <!-- ============ МЭДЭЭ УДИРДАХ ============ -->
+      <div id="news-view" style="display:none">
+        <div class="form-card" style="margin-bottom:26px">
+          <h3 id="news-form-title" style="margin-bottom:16px">Шинэ мэдээ нэмэх</h3>
+          <form id="news-form">
+            <input type="hidden" id="n-id" />
+            <div class="form-group"><label for="n-title">Гарчиг <span style="color:var(--color-danger)">*</span></label><input type="text" id="n-title" required placeholder="Мэдээний гарчиг" /></div>
+            <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+              <div class="form-group"><label for="n-date">Огноо</label><input type="text" id="n-date" placeholder="2026.06.16" /></div>
+              <div class="form-group"><label for="n-category">Ангилал</label>
+                <select id="n-category">
+                  <option value="chuulgan">Чуулган</option>
+                  <option value="uulzalt">Уулзалт</option>
+                  <option value="toirog">Тойргийн ажил</option>
+                  <option value="tsahim">Цахим хөгжил</option>
+                  <option value="hyanalt">Хяналт шалгалт</option>
+                  <option value="busad">Бусад</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group"><label for="n-excerpt">Товч агуулга</label><textarea id="n-excerpt" rows="3" placeholder="Мэдээний товч тайлбар…"></textarea></div>
+            <div class="form-group"><label for="n-link">Эх сурвалж / дэлгэрэнгүй холбоос (заавал биш)</label><input type="url" id="n-link" placeholder="https://..." /></div>
+            <div class="form-group"><label for="n-image">Зураг (заавал биш)</label><input type="file" id="n-image" accept="image/*" /><div id="n-image-cur" class="form-note" style="margin-top:6px"></div></div>
+            <div class="form-group"><label style="display:flex;gap:9px;align-items:center;cursor:pointer"><input type="checkbox" id="n-published" checked style="width:18px;height:18px;accent-color:var(--color-accent)" /> Нийтлэх (сайтад харагдана)</label></div>
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+              <button type="submit" class="btn btn-gold btn-sm">Хадгалах</button>
+              <button type="button" id="news-cancel" class="btn btn-ghost btn-sm" style="display:none">Цуцлах</button>
+              <span id="news-msg" class="form-note"></span>
+            </div>
+          </form>
+        </div>
+        <div id="news-list"></div>
+        <div id="news-empty" class="search-empty" style="display:none">Одоогоор мэдээ алга. Дээрх формоор нэмнэ үү.</div>
+      </div>
     </div>
   </div>
 
@@ -347,6 +389,130 @@
     $("#export-btn").addEventListener("click", exportXLSX);
     ["#f-q", "#f-district", "#f-status", "#f-subject"].forEach((s) => {
       $(s).addEventListener(s === "#f-q" ? "input" : "change", applyFilters);
+    });
+
+    // ===== МЭДЭЭ УДИРДАХ =====
+    const NEWS_CAT = { chuulgan:"Чуулган", uulzalt:"Уулзалт", toirog:"Тойргийн ажил", tsahim:"Цахим хөгжил", hyanalt:"Хяналт шалгалт", busad:"Бусад" };
+    let newsRows = [], newsLoaded = false;
+    const newsForm = $("#news-form"), newsList = $("#news-list"), newsEmpty = $("#news-empty"), newsMsg = $("#news-msg");
+
+    function resetNewsForm() {
+      newsForm.reset(); $("#n-id").value = ""; $("#n-published").checked = true;
+      $("#news-form-title").textContent = "Шинэ мэдээ нэмэх";
+      $("#news-cancel").style.display = "none"; $("#n-image-cur").textContent = "";
+    }
+
+    async function loadNews() {
+      newsList.innerHTML = ""; newsEmpty.style.display = "none";
+      const { data, error } = await sb.from("news").select("*").order("created_at", { ascending: false });
+      if (error) { newsEmpty.textContent = "Ачаалахад алдаа: " + error.message + " (supabase-news.sql ажилласан эсэхээ шалгана уу)"; newsEmpty.style.display = "block"; return; }
+      newsRows = data || []; renderNews();
+    }
+
+    function renderNews() {
+      newsList.innerHTML = "";
+      newsEmpty.style.display = newsRows.length ? "none" : "block";
+      newsRows.forEach((n) => {
+        const row = document.createElement("div");
+        row.className = "news-row";
+        row.innerHTML =
+          `${n.image ? `<img src="${esc(n.image)}" alt="" />` : ""}
+           <div class="nr-body">
+             <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:4px">
+               <span class="tag" style="position:static;background:var(--color-bg-soft);color:var(--color-accent);border:1px solid var(--color-border)">${esc(NEWS_CAT[n.category] || n.category || "—")}</span>
+               ${n.published ? "" : `<span class="badge-status status-draft">Ноорог</span>`}
+               <span style="font-size:.8rem;color:var(--color-text-soft)">${esc(n.date || "")}</span>
+             </div>
+             <div style="font-weight:600">${esc(n.title)}</div>
+             <div style="font-size:.86rem;color:var(--color-text-soft);margin-top:4px">${esc((n.excerpt || "").slice(0, 130))}</div>
+           </div>
+           <div class="nr-actions">
+             <button class="btn btn-ghost btn-sm nr-edit">Засах</button>
+             <button class="btn btn-ghost btn-sm nr-del" style="color:var(--color-danger)">Устгах</button>
+           </div>`;
+        row.querySelector(".nr-edit").addEventListener("click", () => editNews(n));
+        row.querySelector(".nr-del").addEventListener("click", () => deleteNews(n));
+        newsList.appendChild(row);
+      });
+    }
+
+    function editNews(n) {
+      $("#n-id").value = n.id;
+      $("#n-title").value = n.title || "";
+      $("#n-date").value = n.date || "";
+      $("#n-category").value = n.category || "busad";
+      $("#n-excerpt").value = n.excerpt || "";
+      $("#n-link").value = n.link || "";
+      $("#n-published").checked = !!n.published;
+      $("#n-image-cur").textContent = n.image ? "Одоогийн зураг хадгалагдана. Шинээр сонгвол солигдоно." : "";
+      $("#news-form-title").textContent = "Мэдээ засах";
+      $("#news-cancel").style.display = "inline-flex";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    async function deleteNews(n) {
+      if (!confirm("«" + (n.title || "") + "» мэдээг устгах уу?")) return;
+      const { error } = await sb.from("news").delete().eq("id", n.id);
+      if (error) { alert("Алдаа: " + error.message); return; }
+      if (n.image && n.image.includes("/news-photos/")) {
+        const p = n.image.split("/news-photos/")[1];
+        if (p) { try { await sb.storage.from("news-photos").remove([p]); } catch (_) {} }
+      }
+      newsRows = newsRows.filter((x) => x.id !== n.id); renderNews();
+    }
+
+    newsForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      newsMsg.textContent = ""; newsMsg.style.color = "";
+      const btn = newsForm.querySelector('button[type="submit"]');
+      btn.disabled = true; btn.textContent = "Хадгалж байна…";
+      try {
+        const id = $("#n-id").value;
+        let imageUrl = null;
+        const file = $("#n-image").files[0];
+        if (file) {
+          const ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "");
+          const path = `${Date.now()}-${Math.round(Math.random() * 1e6)}.${ext}`;
+          const { error: upErr } = await sb.storage.from("news-photos").upload(path, file, { contentType: file.type });
+          if (upErr) throw upErr;
+          imageUrl = sb.storage.from("news-photos").getPublicUrl(path).data.publicUrl;
+        }
+        const rec = {
+          title: $("#n-title").value.trim(),
+          date: $("#n-date").value.trim() || null,
+          category: $("#n-category").value,
+          excerpt: $("#n-excerpt").value.trim() || null,
+          link: $("#n-link").value.trim() || null,
+          published: $("#n-published").checked,
+        };
+        if (imageUrl) rec.image = imageUrl;
+        let error;
+        if (id) { ({ error } = await sb.from("news").update(rec).eq("id", id)); }
+        else { ({ error } = await sb.from("news").insert(rec)); }
+        if (error) throw error;
+        newsMsg.style.color = "var(--color-success)";
+        newsMsg.textContent = "✓ Хадгаллаа.";
+        resetNewsForm(); await loadNews();
+        setTimeout(() => { newsMsg.textContent = ""; }, 4000);
+      } catch (err) {
+        newsMsg.style.color = "var(--color-danger)";
+        newsMsg.textContent = "Алдаа: " + (err.message || "хадгалж чадсангүй");
+      } finally {
+        btn.disabled = false; btn.textContent = "Хадгалах";
+      }
+    });
+
+    $("#news-cancel").addEventListener("click", resetNewsForm);
+
+    // Таб солих
+    document.querySelectorAll(".atab").forEach((t) => {
+      t.addEventListener("click", () => {
+        document.querySelectorAll(".atab").forEach((x) => x.classList.toggle("active", x === t));
+        const v = t.dataset.view;
+        $("#fb-view").style.display = v === "fb" ? "block" : "none";
+        $("#news-view").style.display = v === "news" ? "block" : "none";
+        if (v === "news" && !newsLoaded) { newsLoaded = true; loadNews(); }
+      });
     });
   })();
   </script>
