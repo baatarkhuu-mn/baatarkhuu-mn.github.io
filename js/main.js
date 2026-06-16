@@ -111,6 +111,14 @@
         els.forEach((e) => e.classList.add("visible"));
         return;
       }
+      // Зэрэгцээ элементүүдийг дараалан (stagger) гаргах
+      els.forEach((e) => {
+        const parent = e.parentElement;
+        if (!parent) return;
+        const sibs = Array.prototype.filter.call(parent.children, (c) => c.classList && c.classList.contains("reveal"));
+        const i = sibs.indexOf(e);
+        if (i > 0) e.style.transitionDelay = Math.min(i * 80, 400) + "ms";
+      });
       const io = new IntersectionObserver(
         (entries) => entries.forEach((en) => {
           if (en.isIntersecting) { en.target.classList.add("visible"); io.unobserve(en.target); }

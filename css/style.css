@@ -901,6 +901,28 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
   .bio-tab { justify-content: flex-start; }
 }
 
+/* ---------- 22. Амьд хөдөлгөөн (transitions) ---------- */
+/* Hero — нээгдэхэд дараалан гарч ирэх */
+.hero-content > * { animation: heroUp .7s cubic-bezier(.22,.61,.36,1) both; }
+.hero-content > *:nth-child(1) { animation-delay: .05s; }
+.hero-content > *:nth-child(2) { animation-delay: .15s; }
+.hero-content > *:nth-child(3) { animation-delay: .25s; }
+.hero-content > *:nth-child(4) { animation-delay: .35s; }
+.hero-portrait { animation: heroPop .8s cubic-bezier(.22,.61,.36,1) .2s both; }
+@keyframes heroUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+@keyframes heroPop { from { opacity: 0; transform: translateY(20px) scale(.97); } to { opacity: 1; transform: none; } }
+
+/* Картын зураг — hover дээр зөөлөн томрох */
+.card .card-media img { transition: transform .55s cubic-bezier(.22,.61,.36,1); }
+.card:hover .card-media img { transform: scale(1.06); }
+
+/* Хуудасны банерын гарчиг гарч ирэх */
+.page-hero h1 { animation: heroUp .6s ease both; }
+.page-hero .breadcrumb { animation: heroUp .6s ease .12s both; }
+
+/* Scroll reveal — зөөлөн, илүү жигд шилжилт */
+.reveal { transition: opacity .65s cubic-bezier(.22,.61,.36,1), transform .65s cubic-bezier(.22,.61,.36,1); }
+
 /* Хэвлэх (Print) */
 @media print {
   .site-header, .site-footer, .to-top, .hero-actions, .share, .nav-tools { display: none !important; }
