@@ -417,11 +417,9 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 
 /* Хажуу тийш гүйлгэдэг Reels карусель (нүүр хуудас) */
 .reels-scroll { display: flex; gap: 18px; overflow-x: auto; scroll-snap-type: x mandatory;
-  padding: 4px 2px 16px; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+  padding: 4px 2px; -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none; }
 .reels-scroll .reel-embed { flex: 0 0 300px; width: 300px; height: 520px; scroll-snap-align: start; }
-.reels-scroll::-webkit-scrollbar { height: 8px; }
-.reels-scroll::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 20px; }
-.reels-scroll::-webkit-scrollbar-track { background: transparent; }
+.reels-scroll::-webkit-scrollbar { display: none; }
 @media (max-width: 560px) { .reels-scroll .reel-embed { flex-basis: 80vw; width: 80vw; height: 500px; } }
 
 /* Хуудаслалттай Reels (нүүр хуудас) */
