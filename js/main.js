@@ -935,6 +935,26 @@
     },
   };
 
+  /* ---------- 14. Парламентын ирц (чуулган сонгох) ---------- */
+  const Attendance = {
+    init() {
+      const sel = document.querySelector("#att-session");
+      const dataEl = document.querySelector("#att-data");
+      if (!sel || !dataEl) return;
+      let data;
+      try { data = JSON.parse(dataEl.textContent); } catch (_) { return; }
+      const apply = (key) => {
+        const d = data[key]; if (!d) return;
+        document.querySelectorAll(".attendance [data-att]").forEach((el) => {
+          const k = el.dataset.att;
+          if (d[k] != null) el.textContent = d[k];
+        });
+      };
+      sel.addEventListener("change", () => apply(sel.value));
+      apply(sel.value);
+    },
+  };
+
   /* ---------- Бүгдийг эхлүүлэх ---------- */
   // Хөвөгч "Санал хүсэлт" товч — холбоо барих хуудаснаас бусад бүх хуудсанд
   function injectFeedbackFab() {
@@ -950,6 +970,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     Theme.init(); Nav.init(); Search.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
-    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init();
+    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init();
   });
 })();

@@ -120,7 +120,6 @@
   <main id="main">
     <!-- ============ HERO ============ -->
     <section class="hero">
-      <span class="light-beam" aria-hidden="true"></span>
       <div class="container">
         <div class="hero-content">
           <h1>Цэндийн БААТАРХҮҮ</h1>
@@ -169,14 +168,28 @@
         <div class="section-head reveal">
           <span class="eyebrow">Ил тод байдал</span>
           <h2>Парламентын чуулганы ирц</h2>
-          <p>2025 оны намрын чуулган. Эх сурвалж: Улсын Их Хурал.</p>
+          <p>Эх сурвалж: Улсын Их Хурал (uih.mn).</p>
+        </div>
+        <div class="reveal" style="max-width:360px;margin:0 auto 30px">
+          <select id="att-session" class="att-select" aria-label="Чуулган сонгох">
+            <option value="2024n">2024 оны намрын чуулганы ирц</option>
+            <option value="2025h">2025 оны хаврын чуулганы ирц</option>
+            <option value="2025n" selected>2025 оны намрын чуулганы ирц</option>
+          </select>
         </div>
         <div class="attendance reveal">
-          <div class="att-item"><div class="att-circle att-green">72.2%</div><div class="att-label">Ирсэн</div></div>
-          <div class="att-item"><div class="att-circle att-gold">27.8%</div><div class="att-label">Чөлөөтэй</div></div>
-          <div class="att-item"><div class="att-circle att-red">0%</div><div class="att-label">Тасалсан</div></div>
-          <div class="att-item"><div class="att-circle att-navy">129</div><div class="att-label">Хоцорсон минут</div></div>
+          <div class="att-item"><div class="att-circle att-green" data-att="present">72.2%</div><div class="att-label">Ирсэн</div></div>
+          <div class="att-item"><div class="att-circle att-gold" data-att="excused">27.8%</div><div class="att-label">Чөлөөтэй</div></div>
+          <div class="att-item"><div class="att-circle att-red" data-att="absent">0%</div><div class="att-label">Тасалсан</div></div>
+          <div class="att-item"><div class="att-circle att-navy" data-att="late">129</div><div class="att-label">Хоцорсон минут</div></div>
         </div>
+        <script type="application/json" id="att-data">
+        {
+          "2024n": {"present":"—","excused":"—","absent":"—","late":"—"},
+          "2025h": {"present":"—","excused":"—","absent":"—","late":"—"},
+          "2025n": {"present":"72.2%","excused":"27.8%","absent":"0%","late":"129"}
+        }
+        </script>
         <div style="text-align:center" class="reveal">
           <a href="https://www.uih.mn/baatarkhuu/" target="_blank" rel="noopener" class="btn btn-outline">Бодит ирцийн мэдээлэл (УИХ) →</a>
         </div>
@@ -205,6 +218,20 @@
           <h2 style="font-size:clamp(1.6rem,3vw,2.3rem);margin:12px 0 14px">Таны санал бидэнд чухал</h2>
           <p style="color:var(--color-text-soft);margin-bottom:26px">Хүсэлт, өргөдөл, санал гомдлоо илгээгээрэй. Сонгогч бүрийн дуу хоолой надад чухал.</p>
           <a href="holboo.html" class="btn btn-gold">Санал хүсэлт илгээх</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ИЛ ТОД САНАЛ САМБАР ============ -->
+    <section class="section" id="public-feed">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Ил тод байдал</span>
+          <h2>Иргэдийн нийтэлсэн санал</h2>
+          <p>Иргэд өөрсдөө зөвшөөрсний дагуу нийтэлсэн асуудлууд. Саналыг дэмжиж, коммент хэлбэрээр үлдээгээрэй.</p>
+        </div>
+        <div class="feed-list" data-feed>
+          <p class="feed-state">Ачаалж байна…</p>
         </div>
       </div>
     </section>
@@ -252,6 +279,8 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="m18 15-6-6-6 6"/></svg>
   </button>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
