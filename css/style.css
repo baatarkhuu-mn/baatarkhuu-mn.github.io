@@ -979,6 +979,30 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .ev-meta { font-size: .82rem; color: var(--color-text-soft); margin-bottom: 10px; }
 @media (max-width: 860px) { .home-split { grid-template-columns: 1fr; gap: 40px; } }
 
+/* ---------- Утасны mockup (санал хүсэлтийн жишээ) ---------- */
+.phone-mock { width: 248px; margin: 0 auto 26px; }
+.phone-frame { position: relative; background: #060b16; border: 2px solid var(--color-border);
+  border-radius: 36px; padding: 14px 11px; box-shadow: var(--shadow-lg), var(--glow-blue); }
+.phone-frame::before { content: ""; position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+  width: 74px; height: 5px; background: #1c2b4a; border-radius: 10px; z-index: 2; }
+.pm-screen { background: linear-gradient(165deg, #0e1830, #0a1224 70%, #081427); border-radius: 26px; padding: 30px 12px 14px; }
+.pm-time { text-align: center; color: #e8eef8; font-size: 1.7rem; font-weight: 800; letter-spacing: .02em; }
+.pm-date { text-align: center; color: var(--color-accent); font-size: .68rem; font-weight: 600; margin-bottom: 16px; letter-spacing: .04em; }
+.pm-card { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); border-radius: 14px; padding: 10px 11px; margin-bottom: 10px; }
+.pm-head { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+.pm-ava { width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0; background: linear-gradient(160deg, var(--color-primary), var(--color-accent)); }
+.pm-who { font-size: .72rem; color: #e8eef8; font-weight: 700; line-height: 1.25; }
+.pm-who span { display: block; color: var(--color-accent); font-size: .6rem; font-weight: 600; }
+.pm-txt { font-size: .68rem; color: #c9d6ec; line-height: 1.45; margin-bottom: 8px; }
+.pm-photo { height: 54px; border-radius: 8px; margin-bottom: 8px; display: grid; place-items: center;
+  background: linear-gradient(135deg, #15294e, #0b1830); }
+.pm-photo svg { width: 22px; height: 22px; color: #4d6da3; }
+.pm-eng { display: flex; gap: 16px; font-size: .64rem; color: var(--color-text-soft); }
+.pm-eng span { display: inline-flex; align-items: center; gap: 5px; }
+.pm-eng svg { width: 13px; height: 13px; }
+.pm-eng .heart { color: #f0496b; }
+.phone-cap { text-align: center; font-size: .82rem; color: var(--color-text-soft); margin-bottom: 24px; }
+
 /* ---------- Санал авах: заавар | форм (2 багана) ---------- */
 .fb-split { display: grid; grid-template-columns: 1fr 1.1fr; gap: 46px; align-items: start; }
 .fb-guide h3 { font-size: 1.25rem; margin-bottom: 18px; }
