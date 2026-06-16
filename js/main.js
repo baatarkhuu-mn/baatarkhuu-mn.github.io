@@ -993,6 +993,41 @@
     },
   };
 
+  /* ---------- 16. Хуудаслалт (pagination) ---------- */
+  const Pager = {
+    init() {
+      document.querySelectorAll("[data-paginate]").forEach((grid) => {
+        const size = parseInt(grid.dataset.pageSize || "6", 10);
+        const items = Array.prototype.filter.call(grid.children, (c) => c.nodeType === 1);
+        if (items.length <= size) return; // нэг хуудас бол хуудаслалт хэрэггүй
+        const pages = Math.ceil(items.length / size);
+        const pager = document.createElement("nav");
+        pager.className = "pager"; pager.setAttribute("aria-label", "Хуудаслалт");
+        grid.after(pager);
+        let cur = 1;
+        const render = (scroll) => {
+          items.forEach((el, i) => { el.style.display = (i >= (cur - 1) * size && i < cur * size) ? "" : "none"; });
+          pager.innerHTML = "";
+          const mk = (label, target, dis, active) => {
+            const b = document.createElement("button");
+            b.type = "button"; b.textContent = label;
+            if (active) b.classList.add("active");
+            if (dis) b.disabled = true;
+            else b.addEventListener("click", () => { cur = target; render(true); });
+            pager.appendChild(b);
+          };
+          mk("«", 1, cur === 1);
+          mk("‹", cur - 1, cur === 1);
+          for (let i = 1; i <= pages; i++) mk(String(i), i, false, i === cur);
+          mk("›", cur + 1, cur === pages);
+          mk("»", pages, cur === pages);
+          if (scroll) grid.scrollIntoView({ behavior: "smooth", block: "start" });
+        };
+        render(false);
+      });
+    },
+  };
+
   /* ---------- Бүгдийг эхлүүлэх ---------- */
   // Хөвөгч "Санал хүсэлт" товч — холбоо барих хуудаснаас бусад бүх хуудсанд
   function injectFeedbackFab() {
@@ -1008,6 +1043,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     Theme.init(); Nav.init(); Search.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
-    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init();
+    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); Pager.init();
   });
 })();
