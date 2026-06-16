@@ -1060,6 +1060,28 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .guide-steps li b { color: var(--color-text); font-weight: 700; }
 @media (max-width: 820px) { .fb-split { grid-template-columns: 1fr; gap: 30px; } }
 
+/* ---------- Хууль: статистик chip + pill шүүлтүүр ---------- */
+.law-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.law-chip { display: inline-flex; align-items: center; gap: 7px; background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.16); color: #e8eef8; padding: 7px 15px; border-radius: 30px; font-size: .82rem; font-weight: 600; }
+.law-chip b { color: var(--color-accent); font-size: .92rem; }
+.law-search { position: relative; margin-bottom: 18px; }
+.law-search svg { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--color-text-soft); pointer-events: none; }
+.law-search input { width: 100%; padding: 14px 16px 14px 46px; border-radius: 12px; border: 1px solid var(--color-border);
+  background: var(--color-bg-card); color: var(--color-text); font-family: inherit; font-size: .95rem; }
+.law-search input:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px var(--color-accent-soft); }
+.law-pills { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; }
+.law-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 30px;
+  border: 1px solid var(--color-border); background: var(--color-bg-card); color: var(--color-text-soft);
+  font-family: inherit; font-size: .88rem; font-weight: 600; cursor: pointer; transition: color var(--transition), background var(--transition), border-color var(--transition); }
+.law-pill:hover { color: var(--color-text); border-color: var(--color-primary-dark); }
+.law-pill.active { background: var(--color-primary); border-color: var(--color-primary); color: #fff; box-shadow: var(--glow-blue); }
+.lp-n { display: inline-grid; place-items: center; min-width: 21px; height: 21px; padding: 0 6px; border-radius: 20px;
+  background: var(--color-bg-soft); color: var(--color-text-soft); font-size: .72rem; font-weight: 700; }
+.law-pill.active .lp-n { background: rgba(255,255,255,.22); color: #fff; }
+.badge-status.status-support { background: rgba(77,141,240,.16); color: var(--color-primary-light); }
+.badge-status.status-notstarted { background: var(--color-bg-soft); color: var(--color-text-soft); border: 1px solid var(--color-border); }
+
 /* ---------- Хуудаслалт (pagination) ---------- */
 .pager { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 40px; flex-wrap: wrap; }
 .pager button { min-width: 42px; height: 42px; padding: 0 12px; border: 1px solid var(--color-border);

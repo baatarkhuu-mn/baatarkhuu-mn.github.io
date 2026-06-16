@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#060b16" />
   <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");</script>
-  <title>Хууль, санаачилга — Ц.Баатархүү | УИХ-ын гишүүн</title>
+  <title>Хууль — Ц.Баатархүү | УИХ-ын гишүүн</title>
   <meta name="description" content="УИХ-ын гишүүн Ц.Баатархүүгийн өргөн барьсан болон хамтран санаачилсан хууль, төслүүд, тэдгээрийн төлөв байдал. PDF татах боломжтой." />
   <link rel="canonical" href="https://baatarkhuu-mn.github.io/huuli.html" />
   <link rel="icon" type="image/svg+xml" href="assets/img/logo.svg" />
@@ -24,7 +24,7 @@
       <div class="main-nav" id="main-nav"><ul>
         <li><a href="index.html">Нүүр</a></li>
         <li><a href="namtar.html">Намтар</a></li>
-        <li><a href="huuli.html" class="active">Хууль, санаачилга</a></li><li><a href="tusul.html">Төслүүд</a></li>
+        <li><a href="huuli.html" class="active">Хууль</a></li><li><a href="tusul.html">Төслүүд</a></li>
         <li><a href="medee.html">Мэдээ</a></li>
         <li><a href="video.html">Видео</a></li>
         <li><a href="tailan.html">Тайлан</a></li>
@@ -51,33 +51,24 @@
   <main id="main">
     <section class="page-hero">
       <div class="container">
-        <h1>Хууль, санаачилга</h1>
-        <nav class="breadcrumb" aria-label="Замчлал"><a href="index.html">Нүүр</a><span>/</span>Хууль, санаачилга</nav>
+        <h1>Хууль</h1>
+        <nav class="breadcrumb" aria-label="Замчлал"><a href="index.html">Нүүр</a><span>/</span>Хууль</nav>
+        <div class="law-chips" data-law-chips></div>
       </div>
     </section>
 
     <section class="section">
       <div class="container">
-        <!-- Шүүлтүүр toolbar -->
-        <div class="toolbar reveal">
-          <div class="field">
-            <input type="text" id="filter-search" placeholder="Хуулийн нэрээр хайх…" aria-label="Хуулийн нэрээр хайх" />
-          </div>
-          <select id="filter-category" aria-label="Ангилал">
-            <option value="all">Бүх ангилал</option>
-            <option value="own">Өргөн барьсан</option>
-            <option value="co">Хамтран санаачилсан</option>
-          </select>
-          <select id="filter-status" aria-label="Төлөв">
-            <option value="all">Бүх төлөв</option>
-            <option value="passed">Батлагдсан</option>
-            <option value="review">Хэлэлцэж буй</option>
-            <option value="draft">Төсөл</option>
-          </select>
+        <!-- Хайлт -->
+        <div class="law-search reveal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" id="filter-search" placeholder="Хайх…" aria-label="Хуулийн нэрээр хайх" />
         </div>
+        <!-- Төлвийн шүүлтүүр (динамик) -->
+        <div class="law-pills reveal" data-law-pills></div>
 
-        <!-- CMS-ээс динамикаар үүсгэх жагсаалт. Доорх нь жишээ бичилт — бодит мэдээллээр шинэчилнэ. -->
-        <div class="law-list" data-filterable>
+        <!-- Жишээ бичилт — бодит хуулиудаар шинэчилнэ. -->
+        <div class="law-list" data-laws>
           <article class="law-item" data-item data-title="Цахим засаглалыг хөгжүүлэх тухай хууль" data-category="own" data-status="review">
             <div class="law-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="26" height="26"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
             <div>
@@ -105,31 +96,31 @@
             <div class="law-actions"><span class="badge-status status-passed">Батлагдсан</span><a class="btn btn-ghost btn-sm" href="assets/pdf/huuli-holboo.pdf" download>PDF</a></div>
           </article>
 
-          <article class="law-item" data-item data-title="Инновацийн тухай хууль" data-category="co" data-status="review">
+          <article class="law-item" data-item data-title="Инновацийн тухай хууль" data-category="co" data-status="support">
             <div class="law-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="26" height="26"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.4 1 2.3h6c0-.9.4-1.8 1-2.3A7 7 0 0 0 12 2z"/></svg></div>
             <div>
               <h4>Инновацийн тухай хуульд нэмэлт, өөрчлөлт оруулах тухай</h4>
               <div class="meta"><span>2025.11</span><span>Хамтран санаачилсан</span><span>Гарааны бизнесийн дэмжлэг</span></div>
             </div>
-            <div class="law-actions"><span class="badge-status status-review">Хэлэлцэж буй</span><a class="btn btn-ghost btn-sm" href="assets/pdf/huuli-innovation.pdf" download>PDF</a></div>
+            <div class="law-actions"><span class="badge-status status-support">Хэлэлцэх эсэхийг дэмжсэн</span><a class="btn btn-ghost btn-sm" href="assets/pdf/huuli-innovation.pdf" download>PDF</a></div>
           </article>
 
-          <article class="law-item" data-item data-title="Нийслэлийн гэр хорооллын дэд бүтцийн хөгжлийн хууль" data-category="own" data-status="draft">
+          <article class="law-item" data-item data-title="Нийслэлийн гэр хорооллын дэд бүтцийн хөгжлийн хууль" data-category="own" data-status="notstarted">
             <div class="law-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="26" height="26"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></div>
             <div>
               <h4>Нийслэлийн гэр хорооллын дахин төлөвлөлтийг дэмжих хуулийн төсөл</h4>
               <div class="meta"><span>2026.02</span><span>Өргөн барьсан</span><span>Чингэлтэй, Сүхбаатар дүүргийн хөгжил</span></div>
             </div>
-            <div class="law-actions"><span class="badge-status status-draft">Төсөл</span><a class="btn btn-ghost btn-sm" href="assets/pdf/huuli-ger-horoolol.pdf" download>PDF</a></div>
+            <div class="law-actions"><span class="badge-status status-notstarted">Хэлэлцэж эхлээгүй</span><a class="btn btn-ghost btn-sm" href="assets/pdf/huuli-ger-horoolol.pdf" download>PDF</a></div>
           </article>
 
-          <article class="law-item" data-item data-title="Хиймэл оюун ухааны тухай хууль" data-category="co" data-status="draft">
+          <article class="law-item" data-item data-title="Хиймэл оюун ухааны тухай хууль" data-category="co" data-status="notstarted">
             <div class="law-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="26" height="26"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="10" r="1.3" fill="currentColor"/><circle cx="15" cy="10" r="1.3" fill="currentColor"/><path d="M9 15h6M12 2v2M12 20v2M2 12h2M20 12h2"/></svg></div>
             <div>
               <h4>Хиймэл оюун ухааны зохицуулалтын тухай хуулийн төсөл</h4>
               <div class="meta"><span>2026.01</span><span>Хамтран санаачилсан</span><span>Шинэ технологийн эрх зүйн орчин</span></div>
             </div>
-            <div class="law-actions"><span class="badge-status status-draft">Төсөл</span><a class="btn btn-ghost btn-sm" href="assets/pdf/huuli-ai.pdf" download>PDF</a></div>
+            <div class="law-actions"><span class="badge-status status-notstarted">Хэлэлцэж эхлээгүй</span><a class="btn btn-ghost btn-sm" href="assets/pdf/huuli-ai.pdf" download>PDF</a></div>
           </article>
         </div>
 
@@ -150,7 +141,7 @@
           <h4>Цэндийн Баатархүү</h4>
           
         </div>
-        <div><h4>Цэс</h4><ul class="footer-links"><li><a href="namtar.html">Намтар</a></li><li><a href="huuli.html">Хууль, санаачилга</a></li><li><a href="tusul.html">Төслүүд</a></li><li><a href="medee.html">Мэдээ</a></li><li><a href="video.html">Видео</a></li><li><a href="tailan.html">Тайлан</a></li></ul></div>
+        <div><h4>Цэс</h4><ul class="footer-links"><li><a href="namtar.html">Намтар</a></li><li><a href="huuli.html">Хууль</a></li><li><a href="tusul.html">Төслүүд</a></li><li><a href="medee.html">Мэдээ</a></li><li><a href="video.html">Видео</a></li><li><a href="tailan.html">Тайлан</a></li></ul></div>
         <div><h4>Сошиал</h4><div class="footer-social"><a href="https://www.facebook.com/ts.baatarkhuu/" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 22v-8h3l1-4h-4V7c0-1 .3-2 2-2h2V1.5C18.5 1.4 17.3 1 16 1c-3 0-5 2-5 5v3H7v4h4v8h2z"/></svg></a><a href="https://x.com/ts_baatarkhuu" target="_blank" rel="noopener" aria-label="X (Twitter)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.657l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a></div></div>
         <div><h4>Холбоо барих</h4><ul class="footer-contact"><li><svg class="fc-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>Улаанбаатар хот, Сүхбаатар дүүрэг, Төрийн ордон</li><li><svg class="fc-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"/></svg><a href="tel:261467">261467</a></li><li><svg class="fc-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 6 10 7 10-7"/></svg><a href="mailto:baatarkhuu@gmail.com">baatarkhuu@gmail.com</a></li></ul></div>
       </div>

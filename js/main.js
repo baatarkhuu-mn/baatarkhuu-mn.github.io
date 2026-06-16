@@ -1095,6 +1095,58 @@
     },
   };
 
+  /* ---------- 18. Хууль — chip + pill шүүлтүүр ---------- */
+  const Laws = {
+    ORDER: ["passed", "discussed", "support", "review", "notstarted", "withdrawn"],
+    LABEL: { passed: "Батлагдсан", discussed: "Хэлэлцүүлэг хийсэн", support: "Хэлэлцэх эсэхийг дэмжсэн", review: "Хэлэлцэж буй", notstarted: "Хэлэлцэж эхлээгүй", withdrawn: "Татаж авсан" },
+    init() {
+      const list = document.querySelector("[data-laws]");
+      if (!list) return;
+      const items = Array.from(list.querySelectorAll(".law-item"));
+      const pillsBox = document.querySelector("[data-law-pills]");
+      const chipsBox = document.querySelector("[data-law-chips]");
+      const search = document.querySelector("#filter-search");
+      const empty = document.querySelector(".filter-empty");
+      let active = "all";
+      const counts = {};
+      items.forEach((it) => { const s = it.dataset.status; counts[s] = (counts[s] || 0) + 1; });
+      const total = items.length;
+      // Статистик chip
+      if (chipsBox) {
+        const chip = (label, n) => `<span class="law-chip"><b>${n}</b> ${label}</span>`;
+        let h = chip("Нийт", total);
+        if (counts.passed) h += chip("Батлагдсан", counts.passed);
+        const inProc = (counts.review || 0) + (counts.support || 0) + (counts.discussed || 0);
+        if (inProc) h += chip("Хэлэлцэж буй", inProc);
+        chipsBox.innerHTML = h;
+      }
+      const apply = () => {
+        const q = (search ? search.value : "").trim().toLowerCase();
+        let shown = 0;
+        items.forEach((it) => {
+          const okStatus = active === "all" || it.dataset.status === active;
+          const text = (it.dataset.title || it.textContent).toLowerCase();
+          const okText = !q || text.includes(q);
+          const vis = okStatus && okText;
+          it.style.display = vis ? "" : "none";
+          if (vis) shown++;
+        });
+        if (empty) empty.style.display = shown ? "none" : "block";
+      };
+      const buildPills = () => {
+        if (!pillsBox) return;
+        const mk = (key, label, n) => `<button class="law-pill${active === key ? " active" : ""}" type="button" data-pill="${key}">${label}<span class="lp-n">${n}</span></button>`;
+        let html = mk("all", "Бүгд", total);
+        this.ORDER.forEach((k) => { if (counts[k]) html += mk(k, this.LABEL[k], counts[k]); });
+        pillsBox.innerHTML = html;
+        pillsBox.querySelectorAll(".law-pill").forEach((b) => b.addEventListener("click", () => { active = b.dataset.pill; buildPills(); apply(); }));
+      };
+      buildPills();
+      if (search) search.addEventListener("input", apply);
+      apply();
+    },
+  };
+
   /* ---------- Бүгдийг эхлүүлэх ---------- */
   // Хөвөгч "Санал хүсэлт" товч — холбоо барих хуудаснаас бусад бүх хуудсанд
   function injectFeedbackFab() {
@@ -1110,6 +1162,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     Theme.init(); Nav.init(); Search.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
-    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); Pager.init(); Carousel.init();
+    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); Pager.init(); Carousel.init(); Laws.init();
   });
 })();
