@@ -415,6 +415,15 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
   box-shadow: var(--shadow); background: var(--color-bg-card); height: 600px; }
 .reel-embed iframe { width: 100%; height: 100%; border: 0; display: block; }
 
+/* Хажуу тийш гүйлгэдэг Reels карусель (нүүр хуудас) */
+.reels-scroll { display: flex; gap: 18px; overflow-x: auto; scroll-snap-type: x mandatory;
+  padding: 4px 2px 16px; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+.reels-scroll .reel-embed { flex: 0 0 300px; width: 300px; height: 520px; scroll-snap-align: start; }
+.reels-scroll::-webkit-scrollbar { height: 8px; }
+.reels-scroll::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 20px; }
+.reels-scroll::-webkit-scrollbar-track { background: transparent; }
+@media (max-width: 560px) { .reels-scroll .reel-embed { flex-basis: 80vw; width: 80vw; height: 500px; } }
+
 /* ---------- 10.1 Флоу диаграм (гэрэлтсэн зангилаа) ---------- */
 .flow-section {
   color: #fff; border-block: 1px solid var(--color-border);
