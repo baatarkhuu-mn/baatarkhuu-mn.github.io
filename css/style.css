@@ -953,18 +953,18 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .news-list-home { display: flex; flex-direction: column; }
 .news-item { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--color-border); align-items: flex-start; }
 .news-item:first-child { padding-top: 0; }
-.ni-img { width: 132px; height: 96px; flex-shrink: 0; border-radius: var(--radius-sm); overflow: hidden;
+.ni-img { width: 188px; height: 132px; flex-shrink: 0; border-radius: var(--radius-sm); overflow: hidden;
   background: linear-gradient(160deg, #15294e, #0b1830); display: grid; place-items: center; }
 [data-theme="light"] .ni-img { background: linear-gradient(160deg, #d6e3f7, #eef3fb); }
 .ni-img img { width: 100%; height: 100%; object-fit: cover; }
 .ni-img img.ni-ph { width: 48%; height: auto; object-fit: contain; opacity: .4; }
 .ni-text { flex: 1; min-width: 0; }
-.ni-meta { font-size: .78rem; color: var(--color-accent); font-weight: 700; letter-spacing: .03em; margin-bottom: 5px; }
-.ni-title { font-size: clamp(1rem, 1.5vw, 1.18rem); line-height: 1.34; color: var(--color-text); font-weight: 700; }
-.ni-excerpt { font-size: .86rem; color: var(--color-text-soft); margin: 6px 0 7px; line-height: 1.5; }
-.ni-more { font-size: .8rem; color: var(--color-accent); font-weight: 600; }
+.ni-title { font-size: clamp(1.08rem, 1.7vw, 1.32rem); line-height: 1.32; color: var(--color-text); font-weight: 700; }
+.ni-excerpt { font-size: .9rem; color: var(--color-text-soft); margin: 8px 0; line-height: 1.55; }
+.ni-date { display: flex; align-items: center; gap: 7px; font-size: .8rem; color: var(--color-text-soft); margin-top: 10px; }
+.ni-cal { width: 14px; height: 14px; flex-shrink: 0; color: var(--color-accent); }
 .news-item:hover .ni-title { color: var(--color-primary-light); }
-@media (max-width: 480px) { .ni-img { width: 92px; height: 72px; } }
+@media (max-width: 560px) { .news-item { flex-direction: column; } .ni-img { width: 100%; height: 180px; } }
 /* Баруун: арга хэмжээ, бүртгэл */
 .events-list { display: flex; flex-direction: column; gap: 14px; }
 .event-card { display: flex; gap: 16px; align-items: center; background: var(--color-bg-card);
