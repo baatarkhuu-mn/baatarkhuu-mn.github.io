@@ -1038,6 +1038,44 @@
     },
   };
 
+  /* ---------- 17. Карусель (хажуу гүйлгэх + дугаар) ---------- */
+  const Carousel = {
+    init() {
+      document.querySelectorAll("[data-carousel]").forEach((track) => {
+        const wrap = track.parentElement;
+        const prev = wrap.querySelector("[data-car-prev]");
+        const next = wrap.querySelector("[data-car-next]");
+        const dots = (wrap.nextElementSibling && wrap.nextElementSibling.matches && wrap.nextElementSibling.matches("[data-car-dots]"))
+          ? wrap.nextElementSibling : document.querySelector("[data-car-dots]");
+        const pageW = () => track.clientWidth || 1;
+        const pageCount = () => Math.max(1, Math.ceil(track.scrollWidth / pageW()));
+        const curPage = () => Math.round(track.scrollLeft / pageW());
+        const go = (p) => track.scrollTo({ left: p * pageW(), behavior: "smooth" });
+        const update = () => {
+          const pc = pageCount(), cp = curPage();
+          if (prev) prev.disabled = cp <= 0;
+          if (next) next.disabled = cp >= pc - 1;
+          if (dots) {
+            dots.style.display = pc <= 1 ? "none" : "";
+            dots.innerHTML = "";
+            for (let i = 0; i < pc; i++) {
+              const b = document.createElement("button");
+              b.type = "button"; b.textContent = String(i + 1);
+              if (i === cp) b.classList.add("active");
+              b.addEventListener("click", () => go(i));
+              dots.appendChild(b);
+            }
+          }
+        };
+        if (prev) prev.addEventListener("click", () => go(Math.max(0, curPage() - 1)));
+        if (next) next.addEventListener("click", () => go(curPage() + 1));
+        let st; track.addEventListener("scroll", () => { clearTimeout(st); st = setTimeout(update, 120); });
+        let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(update, 200); });
+        update();
+      });
+    },
+  };
+
   /* ---------- Бүгдийг эхлүүлэх ---------- */
   // Хөвөгч "Санал хүсэлт" товч — холбоо барих хуудаснаас бусад бүх хуудсанд
   function injectFeedbackFab() {
@@ -1053,6 +1091,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     Theme.init(); Nav.init(); Search.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
-    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); Pager.init();
+    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); Pager.init(); Carousel.init();
   });
 })();

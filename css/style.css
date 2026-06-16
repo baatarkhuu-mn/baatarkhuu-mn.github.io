@@ -429,6 +429,18 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .reels-grid .reel-embed { flex: 0 0 300px; width: 300px; height: 520px; }
 @media (max-width: 560px) { .reels-grid .reel-embed { flex-basis: 86vw; width: 86vw; height: 500px; } }
 
+/* Reels карусель — хажуу гүйлгэх ‹ › товч + доор дугаар */
+.reels-carousel { position: relative; }
+.car-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 5;
+  width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--color-border);
+  background: var(--color-bg-card); color: var(--color-text); cursor: pointer; font-size: 1.7rem; line-height: 1;
+  display: grid; place-items: center; box-shadow: var(--shadow); transition: color var(--transition), border-color var(--transition), opacity var(--transition); }
+.car-prev { left: -10px; } .car-next { right: -10px; }
+.car-arrow:hover:not(:disabled) { border-color: var(--color-primary); color: var(--color-primary); }
+.car-arrow:disabled { opacity: .32; cursor: not-allowed; }
+.reels-dots { margin-top: 22px; }
+@media (max-width: 560px) { .car-arrow { display: none; } } /* утсан дээр шудрах */
+
 /* ---------- 10.1 Флоу диаграм (гэрэлтсэн зангилаа) ---------- */
 .flow-section {
   color: #fff; border-block: 1px solid var(--color-border);
