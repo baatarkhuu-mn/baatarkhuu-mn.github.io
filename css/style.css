@@ -1001,6 +1001,16 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .pm-eng span { display: inline-flex; align-items: center; gap: 5px; }
 .pm-eng svg { width: 13px; height: 13px; }
 .pm-eng .heart { color: #f0496b; }
+/* Утас доторх маягт (санал илгээх жишээ) */
+.pm-appbar { text-align: center; color: #e8eef8; font-weight: 700; font-size: .84rem; padding-bottom: 12px; margin-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,.08); }
+.pm-field { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); border-radius: 9px; padding: 7px 10px; margin-bottom: 9px; }
+.pm-lbl { display: block; font-size: .56rem; color: var(--color-accent); font-weight: 700; margin-bottom: 2px; letter-spacing: .04em; text-transform: uppercase; }
+.pm-val { font-size: .7rem; color: #d7e3f5; line-height: 1.4; }
+.pm-attach { display: flex; align-items: center; gap: 6px; font-size: .64rem; color: var(--color-text-soft); margin: 0 0 9px 2px; }
+.pm-attach svg { width: 13px; height: 13px; color: var(--color-accent); }
+.pm-rate { display: flex; align-items: center; gap: 7px; font-size: .82rem; color: var(--color-warning); letter-spacing: 1px; margin: 0 0 13px 2px; }
+.pm-rate b { color: var(--color-text-soft); font-size: .6rem; font-weight: 600; letter-spacing: 0; }
+.pm-submit { background: var(--color-accent); color: #06121f; text-align: center; font-weight: 700; font-size: .78rem; padding: 9px; border-radius: 9px; box-shadow: var(--glow-gold); }
 .phone-cap { text-align: center; font-size: .82rem; color: var(--color-text-soft); margin-bottom: 24px; }
 
 /* ---------- Санал авах: заавар | форм (2 багана) ---------- */
