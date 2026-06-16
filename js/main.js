@@ -194,7 +194,7 @@
         const show = (n, saved) => {
           if (!msg) return;
           msg.textContent = n
-            ? "Таны үнэлгээ: " + n + "/10 — " + Rating.label(n) + (saved ? ". Баярлалаа! 🙏" : "")
+            ? "Таны үнэлгээ: " + n + "/10 — " + Rating.label(n) + (saved ? ". Баярлалаа!" : "")
             : "Оноо дээр дарж үнэлнэ үү (1–10)";
         };
         for (let i = 1; i <= Rating.MAX; i++) {
@@ -304,7 +304,7 @@
               const { latitude: lat, longitude: lng, accuracy } = pos.coords;
               latIn.value = lat.toFixed(6);
               lngIn.value = lng.toFixed(6);
-              geoStatus.innerHTML = `✅ Тогтоогдлоо: <strong>${lat.toFixed(5)}, ${lng.toFixed(5)}</strong> (±${Math.round(accuracy)}м)`;
+              geoStatus.innerHTML = `Тогтоогдлоо: <strong>${lat.toFixed(5)}, ${lng.toFixed(5)}</strong> (±${Math.round(accuracy)}м)`;
               if (geoMap) {
                 geoMap.style.display = "block";
                 geoMap.innerHTML = `<iframe src="https://www.google.com/maps?q=${lat},${lng}&z=17&output=embed" title="Таны тогтоосон байршил" loading="lazy" style="width:100%;height:240px;border:0;display:block"></iframe>`;
@@ -505,7 +505,7 @@
   const I18n = {
     ph: {
       "Түлхүүр үг бичнэ үү…": "Type a keyword…",
-      "🔍 Хуулийн нэрээр хайх…": "🔍 Search by law name…",
+      "Хуулийн нэрээр хайх…": "Search by law name…",
       "Таны овог нэр": "Your full name",
       "+976 ХХХХ-ХХХХ": "+976 XXXX-XXXX",
       "tanii@mail.mn": "you@mail.mn",
@@ -521,14 +521,14 @@
       "Сайтаас хайх": "Search the site", "Хаах": "Close",
       "Ил тод байдал": "Transparency",
       "Иргэдийн нийтэлсэн санал": "Citizens' published feedback",
-      "Иргэд өөрсдөө зөвшөөрсний дагуу нийтэлсэн асуудлууд. Дэмжвэл ❤ дарж, саналаа коммент хэлбэрээр үлдээгээрэй.":
-        "Issues published with citizens' own consent. Show support with ❤ and leave your thoughts as a comment.",
+      "Иргэд өөрсдөө зөвшөөрсний дагуу нийтэлсэн асуудлууд. Саналыг дэмжиж, коммент хэлбэрээр үлдээгээрэй.":
+        "Issues published with citizens' own consent. Show your support and leave your thoughts as a comment.",
       "Цэндийн Баатархүү": "Tsendiin Baatarkhuu",
       "Монгол Улсын Их Хурлын гишүүн. Сонгуулийн 10-р тойрог — Чингэлтэй, Сүхбаатар дүүргийн иргэдийн итгэлийг хүлээж, шударга ёс, цахим хөгжлийн төлөө ажилласаар байна.":
         "Member of the Parliament of Mongolia. Earning the trust of citizens of Electoral District 10 — Chingeltei and Sukhbaatar — and working for justice and digital development.",
       "УИХ-ын вебсайт": "Parliament website", "Хууль зүйн портал": "Legal information portal",
       "Гишүүний албан ёсны CV": "Member's official CV", "Санал хүсэлт": "Feedback",
-      "📍 Улаанбаатар хот, Сүхбаатар дүүрэг, Төрийн ордон": "📍 Ulaanbaatar, Sukhbaatar District, State Palace",
+      "Улаанбаатар хот, Сүхбаатар дүүрэг, Төрийн ордон": "Ulaanbaatar, Sukhbaatar District, State Palace",
       "Бүх эрх хуулиар хамгаалагдсан.": "All rights reserved.",
       "УИХ-ын гишүүний албан ёсны вебсайт.": "Official website of the Member of Parliament.",
       "Facebook": "Facebook",
@@ -603,7 +603,7 @@
         "From 2024 to 2025 he served as Minister of Digital Development, Innovation and Communications. From 2020 to 2024 he was Secretary General of the Democratic Party.",
       "«Зөв ярих ухаан», «Ажил хэргийн гурвалжин», «Манлайллын мөрдлөг» зэрэг гурван ном бичиж хэвлүүлсэн. Англи, турк хэлтэй.":
         "He has authored three books: “The Art of Speaking Well,” “The Business Triangle,” and “The Leadership Code.” He speaks English and Turkish.",
-      "🎓 Боловсрол": "🎓 Education", "💼 Ажлын туршлага": "💼 Work experience",
+      "Боловсрол": "Education", "Ажлын туршлага": "Work experience",
       "Замнал": "Journey", "Улс төрийн үйл ажиллагаа": "Political career",
       "Олон нийтийн өмнө хүлээсэн үүрэг хариуцлагын замнал он цагийн дарааллаар.":
         "A chronological path of public responsibilities.",
@@ -828,19 +828,19 @@
       el.innerHTML =
         `<div class="fc-top">
            <span class="fc-subject">${this.esc(this.SUBJ[r.subject] || r.subject || "Санал")}</span>
-           ${r.rating != null ? `<span class="fc-tag fc-rate">⭐ ${r.rating}/10</span>` : ""}
+           ${r.rating != null ? `<span class="fc-tag fc-rate">${r.rating}/10</span>` : ""}
          </div>
          <div class="fc-meta">
-           <span>📅 ${this.fmt(r.created_at)}</span>
-           ${loc ? `<span>📍 ${this.esc(loc)}</span>` : ""}
+           <span>${this.fmt(r.created_at)}</span>
+           ${loc ? `<span>${this.esc(loc)}</span>` : ""}
          </div>
          <div class="fc-msg">${this.esc(r.message)}</div>
          <div class="fc-photos"></div>
          <div class="fc-actions">
            <button class="fc-like${isLiked ? " liked" : ""}" type="button" aria-pressed="${isLiked}">
-             <span class="heart">${isLiked ? "❤" : "🤍"}</span><span class="cnt">${likeCount}</span>
+             <span class="heart"><svg viewBox="0 0 24 24"><path d="M12 21s-8-5.3-8-11a4.5 4.5 0 0 1 8-2.7A4.5 4.5 0 0 1 20 10c0 5.7-8 11-8 11z"/></svg></span><span class="cnt">${likeCount}</span>
            </button>
-           <button class="fc-comment-toggle" type="button">💬 Коммент <span class="ccnt">(${comments.length})</span></button>
+           <button class="fc-comment-toggle" type="button">Коммент <span class="ccnt">(${comments.length})</span></button>
          </div>
          <div class="fc-comments">
            <div class="fc-comment-box"></div>
@@ -876,7 +876,7 @@
           this.saveLiked(set);
           likeBtn.classList.toggle("liked", nowLiked);
           likeBtn.setAttribute("aria-pressed", String(nowLiked));
-          likeBtn.querySelector(".heart").textContent = nowLiked ? "❤" : "🤍";
+          /* heart fill -> CSS .liked */
           likeBtn.querySelector(".cnt").textContent = (typeof data === "number" ? data : likeCount);
         } catch (_) {} finally { likeBtn.disabled = false; }
       });

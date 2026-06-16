@@ -532,6 +532,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .contact-info .info-item .ic { width: 48px; height: 48px; flex-shrink: 0; border-radius: var(--radius-sm);
   background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary)); color: #fff;
   display: grid; place-items: center; box-shadow: var(--glow-blue); font-size: 1.2rem; }
+.contact-info .info-item .ic svg { width: 22px; height: 22px; }
 .contact-info .info-item h4 { margin-bottom: 2px; }
 .contact-info .info-item p, .contact-info .info-item a { color: var(--color-text-soft); }
 .contact-info .info-item a:hover { color: var(--color-primary-light); }
@@ -807,9 +808,11 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
   border-radius: var(--radius-sm); transition: color var(--transition), background var(--transition);
 }
 .fc-like:hover, .fc-comment-toggle:hover { color: var(--color-text); background: var(--color-bg-soft); }
-.fc-like .heart { font-size: 1.15rem; line-height: 1; transition: transform var(--transition); }
+.fc-like .heart { line-height: 0; transition: transform var(--transition); }
+.fc-like .heart svg { width: 1.15em; height: 1.15em; fill: none; stroke: currentColor; stroke-width: 2; vertical-align: -.18em; }
 .fc-like.liked { color: #f0496b; }
-.fc-like.liked .heart { transform: scale(1.15); }
+.fc-like.liked .heart { transform: scale(1.12); }
+.fc-like.liked .heart svg { fill: #f0496b; stroke: #f0496b; }
 
 .fc-comments { margin-top: 14px; display: none; }
 .fc-comments.open { display: block; }
