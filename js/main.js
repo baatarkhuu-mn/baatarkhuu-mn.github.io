@@ -822,7 +822,7 @@
 
     card(sb, r, likeCount, comments, liked) {
       const el = document.createElement("article");
-      el.className = "feed-card reveal is-visible";
+      el.className = "feed-card reveal visible";
       const loc = [r.district ? r.district + " дүүрэг" : "", r.khoroo ? r.khoroo + "-р хороо" : ""].filter(Boolean).join(", ");
       const isLiked = liked.has(r.id);
       el.innerHTML =
@@ -915,6 +915,26 @@
     },
   };
 
+  /* ---------- 13. Намтар таб (segmented tabs) ---------- */
+  const Tabs = {
+    init() {
+      const bar = document.querySelector("[data-tabs]");
+      if (!bar) return;
+      const tabs = Array.from(bar.querySelectorAll(".bio-tab"));
+      const panels = Array.from(document.querySelectorAll(".bio-panel"));
+      const activate = (key) => {
+        tabs.forEach((t) => { const on = t.dataset.tab === key; t.classList.toggle("active", on); t.setAttribute("aria-selected", on ? "true" : "false"); });
+        panels.forEach((p) => {
+          const on = p.dataset.panel === key;
+          p.classList.toggle("active", on);
+          // Нуугдсан панель нээгдэхэд reveal анимэйшнийг шуурхай харуулна
+          if (on) p.querySelectorAll(".reveal").forEach((el) => el.classList.add("visible"));
+        });
+      };
+      tabs.forEach((t) => t.addEventListener("click", () => activate(t.dataset.tab)));
+    },
+  };
+
   /* ---------- Бүгдийг эхлүүлэх ---------- */
   // Хөвөгч "Санал хүсэлт" товч — холбоо барих хуудаснаас бусад бүх хуудсанд
   function injectFeedbackFab() {
@@ -930,6 +950,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     Theme.init(); Nav.init(); Search.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
-    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init();
+    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init();
   });
 })();
