@@ -1040,12 +1040,12 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .pm-note.pn-name { top: 125px; }
 .pm-note.pn-phone { top: 204px; }
 .pm-note.pn-attach { top: 369px; }
-#feedback .fb-guide .guide-steps { display: none; }
+.fb-guide:has(.phone-mock.annotated) .guide-steps { display: none; }
 @media (max-width: 820px) {
   .phone-mock.annotated { max-width: 248px; min-height: auto; }
   .phone-mock.annotated .phone-frame { width: 100%; transform: none; }
   .pm-note { display: none; }
-  #feedback .fb-guide .guide-steps { display: flex; }
+  .fb-guide:has(.phone-mock.annotated) .guide-steps { display: flex; }
 }
 
 /* ---------- Санал авах: заавар | форм (2 багана) ---------- */
