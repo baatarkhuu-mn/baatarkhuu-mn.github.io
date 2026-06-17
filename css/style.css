@@ -1208,6 +1208,26 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .fc-response .fcr-label { font-size: .74rem; font-weight: 700; color: var(--color-accent); text-transform: uppercase; letter-spacing: .05em; display: block; margin-bottom: 4px; }
 .fc-response p { margin: 0; font-size: .9rem; line-height: 1.55; }
 
+/* Бидний тухай — платформын танилцуулга */
+.about-flow { display: flex; align-items: stretch; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 8px 0 40px; }
+.af-step { flex: 1; min-width: 160px; max-width: 235px; text-align: center; background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 24px 16px; }
+.af-ic { width: 50px; height: 50px; margin: 0 auto 13px; display: grid; place-items: center; border-radius: 50%; background: var(--color-accent-soft); color: var(--color-accent); }
+.af-ic svg { width: 24px; height: 24px; }
+.af-t { font-weight: 700; margin-bottom: 5px; }
+.af-step p { font-size: .84rem; color: var(--color-text-soft); margin: 0; line-height: 1.45; }
+.af-arrow { align-self: center; color: var(--color-accent); font-size: 1.5rem; font-weight: 700; }
+@media (max-width: 760px) {
+  .about-flow { flex-direction: column; align-items: center; }
+  .af-step { max-width: none; width: 100%; }
+  .af-arrow { transform: rotate(90deg); }
+}
+.about-promise { max-width: 760px; margin: 0 auto; background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 28px 30px; }
+.about-promise h3 { margin: 0 0 10px; font-size: 1.2rem; }
+.about-promise > p { color: var(--color-text-soft); margin: 0 0 16px; }
+.promise-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 11px; }
+.promise-list li { position: relative; padding-left: 32px; line-height: 1.5; }
+.promise-list li::before { content: "✓"; position: absolute; left: 0; top: 1px; width: 21px; height: 21px; display: grid; place-items: center; border-radius: 50%; background: rgba(70,200,130,.18); color: #46c882; font-size: .72rem; font-weight: 800; }
+
 /* Хөдөлгөөн багасгах хүсэлт */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
