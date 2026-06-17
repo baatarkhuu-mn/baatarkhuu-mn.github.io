@@ -56,6 +56,7 @@
     .lightbox img { max-width:92vw; max-height:88vh; border-radius:var(--radius); }
     .lightbox button { position:absolute; top:20px; right:24px; background:var(--color-bg-card); color:var(--color-text);
       border:1px solid var(--color-border); border-radius:50%; width:44px; height:44px; cursor:pointer; font-size:1.1rem; }
+    .cms-bar { margin-bottom:18px; }
     .reg-table { width:100%; border-collapse:collapse; font-size:.86rem; }
     .reg-table th { text-align:left; color:var(--color-text-soft); font-weight:600; font-size:.78rem; padding:6px 8px; border-bottom:1px solid var(--color-border); }
     .reg-table td { padding:7px 8px; border-bottom:1px solid var(--color-border); }
@@ -260,8 +261,9 @@
 
       <!-- ============ МЭДЭЭ УДИРДАХ ============ -->
       <section id="news-view" class="view" style="display:none">
-        <div class="form-card" style="margin-bottom:26px">
-          <h3 id="news-form-title" style="margin-bottom:16px">Шинэ мэдээ нэмэх</h3>
+        <div class="cms-bar"><button type="button" class="btn btn-gold btn-sm" data-newbtn="news">+ Шинэ мэдээ нэмэх</button></div>
+          <div class="form-card cms-form" hidden style="margin-bottom:26px">
+            <h3 id="news-form-title" style="margin-bottom:16px">Шинэ мэдээ нэмэх</h3>
           <form id="news-form">
             <input type="hidden" id="n-id" />
             <div class="form-group"><label for="n-title">Гарчиг <span style="color:var(--color-danger)">*</span></label><input type="text" id="n-title" required placeholder="Мэдээний гарчиг" /></div>
@@ -295,7 +297,8 @@
 
         <!-- ============ ВИДЕО УДИРДАХ ============ -->
         <section id="video-view" class="view" style="display:none">
-          <div class="form-card" style="margin-bottom:26px">
+          <div class="cms-bar"><button type="button" class="btn btn-gold btn-sm" data-newbtn="video">+ Шинэ видео нэмэх</button></div>
+          <div class="form-card cms-form" hidden style="margin-bottom:26px">
             <h3 id="video-form-title" style="margin-bottom:6px">Шинэ видео нэмэх</h3>
             <p class="form-note" style="margin-bottom:16px">Facebook Reel эсвэл YouTube бичлэгийн <strong>холбоосыг</strong> хуулж тавина. Жишээ: <code>https://www.facebook.com/reel/123…</code> эсвэл <code>https://youtu.be/abc…</code></p>
             <form id="video-form">
@@ -323,7 +326,8 @@
 
         <!-- ============ ТАЙЛАН УДИРДАХ ============ -->
         <section id="report-view" class="view" style="display:none">
-          <div class="form-card" style="margin-bottom:26px">
+          <div class="cms-bar"><button type="button" class="btn btn-gold btn-sm" data-newbtn="report">+ Шинэ тайлан нэмэх</button></div>
+          <div class="form-card cms-form" hidden style="margin-bottom:26px">
             <h3 id="report-form-title" style="margin-bottom:16px">Шинэ тайлан нэмэх</h3>
             <form id="report-form">
               <input type="hidden" id="r-id" />
@@ -354,7 +358,8 @@
 
         <!-- ============ ТӨСЛҮҮД УДИРДАХ ============ -->
         <section id="project-view" class="view" style="display:none">
-          <div class="form-card" style="margin-bottom:26px">
+          <div class="cms-bar"><button type="button" class="btn btn-gold btn-sm" data-newbtn="project">+ Шинэ төсөл нэмэх</button></div>
+          <div class="form-card cms-form" hidden style="margin-bottom:26px">
             <h3 id="project-form-title" style="margin-bottom:16px">Шинэ төсөл нэмэх</h3>
             <form id="project-form">
               <input type="hidden" id="p-id" />
@@ -387,7 +392,8 @@
 
         <!-- ============ ХУУЛЬ УДИРДАХ ============ -->
         <section id="law-view" class="view" style="display:none">
-          <div class="form-card" style="margin-bottom:26px">
+          <div class="cms-bar"><button type="button" class="btn btn-gold btn-sm" data-newbtn="law">+ Шинэ хууль нэмэх</button></div>
+          <div class="form-card cms-form" hidden style="margin-bottom:26px">
             <h3 id="law-form-title" style="margin-bottom:16px">Шинэ хууль нэмэх</h3>
             <form id="law-form">
               <input type="hidden" id="l-id" />
@@ -429,7 +435,8 @@
 
         <!-- ============ АРГА ХЭМЖЭЭ УДИРДАХ ============ -->
         <section id="event-view" class="view" style="display:none">
-          <div class="form-card" style="margin-bottom:26px">
+          <div class="cms-bar"><button type="button" class="btn btn-gold btn-sm" data-newbtn="event">+ Шинэ арга хэмжээ нэмэх</button></div>
+          <div class="form-card cms-form" hidden style="margin-bottom:26px">
             <h3 id="event-form-title" style="margin-bottom:16px">Шинэ арга хэмжээ нэмэх</h3>
             <form id="event-form">
               <input type="hidden" id="e-id" />
@@ -1441,11 +1448,25 @@
       if (name === "event" && !eventLoaded) { eventLoaded = true; loadEvents(); }
       if (name === "settings" && !settingsLoaded) { settingsLoaded = true; loadSettings(); }
       if (name === "dashboard") renderRecent();
+      document.querySelectorAll(".cms-form").forEach((f) => { f.hidden = true; }); // view сольиход формыг нуух
       const shell = document.querySelector(".admin-shell"); if (shell) shell.classList.remove("nav-open");
       window.scrollTo({ top: 0 });
     }
     document.querySelectorAll(".nav-link[data-view]").forEach((b) => {
       b.addEventListener("click", () => showView(b.dataset.view));
+    });
+
+    // ===== Жагсаалт + "Шинэ нэмэх" (форм нуух/харуулах) =====
+    const RESET_FORM = { news: resetNewsForm, video: resetVideoForm, report: resetReportForm, project: resetProjectForm, law: resetLawForm, event: resetEventForm };
+    const showCmsForm = (k) => { const f = document.querySelector("#" + k + "-view .cms-form"); if (f) { f.hidden = false; f.scrollIntoView({ behavior: "smooth", block: "start" }); } };
+    document.querySelectorAll("[data-newbtn]").forEach((b) => b.addEventListener("click", () => {
+      const k = b.dataset.newbtn; if (RESET_FORM[k]) RESET_FORM[k](); showCmsForm(k);
+    }));
+    document.addEventListener("click", (e) => {
+      const ed = e.target.closest(".nr-edit,.vr-edit,.rr-edit,.pr-edit,.lr-edit,.er-edit");
+      if (ed) { const v = ed.closest(".view"), f = v && v.querySelector(".cms-form"); if (f) { f.hidden = false; f.scrollIntoView({ behavior: "smooth", block: "start" }); } }
+      const cb = e.target.closest("#news-cancel,#video-cancel,#report-cancel,#project-cancel,#law-cancel,#event-cancel");
+      if (cb) { const v = cb.closest(".view"), f = v && v.querySelector(".cms-form"); if (f) f.hidden = true; }
     });
 
     // Хурдан үйлдэл (хяналтын самбарын товчнууд)

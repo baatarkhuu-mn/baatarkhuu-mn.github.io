@@ -1056,7 +1056,7 @@
       const sb = window.getSB && window.getSB();
       if (!sb) return; // Supabase алга бол статик мэдээ хэвээр
       try {
-        const { data, error } = await sb.from("news").select("*").eq("published", true).order("created_at", { ascending: false }).limit(60);
+        const { data, error } = await sb.from("news").select("*").eq("published", true).order("date", { ascending: false, nullsFirst: false }).order("created_at", { ascending: false }).limit(60);
         if (error) throw error;
         if (!data || !data.length) return; // мэдээ ороогүй бол статик хэвээр
         if (grid) grid.innerHTML = data.map((n) => this.card(n)).join("");
