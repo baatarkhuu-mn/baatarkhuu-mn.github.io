@@ -222,14 +222,7 @@
               </div>
               <div class="form-group">
                 <label for="f-subject">Төрөл</label>
-                <select id="f-subject" name="subject">
-                  <option value="sanal">Санал</option>
-                  <option value="urgudul">Өргөдөл</option>
-                  <option value="gomdol">Гомдол</option>
-                  <option value="asuudal">Тулгамдсан асуудал мэдээлэх</option>
-                  <option value="uulzalt">Уулзалтын хүсэлт</option>
-                  <option value="busad">Бусад</option>
-                </select>
+                <select id="f-subject" name="subject"><option value="gerel">Гэрэлтүүлэг</option><option value="zam">Зам, нүх, эвдрэл</option><option value="yavgan">Явган хүний зам</option><option value="hog">Хог, орчны бохирдол</option><option value="buudal">Автобусны буудал</option><option value="surguuli">Сургууль, цэцэрлэг</option><option value="emnelg">Эмнэлэг, өрхийн эмнэлэг</option><option value="soh">СӨХ, байрны орчин</option><option value="hurteemj">Ахмад, ХБИ-ийн хүртээмж</option><option value="huuli">Хууль, бодлогын санал</option><option value="urgudul">Хувийн өргөдөл, тусламж хүсэлт</option></select>
               </div>
               <div class="form-group">
                 <label for="f-message">Агуулга <span aria-hidden="true" style="color:var(--color-danger)">*</span></label>
@@ -251,6 +244,10 @@
                   <span class="geo-status" id="geo-status" aria-live="polite">Байршил тогтоогоогүй</span>
                 </div>
                 <div id="geo-map" style="display:none;margin-top:12px"></div>
+                <div class="form-row" style="margin-top:12px">
+                  <div class="form-group" style="margin:0"><label for="f-loc-detail">Хороо, гудамж, ойролцоох обьект</label><input type="text" id="f-loc-detail" name="loc_detail" placeholder="5-р хороо, ...гудамж, ...-ийн урд" /></div>
+                  <div class="form-group" style="margin:0"><label for="f-pole">Гэрлийн шонгийн дугаар <span class="form-note">(байвал)</span></label><input type="text" id="f-pole" name="pole" placeholder="ЧД-1234" /></div>
+                </div>
                 <input type="hidden" name="lat" id="f-lat" />
                 <input type="hidden" name="lng" id="f-lng" />
               </div>
@@ -332,6 +329,8 @@
   <button class="to-top" aria-label="Дээш гарах"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="m18 15-6-6-6 6"/></svg></button>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase-config.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

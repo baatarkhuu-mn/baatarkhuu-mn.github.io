@@ -304,30 +304,47 @@
       const geoMap = form.querySelector("#geo-map");
       const latIn = form.querySelector("#f-lat");
       const lngIn = form.querySelector("#f-lng");
+      let leafMap = null, leafMarker = null;
+      const UB = [47.9187, 106.9178];
+      const setLL = (lat, lng) => { latIn.value = (+lat).toFixed(6); lngIn.value = (+lng).toFixed(6); };
+      const pinMsg = (lat, lng) => { if (geoStatus) geoStatus.innerHTML = `Pin: <strong>${(+lat).toFixed(5)}, ${(+lng).toFixed(5)}</strong> — газрын зураг дээр чирж засна уу`; };
       const resetGeo = () => {
         if (geoStatus) geoStatus.textContent = "Байршил тогтоогоогүй";
         if (geoMap) { geoMap.style.display = "none"; geoMap.innerHTML = ""; }
         if (latIn) latIn.value = ""; if (lngIn) lngIn.value = "";
+        leafMap = null; leafMarker = null;
+      };
+      const showMap = (lat, lng) => {
+        if (!geoMap) return;
+        geoMap.style.display = "block";
+        if (typeof L === "undefined") {
+          geoMap.innerHTML = `<iframe src="https://www.google.com/maps?q=${lat},${lng}&z=17&output=embed" title="Байршил" loading="lazy" style="width:100%;height:100%;border:0;display:block"></iframe>`;
+          return;
+        }
+        if (!leafMap) {
+          geoMap.innerHTML = "";
+          leafMap = L.map(geoMap, { scrollWheelZoom: false }).setView([lat, lng], 16);
+          L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap" }).addTo(leafMap);
+          leafMarker = L.marker([lat, lng], { draggable: true }).addTo(leafMap);
+          leafMarker.on("dragend", () => { const p = leafMarker.getLatLng(); setLL(p.lat, p.lng); pinMsg(p.lat, p.lng); });
+          leafMap.on("click", (e) => { leafMarker.setLatLng(e.latlng); setLL(e.latlng.lat, e.latlng.lng); pinMsg(e.latlng.lat, e.latlng.lng); });
+          setTimeout(() => leafMap.invalidateSize(), 250);
+        } else { leafMap.setView([lat, lng], 16); leafMarker.setLatLng([lat, lng]); }
       };
       if (geoBtn) {
         geoBtn.addEventListener("click", () => {
-          if (!navigator.geolocation) { geoStatus.textContent = "⚠ Таны төхөөрөмж байршил тогтоохыг дэмжихгүй байна."; return; }
+          if (!navigator.geolocation) {
+            if (geoStatus) geoStatus.textContent = "Газрын зураг дээр дарж pin тавина уу.";
+            showMap(UB[0], UB[1]); return;
+          }
           geoStatus.textContent = "⏳ Байршил тогтоож байна…";
           navigator.geolocation.getCurrentPosition(
-            (pos) => {
-              const { latitude: lat, longitude: lng, accuracy } = pos.coords;
-              latIn.value = lat.toFixed(6);
-              lngIn.value = lng.toFixed(6);
-              geoStatus.innerHTML = `Тогтоогдлоо: <strong>${lat.toFixed(5)}, ${lng.toFixed(5)}</strong> (±${Math.round(accuracy)}м)`;
-              if (geoMap) {
-                geoMap.style.display = "block";
-                geoMap.innerHTML = `<iframe src="https://www.google.com/maps?q=${lat},${lng}&z=17&output=embed" title="Таны тогтоосон байршил" loading="lazy" style="width:100%;height:240px;border:0;display:block"></iframe>`;
-              }
-            },
+            (pos) => { const { latitude: lat, longitude: lng } = pos.coords; setLL(lat, lng); showMap(lat, lng); pinMsg(lat, lng); },
             (err) => {
               geoStatus.textContent = err.code === 1
-                ? "⚠ Байршлын зөвшөөрөл олгогдоогүй. Хөтчийн тохиргооноос зөвшөөрнө үү."
-                : "⚠ Байршил авч чадсангүй. Дахин оролдоно уу.";
+                ? "Зөвшөөрөл олгоогүй — газрын зураг дээр дарж pin тавина уу."
+                : "GPS аваагүй — газрын зураг дээр дарж pin тавина уу.";
+              showMap(UB[0], UB[1]);
             },
             { enableHighAccuracy: true, timeout: 12000 }
           );
@@ -384,23 +401,45 @@
           // Зөвшөөрсөн бол нийтийн (public) сан руу, эс бөгөөс хаалттай сан руу
           const bucket = isPublic ? "feedback-public" : "feedback-photos";
 
+          // EXIF/GPS metadata цэвэрлэх (нийтэд харагдах зургаас) — хувийн нууцлал
+          const stripExif = (file) => new Promise((res) => {
+            if (!file.type.startsWith("image/")) return res(file);
+            const img = new Image(); const url = URL.createObjectURL(file);
+            img.onload = () => {
+              let w = img.naturalWidth, h = img.naturalHeight; const max = 1600;
+              if (Math.max(w, h) > max) { const s = max / Math.max(w, h); w = Math.round(w * s); h = Math.round(h * s); }
+              const c = document.createElement("canvas"); c.width = w; c.height = h;
+              c.getContext("2d").drawImage(img, 0, 0, w, h);
+              URL.revokeObjectURL(url);
+              c.toBlob((blob) => res(blob ? new File([blob], (file.name.replace(/\.\w+$/, "") || "img") + ".jpg", { type: "image/jpeg" }) : file), "image/jpeg", 0.85);
+            };
+            img.onerror = () => { URL.revokeObjectURL(url); res(file); };
+            img.src = url;
+          });
           // 1) Зургуудыг storage руу хуулах
           const photoPaths = [];
           for (let i = 0; i < files.length; i++) {
-            const f = files[i];
+            const f = isPublic ? await stripExif(files[i]) : files[i]; // нийтэд бол metadata устгана
             const ext = (f.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "");
             const path = `${Date.now()}-${i}-${Math.round(performance.now())}.${ext}`;
             const { error: upErr } = await sb.storage.from(bucket).upload(path, f, { contentType: f.type });
             if (upErr) throw upErr;
             photoPaths.push(path);
           }
-          // 2) Мөр оруулах
+          // 2) Мөр оруулах — байршлын дэлгэрэнгүйг агуулгад нэмнэ
           const fd = new FormData(form);
+          let message = (fd.get("message") || "").toString().trim();
+          const locDetail = (fd.get("loc_detail") || "").toString().trim();
+          const pole = (fd.get("pole") || "").toString().trim();
+          const extra = [];
+          if (locDetail) extra.push("Байршил: " + locDetail);
+          if (pole) extra.push("Гэрлийн шон: " + pole);
+          if (extra.length) message += "\n\n" + extra.join("\n");
           const row = {
             name: (fd.get("name") || "").toString().trim(),
             phone: (fd.get("phone") || "").toString().trim() || null,
             subject: (fd.get("subject") || "").toString(),
-            message: (fd.get("message") || "").toString().trim(),
+            message: message,
             lat: latIn && latIn.value ? parseFloat(latIn.value) : null,
             lng: lngIn && lngIn.value ? parseFloat(lngIn.value) : null,
             rating: ratingIn && ratingIn.value ? parseInt(ratingIn.value, 10) : null,
@@ -787,7 +826,7 @@
 
   /* ---------- 12. Ил тод санал самбар (public feed) ---------- */
   const PublicFeed = {
-    SUBJ: { sanal: "Санал", urgudul: "Өргөдөл", gomdol: "Гомдол", asuudal: "Тулгамдсан асуудал", uulzalt: "Уулзалтын хүсэлт", busad: "Бусад" },
+    SUBJ: { gerel: "Гэрэлтүүлэг", zam: "Зам, нүх, эвдрэл", yavgan: "Явган хүний зам", hog: "Хог, орчны бохирдол", buudal: "Автобусны буудал", surguuli: "Сургууль, цэцэрлэг", emnelg: "Эмнэлэг, өрхийн эмнэлэг", soh: "СӨХ, байрны орчин", hurteemj: "Ахмад, ХБИ хүртээмж", huuli: "Хууль, бодлогын санал", urgudul: "Хувийн өргөдөл, тусламж", sanal: "Санал", gomdol: "Гомдол", asuudal: "Тулгамдсан асуудал", uulzalt: "Уулзалтын хүсэлт", busad: "Бусад" },
     esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
     fmt(s) { try { return new Date(s).toLocaleString("mn-MN", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }); } catch (_) { return ""; } },
 
