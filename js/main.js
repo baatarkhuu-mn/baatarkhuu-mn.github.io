@@ -1237,6 +1237,35 @@
     },
   };
 
+  /* ---------- Видео (CMS) — admin-аас нэмсэн видеог ачаална ---------- */
+  const VideoCMS = {
+    init() {
+      const listEl = document.querySelector("[data-video-list]");
+      if (!listEl) return; // зөвхөн видео хуудсанд
+      const sb = window.getSB && window.getSB();
+      if (!sb) return;
+      sb.from("videos").select("*").eq("published", true)
+        .order("sort", { ascending: true }).order("created_at", { ascending: false })
+        .then(({ data, error }) => {
+          if (error || !data || !data.length) return; // хоосон/алдаа → жишээ хэвээр
+          const featuredEl = document.querySelector("[data-video-featured]");
+          const feat = data.find((v) => v.featured) || data[0];
+          const rest = data.filter((v) => v !== feat);
+          if (featuredEl) featuredEl.innerHTML = VideoCMS.embed(feat);
+          listEl.innerHTML = (rest.length ? rest : data).map((v) => VideoCMS.embed(v, true)).join("");
+        });
+    },
+    ytId(url) { const m = String(url).match(/(?:v=|youtu\.be\/|\/embed\/|\/shorts\/)([\w-]{11})/); return m ? m[1] : ""; },
+    embed(v, reveal) {
+      const cls = "reel-embed" + (reveal ? " reveal visible" : "");
+      const title = (v.title || "Видео").replace(/"/g, "&quot;");
+      let src;
+      if (v.platform === "youtube") src = "https://www.youtube.com/embed/" + VideoCMS.ytId(v.url);
+      else src = "https://www.facebook.com/plugins/video.php?href=" + encodeURIComponent(v.url) + "&show_text=false&width=320";
+      return `<div class="${cls}"><iframe src="${src}" title="${title}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>`;
+    },
+  };
+
   // Хөвөгч "Санал хүсэлт" товч — холбоо барих хуудаснаас бусад бүх хуудсанд
   function injectFeedbackFab() {
     if (location.pathname.includes("holboo")) return;
@@ -1251,6 +1280,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     Theme.init(); Nav.init(); Search.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
-    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init();
+    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init();
   });
 })();

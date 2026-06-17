@@ -150,6 +150,10 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2z"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8z"/></svg>
           Мэдээ
         </button>
+        <button type="button" class="nav-link" data-view="video">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m10 9 5 3-5 3z"/></svg>
+          Видео
+        </button>
       </nav>
       <div class="as-foot">
         <a href="index.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg> Сайт руу очих</a>
@@ -264,6 +268,34 @@
         <div id="news-list"></div>
         <div id="news-empty" class="search-empty" style="display:none">Одоогоор мэдээ алга. Дээрх формоор нэмнэ үү.</div>
         </section><!-- /news-view -->
+
+        <!-- ============ ВИДЕО УДИРДАХ ============ -->
+        <section id="video-view" class="view" style="display:none">
+          <div class="form-card" style="margin-bottom:26px">
+            <h3 id="video-form-title" style="margin-bottom:6px">Шинэ видео нэмэх</h3>
+            <p class="form-note" style="margin-bottom:16px">Facebook Reel эсвэл YouTube бичлэгийн <strong>холбоосыг</strong> хуулж тавина. Жишээ: <code>https://www.facebook.com/reel/123…</code> эсвэл <code>https://youtu.be/abc…</code></p>
+            <form id="video-form">
+              <input type="hidden" id="v-id" />
+              <div class="form-group"><label for="v-url">Видеоны холбоос <span style="color:var(--color-danger)">*</span></label><input type="url" id="v-url" required placeholder="https://www.facebook.com/reel/… эсвэл https://youtu.be/…" /></div>
+              <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                <div class="form-group"><label for="v-platform">Платформ</label>
+                  <select id="v-platform"><option value="facebook">Facebook Reel</option><option value="youtube">YouTube</option></select>
+                </div>
+                <div class="form-group"><label for="v-sort">Эрэмбэ (бага нь түрүүнд)</label><input type="number" id="v-sort" value="0" /></div>
+              </div>
+              <div class="form-group"><label for="v-title">Гарчиг (заавал биш)</label><input type="text" id="v-title" placeholder="Видеоны товч нэр" /></div>
+              <div class="form-group"><label style="display:flex;gap:9px;align-items:center;cursor:pointer"><input type="checkbox" id="v-featured" style="width:18px;height:18px;accent-color:var(--color-accent)" /> «Онцлох» болгох (хамгийн дээр томоор)</label></div>
+              <div class="form-group"><label style="display:flex;gap:9px;align-items:center;cursor:pointer"><input type="checkbox" id="v-published" checked style="width:18px;height:18px;accent-color:var(--color-accent)" /> Нийтлэх (сайтад харагдана)</label></div>
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                <button type="submit" class="btn btn-gold btn-sm">Хадгалах</button>
+                <button type="button" id="video-cancel" class="btn btn-ghost btn-sm" style="display:none">Цуцлах</button>
+                <span id="video-msg" class="form-note"></span>
+              </div>
+            </form>
+          </div>
+          <div id="video-list"></div>
+          <div id="video-empty" class="search-empty" style="display:none">Одоогоор видео алга. Дээрх формоор нэмнэ үү.</div>
+        </section><!-- /video-view -->
       </div><!-- /admin-content -->
     </div><!-- /admin-main -->
   </div><!-- /dash-view -->
@@ -682,13 +714,99 @@
 
     $("#news-cancel").addEventListener("click", resetNewsForm);
 
+    // ===== ВИДЕО УДИРДАХ =====
+    const PLATFORM_LABEL = { facebook: "Facebook Reel", youtube: "YouTube" };
+    let videoRows = [], videoLoaded = false;
+    const videoForm = $("#video-form"), videoList = $("#video-list"), videoEmpty = $("#video-empty"), videoMsg = $("#video-msg");
+
+    function resetVideoForm() {
+      videoForm.reset(); $("#v-id").value = ""; $("#v-published").checked = true; $("#v-featured").checked = false;
+      $("#v-sort").value = 0; $("#v-platform").value = "facebook";
+      $("#video-form-title").textContent = "Шинэ видео нэмэх"; $("#video-cancel").style.display = "none";
+    }
+
+    async function loadVideos() {
+      videoList.innerHTML = ""; videoEmpty.style.display = "none";
+      const { data, error } = await sb.from("videos").select("*").order("sort", { ascending: true }).order("created_at", { ascending: false });
+      if (error) { videoEmpty.textContent = "Ачаалахад алдаа: " + error.message + " (supabase-videos.sql ажилласан эсэхээ шалгана уу)"; videoEmpty.style.display = "block"; return; }
+      videoRows = data || []; renderVideos();
+    }
+
+    function renderVideos() {
+      videoList.innerHTML = "";
+      videoEmpty.style.display = videoRows.length ? "none" : "block";
+      videoRows.forEach((v) => {
+        const row = document.createElement("div");
+        row.className = "news-row";
+        row.innerHTML =
+          `<div class="nr-body">
+             <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:4px">
+               <span class="tag" style="position:static;background:var(--color-bg-soft);color:var(--color-accent);border:1px solid var(--color-border)">${esc(PLATFORM_LABEL[v.platform] || v.platform)}</span>
+               ${v.featured ? `<span class="rate-pill">Онцлох</span>` : ""}
+               ${v.published ? "" : `<span class="badge-status status-draft">Ноорог</span>`}
+               <span style="font-size:.8rem;color:var(--color-text-soft)">эрэмбэ: ${v.sort}</span>
+             </div>
+             <div style="font-weight:600">${esc(v.title || "(гарчиггүй)")}</div>
+             <div style="font-size:.82rem;color:var(--color-text-soft);margin-top:4px;word-break:break-all">${esc(v.url)}</div>
+           </div>
+           <div class="nr-actions">
+             <button class="btn btn-ghost btn-sm vr-edit">Засах</button>
+             <button class="btn btn-ghost btn-sm vr-del" style="color:var(--color-danger)">Устгах</button>
+           </div>`;
+        row.querySelector(".vr-edit").addEventListener("click", () => editVideo(v));
+        row.querySelector(".vr-del").addEventListener("click", () => deleteVideo(v));
+        videoList.appendChild(row);
+      });
+    }
+
+    function editVideo(v) {
+      $("#v-id").value = v.id; $("#v-url").value = v.url || ""; $("#v-platform").value = v.platform || "facebook";
+      $("#v-sort").value = v.sort != null ? v.sort : 0; $("#v-title").value = v.title || "";
+      $("#v-featured").checked = !!v.featured; $("#v-published").checked = !!v.published;
+      $("#video-form-title").textContent = "Видео засах"; $("#video-cancel").style.display = "inline-flex";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    async function deleteVideo(v) {
+      if (!confirm("Энэ видеог устгах уу?")) return;
+      const { error } = await sb.from("videos").delete().eq("id", v.id);
+      if (error) { alert("Алдаа: " + error.message); return; }
+      videoRows = videoRows.filter((x) => x.id !== v.id); renderVideos();
+    }
+
+    videoForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      videoMsg.textContent = ""; videoMsg.style.color = "";
+      const btn = videoForm.querySelector('button[type="submit"]'); btn.disabled = true; btn.textContent = "Хадгалж байна…";
+      try {
+        const id = $("#v-id").value;
+        const rec = {
+          url: $("#v-url").value.trim(), platform: $("#v-platform").value,
+          title: $("#v-title").value.trim() || null, featured: $("#v-featured").checked,
+          published: $("#v-published").checked, sort: parseInt($("#v-sort").value, 10) || 0,
+        };
+        let error;
+        if (id) ({ error } = await sb.from("videos").update(rec).eq("id", id));
+        else ({ error } = await sb.from("videos").insert(rec));
+        if (error) throw error;
+        videoMsg.style.color = "var(--color-success)"; videoMsg.textContent = "✓ Хадгаллаа.";
+        resetVideoForm(); await loadVideos();
+        setTimeout(() => { videoMsg.textContent = ""; }, 4000);
+      } catch (err) {
+        videoMsg.style.color = "var(--color-danger)"; videoMsg.textContent = "Алдаа: " + (err.message || "хадгалж чадсангүй");
+      } finally { btn.disabled = false; btn.textContent = "Хадгалах"; }
+    });
+
+    $("#video-cancel").addEventListener("click", resetVideoForm);
+
     // Цонх (view) солих — sidebar навигац
-    const PAGE_TITLE = { dashboard: "Хяналтын самбар", fb: "Санал хүсэлт", news: "Мэдээ" };
+    const PAGE_TITLE = { dashboard: "Хяналтын самбар", fb: "Санал хүсэлт", news: "Мэдээ", video: "Видео" };
     function showView(name) {
       document.querySelectorAll(".view").forEach((v) => { v.style.display = v.id === name + "-view" ? "block" : "none"; });
       document.querySelectorAll(".nav-link[data-view]").forEach((b) => b.classList.toggle("active", b.dataset.view === name));
       const t = $("#page-title"); if (t) t.textContent = PAGE_TITLE[name] || "";
       if (name === "news" && !newsLoaded) { newsLoaded = true; loadNews(); }
+      if (name === "video" && !videoLoaded) { videoLoaded = true; loadVideos(); }
       if (name === "dashboard") renderRecent();
       const shell = document.querySelector(".admin-shell"); if (shell) shell.classList.remove("nav-open");
       window.scrollTo({ top: 0 });
