@@ -1355,6 +1355,39 @@
     },
   };
 
+  /* ---------- Хууль (CMS) — admin-аас нэмсэн хуулийг ачаална ---------- */
+  const LawsCMS = {
+    esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
+    ICON: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="26" height="26"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>',
+    LABEL: { passed: "Батлагдсан", review: "Хэлэлцэж буй", support: "Хэлэлцэх эсэхийг дэмжсэн", discussed: "Хэлэлцүүлэг хийсэн", notstarted: "Хэлэлцэж эхлээгүй", withdrawn: "Татаж авсан" },
+    CLS: { passed: "status-passed", review: "status-review", support: "status-support", discussed: "status-review", notstarted: "status-notstarted", withdrawn: "status-draft" },
+    init() {
+      const list = document.querySelector("[data-laws]");
+      if (!list) return;
+      const sb = window.getSB && window.getSB();
+      if (!sb) return;
+      sb.from("laws").select("*").eq("published", true)
+        .order("sort", { ascending: true }).order("created_at", { ascending: false })
+        .then(({ data, error }) => {
+          if (error || !data || !data.length) return; // хоосон/алдаа → жишээ хэвээр
+          list.innerHTML = data.map((l) => LawsCMS.item(l)).join("");
+          Laws.init(); // чипс / пилл / хайлтыг шинэ өгөгдлөөр дахин үүсгэх
+        });
+    },
+    item(l) {
+      const esc = LawsCMS.esc;
+      const status = l.status || "review";
+      const role = l.category === "co" ? "Хамтран санаачилсан" : "Өргөн барьсан";
+      const meta = [l.date_label, role, l.topic].filter(Boolean).map((m) => `<span>${esc(m)}</span>`).join("");
+      const pdf = l.pdf_url ? `<a class="btn btn-ghost btn-sm" href="${esc(l.pdf_url)}" target="_blank" rel="noopener">PDF</a>` : "";
+      return `<article class="law-item" data-item data-title="${esc(l.title)}" data-category="${esc(l.category || "own")}" data-status="${esc(status)}">
+        <div class="law-icon">${LawsCMS.ICON}</div>
+        <div><h4>${esc(l.title)}</h4><div class="meta">${meta}</div></div>
+        <div class="law-actions"><span class="badge-status ${LawsCMS.CLS[status] || "status-review"}">${esc(LawsCMS.LABEL[status] || status)}</span>${pdf}</div>
+      </article>`;
+    },
+  };
+
   // Хөвөгч "Санал хүсэлт" товч — холбоо барих хуудаснаас бусад бүх хуудсанд
   function injectFeedbackFab() {
     if (location.pathname.includes("holboo")) return;
@@ -1369,6 +1402,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     Theme.init(); Nav.init(); Search.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
-    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); ReportsCMS.init(); ProjectsCMS.init();
+    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); ReportsCMS.init(); ProjectsCMS.init(); LawsCMS.init();
   });
 })();

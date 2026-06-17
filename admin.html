@@ -162,6 +162,10 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 7h20M2 7v13a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V7M8 7V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v3"/></svg>
           Төслүүд
         </button>
+        <button type="button" class="nav-link" data-view="law">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M5 7l7-4 7 4M4 7l3 7H1zM17 14l3-7M20 14h-6l3-7"/></svg>
+          Хууль
+        </button>
       </nav>
       <div class="as-foot">
         <a href="index.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg> Сайт руу очих</a>
@@ -368,6 +372,47 @@
           <div id="project-list"></div>
           <div id="project-empty" class="search-empty" style="display:none">Одоогоор төсөл алга. Дээрх формоор нэмнэ үү.</div>
         </section><!-- /project-view -->
+
+        <!-- ============ ХУУЛЬ УДИРДАХ ============ -->
+        <section id="law-view" class="view" style="display:none">
+          <div class="form-card" style="margin-bottom:26px">
+            <h3 id="law-form-title" style="margin-bottom:16px">Шинэ хууль нэмэх</h3>
+            <form id="law-form">
+              <input type="hidden" id="l-id" />
+              <div class="form-group"><label for="l-title">Хуулийн нэр <span style="color:var(--color-danger)">*</span></label><input type="text" id="l-title" required placeholder="Цахим засаглалыг хөгжүүлэх тухай хуульд нэмэлт, өөрчлөлт" /></div>
+              <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                <div class="form-group"><label for="l-status">Төлөв</label>
+                  <select id="l-status">
+                    <option value="review">Хэлэлцэж буй</option>
+                    <option value="passed">Батлагдсан</option>
+                    <option value="support">Хэлэлцэх эсэхийг дэмжсэн</option>
+                    <option value="discussed">Хэлэлцүүлэг хийсэн</option>
+                    <option value="notstarted">Хэлэлцэж эхлээгүй</option>
+                    <option value="withdrawn">Татаж авсан</option>
+                  </select>
+                </div>
+                <div class="form-group"><label for="l-category">Үүрэг</label>
+                  <select id="l-category"><option value="own">Өргөн барьсан</option><option value="co">Хамтран санаачилсан</option></select>
+                </div>
+              </div>
+              <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                <div class="form-group"><label for="l-date">Огноо</label><input type="text" id="l-date" placeholder="2026.05" /></div>
+                <div class="form-group"><label for="l-sort">Эрэмбэ (бага нь түрүүнд)</label><input type="number" id="l-sort" value="0" /></div>
+              </div>
+              <div class="form-group"><label for="l-topic">Сэдэв / товч</label><input type="text" id="l-topic" placeholder="Төрийн үйлчилгээний цахимжуулалт" /></div>
+              <div class="form-group"><label for="l-pdf">PDF файл (заавал биш)</label><input type="file" id="l-pdf" accept="application/pdf" /><div id="l-pdf-cur" class="form-note" style="margin-top:6px"></div></div>
+              <div class="form-group"><label for="l-link">Эсвэл холбоос (parliament.mn г.м — заавал биш)</label><input type="url" id="l-link" placeholder="https://www.parliament.mn/..." /></div>
+              <div class="form-group"><label style="display:flex;gap:9px;align-items:center;cursor:pointer"><input type="checkbox" id="l-published" checked style="width:18px;height:18px;accent-color:var(--color-accent)" /> Нийтлэх (сайтад харагдана)</label></div>
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                <button type="submit" class="btn btn-gold btn-sm">Хадгалах</button>
+                <button type="button" id="law-cancel" class="btn btn-ghost btn-sm" style="display:none">Цуцлах</button>
+                <span id="law-msg" class="form-note"></span>
+              </div>
+            </form>
+          </div>
+          <div id="law-list"></div>
+          <div id="law-empty" class="search-empty" style="display:none">Одоогоор хууль алга. Дээрх формоор нэмнэ үү.</div>
+        </section><!-- /law-view -->
       </div><!-- /admin-content -->
     </div><!-- /admin-main -->
   </div><!-- /dash-view -->
@@ -1069,8 +1114,106 @@
 
     $("#project-cancel").addEventListener("click", resetProjectForm);
 
+    // ===== ХУУЛЬ УДИРДАХ =====
+    const LAW_STATUS = { passed: "Батлагдсан", review: "Хэлэлцэж буй", support: "Хэлэлцэх эсэхийг дэмжсэн", discussed: "Хэлэлцүүлэг хийсэн", notstarted: "Хэлэлцэж эхлээгүй", withdrawn: "Татаж авсан" };
+    const LAW_CLS = { passed: "status-passed", review: "status-review", support: "status-support", discussed: "status-review", notstarted: "status-notstarted", withdrawn: "status-draft" };
+    let lawRows = [], lawLoaded = false;
+    const lawForm = $("#law-form"), lawList = $("#law-list"), lawEmpty = $("#law-empty"), lawMsg = $("#law-msg");
+
+    function resetLawForm() {
+      lawForm.reset(); $("#l-id").value = ""; $("#l-published").checked = true; $("#l-status").value = "review"; $("#l-category").value = "own"; $("#l-sort").value = 0;
+      $("#law-form-title").textContent = "Шинэ хууль нэмэх"; $("#law-cancel").style.display = "none"; $("#l-pdf-cur").textContent = "";
+    }
+
+    async function loadLaws() {
+      lawList.innerHTML = ""; lawEmpty.style.display = "none";
+      const { data, error } = await sb.from("laws").select("*").order("sort", { ascending: true }).order("created_at", { ascending: false });
+      if (error) { lawEmpty.textContent = "Ачаалахад алдаа: " + error.message + " (supabase-laws.sql ажилласан эсэхээ шалгана уу)"; lawEmpty.style.display = "block"; return; }
+      lawRows = data || []; renderLaws();
+    }
+
+    function renderLaws() {
+      lawList.innerHTML = "";
+      lawEmpty.style.display = lawRows.length ? "none" : "block";
+      lawRows.forEach((l) => {
+        const row = document.createElement("div");
+        row.className = "news-row";
+        row.innerHTML =
+          `<div class="nr-body">
+             <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:4px">
+               <span class="badge-status ${LAW_CLS[l.status] || "status-review"}">${esc(LAW_STATUS[l.status] || l.status)}</span>
+               <span class="tag" style="position:static;background:var(--color-bg-soft);color:var(--color-accent);border:1px solid var(--color-border)">${l.category === "co" ? "Хамтран санаачилсан" : "Өргөн барьсан"}</span>
+               ${l.published ? "" : `<span class="badge-status status-draft">Ноорог</span>`}
+               <span style="font-size:.8rem;color:var(--color-text-soft)">эрэмбэ: ${l.sort}</span>
+               ${l.pdf_url ? `<a href="${esc(l.pdf_url)}" target="_blank" rel="noopener" style="font-size:.8rem;color:var(--color-primary-light)">PDF/холбоос</a>` : ""}
+             </div>
+             <div style="font-weight:600">${esc(l.title)}</div>
+             <div style="font-size:.84rem;color:var(--color-text-soft);margin-top:4px">${esc(l.date_label || "")}${l.topic ? " · " + esc(l.topic) : ""}</div>
+           </div>
+           <div class="nr-actions">
+             <button class="btn btn-ghost btn-sm lr-edit">Засах</button>
+             <button class="btn btn-ghost btn-sm lr-del" style="color:var(--color-danger)">Устгах</button>
+           </div>`;
+        row.querySelector(".lr-edit").addEventListener("click", () => editLaw(l));
+        row.querySelector(".lr-del").addEventListener("click", () => deleteLaw(l));
+        lawList.appendChild(row);
+      });
+    }
+
+    function editLaw(l) {
+      $("#l-id").value = l.id; $("#l-title").value = l.title || ""; $("#l-status").value = l.status || "review";
+      $("#l-category").value = l.category || "own"; $("#l-date").value = l.date_label || ""; $("#l-sort").value = l.sort != null ? l.sort : 0;
+      $("#l-topic").value = l.topic || ""; $("#l-link").value = (l.pdf_url && !l.pdf_url.includes("/reports/")) ? l.pdf_url : ""; $("#l-published").checked = !!l.published;
+      $("#l-pdf-cur").textContent = l.pdf_url ? "Одоогийн PDF/холбоос хадгалагдана. Шинээр сонгвол солигдоно." : "";
+      $("#law-form-title").textContent = "Хууль засах"; $("#law-cancel").style.display = "inline-flex";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    async function deleteLaw(l) {
+      if (!confirm("«" + (l.title || "") + "» хуулийг устгах уу?")) return;
+      const { error } = await sb.from("laws").delete().eq("id", l.id);
+      if (error) { alert("Алдаа: " + error.message); return; }
+      if (l.pdf_url && l.pdf_url.includes("/reports/")) { const p = l.pdf_url.split("/reports/")[1]; if (p) { try { await sb.storage.from("reports").remove([p]); } catch (_) {} } }
+      lawRows = lawRows.filter((x) => x.id !== l.id); renderLaws();
+    }
+
+    lawForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      lawMsg.textContent = ""; lawMsg.style.color = "";
+      const btn = lawForm.querySelector('button[type="submit"]'); btn.disabled = true; btn.textContent = "Хадгалж байна…";
+      try {
+        const id = $("#l-id").value;
+        const rec = {
+          title: $("#l-title").value.trim(), status: $("#l-status").value, category: $("#l-category").value,
+          date_label: $("#l-date").value.trim() || null, topic: $("#l-topic").value.trim() || null,
+          published: $("#l-published").checked, sort: parseInt($("#l-sort").value, 10) || 0,
+        };
+        const file = $("#l-pdf").files[0];
+        if (file) {
+          const ext = (file.name.split(".").pop() || "pdf").toLowerCase().replace(/[^a-z0-9]/g, "");
+          const path = `law-${Date.now()}-${Math.round(Math.random() * 1e6)}.${ext}`;
+          const { error: upErr } = await sb.storage.from("reports").upload(path, file, { contentType: file.type });
+          if (upErr) throw upErr;
+          rec.pdf_url = sb.storage.from("reports").getPublicUrl(path).data.publicUrl;
+        } else {
+          rec.pdf_url = $("#l-link").value.trim() || null;
+        }
+        let error;
+        if (id) ({ error } = await sb.from("laws").update(rec).eq("id", id));
+        else ({ error } = await sb.from("laws").insert(rec));
+        if (error) throw error;
+        lawMsg.style.color = "var(--color-success)"; lawMsg.textContent = "✓ Хадгаллаа.";
+        resetLawForm(); await loadLaws();
+        setTimeout(() => { lawMsg.textContent = ""; }, 4000);
+      } catch (err) {
+        lawMsg.style.color = "var(--color-danger)"; lawMsg.textContent = "Алдаа: " + (err.message || "хадгалж чадсангүй");
+      } finally { btn.disabled = false; btn.textContent = "Хадгалах"; }
+    });
+
+    $("#law-cancel").addEventListener("click", resetLawForm);
+
     // Цонх (view) солих — sidebar навигац
-    const PAGE_TITLE = { dashboard: "Хяналтын самбар", fb: "Санал хүсэлт", news: "Мэдээ", video: "Видео", report: "Тайлан", project: "Төслүүд" };
+    const PAGE_TITLE = { dashboard: "Хяналтын самбар", fb: "Санал хүсэлт", news: "Мэдээ", video: "Видео", report: "Тайлан", project: "Төслүүд", law: "Хууль" };
     function showView(name) {
       document.querySelectorAll(".view").forEach((v) => { v.style.display = v.id === name + "-view" ? "block" : "none"; });
       document.querySelectorAll(".nav-link[data-view]").forEach((b) => b.classList.toggle("active", b.dataset.view === name));
@@ -1079,6 +1222,7 @@
       if (name === "video" && !videoLoaded) { videoLoaded = true; loadVideos(); }
       if (name === "report" && !reportLoaded) { reportLoaded = true; loadReports(); }
       if (name === "project" && !projectLoaded) { projectLoaded = true; loadProjects(); }
+      if (name === "law" && !lawLoaded) { lawLoaded = true; loadLaws(); }
       if (name === "dashboard") renderRecent();
       const shell = document.querySelector(".admin-shell"); if (shell) shell.classList.remove("nav-open");
       window.scrollTo({ top: 0 });
