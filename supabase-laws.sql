@@ -11,6 +11,7 @@ create table if not exists public.laws (
   category    text not null default 'own',       -- own (Өргөн барьсан) | co (Хамтран санаачилсан)
   date_label  text,                              -- "2026.05"
   topic       text,                              -- "Иргэдийн мэдээллийн хамгаалалт"
+  summary     text,                              -- дэлгэрэнгүй тайлбар (карт дээр дарахад)
   status      text not null default 'review',    -- passed|review|support|discussed|notstarted|withdrawn
   pdf_url     text,
   sort        int not null default 0,

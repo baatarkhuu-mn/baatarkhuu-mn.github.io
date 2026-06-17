@@ -408,6 +408,7 @@
                 <div class="form-group"><label for="l-sort">Эрэмбэ (бага нь түрүүнд)</label><input type="number" id="l-sort" value="0" /></div>
               </div>
               <div class="form-group"><label for="l-topic">Сэдэв / товч</label><input type="text" id="l-topic" placeholder="Төрийн үйлчилгээний цахимжуулалт" /></div>
+              <div class="form-group"><label for="l-summary">Дэлгэрэнгүй тайлбар (карт дээр дарахад харагдана)</label><textarea id="l-summary" rows="4" placeholder="Хуулийн зорилго, агуулга, нөлөөг тайлбарласан текст…"></textarea></div>
               <div class="form-group"><label for="l-pdf">PDF файл (заавал биш)</label><input type="file" id="l-pdf" accept="application/pdf" /><div id="l-pdf-cur" class="form-note" style="margin-top:6px"></div></div>
               <div class="form-group"><label for="l-link">Эсвэл холбоос (parliament.mn г.м — заавал биш)</label><input type="url" id="l-link" placeholder="https://www.parliament.mn/..." /></div>
               <div class="form-group"><label style="display:flex;gap:9px;align-items:center;cursor:pointer"><input type="checkbox" id="l-published" checked style="width:18px;height:18px;accent-color:var(--color-accent)" /> Нийтлэх (сайтад харагдана)</label></div>
@@ -1203,7 +1204,7 @@
     function editLaw(l) {
       $("#l-id").value = l.id; $("#l-title").value = l.title || ""; $("#l-status").value = l.status || "review";
       $("#l-category").value = l.category || "own"; $("#l-date").value = l.date_label || ""; $("#l-sort").value = l.sort != null ? l.sort : 0;
-      $("#l-topic").value = l.topic || ""; $("#l-link").value = (l.pdf_url && !l.pdf_url.includes("/reports/")) ? l.pdf_url : ""; $("#l-published").checked = !!l.published;
+      $("#l-topic").value = l.topic || ""; $("#l-summary").value = l.summary || ""; $("#l-link").value = (l.pdf_url && !l.pdf_url.includes("/reports/")) ? l.pdf_url : ""; $("#l-published").checked = !!l.published;
       $("#l-pdf-cur").textContent = l.pdf_url ? "Одоогийн PDF/холбоос хадгалагдана. Шинээр сонгвол солигдоно." : "";
       $("#law-form-title").textContent = "Хууль засах"; $("#law-cancel").style.display = "inline-flex";
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1226,6 +1227,7 @@
         const rec = {
           title: $("#l-title").value.trim(), status: $("#l-status").value, category: $("#l-category").value,
           date_label: $("#l-date").value.trim() || null, topic: $("#l-topic").value.trim() || null,
+          summary: $("#l-summary").value.trim() || null,
           published: $("#l-published").checked, sort: parseInt($("#l-sort").value, 10) || 0,
         };
         const file = $("#l-pdf").files[0];

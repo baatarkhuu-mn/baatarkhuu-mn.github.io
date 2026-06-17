@@ -1177,6 +1177,19 @@
         let st; track.addEventListener("scroll", () => { clearTimeout(st); st = setTimeout(update, 120); });
         let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(update, 200); });
         update();
+
+        // Автоматаар гүйх (data-autoplay) — hover/хүрэлт дээр түр зогсоно, төгсгөлд эхлэл рүү
+        if (track.hasAttribute("data-autoplay")) {
+          const delay = parseInt(track.dataset.autoplay, 10) || 5000;
+          let timer = null;
+          const tick = () => { const pc = pageCount(); if (pc <= 1) return; let n = curPage() + 1; if (n >= pc) n = 0; go(n); };
+          const start = () => { if (!timer && pageCount() > 1) timer = setInterval(tick, delay); };
+          const stop = () => { if (timer) { clearInterval(timer); timer = null; } };
+          start();
+          ["mouseenter", "touchstart", "focusin"].forEach((ev) => track.addEventListener(ev, stop, { passive: true }));
+          ["mouseleave", "touchend"].forEach((ev) => track.addEventListener(ev, start, { passive: true }));
+          document.addEventListener("visibilitychange", () => { if (document.hidden) stop(); else start(); });
+        }
       });
     },
   };
@@ -1230,6 +1243,42 @@
       buildPills();
       if (search) search.addEventListener("input", apply);
       apply();
+
+      // Карт дээр дарж дэлгэрэнгүй цонх нээх (унших / үзэх / татах)
+      const modal = document.querySelector("#law-modal");
+      if (modal) {
+        const openModal = (it) => {
+          const titleEl = it.querySelector("h4");
+          const badge = it.querySelector(".badge-status");
+          const metaEl = it.querySelector(".meta");
+          const pdfLink = it.querySelector(".law-actions a[href]");
+          const pdf = pdfLink ? pdfLink.getAttribute("href") : "";
+          modal.querySelector(".lm-badges").innerHTML = badge ? `<span class="${badge.className}">${badge.textContent}</span>` : "";
+          modal.querySelector(".lm-title").textContent = titleEl ? titleEl.textContent : "";
+          modal.querySelector(".lm-meta").innerHTML = metaEl ? metaEl.innerHTML : "";
+          const sumBox = modal.querySelector(".lm-summary");
+          sumBox.innerHTML = "";
+          const p = document.createElement("p");
+          if (it.dataset.summary) p.textContent = it.dataset.summary;
+          else { p.className = "lm-empty"; p.textContent = "Дэлгэрэнгүй тайлбар оруулаагүй байна."; }
+          sumBox.appendChild(p);
+          modal.querySelector(".lm-actions").innerHTML = pdf
+            ? `<a class="btn btn-primary" href="${pdf}" target="_blank" rel="noopener">Үзэх</a><a class="btn btn-ghost" href="${pdf}" download>Татах</a>`
+            : '<span class="lm-empty">Хавсралт файл алга.</span>';
+          modal.classList.add("open"); modal.setAttribute("aria-hidden", "false");
+        };
+        items.forEach((it) => {
+          it.setAttribute("tabindex", "0");
+          it.addEventListener("click", (e) => { if (e.target.closest("a")) return; openModal(it); });
+          it.addEventListener("keydown", (e) => { if (e.key === "Enter") openModal(it); });
+        });
+        if (!modal._wired) {
+          modal._wired = true;
+          const close = () => { modal.classList.remove("open"); modal.setAttribute("aria-hidden", "true"); };
+          modal.addEventListener("click", (e) => { if (e.target === modal || e.target.closest(".lm-close")) close(); });
+          document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
+        }
+      }
     },
   };
 
@@ -1539,10 +1588,10 @@
       const role = l.category === "co" ? "Хамтран санаачилсан" : "Өргөн барьсан";
       const meta = [l.date_label, role, l.topic].filter(Boolean).map((m) => `<span>${esc(m)}</span>`).join("");
       const pdf = l.pdf_url ? `<a class="btn btn-ghost btn-sm" href="${esc(l.pdf_url)}" target="_blank" rel="noopener">PDF</a>` : "";
-      return `<article class="law-item" data-item data-title="${esc(l.title)}" data-category="${esc(l.category || "own")}" data-status="${esc(status)}">
+      return `<article class="law-item" data-item data-title="${esc(l.title)}" data-category="${esc(l.category || "own")}" data-status="${esc(status)}" data-summary="${esc(l.summary || "")}">
         <div class="law-icon">${LawsCMS.ICON}</div>
         <div><h4>${esc(l.title)}</h4><div class="meta">${meta}</div></div>
-        <div class="law-actions"><span class="badge-status ${LawsCMS.CLS[status] || "status-review"}">${esc(LawsCMS.LABEL[status] || status)}</span>${pdf}</div>
+        <div class="law-actions"><span class="badge-status ${LawsCMS.CLS[status] || "status-review"}">${esc(LawsCMS.LABEL[status] || status)}</span>${pdf}<span class="law-more">Дэлгэрэнгүй →</span></div>
       </article>`;
     },
   };
