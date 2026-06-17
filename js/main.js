@@ -1316,6 +1316,45 @@
     },
   };
 
+  /* ---------- Төслүүд (CMS) — admin-аас нэмсэн төслийг ачаална ---------- */
+  const ProjectsCMS = {
+    esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
+    STATUS: {
+      ongoing: { label: "Хэрэгжиж буй", style: "background:rgba(240,164,55,.92);color:#2a1c03" },
+      done: { label: "Хэрэгжсэн", style: "background:rgba(52,201,124,.9);color:#06281a" },
+      planned: { label: "Төлөвлөж буй", style: "background:rgba(120,144,180,.55);color:#fff" },
+    },
+    init() {
+      const grid = document.querySelector("[data-projects]");
+      if (!grid) return;
+      const sb = window.getSB && window.getSB();
+      if (!sb) return;
+      sb.from("projects").select("*").eq("published", true)
+        .order("sort", { ascending: true }).order("created_at", { ascending: false })
+        .then(({ data, error }) => {
+          if (error || !data || !data.length) return; // хоосон/алдаа → жишээ хэвээр
+          grid.innerHTML = data.map((p) => ProjectsCMS.card(p)).join("");
+        });
+    },
+    card(p) {
+      const esc = ProjectsCMS.esc;
+      const st = ProjectsCMS.STATUS[p.status] || ProjectsCMS.STATUS.ongoing;
+      const media = (p.image_url
+        ? `<img src="${esc(p.image_url)}" alt="${esc(p.title)}" loading="lazy" onerror="this.remove()" />`
+        : "") + `<span class="placeholder"><img src="assets/img/logo.svg" alt="" style="width:46%;opacity:.4" /></span>`;
+      const link = p.link ? esc(p.link) : "";
+      return `<article class="card reveal visible" data-item data-title="${esc(p.title)}">
+        <div class="card-media"><span class="tag">${esc(p.category || "Төсөл")}</span><span class="tag status-tag badge-status" style="${st.style}">${st.label}</span>${media}</div>
+        <div class="card-body">
+          <div class="card-date">${esc(p.date_label || "")}</div>
+          <h3>${link ? `<a href="${link}" target="_blank" rel="noopener">${esc(p.title)}</a>` : esc(p.title)}</h3>
+          <p>${esc(p.description || "")}</p>
+          ${link ? `<a href="${link}" target="_blank" rel="noopener" class="card-link">Дэлгэрэнгүй →</a>` : ""}
+        </div>
+      </article>`;
+    },
+  };
+
   // Хөвөгч "Санал хүсэлт" товч — холбоо барих хуудаснаас бусад бүх хуудсанд
   function injectFeedbackFab() {
     if (location.pathname.includes("holboo")) return;
@@ -1330,6 +1369,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     Theme.init(); Nav.init(); Search.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
-    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); ReportsCMS.init();
+    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); ReportsCMS.init(); ProjectsCMS.init();
   });
 })();

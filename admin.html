@@ -158,6 +158,10 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
           Тайлан
         </button>
+        <button type="button" class="nav-link" data-view="project">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 7h20M2 7v13a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V7M8 7V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v3"/></svg>
+          Төслүүд
+        </button>
       </nav>
       <div class="as-foot">
         <a href="index.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg> Сайт руу очих</a>
@@ -331,6 +335,39 @@
           <div id="report-list"></div>
           <div id="report-empty" class="search-empty" style="display:none">Одоогоор тайлан алга. Дээрх формоор нэмнэ үү.</div>
         </section><!-- /report-view -->
+
+        <!-- ============ ТӨСЛҮҮД УДИРДАХ ============ -->
+        <section id="project-view" class="view" style="display:none">
+          <div class="form-card" style="margin-bottom:26px">
+            <h3 id="project-form-title" style="margin-bottom:16px">Шинэ төсөл нэмэх</h3>
+            <form id="project-form">
+              <input type="hidden" id="p-id" />
+              <div class="form-group"><label for="p-title">Гарчиг <span style="color:var(--color-danger)">*</span></label><input type="text" id="p-title" required placeholder="«Спортлог Чингэлтэйчүүд»" /></div>
+              <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                <div class="form-group"><label for="p-category">Ангилал бичиг</label><input type="text" id="p-category" placeholder="Спорт, эрүүл мэнд" /></div>
+                <div class="form-group"><label for="p-status">Төлөв</label>
+                  <select id="p-status"><option value="ongoing">Хэрэгжиж буй</option><option value="done">Хэрэгжсэн</option><option value="planned">Төлөвлөж буй</option></select>
+                </div>
+              </div>
+              <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                <div class="form-group"><label for="p-district">Дүүрэг (заавал биш)</label><input type="text" id="p-district" placeholder="Чингэлтэй" /></div>
+                <div class="form-group"><label for="p-sort">Эрэмбэ (бага нь түрүүнд)</label><input type="number" id="p-sort" value="0" /></div>
+              </div>
+              <div class="form-group"><label for="p-date">Огноо / байршлын бичиг</label><input type="text" id="p-date" placeholder="Чингэлтэй дүүрэг · 2016 оноос" /></div>
+              <div class="form-group"><label for="p-desc">Тайлбар</label><textarea id="p-desc" rows="3" placeholder="Төслийн товч тайлбар…"></textarea></div>
+              <div class="form-group"><label for="p-link">Дэлгэрэнгүй холбоос (заавал биш)</label><input type="url" id="p-link" placeholder="https://..." /></div>
+              <div class="form-group"><label for="p-image">Зураг (заавал биш)</label><input type="file" id="p-image" accept="image/*" /><div id="p-image-cur" class="form-note" style="margin-top:6px"></div></div>
+              <div class="form-group"><label style="display:flex;gap:9px;align-items:center;cursor:pointer"><input type="checkbox" id="p-published" checked style="width:18px;height:18px;accent-color:var(--color-accent)" /> Нийтлэх (сайтад харагдана)</label></div>
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                <button type="submit" class="btn btn-gold btn-sm">Хадгалах</button>
+                <button type="button" id="project-cancel" class="btn btn-ghost btn-sm" style="display:none">Цуцлах</button>
+                <span id="project-msg" class="form-note"></span>
+              </div>
+            </form>
+          </div>
+          <div id="project-list"></div>
+          <div id="project-empty" class="search-empty" style="display:none">Одоогоор төсөл алга. Дээрх формоор нэмнэ үү.</div>
+        </section><!-- /project-view -->
       </div><!-- /admin-content -->
     </div><!-- /admin-main -->
   </div><!-- /dash-view -->
@@ -935,8 +972,105 @@
 
     $("#report-cancel").addEventListener("click", resetReportForm);
 
+    // ===== ТӨСЛҮҮД УДИРДАХ =====
+    const PROJ_STATUS = { ongoing: "Хэрэгжиж буй", done: "Хэрэгжсэн", planned: "Төлөвлөж буй" };
+    let projectRows = [], projectLoaded = false;
+    const projectForm = $("#project-form"), projectList = $("#project-list"), projectEmpty = $("#project-empty"), projectMsg = $("#project-msg");
+
+    function resetProjectForm() {
+      projectForm.reset(); $("#p-id").value = ""; $("#p-published").checked = true; $("#p-status").value = "ongoing"; $("#p-sort").value = 0;
+      $("#project-form-title").textContent = "Шинэ төсөл нэмэх"; $("#project-cancel").style.display = "none"; $("#p-image-cur").textContent = "";
+    }
+
+    async function loadProjects() {
+      projectList.innerHTML = ""; projectEmpty.style.display = "none";
+      const { data, error } = await sb.from("projects").select("*").order("sort", { ascending: true }).order("created_at", { ascending: false });
+      if (error) { projectEmpty.textContent = "Ачаалахад алдаа: " + error.message + " (supabase-projects.sql ажилласан эсэхээ шалгана уу)"; projectEmpty.style.display = "block"; return; }
+      projectRows = data || []; renderProjects();
+    }
+
+    function renderProjects() {
+      projectList.innerHTML = "";
+      projectEmpty.style.display = projectRows.length ? "none" : "block";
+      projectRows.forEach((p) => {
+        const row = document.createElement("div");
+        row.className = "news-row";
+        row.innerHTML =
+          `${p.image_url ? `<img src="${esc(p.image_url)}" alt="" />` : ""}
+           <div class="nr-body">
+             <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:4px">
+               <span class="tag" style="position:static;background:var(--color-bg-soft);color:var(--color-accent);border:1px solid var(--color-border)">${esc(p.category || "Төсөл")}</span>
+               <span class="badge-status ${p.status === "done" ? "status-passed" : p.status === "planned" ? "status-draft" : "status-review"}">${esc(PROJ_STATUS[p.status] || p.status)}</span>
+               ${p.published ? "" : `<span class="badge-status status-draft">Ноорог</span>`}
+               <span style="font-size:.8rem;color:var(--color-text-soft)">эрэмбэ: ${p.sort}</span>
+             </div>
+             <div style="font-weight:600">${esc(p.title)}</div>
+             <div style="font-size:.84rem;color:var(--color-text-soft);margin-top:4px">${esc(p.date_label || "")}</div>
+           </div>
+           <div class="nr-actions">
+             <button class="btn btn-ghost btn-sm pr-edit">Засах</button>
+             <button class="btn btn-ghost btn-sm pr-del" style="color:var(--color-danger)">Устгах</button>
+           </div>`;
+        row.querySelector(".pr-edit").addEventListener("click", () => editProject(p));
+        row.querySelector(".pr-del").addEventListener("click", () => deleteProject(p));
+        projectList.appendChild(row);
+      });
+    }
+
+    function editProject(p) {
+      $("#p-id").value = p.id; $("#p-title").value = p.title || ""; $("#p-category").value = p.category || "";
+      $("#p-status").value = p.status || "ongoing"; $("#p-district").value = p.district || ""; $("#p-sort").value = p.sort != null ? p.sort : 0;
+      $("#p-date").value = p.date_label || ""; $("#p-desc").value = p.description || ""; $("#p-link").value = p.link || "";
+      $("#p-published").checked = !!p.published;
+      $("#p-image-cur").textContent = p.image_url ? "Одоогийн зураг хадгалагдана. Шинээр сонгвол солигдоно." : "";
+      $("#project-form-title").textContent = "Төсөл засах"; $("#project-cancel").style.display = "inline-flex";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    async function deleteProject(p) {
+      if (!confirm("«" + (p.title || "") + "» төслийг устгах уу?")) return;
+      const { error } = await sb.from("projects").delete().eq("id", p.id);
+      if (error) { alert("Алдаа: " + error.message); return; }
+      if (p.image_url && p.image_url.includes("/projects/")) { const pa = p.image_url.split("/projects/")[1]; if (pa) { try { await sb.storage.from("projects").remove([pa]); } catch (_) {} } }
+      projectRows = projectRows.filter((x) => x.id !== p.id); renderProjects();
+    }
+
+    projectForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      projectMsg.textContent = ""; projectMsg.style.color = "";
+      const btn = projectForm.querySelector('button[type="submit"]'); btn.disabled = true; btn.textContent = "Хадгалж байна…";
+      try {
+        const id = $("#p-id").value;
+        const rec = {
+          title: $("#p-title").value.trim(), category: $("#p-category").value.trim() || null,
+          status: $("#p-status").value, district: $("#p-district").value.trim() || null,
+          date_label: $("#p-date").value.trim() || null, description: $("#p-desc").value.trim() || null,
+          link: $("#p-link").value.trim() || null, published: $("#p-published").checked, sort: parseInt($("#p-sort").value, 10) || 0,
+        };
+        const file = $("#p-image").files[0];
+        if (file) {
+          const ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "");
+          const path = `${Date.now()}-${Math.round(Math.random() * 1e6)}.${ext}`;
+          const { error: upErr } = await sb.storage.from("projects").upload(path, file, { contentType: file.type });
+          if (upErr) throw upErr;
+          rec.image_url = sb.storage.from("projects").getPublicUrl(path).data.publicUrl;
+        }
+        let error;
+        if (id) ({ error } = await sb.from("projects").update(rec).eq("id", id));
+        else ({ error } = await sb.from("projects").insert(rec));
+        if (error) throw error;
+        projectMsg.style.color = "var(--color-success)"; projectMsg.textContent = "✓ Хадгаллаа.";
+        resetProjectForm(); await loadProjects();
+        setTimeout(() => { projectMsg.textContent = ""; }, 4000);
+      } catch (err) {
+        projectMsg.style.color = "var(--color-danger)"; projectMsg.textContent = "Алдаа: " + (err.message || "хадгалж чадсангүй");
+      } finally { btn.disabled = false; btn.textContent = "Хадгалах"; }
+    });
+
+    $("#project-cancel").addEventListener("click", resetProjectForm);
+
     // Цонх (view) солих — sidebar навигац
-    const PAGE_TITLE = { dashboard: "Хяналтын самбар", fb: "Санал хүсэлт", news: "Мэдээ", video: "Видео", report: "Тайлан" };
+    const PAGE_TITLE = { dashboard: "Хяналтын самбар", fb: "Санал хүсэлт", news: "Мэдээ", video: "Видео", report: "Тайлан", project: "Төслүүд" };
     function showView(name) {
       document.querySelectorAll(".view").forEach((v) => { v.style.display = v.id === name + "-view" ? "block" : "none"; });
       document.querySelectorAll(".nav-link[data-view]").forEach((b) => b.classList.toggle("active", b.dataset.view === name));
@@ -944,6 +1078,7 @@
       if (name === "news" && !newsLoaded) { newsLoaded = true; loadNews(); }
       if (name === "video" && !videoLoaded) { videoLoaded = true; loadVideos(); }
       if (name === "report" && !reportLoaded) { reportLoaded = true; loadReports(); }
+      if (name === "project" && !projectLoaded) { projectLoaded = true; loadProjects(); }
       if (name === "dashboard") renderRecent();
       const shell = document.querySelector(".admin-shell"); if (shell) shell.classList.remove("nav-open");
       window.scrollTo({ top: 0 });
