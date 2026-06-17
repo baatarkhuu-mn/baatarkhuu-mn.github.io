@@ -1317,6 +1317,10 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .vc-body h3 { font-size: 1.02rem; line-height: 1.35; margin: 0 0 6px; }
 .vc-body p { font-size: .88rem; color: var(--color-text-soft); margin: 0; line-height: 1.5; }
 
+/* Мэдээний grid карт — текстийг хураангуй (бүтэн биш) */
+[data-news-feed] .card-body h3 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+[data-news-feed] .card-body p { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
 /* Хөдөлгөөн багасгах хүсэлт */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
