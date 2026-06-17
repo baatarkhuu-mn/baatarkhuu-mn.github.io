@@ -24,7 +24,7 @@
     .toolbar-main { display:flex; gap:10px; align-items:center; }
     .toolbar-main .field { flex:1; margin:0; }
     .toolbar-main .btn { white-space:nowrap; }
-    .toolbar-filters { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+    .toolbar-filters { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
     .toolbar input, .toolbar select {
       width:100%; padding:11px 14px; border-radius:var(--radius-sm);
       border:1px solid var(--color-border); background:var(--color-bg-card);
@@ -108,7 +108,6 @@
           <button id="export-btn" class="btn btn-gold btn-sm">Excel татах</button>
         </div>
         <div class="toolbar-filters">
-          <select id="f-district"><option value="all">Бүх дүүрэг</option><option>Чингэлтэй</option><option>Сүхбаатар</option><option>Бусад</option></select>
           <select id="f-status"><option value="all">Бүх төлөв</option><option value="new">Шинэ</option><option value="in_progress">Шийдвэрлэж буй</option><option value="done">Шийдвэрлэсэн</option></select>
           <select id="f-subject">
             <option value="all">Бүх төрөл</option>
@@ -215,9 +214,8 @@
 
     function applyFilters() {
       const q = $("#f-q").value.trim().toLowerCase();
-      const d = $("#f-district").value, st = $("#f-status").value, su = $("#f-subject").value;
+      const st = $("#f-status").value, su = $("#f-subject").value;
       const rows = allRows.filter((r) => {
-        if (d !== "all" && r.district !== d) return false;
         if (st !== "all" && r.status !== st) return false;
         if (su !== "all" && r.subject !== su) return false;
         if (q && !((r.name || "") + (r.message || "")).toLowerCase().includes(q)) return false;
@@ -447,7 +445,7 @@
     logoutBtn.addEventListener("click", async () => { await sb.auth.signOut(); showLogin(); });
     $("#refresh-btn").addEventListener("click", loadFeedback);
     $("#export-btn").addEventListener("click", exportXLSX);
-    ["#f-q", "#f-district", "#f-status", "#f-subject"].forEach((s) => {
+    ["#f-q", "#f-status", "#f-subject"].forEach((s) => {
       $(s).addEventListener(s === "#f-q" ? "input" : "change", applyFilters);
     });
 
