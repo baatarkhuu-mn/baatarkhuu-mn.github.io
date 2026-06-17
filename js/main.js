@@ -435,6 +435,9 @@
           if (locDetail) extra.push("Байршил: " + locDetail);
           if (pole) extra.push("Гэрлийн шон: " + pole);
           if (extra.length) message += "\n\n" + extra.join("\n");
+          // Лавлагааны дугаар (админ хайж олох, иргэн лавлах). Жинхэнэ дараалсан дугаар + явц шалгалт нь Supabase-д хийгдэнэ.
+          const trackRef = "AT-" + new Date().getFullYear() + "-" + String(Date.now() % 1000000).padStart(6, "0");
+          message += "\n\n[Дугаар: " + trackRef + "]";
           const row = {
             name: (fd.get("name") || "").toString().trim(),
             phone: (fd.get("phone") || "").toString().trim() || null,
@@ -455,10 +458,10 @@
           if (row.lat) parts.push("GPS байршил");
           if (row.rating) parts.push(`үнэлгээ ${row.rating}/10`);
           success && success.classList.add("show");
-          if (success) success.textContent = "✓ Таны санал хүсэлт" + (parts.length ? ` (${parts.join(", ")} хавсралттай)` : "") + " амжилттай хүлээн авлаа. Бид удахгүй хариу өгөх болно.";
+          if (success) success.innerHTML = "✓ Таны санал <strong>#" + trackRef + "</strong> дугаартай бүртгэгдлээ" + (parts.length ? ` (${parts.join(", ")})` : "") + ". Энэ дугаараа тэмдэглэж аваарай — лавлахад хэрэг болно. Бид удахгүй хариу өгнө.";
           form.reset(); files = []; renderPreviews(); resetGeo(); resetKhoroo();
           const rb = form.querySelector("[data-rating]"); if (rb && rb._resetRating) rb._resetRating();
-          setTimeout(() => { success && success.classList.remove("show"); resetSuccessStyle(); }, 9000);
+          setTimeout(() => { success && success.classList.remove("show"); resetSuccessStyle(); }, 12000);
         } catch (err) {
           showError("⚠ Илгээхэд алдаа гарлаа: " + (err.message || "сүлжээний асуудал") + ". Дахин оролдох эсвэл утсаар холбогдоно уу.");
         } finally {
