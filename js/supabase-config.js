@@ -1,9 +1,9 @@
 /* ============================================================
    Supabase холболтын тохиргоо (нийтэд ил байж болно — RLS хамгаална)
-   Энэ нь танай eCanvasser CRM-тэй ижил Supabase төсөл.
+   Баатархүүгийн сайтын тусдаа Supabase төсөл (2026-06, шинэ аккаунт).
    ============================================================ */
-window.SB_URL = "https://ezzjmwqfqmpskfqyukpj.supabase.co";
-window.SB_KEY = "sb_publishable_f4y0uLlASHzPadXFBX8MMw_C1MWOLIQ";
+window.SB_URL = "https://qtmueuyxqfgekbacymiu.supabase.co";
+window.SB_KEY = "sb_publishable_HGHc9XSJ0AOVO4Jo9ZLoRw_3iVFLLxH";
 
 // Supabase client (supabase-js CDN ачаалагдсаны дараа үүснэ)
 window.getSB = function () {
