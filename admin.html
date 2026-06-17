@@ -57,49 +57,141 @@
     .lightbox button { position:absolute; top:20px; right:24px; background:var(--color-bg-card); color:var(--color-text);
       border:1px solid var(--color-border); border-radius:50%; width:44px; height:44px; cursor:pointer; font-size:1.1rem; }
     @media (max-width:640px){ .stat-row{ grid-template-columns:repeat(2,1fr); } }
+
+    /* ====== Dashboard shell ====== */
+    body { margin:0; }
+    .admin-shell { display:flex; min-height:100vh; }
+    .admin-sidebar { width:248px; flex-shrink:0; background:var(--color-bg-card); border-right:1px solid var(--color-border);
+      display:flex; flex-direction:column; position:sticky; top:0; height:100vh; }
+    .as-brand { display:flex; align-items:center; gap:10px; padding:18px 20px; border-bottom:1px solid var(--color-border); }
+    .as-brand .emblem { width:38px; height:38px; flex-shrink:0; }
+    .as-brand .emblem img { width:100%; height:100%; }
+    .as-brand strong { font-size:.98rem; display:block; line-height:1.2; }
+    .as-brand small { font-size:.72rem; color:var(--color-accent); }
+    .as-nav { display:flex; flex-direction:column; gap:3px; padding:14px 12px; flex:1; }
+    .as-foot { padding:14px 12px; border-top:1px solid var(--color-border); display:flex; flex-direction:column; gap:3px; }
+    .nav-link { display:flex; align-items:center; gap:11px; width:100%; text-align:left; padding:11px 14px; border:none;
+      background:transparent; color:var(--color-text-soft); font:inherit; font-size:.92rem; border-radius:var(--radius-sm);
+      cursor:pointer; transition:background .15s,color .15s; text-decoration:none; }
+    .nav-link:hover { background:var(--color-bg-soft); color:var(--color-text); }
+    .nav-link.active { background:var(--color-accent-soft); color:var(--color-accent); font-weight:600; }
+    .nav-link svg { width:18px; height:18px; flex-shrink:0; }
+    .nav-count { margin-left:auto; background:var(--color-accent); color:#06121f; font-size:.72rem; font-weight:700;
+      min-width:20px; height:20px; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; padding:0 6px; }
+    .nav-count:empty { display:none; }
+    .admin-main { flex:1; min-width:0; display:flex; flex-direction:column; }
+    .admin-topbar { display:flex; align-items:center; gap:16px; padding:16px 26px; border-bottom:1px solid var(--color-border);
+      background:var(--color-bg); position:sticky; top:0; z-index:20; }
+    .admin-topbar h1 { font-size:1.3rem; margin:0; }
+    .topbar-user { margin-left:auto; display:flex; align-items:center; gap:12px; font-size:.86rem; color:var(--color-text-soft); }
+    .as-toggle { display:none; background:none; border:none; color:var(--color-text); font-size:1.4rem; cursor:pointer; line-height:1; }
+    .admin-content { padding:26px; max-width:1100px; width:100%; }
+    .dash-grid { display:grid; grid-template-columns:1.5fr 1fr; gap:18px; margin-top:6px; }
+    .panel { background:var(--color-bg-card); border:1px solid var(--color-border); border-radius:var(--radius); padding:20px; }
+    .panel-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+    .panel-head h3 { margin:0; font-size:1.02rem; }
+    .panel-head button { background:none; border:none; color:var(--color-accent); font:inherit; font-size:.84rem; cursor:pointer; }
+    .recent-item { display:flex; gap:12px; align-items:flex-start; padding:11px 0; border-bottom:1px dashed var(--color-border); }
+    .recent-item:last-child { border-bottom:none; }
+    .recent-item .ri-main { flex:1; min-width:0; }
+    .recent-item .ri-name { font-weight:600; font-size:.9rem; }
+    .recent-item .ri-msg { font-size:.83rem; color:var(--color-text-soft); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:2px; }
+    .recent-item .ri-date { font-size:.75rem; color:var(--color-text-soft); white-space:nowrap; }
+    .quick-actions { display:flex; flex-direction:column; gap:10px; }
+    .quick-actions .btn { width:100%; justify-content:flex-start; text-decoration:none; }
+    .admin-backdrop { display:none; position:fixed; inset:0; background:rgba(2,8,18,.6); z-index:40; }
+    @media (max-width:880px){ .dash-grid { grid-template-columns:1fr; } }
+    @media (max-width:760px){
+      .admin-sidebar { position:fixed; left:0; top:0; z-index:50; transform:translateX(-100%); transition:transform .25s; box-shadow:0 0 40px rgba(0,0,0,.45); }
+      .admin-shell.nav-open .admin-sidebar { transform:translateX(0); }
+      .admin-shell.nav-open .admin-backdrop { display:block; }
+      .as-toggle { display:block; }
+      .admin-content { padding:18px 16px; }
+      .admin-topbar { padding:14px 16px; }
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="admin-top">
-      <span class="brand"><span class="emblem" style="width:42px;height:42px;display:block"><img src="assets/img/logo.svg" alt="" /></span>
-        <span class="brand-text"><strong>Админ самбар</strong><span style="display:block;font-size:.72rem;color:var(--color-accent)">Санал хүсэлт</span></span></span>
-      <div style="display:flex;gap:10px;align-items:center">
-        <a href="index.html" class="btn btn-ghost btn-sm">← Сайт руу</a>
-        <button id="logout-btn" class="btn btn-outline btn-sm" style="display:none">Гарах</button>
-      </div>
+  <!-- НЭВТРЭХ -->
+  <div id="login-view" class="login-wrap" style="display:none">
+    <div class="form-card login-card">
+      <span class="emblem" style="width:48px;height:48px;display:block;margin:0 auto 16px"><img src="assets/img/logo.svg" alt="" style="width:100%;height:100%" /></span>
+      <h2 style="margin-bottom:6px;text-align:center">Админ нэвтрэх</h2>
+      <p class="form-note" style="margin-bottom:20px;text-align:center">Зөвхөн эрх бүхий хүн нэвтэрнэ.</p>
+      <form id="login-form">
+        <div class="form-group"><label for="l-email">И-мэйл</label>
+          <input type="email" id="l-email" required autocomplete="username" /></div>
+        <div class="form-group"><label for="l-pass">Нууц үг</label>
+          <input type="password" id="l-pass" required autocomplete="current-password" /></div>
+        <button type="submit" class="btn btn-gold" style="width:100%">Нэвтрэх</button>
+        <div id="login-err" class="form-note" style="color:var(--color-danger);margin-top:10px"></div>
+      </form>
     </div>
+  </div>
 
-    <!-- НЭВТРЭХ -->
-    <div id="login-view" class="login-wrap" style="display:none">
-      <div class="form-card login-card">
-        <h2 style="margin-bottom:6px">Нэвтрэх</h2>
-        <p class="form-note" style="margin-bottom:20px">Зөвхөн эрх бүхий хүн нэвтэрнэ.</p>
-        <form id="login-form">
-          <div class="form-group"><label for="l-email">И-мэйл</label>
-            <input type="email" id="l-email" required autocomplete="username" /></div>
-          <div class="form-group"><label for="l-pass">Нууц үг</label>
-            <input type="password" id="l-pass" required autocomplete="current-password" /></div>
-          <button type="submit" class="btn btn-gold" style="width:100%">Нэвтрэх</button>
-          <div id="login-err" class="form-note" style="color:var(--color-danger);margin-top:10px"></div>
-        </form>
+  <!-- АДМИН SHELL -->
+  <div id="dash-view" class="admin-shell" style="display:none">
+    <div class="admin-backdrop" id="admin-backdrop"></div>
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div class="as-brand">
+        <span class="emblem"><img src="assets/img/logo.svg" alt="" /></span>
+        <span><strong>Админ самбар</strong><small>baatarkhuu.mn</small></span>
       </div>
-    </div>
+      <nav class="as-nav">
+        <button type="button" class="nav-link active" data-view="dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+          Хяналтын самбар
+        </button>
+        <button type="button" class="nav-link" data-view="fb">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Санал хүсэлт <span class="nav-count" id="nav-fb-count"></span>
+        </button>
+        <button type="button" class="nav-link" data-view="news">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2z"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8z"/></svg>
+          Мэдээ
+        </button>
+      </nav>
+      <div class="as-foot">
+        <a href="index.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg> Сайт руу очих</a>
+        <button type="button" id="logout-btn" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg> Гарах</button>
+      </div>
+    </aside>
 
-    <!-- САМБАР -->
-    <div id="dash-view" style="display:none">
-      <div class="admin-tabs">
-        <button type="button" class="atab active" data-view="fb">Санал хүсэлт</button>
-        <button type="button" class="atab" data-view="news">Мэдээ</button>
-      </div>
+    <div class="admin-main">
+      <header class="admin-topbar">
+        <button type="button" class="as-toggle" id="sidebar-toggle" aria-label="Цэс">☰</button>
+        <h1 id="page-title">Хяналтын самбар</h1>
+        <div class="topbar-user"><span id="admin-email"></span></div>
+      </header>
 
-      <div id="fb-view">
-      <div class="stat-row">
-        <div class="mini-stat"><div class="n" id="st-total">—</div><div class="l">Нийт санал</div></div>
-        <div class="mini-stat"><div class="n" id="st-new">—</div><div class="l">Шинэ (хариугүй)</div></div>
-        <div class="mini-stat"><div class="n" id="st-rating">—</div><div class="l">Дундаж үнэлгээ</div></div>
-        <div class="mini-stat"><div class="n" id="st-photos">—</div><div class="l">Зурагтай санал</div></div>
-      </div>
+      <div class="admin-content">
+        <!-- ХЯНАЛТЫН САМБАР -->
+        <section id="dashboard-view" class="view">
+          <div class="stat-row">
+            <div class="mini-stat"><div class="n" id="st-total">—</div><div class="l">Нийт санал</div></div>
+            <div class="mini-stat"><div class="n" id="st-new">—</div><div class="l">Шинэ (хариугүй)</div></div>
+            <div class="mini-stat"><div class="n" id="st-rating">—</div><div class="l">Дундаж үнэлгээ</div></div>
+            <div class="mini-stat"><div class="n" id="st-photos">—</div><div class="l">Зурагтай санал</div></div>
+          </div>
+          <div class="dash-grid">
+            <div class="panel">
+              <div class="panel-head"><h3>Сүүлийн санал хүсэлт</h3><button type="button" data-goto="fb">Бүгдийг харах →</button></div>
+              <div id="recent-fb"><p class="form-note">Ачаалж байна…</p></div>
+            </div>
+            <div class="panel">
+              <div class="panel-head"><h3>Хурдан үйлдэл</h3></div>
+              <div class="quick-actions">
+                <button type="button" class="btn btn-gold btn-sm" data-goto="news-new">+ Шинэ мэдээ нэмэх</button>
+                <button type="button" class="btn btn-ghost btn-sm" data-goto="fb">Санал хүсэлт харах</button>
+                <button type="button" class="btn btn-ghost btn-sm" id="quick-export">Excel татах</button>
+                <a href="index.html" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">Сайтыг шинэ цонхонд үзэх</a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- САНАЛ ХҮСЭЛТ -->
+        <section id="fb-view" class="view" style="display:none">
 
       <div class="toolbar">
         <div class="toolbar-main">
@@ -136,10 +228,10 @@
       <div id="fb-list"></div>
       <div id="fb-empty" class="search-empty" style="display:none">Илэрц алга.</div>
       <div id="fb-loading" class="search-empty">Ачааллаж байна…</div>
-      </div><!-- /fb-view -->
+      </section><!-- /fb-view -->
 
       <!-- ============ МЭДЭЭ УДИРДАХ ============ -->
-      <div id="news-view" style="display:none">
+      <section id="news-view" class="view" style="display:none">
         <div class="form-card" style="margin-bottom:26px">
           <h3 id="news-form-title" style="margin-bottom:16px">Шинэ мэдээ нэмэх</h3>
           <form id="news-form">
@@ -171,9 +263,10 @@
         </div>
         <div id="news-list"></div>
         <div id="news-empty" class="search-empty" style="display:none">Одоогоор мэдээ алга. Дээрх формоор нэмнэ үү.</div>
-      </div>
-    </div>
-  </div>
+        </section><!-- /news-view -->
+      </div><!-- /admin-content -->
+    </div><!-- /admin-main -->
+  </div><!-- /dash-view -->
 
   <div class="lightbox" id="lightbox"><button aria-label="Хаах">✕</button><img src="" alt="" /></div>
 
@@ -206,10 +299,33 @@
 
     function computeStats(rows) {
       $("#st-total").textContent = rows.length;
-      $("#st-new").textContent = rows.filter((r) => r.status === "new").length;
+      const newCount = rows.filter((r) => r.status === "new").length;
+      $("#st-new").textContent = newCount;
       const rated = rows.filter((r) => r.rating != null);
       $("#st-rating").textContent = rated.length ? (rated.reduce((a, r) => a + r.rating, 0) / rated.length).toFixed(1) + "/10" : "—";
       $("#st-photos").textContent = rows.filter((r) => r.photos && r.photos.length).length;
+      const nc = $("#nav-fb-count"); if (nc) nc.textContent = newCount ? newCount : "";
+      renderRecent();
+    }
+
+    function renderRecent() {
+      const box = $("#recent-fb"); if (!box) return;
+      if (!allRows.length) { box.innerHTML = '<p class="form-note">Одоогоор санал алга.</p>'; return; }
+      box.innerHTML = "";
+      allRows.slice(0, 6).forEach((r) => {
+        const div = document.createElement("div");
+        div.className = "recent-item";
+        const st = STATUS_LABEL[r.status] || r.status;
+        const stCls = r.status === "done" ? "status-passed" : r.status === "in_progress" ? "status-review" : "status-draft";
+        const d = new Date(r.created_at).toLocaleDateString("mn-MN", { month: "2-digit", day: "2-digit" });
+        div.innerHTML =
+          `<div class="ri-main">
+             <div class="ri-name">${esc(r.name) || "Нэргүй"} <span class="badge-status ${stCls}" style="margin-left:6px">${st}</span></div>
+             <div class="ri-msg">${esc((r.message || "").replace(/\n/g, " ").slice(0, 90))}</div>
+           </div>
+           <div class="ri-date">${d}</div>`;
+        box.appendChild(div);
+      });
     }
 
     function applyFilters() {
@@ -425,8 +541,12 @@
       applyFilters();
     }
 
-    function showDash() { loginView.style.display = "none"; dashView.style.display = "block"; logoutBtn.style.display = "inline-flex"; loadFeedback(); }
-    function showLogin() { loginView.style.display = "grid"; dashView.style.display = "none"; logoutBtn.style.display = "none"; }
+    function showDash() {
+      loginView.style.display = "none"; dashView.style.display = "flex";
+      showView("dashboard"); loadFeedback();
+      sb.auth.getUser().then(({ data }) => { const e = $("#admin-email"); if (e && data.user) e.textContent = data.user.email; });
+    }
+    function showLogin() { loginView.style.display = "grid"; dashView.style.display = "none"; }
 
     // Эхлүүлэх
     sb = window.getSB && window.getSB();
@@ -562,16 +682,35 @@
 
     $("#news-cancel").addEventListener("click", resetNewsForm);
 
-    // Таб солих
-    document.querySelectorAll(".atab").forEach((t) => {
-      t.addEventListener("click", () => {
-        document.querySelectorAll(".atab").forEach((x) => x.classList.toggle("active", x === t));
-        const v = t.dataset.view;
-        $("#fb-view").style.display = v === "fb" ? "block" : "none";
-        $("#news-view").style.display = v === "news" ? "block" : "none";
-        if (v === "news" && !newsLoaded) { newsLoaded = true; loadNews(); }
+    // Цонх (view) солих — sidebar навигац
+    const PAGE_TITLE = { dashboard: "Хяналтын самбар", fb: "Санал хүсэлт", news: "Мэдээ" };
+    function showView(name) {
+      document.querySelectorAll(".view").forEach((v) => { v.style.display = v.id === name + "-view" ? "block" : "none"; });
+      document.querySelectorAll(".nav-link[data-view]").forEach((b) => b.classList.toggle("active", b.dataset.view === name));
+      const t = $("#page-title"); if (t) t.textContent = PAGE_TITLE[name] || "";
+      if (name === "news" && !newsLoaded) { newsLoaded = true; loadNews(); }
+      if (name === "dashboard") renderRecent();
+      const shell = document.querySelector(".admin-shell"); if (shell) shell.classList.remove("nav-open");
+      window.scrollTo({ top: 0 });
+    }
+    document.querySelectorAll(".nav-link[data-view]").forEach((b) => {
+      b.addEventListener("click", () => showView(b.dataset.view));
+    });
+
+    // Хурдан үйлдэл (хяналтын самбарын товчнууд)
+    document.querySelectorAll("[data-goto]").forEach((b) => {
+      b.addEventListener("click", () => {
+        const g = b.dataset.goto;
+        if (g === "news-new") { showView("news"); resetNewsForm(); }
+        else showView(g);
       });
     });
+    $("#quick-export").addEventListener("click", exportXLSX);
+
+    // Мобайл: хажуугийн цэс нээх/хаах
+    const shell = document.querySelector(".admin-shell");
+    $("#sidebar-toggle").addEventListener("click", () => shell.classList.toggle("nav-open"));
+    $("#admin-backdrop").addEventListener("click", () => shell.classList.remove("nav-open"));
   })();
   </script>
 </body>
