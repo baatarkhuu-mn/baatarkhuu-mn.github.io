@@ -1264,6 +1264,13 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .ev-reg-ok { color: #46c882; font-weight: 600; margin: 4px 0 0; }
 .ev-reg-msg { font-size: .82rem; margin: 0; }
 
+/* Нүүрний мэдээ rotator */
+.news-item.nf-in { animation: nfFade .45s ease; }
+@keyframes nfFade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.news-dots { display: flex; gap: 7px; justify-content: center; margin-top: 14px; }
+.news-dots button { width: 8px; height: 8px; border-radius: 50%; border: none; background: var(--color-border); cursor: pointer; padding: 0; transition: all var(--transition); }
+.news-dots button.active { background: var(--color-accent); width: 22px; border-radius: 5px; }
+
 /* Хөдөлгөөн багасгах хүсэлт */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }

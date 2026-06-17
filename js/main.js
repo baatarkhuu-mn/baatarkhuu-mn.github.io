@@ -1054,14 +1054,39 @@
       const home = document.querySelector("[data-news-home]");
       if (!grid && !home) return;
       const sb = window.getSB && window.getSB();
-      if (!sb) return; // Supabase алга бол статик мэдээ хэвээр
-      try {
-        const { data, error } = await sb.from("news").select("*").eq("published", true).order("date", { ascending: false, nullsFirst: false }).order("created_at", { ascending: false }).limit(60);
-        if (error) throw error;
-        if (!data || !data.length) return; // мэдээ ороогүй бол статик хэвээр
-        if (grid) grid.innerHTML = data.map((n) => this.card(n)).join("");
-        if (home) home.innerHTML = data.slice(0, 4).map((n) => this.homeItem(n)).join("");
-      } catch (_) { /* алдаа гарвал статик хэвээр үлдээнэ */ }
+      if (sb) {
+        try {
+          const { data, error } = await sb.from("news").select("*").eq("published", true).order("date", { ascending: false, nullsFirst: false }).order("created_at", { ascending: false }).limit(60);
+          if (!error && data && data.length) {
+            if (grid) grid.innerHTML = data.map((n) => this.card(n)).join("");
+            if (home) home.innerHTML = data.slice(0, 8).map((n) => this.homeItem(n)).join("");
+          }
+        } catch (_) { /* алдаа гарвал статик хэвээр үлдээнэ */ }
+      }
+      if (home) this.rotateHome(home);
+    },
+
+    // Нүүрний мэдээг автоматаар сольж харуулах (нэг нэгээр, fade)
+    rotateHome(home) {
+      const items = Array.prototype.filter.call(home.children, (n) => n.nodeType === 1);
+      if (items.length <= 1) return;
+      let cur = 0, timer = null;
+      let dots = (home.nextElementSibling && home.nextElementSibling.classList && home.nextElementSibling.classList.contains("news-dots")) ? home.nextElementSibling : null;
+      if (!dots) { dots = document.createElement("div"); dots.className = "news-dots"; home.after(dots); }
+      const show = (n) => {
+        items.forEach((el, i) => { el.style.display = i === n ? "" : "none"; });
+        const a = items[n]; a.classList.remove("nf-in"); void a.offsetWidth; a.classList.add("nf-in");
+        Array.prototype.forEach.call(dots.children, (d, i) => d.classList.toggle("active", i === n));
+      };
+      const start = () => { if (!timer) timer = setInterval(() => { cur = (cur + 1) % items.length; show(cur); }, 5000); };
+      const stop = () => { if (timer) { clearInterval(timer); timer = null; } };
+      const restart = () => { stop(); start(); };
+      dots.innerHTML = "";
+      items.forEach((_, i) => { const b = document.createElement("button"); b.type = "button"; b.setAttribute("aria-label", "Мэдээ " + (i + 1)); b.addEventListener("click", () => { cur = i; show(cur); restart(); }); dots.appendChild(b); });
+      show(0); start();
+      home.addEventListener("mouseenter", stop);
+      home.addEventListener("mouseleave", start);
+      document.addEventListener("visibilitychange", () => { if (document.hidden) stop(); else start(); });
     },
     homeItem(n) {
       const link = n.link ? this.esc(n.link) : "";
