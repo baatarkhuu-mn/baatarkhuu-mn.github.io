@@ -1425,23 +1425,37 @@
   const VideoCMS = {
     esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
     init() {
-      const listEl = document.querySelector("[data-video-list]");
-      if (!listEl) return; // зөвхөн видео хуудсанд
+      const listEl = document.querySelector("[data-video-list]");   // видео хуудасны grid
+      const reelsEl = document.querySelector("[data-video-reels]"); // нүүрний reels карусель
+      if (!listEl && !reelsEl) return;
       const sb = window.getSB && window.getSB();
       if (!sb) return;
       sb.from("videos").select("*").eq("published", true)
         .order("sort", { ascending: true }).order("created_at", { ascending: false })
         .then(({ data, error }) => {
           if (error || !data || !data.length) return; // хоосон/алдаа → жишээ хэвээр
-          const featuredEl = document.querySelector("[data-video-featured]");
-          const feat = data.find((v) => v.featured) || data[0];
-          const rest = data.filter((v) => v !== feat);
-          if (featuredEl) featuredEl.innerHTML = VideoCMS.card(feat, true);
-          listEl.innerHTML = (rest.length ? rest : data).map((v) => VideoCMS.card(v)).join("");
-          VideoCMS.parseFB();
+          if (listEl) { // Видео хуудас — fb-video карт (жинхэнэ хэмжээ)
+            const featuredEl = document.querySelector("[data-video-featured]");
+            const feat = data.find((v) => v.featured) || data[0];
+            const rest = data.filter((v) => v !== feat);
+            if (featuredEl) featuredEl.innerHTML = VideoCMS.card(feat, true);
+            listEl.innerHTML = (rest.length ? rest : data).map((v) => VideoCMS.card(v)).join("");
+            VideoCMS.parseFB();
+          }
+          if (reelsEl) { // Нүүрний карусель — reel плагин (тогтсон хэмжээ, гүйдэг)
+            reelsEl.innerHTML = data.map((v) => VideoCMS.reelEmbed(v)).join("");
+            window.dispatchEvent(new Event("resize")); // каруселийн цэгийг шинэчлэх
+          }
         });
     },
     ytId(url) { const m = String(url).match(/(?:v=|youtu\.be\/|\/embed\/|\/shorts\/)([\w-]{11})/); return m ? m[1] : ""; },
+    reelEmbed(v) {
+      const esc = VideoCMS.esc;
+      const src = v.platform === "youtube"
+        ? "https://www.youtube.com/embed/" + VideoCMS.ytId(v.url)
+        : "https://www.facebook.com/plugins/video.php?href=" + encodeURIComponent(v.url) + "&show_text=false&width=320";
+      return `<div class="reel-embed reveal visible"><iframe src="${src}" title="${esc(v.title || "Видео")}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>`;
+    },
     card(v, featured) {
       const esc = VideoCMS.esc;
       const title = v.title ? `<h3>${esc(v.title)}</h3>` : "";
