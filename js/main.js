@@ -1304,44 +1304,6 @@
           wrap.appendChild(chips);
           box.appendChild(wrap);
         }
-
-        // Утсаараа сэргээх (дугаараа мартсан / өөр төхөөрөмж)
-        const rec = document.createElement("div");
-        rec.className = "track-recover";
-        rec.innerHTML =
-          '<button type="button" class="tr-rec-toggle">Дугаараа мартсан уу? Утсаараа хайх</button>' +
-          '<div class="tr-rec-body" hidden><div class="track-row"><input type="tel" inputmode="numeric" placeholder="Бүртгүүлсэн утасны дугаар" aria-label="Утасны дугаар" /><button type="button" class="btn btn-ghost" data-rec-btn>Хайх</button></div><div class="tr-rec-result"></div></div>';
-        box.appendChild(rec);
-        const recToggle = rec.querySelector(".tr-rec-toggle");
-        const recBody = rec.querySelector(".tr-rec-body");
-        const recInput = rec.querySelector("input");
-        const recBtn = rec.querySelector("[data-rec-btn]");
-        const recOut = rec.querySelector(".tr-rec-result");
-        recToggle.addEventListener("click", () => { recBody.hidden = !recBody.hidden; if (!recBody.hidden) recInput.focus(); });
-        const recRun = async () => {
-          const ph = (recInput.value || "").trim();
-          if (!ph) { recInput.focus(); return; }
-          recOut.innerHTML = '<p class="tr-loading">Хайж байна…</p>';
-          const sb = window.getSB && window.getSB();
-          if (!sb) { recOut.innerHTML = '<p class="tr-bad">Холболт алга.</p>'; return; }
-          try {
-            const { data, error } = await sb.rpc("track_by_phone", { p_phone: ph });
-            if (error) throw error;
-            if (!data || !data.length) { recOut.innerHTML = '<p class="tr-bad">Энэ дугаараар санал олдсонгүй.</p>'; return; }
-            recOut.innerHTML = '<div class="tm-label">Олдсон саналууд (дарж явц шалгана):</div><div class="tm-chips"></div>';
-            const chips = recOut.querySelector(".tm-chips");
-            data.forEach((m) => {
-              const b = document.createElement("button");
-              b.type = "button"; b.className = "tm-chip";
-              const subj = (PublicFeed.SUBJ && PublicFeed.SUBJ[m.subject]) || "";
-              b.innerHTML = "#" + Tracker.esc(m.ticket) + (subj ? ' <span>· ' + Tracker.esc(subj) + "</span>" : "");
-              b.addEventListener("click", () => { input.value = m.ticket; run(); });
-              chips.appendChild(b);
-            });
-          } catch (e) { recOut.innerHTML = '<p class="tr-bad">Алдаа: ' + Tracker.esc(e.message || "сүлжээ") + "</p>"; }
-        };
-        recBtn.addEventListener("click", recRun);
-        recInput.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); recRun(); } });
       });
     },
   };
