@@ -1324,6 +1324,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 @media (max-width: 860px) { .video-home { grid-template-columns: 1fr; } }
 
 /* Мэдээний grid карт — текстийг хураангуй (бүтэн биш) */
+[data-news-feed] .card-body { display: block; }  /* flex-item болгож blockify хийхгүйн тулд */
 [data-news-feed] .card-body h3 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 [data-news-feed] .card-body p { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 
