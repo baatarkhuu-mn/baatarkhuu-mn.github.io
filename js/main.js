@@ -839,17 +839,16 @@
       if (!wrap) return;
       const sb = window.getSB && window.getSB();
       if (!sb) { wrap.innerHTML = '<p class="feed-state">Самбар одоогоор боломжгүй байна.</p>'; return; }
-
+      this._wrap = wrap; this._sb = sb;
       try {
         const { data: rows, error } = await sb
-          .from("public_feedback").select("*").order("created_at", { ascending: false }).limit(50);
+          .from("public_feedback").select("*").order("created_at", { ascending: false }).limit(100);
         if (error) throw error;
         if (!rows || !rows.length) {
           wrap.innerHTML = '<p class="feed-state">Одоогоор нийтэлсэн санал алга. Та формоор санал илгээж, «олон нийтэд харуулах»-ыг сонгож болно.</p>';
           return;
         }
-
-        // Лайкны тоо + коммент (нэг дор)
+        // Дэмжлэгийн тоо + коммент (нэг дор)
         const likeMap = {};
         try { const { data: lc } = await sb.rpc("like_counts"); (lc || []).forEach((r) => { likeMap[r.feedback_id] = r.cnt; }); } catch (_) {}
         const cmtMap = {};
@@ -857,13 +856,42 @@
           const { data: cm } = await sb.from("feedback_comments").select("*").in("feedback_id", rows.map((r) => r.id)).order("created_at", { ascending: true });
           (cm || []).forEach((c) => { (cmtMap[c.feedback_id] = cmtMap[c.feedback_id] || []).push(c); });
         } catch (_) {}
-
-        const liked = this.likedSet();
-        wrap.innerHTML = "";
-        rows.forEach((r) => wrap.appendChild(this.card(sb, r, likeMap[r.id] || 0, cmtMap[r.id] || [], liked)));
+        this._rows = rows; this._likeMap = likeMap; this._cmtMap = cmtMap; this._liked = this.likedSet();
+        this._active = "all"; this._q = ""; this._sort = "new";
+        this.buildFilter();
+        this.render();
       } catch (err) {
         wrap.innerHTML = '<p class="feed-state">Самбар ачаалахад алдаа гарлаа.</p>';
       }
+    },
+
+    buildFilter() {
+      let bar = document.querySelector("[data-feed-filter]");
+      if (!bar) { bar = document.createElement("div"); bar.setAttribute("data-feed-filter", ""); this._wrap.parentNode.insertBefore(bar, this._wrap); }
+      bar.className = "feed-filter";
+      const counts = {}; this._rows.forEach((r) => { counts[r.subject] = (counts[r.subject] || 0) + 1; });
+      const subjects = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
+      const pill = (key, label, n) => `<button type="button" class="ff-pill${this._active === key ? " active" : ""}" data-subj="${this.esc(key)}">${this.esc(label)}<span class="ff-n">${n}</span></button>`;
+      let pills = pill("all", "Бүгд", this._rows.length);
+      subjects.forEach((s) => { pills += pill(s, this.SUBJ[s] || s, counts[s]); });
+      bar.innerHTML =
+        `<div class="ff-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input type="text" placeholder="Асуудлаас хайх…" aria-label="Хайх" /></div>
+         <div class="ff-pills">${pills}</div>
+         <div class="ff-sort"><button type="button" class="ff-s${this._sort === "new" ? " active" : ""}" data-sort="new">Шинэ</button><button type="button" class="ff-s${this._sort === "support" ? " active" : ""}" data-sort="support">Хамгийн их дэмжсэн</button></div>`;
+      bar.querySelectorAll(".ff-pill").forEach((b) => b.addEventListener("click", () => { this._active = b.dataset.subj; this.buildFilter(); this.render(); }));
+      bar.querySelectorAll(".ff-s").forEach((b) => b.addEventListener("click", () => { this._sort = b.dataset.sort; this.buildFilter(); this.render(); }));
+      const si = bar.querySelector(".ff-search input");
+      if (si) { si.value = this._q; si.addEventListener("input", () => { this._q = si.value.trim().toLowerCase(); this.render(); }); }
+    },
+
+    render() {
+      let list = this._rows.slice();
+      if (this._active !== "all") list = list.filter((r) => r.subject === this._active);
+      if (this._q) list = list.filter((r) => (r.message || "").toLowerCase().includes(this._q));
+      if (this._sort === "support") list.sort((a, b) => (this._likeMap[b.id] || 0) - (this._likeMap[a.id] || 0));
+      this._wrap.innerHTML = "";
+      if (!list.length) { this._wrap.innerHTML = '<p class="feed-state">Илэрц алга.</p>'; return; }
+      list.forEach((r) => this._wrap.appendChild(this.card(this._sb, r, this._likeMap[r.id] || 0, this._cmtMap[r.id] || [], this._liked)));
     },
 
     card(sb, r, likeCount, comments, liked) {
@@ -871,16 +899,23 @@
       el.className = "feed-card reveal visible";
       const loc = [r.district ? r.district + " дүүрэг" : "", r.khoroo ? r.khoroo + "-р хороо" : ""].filter(Boolean).join(", ");
       const isLiked = liked.has(r.id);
+      const ticket = r.ticket_seq != null ? "AT-" + new Date(r.created_at).getFullYear() + "-" + String(r.ticket_seq).padStart(6, "0") : null;
+      const statusBadge = r.status === "done"
+        ? '<span class="fc-status fc-done">✓ Шийдвэрлэсэн</span>'
+        : (r.status === "in_progress" ? '<span class="fc-status fc-prog">Шийдвэрлэж байна</span>' : "");
       el.innerHTML =
         `<div class="fc-top">
            <span class="fc-subject">${this.esc(this.SUBJ[r.subject] || r.subject || "Санал")}</span>
-           ${r.rating != null ? `<span class="fc-tag fc-rate">${r.rating}/10</span>` : ""}
+           ${statusBadge}
+           ${ticket ? `<span class="fc-no">#${ticket}</span>` : ""}
          </div>
          <div class="fc-meta">
            <span>${this.fmt(r.created_at)}</span>
            ${loc ? `<span>${this.esc(loc)}</span>` : ""}
+           ${r.rating != null ? `<span>Үнэлгээ ${r.rating}/10</span>` : ""}
          </div>
          <div class="fc-msg">${this.esc(r.message)}</div>
+         ${r.response ? `<div class="fc-response"><span class="fcr-label">Албаны хариу</span><p>${this.esc(r.response)}</p></div>` : ""}
          <div class="fc-photos"></div>
          <div class="fc-actions">
            <button class="fc-like${isLiked ? " liked" : ""}" type="button" aria-pressed="${isLiked}" title="Танд бас ийм асуудал тулгарч байвал дэмжинэ үү">
@@ -1356,6 +1391,26 @@
     },
   };
 
+  /* ---------- Санал хүсэлтийн тойм (dashboard) ---------- */
+  const FeedbackStats = {
+    async init() {
+      const box = document.querySelector("[data-fb-stats]");
+      if (!box) return;
+      const sb = window.getSB && window.getSB();
+      if (!sb) return;
+      try {
+        const { data, error } = await sb.rpc("feedback_stats");
+        if (error || !data) return;
+        const s = data;
+        const cards = [
+          ["Нийт санал", s.total], ["Энэ сард ирсэн", s.month],
+          ["Шийдвэрлэсэн", s.resolved], ["Иргэдийн дэмжлэг", s.supports],
+        ];
+        box.innerHTML = cards.map(([l, n]) => `<div class="fbs-card"><div class="fbs-n">${n == null ? 0 : n}</div><div class="fbs-l">${l}</div></div>`).join("");
+      } catch (_) {}
+    },
+  };
+
   /* ---------- Хууль (CMS) — admin-аас нэмсэн хуулийг ачаална ---------- */
   const LawsCMS = {
     esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
@@ -1403,6 +1458,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     Theme.init(); Nav.init(); Search.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
-    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); ReportsCMS.init(); ProjectsCMS.init(); LawsCMS.init();
+    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); ReportsCMS.init(); ProjectsCMS.init(); LawsCMS.init(); FeedbackStats.init();
   });
 })();

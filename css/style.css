@@ -1176,6 +1176,38 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
   .track-row .btn { width: 100%; }
 }
 
+/* Санал хүсэлтийн тойм (dashboard) */
+.fb-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
+.fbs-card { background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 20px 16px; text-align: center; }
+.fbs-n { font-size: 1.9rem; font-weight: 800; color: var(--color-accent); line-height: 1; }
+.fbs-l { font-size: .82rem; color: var(--color-text-soft); margin-top: 7px; }
+@media (max-width: 640px) { .fb-stats { grid-template-columns: repeat(2, 1fr); } }
+
+/* Феедийн шүүлтүүр */
+.feed-filter { display: flex; flex-direction: column; gap: 12px; margin-bottom: 22px; }
+.ff-search { display: flex; align-items: center; gap: 9px; border: 1px solid var(--color-border); background: var(--color-bg-soft); border-radius: var(--radius-sm); padding: 0 14px; }
+.ff-search svg { width: 17px; height: 17px; color: var(--color-text-soft); flex-shrink: 0; }
+.ff-search input { flex: 1; border: none; background: none; color: var(--color-text); font-family: inherit; font-size: .95rem; padding: 12px 0; }
+.ff-search input:focus { outline: none; }
+.ff-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.ff-pill { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--color-border); background: var(--color-bg-soft); color: var(--color-text-soft); font-family: inherit; font-size: .84rem; font-weight: 600; padding: 7px 13px; border-radius: 30px; cursor: pointer; transition: all var(--transition); }
+.ff-pill:hover { color: var(--color-text); border-color: var(--color-accent); }
+.ff-pill.active { background: var(--color-accent-soft); border-color: var(--color-accent); color: var(--color-accent); }
+.ff-pill .ff-n { font-size: .76rem; opacity: .8; background: var(--color-bg); border-radius: 20px; padding: 0 7px; }
+.ff-sort { display: flex; gap: 8px; }
+.ff-s { border: none; background: none; color: var(--color-text-soft); font-family: inherit; font-size: .84rem; font-weight: 600; cursor: pointer; padding: 5px 10px; border-radius: var(--radius-sm); }
+.ff-s.active { color: var(--color-accent); background: var(--color-accent-soft); }
+
+/* Феед карт — дугаар, төлөв, албаны хариу */
+.fc-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.fc-no { margin-left: auto; font-size: .76rem; font-weight: 700; color: var(--color-text-soft); letter-spacing: .03em; }
+.fc-status { font-size: .76rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+.fc-status.fc-done { background: rgba(70,200,130,.18); color: #46c882; }
+.fc-status.fc-prog { background: rgba(63,210,230,.16); color: var(--color-accent); }
+.fc-response { margin: 12px 0; padding: 12px 14px; border-left: 3px solid var(--color-accent); background: var(--color-bg-soft); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+.fc-response .fcr-label { font-size: .74rem; font-weight: 700; color: var(--color-accent); text-transform: uppercase; letter-spacing: .05em; display: block; margin-bottom: 4px; }
+.fc-response p { margin: 0; font-size: .9rem; line-height: 1.55; }
+
 /* Хөдөлгөөн багасгах хүсэлт */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
