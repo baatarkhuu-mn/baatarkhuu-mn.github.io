@@ -972,13 +972,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 }
 
 /* ---------- Нүүр: мэдээ + арга хэмжээ (2 багана) ---------- */
-.home-split { display: grid; grid-template-columns: 1fr 1.4fr; gap: 44px; align-items: stretch; }
-.hs-events, .hs-news { display: flex; flex-direction: column; }
-.hs-events [data-events] { flex: 1; }
-.hs-events [data-events] .event-feature { height: 100%; display: flex; flex-direction: column; }
-.hs-events [data-events] .ef-body { flex: 1; display: flex; flex-direction: column; }
-.hs-events [data-events] .ef-desc { flex: 1; }
-.hs-news [data-news-home] { flex: 1; }
+.home-split { display: grid; grid-template-columns: 1fr 1.4fr; gap: 44px; align-items: start; }
 /* Онцлох арга хэмжээ — зурагтай том карт */
 .event-feature { background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: var(--radius); overflow: hidden; transition: border-color var(--transition), box-shadow var(--transition); }
 .event-feature:hover { border-color: var(--color-primary-dark); box-shadow: var(--shadow); }
@@ -1017,20 +1011,22 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .news-item:hover .ni-title { color: var(--color-primary-light); }
 @media (max-width: 560px) { .news-item { flex-direction: column; } .ni-img { width: 100%; height: 180px; } }
 
-/* Нүүрний мэдээ — том босоо карт (хоосон зайг дүүргэж, баганатай тэнцүү) */
-.hs-news .news-list-home { flex: 1; }
+/* Нүүрний мэдээ — хөдлөшгүй бүтэцтэй карт (агуулга ямар ч байсан ижил хэлбэр) */
 .hs-news .news-item {
-  flex-direction: column; gap: 0; padding: 0; height: 100%; flex: 1;
+  flex-direction: column; gap: 0; padding: 0;
   border: 1px solid var(--color-border); border-radius: var(--radius);
   overflow: hidden; background: var(--color-bg-card);
   transition: border-color var(--transition), box-shadow var(--transition);
 }
 .hs-news .news-item:hover { border-color: var(--color-primary-dark); box-shadow: var(--shadow); }
-.hs-news .ni-img { width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: 0; }
-.hs-news .ni-text { padding: 20px 22px; flex: 1; display: flex; flex-direction: column; }
-.hs-news .ni-title { font-size: clamp(1.15rem, 1.9vw, 1.5rem); }
-.hs-news .ni-excerpt { flex: 1; }
-.hs-news .ni-date { margin-top: auto; }
+.hs-news .ni-img { position: relative; width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: 0; }
+.hs-news .ni-cover { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9px; }
+.hs-news .ni-cover img { width: 60px; height: auto; opacity: .85; }
+.hs-news .ni-cover span { font-size: .78rem; color: var(--color-accent); font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+.hs-news .ni-text { padding: 18px 20px; }
+.hs-news .ni-title { font-size: clamp(1.1rem, 1.7vw, 1.35rem);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.hs-news .ni-excerpt { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 /* Баруун: арга хэмжээ, бүртгэл */
 .events-list { display: flex; flex-direction: column; gap: 14px; }
 .event-card { display: flex; gap: 16px; align-items: center; background: var(--color-bg-card);

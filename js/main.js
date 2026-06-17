@@ -1132,7 +1132,7 @@
       const meta = [n.date, this.CAT[n.category] || n.category || "Мэдээ"].filter(Boolean).map((s) => this.esc(s)).join(" · ");
       const img = n.image
         ? `<img src="${this.esc(n.image)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='assets/img/logo.svg';this.className='ni-ph'">`
-        : `<img src="assets/img/logo.svg" alt="" class="ni-ph">`;
+        : `<div class="ni-cover"><img src="assets/img/logo.svg" alt="" /><span>${this.esc(this.CAT[n.category] || "Мэдээ")}</span></div>`;
       const excerpt = n.excerpt ? `<p class="ni-excerpt">${this.esc(n.excerpt)}</p>` : "";
       const cal = '<svg class="ni-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>';
       const dateLine = meta ? `<div class="ni-date">${cal}${meta}</div>` : "";
