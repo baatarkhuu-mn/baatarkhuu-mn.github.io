@@ -180,11 +180,11 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 /* ====== Толгойн баннер (далбаа намирсан) ====== */
 .site-header { position: static; background: none; backdrop-filter: none; border-bottom: none; }
 .hero-banner { position: relative; overflow: hidden; background: linear-gradient(120deg, #0a1730, #143057); }
-.hb-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .5; pointer-events: none; }
-.hb-overlay { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(7,15,31,.9), rgba(7,15,31,.4) 50%, rgba(7,15,31,.9)); }
-.hb-inner { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 18px; min-height: 128px; padding: 18px 0; }
+.hb-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; opacity: .55; pointer-events: none; }
+.hb-overlay { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(7,15,31,.9), rgba(7,15,31,.35) 50%, rgba(7,15,31,.9)); }
+.hb-inner { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 18px; min-height: 84px; padding: 12px 0; }
 .hb-brand { display: flex; align-items: center; gap: 14px; text-decoration: none; }
-.hb-brand .emblem { width: 54px; height: 54px; flex-shrink: 0; display: block; }
+.hb-brand .emblem { width: 44px; height: 44px; flex-shrink: 0; display: block; }
 .hb-brand .emblem img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 2px 8px rgba(0,0,0,.45)); }
 .hb-name { font-size: clamp(1.05rem, 2.3vw, 1.7rem); font-weight: 800; color: #fff; letter-spacing: .04em; text-shadow: 0 2px 12px rgba(0,0,0,.55); }
 .hb-slogan { font-size: clamp(.95rem, 2vw, 1.5rem); font-weight: 800; color: var(--color-accent); letter-spacing: .12em; text-shadow: 0 2px 12px rgba(0,0,0,.55); white-space: nowrap; }
@@ -256,7 +256,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .lang-btn .lang-caret { transition: transform var(--transition); flex-shrink: 0; }
 .lang-switch.open .lang-btn .lang-caret { transform: rotate(180deg); }
 .lang-menu {
-  position: absolute; top: calc(100% + 8px); right: 0; min-width: 170px;
+  position: absolute; top: calc(100% + 8px); left: 0; min-width: 170px;
   background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: var(--radius);
   box-shadow: var(--shadow); padding: 6px; display: none; z-index: 1100;
 }
@@ -994,10 +994,15 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .home-split { display: grid; grid-template-columns: 1fr 1.4fr; gap: 44px; align-items: stretch; }
 .hs-events, .hs-news { display: flex; flex-direction: column; }
 .hs-news [data-news-home] { flex: 1; min-height: 0; }
+/* Зүүн арга хэмжээний картыг ч баганаа дүүргэх (2 багана тэнцүү, хоосон зайгүй) */
+.hs-events [data-events] { flex: 1; display: flex; }
+.hs-events [data-events] .event-feature { width: 100%; display: flex; flex-direction: column; }
+.hs-events [data-events] .ef-body { flex: 1; display: flex; flex-direction: column; }
+.hs-events [data-events] .ef-desc { flex: 1; }
 /* Онцлох арга хэмжээ — зурагтай том карт */
 .event-feature { background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: var(--radius); overflow: hidden; transition: border-color var(--transition), box-shadow var(--transition); }
 .event-feature:hover { border-color: var(--color-primary-dark); box-shadow: var(--shadow); }
-.ef-img { position: relative; aspect-ratio: 16/9; max-height: 240px; background: linear-gradient(160deg, #15294e, #0b1830); display: grid; place-items: center; }
+.ef-img { position: relative; aspect-ratio: 16/9; max-height: 180px; background: linear-gradient(160deg, #15294e, #0b1830); display: grid; place-items: center; }
 [data-theme="light"] .ef-img { background: linear-gradient(160deg, #d6e3f7, #eef3fb); }
 .ef-img img { width: 100%; height: 100%; object-fit: cover; }
 .ef-img.ef-noimg::after { content: ""; width: 44%; aspect-ratio: 1; opacity: .38;
@@ -1035,7 +1040,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 
 /* Нүүрний мэдээ — hero карт (зураг бүтэн, текст доор давхарлаж баганыг дүүргэнэ) */
 .hs-news .news-item {
-  position: relative; display: block; height: 100%; min-height: 300px; padding: 0; gap: 0;
+  position: relative; display: block; height: 100%; min-height: 220px; padding: 0; gap: 0;
   border: 1px solid var(--color-border); border-radius: var(--radius); overflow: hidden;
   background: var(--color-bg-card); transition: border-color var(--transition), box-shadow var(--transition);
 }
