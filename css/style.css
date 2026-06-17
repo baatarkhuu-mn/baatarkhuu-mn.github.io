@@ -1240,6 +1240,14 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .tm-chip span { color: var(--color-text-soft); font-weight: 400; }
 .tm-chip:hover { border-color: var(--color-accent); color: var(--color-accent); }
 
+/* Арга хэмжээний бүртгэл (нүүр) */
+.ef-count { font-size: .84rem; color: var(--color-accent); font-weight: 600; margin: 0 0 10px; }
+.ev-reg-form { display: flex; flex-direction: column; gap: 9px; margin-top: 4px; }
+.ev-reg-form input { padding: 11px 13px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); background: var(--color-bg-soft); color: var(--color-text); font-family: inherit; font-size: .95rem; }
+.ev-reg-form input:focus { outline: none; border-color: var(--color-accent); }
+.ev-reg-ok { color: #46c882; font-weight: 600; margin: 4px 0 0; }
+.ev-reg-msg { font-size: .82rem; margin: 0; }
+
 /* Хөдөлгөөн багасгах хүсэлт */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }

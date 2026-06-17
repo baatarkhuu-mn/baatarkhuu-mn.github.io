@@ -56,6 +56,10 @@
     .lightbox img { max-width:92vw; max-height:88vh; border-radius:var(--radius); }
     .lightbox button { position:absolute; top:20px; right:24px; background:var(--color-bg-card); color:var(--color-text);
       border:1px solid var(--color-border); border-radius:50%; width:44px; height:44px; cursor:pointer; font-size:1.1rem; }
+    .reg-table { width:100%; border-collapse:collapse; font-size:.86rem; }
+    .reg-table th { text-align:left; color:var(--color-text-soft); font-weight:600; font-size:.78rem; padding:6px 8px; border-bottom:1px solid var(--color-border); }
+    .reg-table td { padding:7px 8px; border-bottom:1px solid var(--color-border); }
+    .reg-table a { color:var(--color-primary-light); }
     @media (max-width:640px){ .stat-row{ grid-template-columns:repeat(2,1fr); } }
 
     /* ====== Dashboard shell ====== */
@@ -165,6 +169,10 @@
         <button type="button" class="nav-link" data-view="law">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M5 7l7-4 7 4M4 7l3 7H1zM17 14l3-7M20 14h-6l3-7"/></svg>
           Хууль
+        </button>
+        <button type="button" class="nav-link" data-view="event">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>
+          Арга хэмжээ
         </button>
       </nav>
       <div class="as-foot">
@@ -413,6 +421,38 @@
           <div id="law-list"></div>
           <div id="law-empty" class="search-empty" style="display:none">Одоогоор хууль алга. Дээрх формоор нэмнэ үү.</div>
         </section><!-- /law-view -->
+
+        <!-- ============ АРГА ХЭМЖЭЭ УДИРДАХ ============ -->
+        <section id="event-view" class="view" style="display:none">
+          <div class="form-card" style="margin-bottom:26px">
+            <h3 id="event-form-title" style="margin-bottom:16px">Шинэ арга хэмжээ нэмэх</h3>
+            <form id="event-form">
+              <input type="hidden" id="e-id" />
+              <div class="form-group"><label for="e-title">Гарчиг <span style="color:var(--color-danger)">*</span></label><input type="text" id="e-title" required placeholder="Иргэдтэй нээлттэй уулзалт" /></div>
+              <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+                <div class="form-group"><label for="e-date">Огноо</label><input type="date" id="e-date" /></div>
+                <div class="form-group"><label for="e-time">Цаг</label><input type="text" id="e-time" placeholder="15:00" /></div>
+                <div class="form-group"><label for="e-sort">Эрэмбэ</label><input type="number" id="e-sort" value="0" /></div>
+              </div>
+              <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                <div class="form-group"><label for="e-location">Байршил</label><input type="text" id="e-location" placeholder="Чингэлтэй дүүрэг" /></div>
+                <div class="form-group"><label for="e-badge">Шошго</label><input type="text" id="e-badge" placeholder="Зарлал" /></div>
+              </div>
+              <div class="form-group"><label for="e-desc">Тайлбар</label><textarea id="e-desc" rows="3" placeholder="Арга хэмжээний товч тайлбар…"></textarea></div>
+              <div class="form-group"><label for="e-image">Зураг (заавал биш)</label><input type="file" id="e-image" accept="image/*" /><div id="e-image-cur" class="form-note" style="margin-top:6px"></div></div>
+              <div class="form-group"><label style="display:flex;gap:9px;align-items:center;cursor:pointer"><input type="checkbox" id="e-register" checked style="width:18px;height:18px;accent-color:var(--color-accent)" /> Бүртгэл хүлээн авах (сайт дээр «Бүртгүүлэх» форм гарна)</label></div>
+              <div class="form-group"><label for="e-regurl">Эсвэл гадаад бүртгэлийн холбоос (заавал биш)</label><input type="url" id="e-regurl" placeholder="https://forms.gle/… (бөглөвөл дотоод формын оронд энэ рүү чиглүүлнэ)" /></div>
+              <div class="form-group"><label style="display:flex;gap:9px;align-items:center;cursor:pointer"><input type="checkbox" id="e-published" checked style="width:18px;height:18px;accent-color:var(--color-accent)" /> Нийтлэх (сайтад харагдана)</label></div>
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                <button type="submit" class="btn btn-gold btn-sm">Хадгалах</button>
+                <button type="button" id="event-cancel" class="btn btn-ghost btn-sm" style="display:none">Цуцлах</button>
+                <span id="event-msg" class="form-note"></span>
+              </div>
+            </form>
+          </div>
+          <div id="event-list"></div>
+          <div id="event-empty" class="search-empty" style="display:none">Одоогоор арга хэмжээ алга. Дээрх формоор нэмнэ үү.</div>
+        </section><!-- /event-view -->
       </div><!-- /admin-content -->
     </div><!-- /admin-main -->
   </div><!-- /dash-view -->
@@ -1212,8 +1252,129 @@
 
     $("#law-cancel").addEventListener("click", resetLawForm);
 
+    // ===== АРГА ХЭМЖЭЭ УДИРДАХ =====
+    let eventRows = [], eventLoaded = false, regCounts = {};
+    const eventForm = $("#event-form"), eventList = $("#event-list"), eventEmpty = $("#event-empty"), eventMsg = $("#event-msg");
+
+    function resetEventForm() {
+      eventForm.reset(); $("#e-id").value = ""; $("#e-published").checked = true; $("#e-register").checked = true; $("#e-sort").value = 0;
+      $("#event-form-title").textContent = "Шинэ арга хэмжээ нэмэх"; $("#event-cancel").style.display = "none"; $("#e-image-cur").textContent = "";
+    }
+
+    async function loadEvents() {
+      eventList.innerHTML = ""; eventEmpty.style.display = "none";
+      const { data, error } = await sb.from("events").select("*").order("event_date", { ascending: false }).order("sort", { ascending: true });
+      if (error) { eventEmpty.textContent = "Ачаалахад алдаа: " + error.message + " (supabase-events.sql ажилласан эсэхээ шалгана уу)"; eventEmpty.style.display = "block"; return; }
+      eventRows = data || [];
+      regCounts = {};
+      try { const { data: regs } = await sb.from("event_registrations").select("event_id"); (regs || []).forEach((r) => { regCounts[r.event_id] = (regCounts[r.event_id] || 0) + 1; }); } catch (_) {}
+      renderEvents();
+    }
+
+    function renderEvents() {
+      eventList.innerHTML = "";
+      eventEmpty.style.display = eventRows.length ? "none" : "block";
+      eventRows.forEach((ev) => {
+        const row = document.createElement("div");
+        row.className = "news-row";
+        const cnt = regCounts[ev.id] || 0;
+        row.innerHTML =
+          `${ev.image_url ? `<img src="${esc(ev.image_url)}" alt="" />` : ""}
+           <div class="nr-body">
+             <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:4px">
+               <span class="tag" style="position:static;background:var(--color-bg-soft);color:var(--color-accent);border:1px solid var(--color-border)">${esc(ev.badge || "Зарлал")}</span>
+               ${ev.published ? "" : `<span class="badge-status status-draft">Ноорог</span>`}
+               <span style="font-size:.8rem;color:var(--color-text-soft)">${esc(ev.event_date || "огноогүй")}${ev.time_label ? " · " + esc(ev.time_label) : ""}</span>
+             </div>
+             <div style="font-weight:600">${esc(ev.title)}</div>
+             <div style="font-size:.84rem;color:var(--color-text-soft);margin-top:4px">${esc(ev.location || "")}</div>
+             <button type="button" class="btn btn-ghost btn-sm ev-regs-btn" style="margin-top:8px">Бүртгэл (${cnt})</button>
+             <div class="ev-regs" style="display:none;margin-top:10px"></div>
+           </div>
+           <div class="nr-actions">
+             <button class="btn btn-ghost btn-sm er-edit">Засах</button>
+             <button class="btn btn-ghost btn-sm er-del" style="color:var(--color-danger)">Устгах</button>
+           </div>`;
+        row.querySelector(".er-edit").addEventListener("click", () => editEvent(ev));
+        row.querySelector(".er-del").addEventListener("click", () => deleteEvent(ev));
+        const regsBtn = row.querySelector(".ev-regs-btn");
+        const regsBox = row.querySelector(".ev-regs");
+        regsBtn.addEventListener("click", async () => {
+          if (regsBox.style.display === "block") { regsBox.style.display = "none"; return; }
+          regsBox.style.display = "block"; regsBox.innerHTML = '<p class="form-note">Ачаалж байна…</p>';
+          const { data, error } = await sb.from("event_registrations").select("*").eq("event_id", ev.id).order("created_at", { ascending: true });
+          if (error) { regsBox.innerHTML = '<p style="color:var(--color-danger)">Алдаа: ' + esc(error.message) + "</p>"; return; }
+          if (!data || !data.length) { regsBox.innerHTML = '<p class="form-note">Бүртгүүлсэн хүн алга.</p>'; return; }
+          regsBox.innerHTML = '<table class="reg-table"><thead><tr><th>Нэр</th><th>Утас</th><th>Огноо</th><th></th></tr></thead><tbody></tbody></table>';
+          const tb = regsBox.querySelector("tbody");
+          data.forEach((rg) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `<td>${esc(rg.name || "—")}</td><td><a href="tel:${esc(rg.phone || "")}">${esc(rg.phone || "—")}</a></td><td>${fmtDate(rg.created_at)}</td><td><button type="button" class="btn btn-ghost btn-sm rg-del" style="color:var(--color-danger)">✕</button></td>`;
+            tr.querySelector(".rg-del").addEventListener("click", async () => {
+              if (!confirm("Энэ бүртгэлийг устгах уу?")) return;
+              const { error: de } = await sb.from("event_registrations").delete().eq("id", rg.id);
+              if (de) { alert("Алдаа: " + de.message); return; }
+              tr.remove(); regCounts[ev.id] = Math.max(0, (regCounts[ev.id] || 1) - 1); regsBtn.textContent = "Бүртгэл (" + (regCounts[ev.id] || 0) + ")";
+            });
+            tb.appendChild(tr);
+          });
+        });
+        eventList.appendChild(row);
+      });
+    }
+
+    function editEvent(ev) {
+      $("#e-id").value = ev.id; $("#e-title").value = ev.title || ""; $("#e-date").value = ev.event_date || ""; $("#e-time").value = ev.time_label || "";
+      $("#e-location").value = ev.location || ""; $("#e-badge").value = ev.badge || ""; $("#e-desc").value = ev.description || "";
+      $("#e-sort").value = ev.sort != null ? ev.sort : 0; $("#e-register").checked = !!ev.register_enabled; $("#e-regurl").value = ev.register_url || ""; $("#e-published").checked = !!ev.published;
+      $("#e-image-cur").textContent = ev.image_url ? "Одоогийн зураг хадгалагдана. Шинээр сонгвол солигдоно." : "";
+      $("#event-form-title").textContent = "Арга хэмжээ засах"; $("#event-cancel").style.display = "inline-flex";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    async function deleteEvent(ev) {
+      if (!confirm("«" + (ev.title || "") + "» арга хэмжээг устгах уу? (Бүртгэлүүд нь мөн устана)")) return;
+      const { error } = await sb.from("events").delete().eq("id", ev.id);
+      if (error) { alert("Алдаа: " + error.message); return; }
+      if (ev.image_url && ev.image_url.includes("/events/")) { const p = ev.image_url.split("/events/")[1]; if (p) { try { await sb.storage.from("events").remove([p]); } catch (_) {} } }
+      eventRows = eventRows.filter((x) => x.id !== ev.id); renderEvents();
+    }
+
+    eventForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      eventMsg.textContent = ""; eventMsg.style.color = "";
+      const btn = eventForm.querySelector('button[type="submit"]'); btn.disabled = true; btn.textContent = "Хадгалж байна…";
+      try {
+        const id = $("#e-id").value;
+        const rec = {
+          title: $("#e-title").value.trim(), event_date: $("#e-date").value || null, time_label: $("#e-time").value.trim() || null,
+          location: $("#e-location").value.trim() || null, badge: $("#e-badge").value.trim() || "Зарлал", description: $("#e-desc").value.trim() || null,
+          register_enabled: $("#e-register").checked, register_url: $("#e-regurl").value.trim() || null, published: $("#e-published").checked, sort: parseInt($("#e-sort").value, 10) || 0,
+        };
+        const file = $("#e-image").files[0];
+        if (file) {
+          const ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "");
+          const path = `${Date.now()}-${Math.round(Math.random() * 1e6)}.${ext}`;
+          const { error: upErr } = await sb.storage.from("events").upload(path, file, { contentType: file.type });
+          if (upErr) throw upErr;
+          rec.image_url = sb.storage.from("events").getPublicUrl(path).data.publicUrl;
+        }
+        let error;
+        if (id) ({ error } = await sb.from("events").update(rec).eq("id", id));
+        else ({ error } = await sb.from("events").insert(rec));
+        if (error) throw error;
+        eventMsg.style.color = "var(--color-success)"; eventMsg.textContent = "✓ Хадгаллаа.";
+        resetEventForm(); await loadEvents();
+        setTimeout(() => { eventMsg.textContent = ""; }, 4000);
+      } catch (err) {
+        eventMsg.style.color = "var(--color-danger)"; eventMsg.textContent = "Алдаа: " + (err.message || "хадгалж чадсангүй");
+      } finally { btn.disabled = false; btn.textContent = "Хадгалах"; }
+    });
+
+    $("#event-cancel").addEventListener("click", resetEventForm);
+
     // Цонх (view) солих — sidebar навигац
-    const PAGE_TITLE = { dashboard: "Хяналтын самбар", fb: "Санал хүсэлт", news: "Мэдээ", video: "Видео", report: "Тайлан", project: "Төслүүд", law: "Хууль" };
+    const PAGE_TITLE = { dashboard: "Хяналтын самбар", fb: "Санал хүсэлт", news: "Мэдээ", video: "Видео", report: "Тайлан", project: "Төслүүд", law: "Хууль", event: "Арга хэмжээ" };
     function showView(name) {
       document.querySelectorAll(".view").forEach((v) => { v.style.display = v.id === name + "-view" ? "block" : "none"; });
       document.querySelectorAll(".nav-link[data-view]").forEach((b) => b.classList.toggle("active", b.dataset.view === name));
@@ -1223,6 +1384,7 @@
       if (name === "report" && !reportLoaded) { reportLoaded = true; loadReports(); }
       if (name === "project" && !projectLoaded) { projectLoaded = true; loadProjects(); }
       if (name === "law" && !lawLoaded) { lawLoaded = true; loadLaws(); }
+      if (name === "event" && !eventLoaded) { eventLoaded = true; loadEvents(); }
       if (name === "dashboard") renderRecent();
       const shell = document.querySelector(".admin-shell"); if (shell) shell.classList.remove("nav-open");
       window.scrollTo({ top: 0 });

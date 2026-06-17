@@ -1419,6 +1419,81 @@
     },
   };
 
+  /* ---------- Арга хэмжээ (CMS) + бүртгэл ---------- */
+  const EventsCMS = {
+    esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
+    init() {
+      const box = document.querySelector("[data-events]");
+      if (!box) return;
+      const sb = window.getSB && window.getSB();
+      if (!sb) return;
+      sb.from("events").select("*").eq("published", true)
+        .order("event_date", { ascending: true, nullsFirst: false }).order("sort", { ascending: true })
+        .then(async ({ data, error }) => {
+          if (error || !data || !data.length) return; // хоосон → жишээ хэвээр
+          const today = new Date(); today.setHours(0, 0, 0, 0);
+          let list = data.filter((e) => !e.event_date || new Date(e.event_date) >= today);
+          if (!list.length) return; // ирээдүйн арга хэмжээ алга → жишээ хэвээр
+          list = list.slice(0, 3);
+          const counts = {};
+          try { const { data: rc } = await sb.rpc("event_reg_counts"); (rc || []).forEach((r) => { counts[r.event_id] = r.cnt; }); } catch (_) {}
+          box.innerHTML = "";
+          list.forEach((ev) => box.appendChild(EventsCMS.card(sb, ev, counts[ev.id] || 0)));
+        });
+    },
+    card(sb, ev, regCount) {
+      const esc = EventsCMS.esc;
+      const el = document.createElement("article");
+      el.className = "event-feature reveal visible";
+      let day = "", mon = "";
+      if (ev.event_date) { const d = new Date(ev.event_date); day = d.getDate(); mon = (d.getMonth() + 1) + "-р сар"; }
+      const meta = [ev.location, ev.time_label].filter(Boolean).map(esc).join(" · ");
+      el.innerHTML =
+        `<div class="ef-img${ev.image_url ? "" : " ef-noimg"}">
+           ${ev.image_url ? `<img src="${esc(ev.image_url)}" alt="${esc(ev.title)}" onerror="this.style.display='none';this.parentNode.classList.add('ef-noimg')" />` : ""}
+           <span class="ef-tag">${esc(ev.badge || "Зарлал")}</span>
+           ${day ? `<span class="ef-date"><b>${day}</b>${mon}</span>` : ""}
+         </div>
+         <div class="ef-body">
+           <h3>${esc(ev.title)}</h3>
+           ${meta ? `<p class="ef-meta">${meta}</p>` : ""}
+           ${ev.description ? `<p class="ef-desc">${esc(ev.description)}</p>` : ""}
+           ${regCount ? `<p class="ef-count">${regCount} иргэн бүртгүүлсэн</p>` : ""}
+           <div class="ef-reg"></div>
+         </div>`;
+      const regBox = el.querySelector(".ef-reg");
+      if (ev.register_url) {
+        regBox.innerHTML = `<a href="${esc(ev.register_url)}" target="_blank" rel="noopener" class="btn btn-gold">Бүртгүүлэх</a>`;
+      } else if (ev.register_enabled) {
+        regBox.innerHTML =
+          `<button type="button" class="btn btn-gold ev-reg-open">Бүртгүүлэх</button>
+           <form class="ev-reg-form" hidden>
+             <input type="text" name="name" placeholder="Таны нэр" required />
+             <input type="tel" name="phone" placeholder="Утасны дугаар" required />
+             <button type="submit" class="btn btn-gold btn-sm">Бүртгүүлэх</button>
+             <p class="ev-reg-msg" role="status"></p>
+           </form>`;
+        const openBtn = regBox.querySelector(".ev-reg-open");
+        const form = regBox.querySelector(".ev-reg-form");
+        const msg = regBox.querySelector(".ev-reg-msg");
+        openBtn.addEventListener("click", () => { form.hidden = false; openBtn.style.display = "none"; form.querySelector("input").focus(); });
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const name = form.querySelector('[name="name"]').value.trim();
+          const phone = form.querySelector('[name="phone"]').value.trim();
+          if (!name || !phone) return;
+          const btn = form.querySelector('button[type="submit"]'); btn.disabled = true;
+          try {
+            const { error } = await sb.from("event_registrations").insert({ event_id: ev.id, name, phone });
+            if (error) throw error;
+            form.innerHTML = '<p class="ev-reg-ok">✓ Бүртгэл амжилттай хүлээн авлаа. Баярлалаа!</p>';
+          } catch (err) { msg.textContent = "Алдаа: " + (err.message || "дахин оролдоно уу"); msg.style.color = "var(--color-danger)"; btn.disabled = false; }
+        });
+      }
+      return el;
+    },
+  };
+
   /* ---------- Санал хүсэлтийн тойм (dashboard) ---------- */
   const FeedbackStats = {
     async init() {
@@ -1486,6 +1561,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     Theme.init(); Nav.init(); Search.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
-    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); ReportsCMS.init(); ProjectsCMS.init(); LawsCMS.init(); FeedbackStats.init();
+    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); ReportsCMS.init(); ProjectsCMS.init(); LawsCMS.init(); FeedbackStats.init(); EventsCMS.init();
   });
 })();
