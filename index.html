@@ -370,24 +370,19 @@
       <div class="container">
         <div class="section-head reveal">
           <span class="eyebrow">Видео сан</span>
-          <h2>Сүүлийн Reels</h2>
-          <p>Facebook хуудасны богино видеонууд.</p>
+          <h2>Сүүлийн видео</h2>
+          <p>Гишүүний ярилцлага, чуулганы үг, тойргийн ажлын бичлэгүүд.</p>
         </div>
-        <div class="reels-carousel reveal">
-          <button class="car-arrow car-prev" type="button" data-car-prev aria-label="Өмнөх">‹</button>
-          <div class="reels-scroll" data-carousel data-autoplay="5000" data-video-reels>
-          <div class="reel-embed"><iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F929813136768362&show_text=false&width=320" title="Facebook Reel 1" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>
-          <div class="reel-embed"><iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F892002133925904&show_text=false&width=320" title="Facebook Reel 2" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>
-          <div class="reel-embed"><iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1580547490067595&show_text=false&width=320" title="Facebook Reel 3" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>
-          <div class="reel-embed"><iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1661846501604259&show_text=false&width=320" title="Facebook Reel 4" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>
-          <div class="reel-embed"><iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F847149951289238&show_text=false&width=320" title="Facebook Reel 5" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>
-          <div class="reel-embed"><iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F2020788562199165&show_text=false&width=320" title="Facebook Reel 6" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>
-          <div class="reel-embed"><iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F2001497997404291&show_text=false&width=320" title="Facebook Reel 7" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>
+        <div class="video-home reveal">
+          <div class="vh-featured" data-video-featured>
+            <article class="video-card"><div class="fb-wrap"><div class="fb-video" data-href="https://www.facebook.com/reel/929813136768362" data-show-text="false" data-width="auto"></div></div></article>
           </div>
-          <button class="car-arrow car-next" type="button" data-car-next aria-label="Дараах">›</button>
+          <div class="video-grid vh-rest" data-video-list data-video-limit="4">
+            <article class="video-card"><div class="fb-wrap"><div class="fb-video" data-href="https://www.facebook.com/reel/892002133925904" data-show-text="false" data-width="auto"></div></div></article>
+            <article class="video-card"><div class="fb-wrap"><div class="fb-video" data-href="https://www.facebook.com/reel/1580547490067595" data-show-text="false" data-width="auto"></div></div></article>
+          </div>
         </div>
-        <nav class="pager reels-dots" data-car-dots aria-label="Хуудаслалт"></nav>
-        <div style="text-align:center;margin-top:28px" class="reveal">
+        <div style="text-align:center;margin-top:30px" class="reveal">
           <a href="video.html" class="btn btn-gold">Бүх видео үзэх</a>
         </div>
       </div>
@@ -438,6 +433,8 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="m18 15-6-6-6 6"/></svg>
   </button>
 
+  <div id="fb-root"></div>
+  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v19.0"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase-config.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />

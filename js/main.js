@@ -1439,7 +1439,10 @@
             const feat = data.find((v) => v.featured) || data[0];
             const rest = data.filter((v) => v !== feat);
             if (featuredEl) featuredEl.innerHTML = VideoCMS.card(feat, true);
-            listEl.innerHTML = (rest.length ? rest : data).map((v) => VideoCMS.card(v)).join("");
+            let arr = rest.length ? rest : data;
+            const lim = parseInt(listEl.dataset.videoLimit || "0", 10);
+            if (lim) arr = arr.slice(0, lim);
+            listEl.innerHTML = arr.map((v) => VideoCMS.card(v)).join("");
             VideoCMS.parseFB();
           }
           if (reelsEl) { // Нүүрний карусель — reel плагин (тогтсон хэмжээ, гүйдэг)

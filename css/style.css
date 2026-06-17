@@ -1317,6 +1317,12 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .vc-body h3 { font-size: 1.02rem; line-height: 1.35; margin: 0 0 6px; }
 .vc-body p { font-size: .88rem; color: var(--color-text-soft); margin: 0; line-height: 1.5; }
 
+/* Нүүрний видео — онцлох том + хажууд жижигнүүд (grid) */
+.video-home { display: grid; grid-template-columns: 1.5fr 1fr; gap: 22px; align-items: start; }
+.video-home .vh-featured .video-card { height: 100%; }
+.video-home .vh-rest { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+@media (max-width: 860px) { .video-home { grid-template-columns: 1fr; } }
+
 /* Мэдээний grid карт — текстийг хураангуй (бүтэн биш) */
 [data-news-feed] .card-body h3 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 [data-news-feed] .card-body p { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
