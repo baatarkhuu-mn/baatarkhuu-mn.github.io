@@ -444,6 +444,14 @@
           });
           if (insErr) throw insErr;
           const trackRef = ticketNo || "—";
+          // Дугаарыг энэ төхөөрөмжид хадгална (иргэн дугаараа мартсан ч саналаа олох)
+          if (ticketNo) {
+            try {
+              const mine = JSON.parse(localStorage.getItem("at_tickets") || "[]");
+              mine.unshift({ t: ticketNo, s: (fd.get("subject") || "").toString(), d: Date.now() });
+              localStorage.setItem("at_tickets", JSON.stringify(mine.slice(0, 30)));
+            } catch (_) {}
+          }
 
           // Амжилт
           const parts = [];
@@ -1276,6 +1284,26 @@
         };
         btn.addEventListener("click", run);
         input.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); run(); } });
+
+        // Миний илгээсэн саналууд (энэ төхөөрөмжид хадгалсан) — дугаараа мартсан ч олно
+        let mine = [];
+        try { mine = JSON.parse(localStorage.getItem("at_tickets") || "[]"); } catch (_) {}
+        if (mine.length) {
+          const wrap = document.createElement("div");
+          wrap.className = "track-mine";
+          wrap.innerHTML = '<div class="tm-label">Миний илгээсэн саналууд (энэ төхөөрөмжөөс):</div>';
+          const chips = document.createElement("div"); chips.className = "tm-chips";
+          mine.forEach((m) => {
+            const b = document.createElement("button");
+            b.type = "button"; b.className = "tm-chip";
+            const subj = (PublicFeed.SUBJ && PublicFeed.SUBJ[m.s]) || "";
+            b.innerHTML = "#" + Tracker.esc(m.t) + (subj ? ' <span>· ' + Tracker.esc(subj) + "</span>" : "");
+            b.addEventListener("click", () => { input.value = m.t; run(); });
+            chips.appendChild(b);
+          });
+          wrap.appendChild(chips);
+          box.appendChild(wrap);
+        }
       });
     },
   };

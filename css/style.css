@@ -1228,6 +1228,14 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .promise-list li { position: relative; padding-left: 32px; line-height: 1.5; }
 .promise-list li::before { content: "✓"; position: absolute; left: 0; top: 1px; width: 21px; height: 21px; display: grid; place-items: center; border-radius: 50%; background: rgba(70,200,130,.18); color: #46c882; font-size: .72rem; font-weight: 800; }
 
+/* Миний илгээсэн саналууд (track) */
+.track-mine { margin-top: 18px; max-width: 640px; margin-left: auto; margin-right: auto; }
+.tm-label { font-size: .82rem; color: var(--color-text-soft); margin-bottom: 8px; }
+.tm-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.tm-chip { border: 1px solid var(--color-border); background: var(--color-bg-soft); color: var(--color-text); font-family: inherit; font-size: .82rem; font-weight: 600; padding: 7px 13px; border-radius: 30px; cursor: pointer; transition: all var(--transition); }
+.tm-chip span { color: var(--color-text-soft); font-weight: 400; }
+.tm-chip:hover { border-color: var(--color-accent); color: var(--color-accent); }
+
 /* Хөдөлгөөн багасгах хүсэлт */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
