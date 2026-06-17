@@ -883,8 +883,9 @@
          <div class="fc-msg">${this.esc(r.message)}</div>
          <div class="fc-photos"></div>
          <div class="fc-actions">
-           <button class="fc-like${isLiked ? " liked" : ""}" type="button" aria-pressed="${isLiked}">
-             <span class="heart"><svg viewBox="0 0 24 24"><path d="M12 21s-8-5.3-8-11a4.5 4.5 0 0 1 8-2.7A4.5 4.5 0 0 1 20 10c0 5.7-8 11-8 11z"/></svg></span><span class="cnt">${likeCount}</span>
+           <button class="fc-like${isLiked ? " liked" : ""}" type="button" aria-pressed="${isLiked}" title="Танд бас ийм асуудал тулгарч байвал дэмжинэ үү">
+             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+             <span class="sup-label">${isLiked ? "Дэмжсэн" : "Надад бас ийм асуудал байна"}</span><span class="cnt">${likeCount}</span>
            </button>
            <button class="fc-comment-toggle" type="button">Коммент <span class="ccnt">(${comments.length})</span></button>
          </div>
@@ -922,7 +923,7 @@
           this.saveLiked(set);
           likeBtn.classList.toggle("liked", nowLiked);
           likeBtn.setAttribute("aria-pressed", String(nowLiked));
-          /* heart fill -> CSS .liked */
+          const lbl = likeBtn.querySelector(".sup-label"); if (lbl) lbl.textContent = nowLiked ? "Дэмжсэн" : "Надад бас ийм асуудал байна";
           likeBtn.querySelector(".cnt").textContent = (typeof data === "number" ? data : likeCount);
         } catch (_) {} finally { likeBtn.disabled = false; }
       });

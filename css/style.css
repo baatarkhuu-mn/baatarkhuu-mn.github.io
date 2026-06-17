@@ -844,18 +844,24 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .feed-card .fc-photos img:hover { transform: scale(1.04); }
 .feed-card .fc-rate { color: var(--color-warning); font-weight: 700; }
 
-.fc-actions { display: flex; align-items: center; gap: 16px; padding-top: 12px; border-top: 1px solid var(--color-border); }
-.fc-like, .fc-comment-toggle {
+.fc-actions { display: flex; align-items: center; gap: 12px; padding-top: 12px; border-top: 1px solid var(--color-border); flex-wrap: wrap; }
+.fc-comment-toggle {
   display: inline-flex; align-items: center; gap: 7px; background: none; border: none; cursor: pointer;
   color: var(--color-text-soft); font-family: inherit; font-size: .92rem; font-weight: 600; padding: 4px 6px;
   border-radius: var(--radius-sm); transition: color var(--transition), background var(--transition);
 }
-.fc-like:hover, .fc-comment-toggle:hover { color: var(--color-text); background: var(--color-bg-soft); }
-.fc-like .heart { line-height: 0; transition: transform var(--transition); }
-.fc-like .heart svg { width: 1.15em; height: 1.15em; fill: none; stroke: currentColor; stroke-width: 2; vertical-align: -.18em; }
-.fc-like.liked { color: #f0496b; }
-.fc-like.liked .heart { transform: scale(1.12); }
-.fc-like.liked .heart svg { fill: #f0496b; stroke: #f0496b; }
+.fc-comment-toggle:hover { color: var(--color-text); background: var(--color-bg-soft); }
+/* "Надад бас ийм асуудал байна" дэмжих товч */
+.fc-like {
+  display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-family: inherit; font-weight: 600;
+  color: var(--color-text-soft); border: 1px solid var(--color-border); background: var(--color-bg-soft);
+  padding: 8px 15px; border-radius: 30px; font-size: .85rem; transition: all var(--transition);
+}
+.fc-like svg { width: 16px; height: 16px; flex-shrink: 0; }
+.fc-like:hover { color: var(--color-text); border-color: var(--color-accent); }
+.fc-like .cnt { font-weight: 800; background: var(--color-bg); border-radius: 20px; padding: 1px 9px; font-size: .8rem; }
+.fc-like.liked { background: var(--color-accent-soft); border-color: var(--color-accent); color: var(--color-accent); }
+.fc-like.liked .cnt { background: rgba(255,255,255,.12); }
 
 .fc-comments { margin-top: 14px; display: none; }
 .fc-comments.open { display: block; }
