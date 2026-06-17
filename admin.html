@@ -174,6 +174,10 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>
           Арга хэмжээ
         </button>
+        <button type="button" class="nav-link" data-view="settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Тохиргоо
+        </button>
       </nav>
       <div class="as-foot">
         <a href="index.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg> Сайт руу очих</a>
@@ -454,6 +458,27 @@
           <div id="event-list"></div>
           <div id="event-empty" class="search-empty" style="display:none">Одоогоор арга хэмжээ алга. Дээрх формоор нэмнэ үү.</div>
         </section><!-- /event-view -->
+
+        <!-- ============ ТОХИРГОО (холбоо барих, сошиал) ============ -->
+        <section id="settings-view" class="view" style="display:none">
+          <div class="form-card" style="max-width:640px">
+            <h3 style="margin-bottom:6px">Холбоо барих мэдээлэл</h3>
+            <p class="form-note" style="margin-bottom:18px">Энд засвал <strong>бүх хуудасны</strong> дээд мөр болон хөл хэсэгт автоматаар шинэчлэгдэнэ.</p>
+            <form id="settings-form">
+              <div class="form-group"><label for="s-phone">Утас</label><input type="text" id="s-phone" placeholder="261467" /></div>
+              <div class="form-group"><label for="s-email">И-мэйл</label><input type="email" id="s-email" placeholder="baatarkhuu@gmail.com" /></div>
+              <div class="form-group"><label for="s-address">Хаяг</label><input type="text" id="s-address" placeholder="Улаанбаатар хот, Сүхбаатар дүүрэг, Төрийн ордон" /></div>
+              <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                <div class="form-group"><label for="s-facebook">Facebook холбоос</label><input type="url" id="s-facebook" placeholder="https://www.facebook.com/..." /></div>
+                <div class="form-group"><label for="s-x">X (Twitter) холбоос</label><input type="url" id="s-x" placeholder="https://x.com/..." /></div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                <button type="submit" class="btn btn-gold btn-sm">Хадгалах</button>
+                <span id="settings-msg" class="form-note"></span>
+              </div>
+            </form>
+          </div>
+        </section><!-- /settings-view -->
       </div><!-- /admin-content -->
     </div><!-- /admin-main -->
   </div><!-- /dash-view -->
@@ -1375,8 +1400,35 @@
 
     $("#event-cancel").addEventListener("click", resetEventForm);
 
+    // ===== ТОХИРГОО =====
+    let settingsLoaded = false;
+    const SETTING_FIELDS = { phone: "s-phone", email: "s-email", address: "s-address", facebook: "s-facebook", x: "s-x" };
+    const settingsForm = $("#settings-form"), settingsMsg = $("#settings-msg");
+
+    async function loadSettings() {
+      const { data, error } = await sb.from("site_settings").select("*");
+      if (error) { settingsMsg.textContent = "Ачаалахад алдаа: " + error.message + " (supabase-settings.sql ажилласан эсэхээ шалгана уу)"; settingsMsg.style.color = "var(--color-danger)"; return; }
+      const map = {}; (data || []).forEach((r) => { map[r.key] = r.value; });
+      Object.entries(SETTING_FIELDS).forEach(([k, id]) => { const el = $("#" + id); if (el && map[k] != null) el.value = map[k]; });
+    }
+
+    settingsForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      settingsMsg.textContent = ""; settingsMsg.style.color = "";
+      const btn = settingsForm.querySelector('button[type="submit"]'); btn.disabled = true; btn.textContent = "Хадгалж байна…";
+      try {
+        const rows = Object.entries(SETTING_FIELDS).map(([k, id]) => ({ key: k, value: $("#" + id).value.trim() }));
+        const { error } = await sb.from("site_settings").upsert(rows, { onConflict: "key" });
+        if (error) throw error;
+        settingsMsg.style.color = "var(--color-success)"; settingsMsg.textContent = "✓ Хадгаллаа. Сайт даяар шинэчлэгдэнэ.";
+        setTimeout(() => { settingsMsg.textContent = ""; }, 4000);
+      } catch (err) {
+        settingsMsg.style.color = "var(--color-danger)"; settingsMsg.textContent = "Алдаа: " + (err.message || "хадгалж чадсангүй");
+      } finally { btn.disabled = false; btn.textContent = "Хадгалах"; }
+    });
+
     // Цонх (view) солих — sidebar навигац
-    const PAGE_TITLE = { dashboard: "Хяналтын самбар", fb: "Санал хүсэлт", news: "Мэдээ", video: "Видео", report: "Тайлан", project: "Төслүүд", law: "Хууль", event: "Арга хэмжээ" };
+    const PAGE_TITLE = { dashboard: "Хяналтын самбар", fb: "Санал хүсэлт", news: "Мэдээ", video: "Видео", report: "Тайлан", project: "Төслүүд", law: "Хууль", event: "Арга хэмжээ", settings: "Тохиргоо" };
     function showView(name) {
       document.querySelectorAll(".view").forEach((v) => { v.style.display = v.id === name + "-view" ? "block" : "none"; });
       document.querySelectorAll(".nav-link[data-view]").forEach((b) => b.classList.toggle("active", b.dataset.view === name));
@@ -1387,6 +1439,7 @@
       if (name === "project" && !projectLoaded) { projectLoaded = true; loadProjects(); }
       if (name === "law" && !lawLoaded) { lawLoaded = true; loadLaws(); }
       if (name === "event" && !eventLoaded) { eventLoaded = true; loadEvents(); }
+      if (name === "settings" && !settingsLoaded) { settingsLoaded = true; loadSettings(); }
       if (name === "dashboard") renderRecent();
       const shell = document.querySelector(".admin-shell"); if (shell) shell.classList.remove("nav-open");
       window.scrollTo({ top: 0 });

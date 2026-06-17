@@ -1468,6 +1468,31 @@
     },
   };
 
+  /* ---------- Сайтын тохиргоо (холбоо барих, сошиал) ---------- */
+  const Settings = {
+    async init() {
+      const els = document.querySelectorAll("[data-setting]");
+      if (!els.length) return;
+      const sb = window.getSB && window.getSB();
+      if (!sb) return;
+      let map = {};
+      try {
+        const { data, error } = await sb.from("site_settings").select("*");
+        if (error || !data) return;
+        data.forEach((r) => { map[r.key] = r.value; });
+      } catch (_) { return; }
+      els.forEach((el) => {
+        const val = map[el.dataset.setting];
+        if (val == null || val === "") return; // хоосон бол одоогийнхыг хэвээр
+        const mode = el.dataset.settingType || "text";
+        if (mode === "tel") { el.setAttribute("href", "tel:" + val.replace(/\s+/g, "")); if (el.dataset.settingText !== "no") el.textContent = val; }
+        else if (mode === "mailto") { el.setAttribute("href", "mailto:" + val); if (el.dataset.settingText !== "no") el.textContent = val; }
+        else if (mode === "href") { el.setAttribute("href", val); }
+        else { el.textContent = val; }
+      });
+    },
+  };
+
   /* ---------- Арга хэмжээ (CMS) + бүртгэл ---------- */
   const EventsCMS = {
     esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
@@ -1610,6 +1635,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     Theme.init(); Nav.init(); Search.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
-    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); ReportsCMS.init(); ProjectsCMS.init(); LawsCMS.init(); FeedbackStats.init(); EventsCMS.init();
+    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); ReportsCMS.init(); ProjectsCMS.init(); LawsCMS.init(); FeedbackStats.init(); EventsCMS.init(); Settings.init();
   });
 })();
