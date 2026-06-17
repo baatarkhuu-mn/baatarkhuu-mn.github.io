@@ -1135,6 +1135,41 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
   body::before { display: none; }
 }
 
+/* Саналын явц шалгах */
+.track-box { max-width: 640px; margin: 0 auto; }
+.track-row { display: flex; gap: 10px; }
+.track-row input {
+  flex: 1; padding: 14px 16px; border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border); background: var(--color-bg-soft);
+  color: var(--color-text); font-size: 1rem; letter-spacing: .04em; font-family: inherit;
+}
+.track-row input:focus { outline: none; border-color: var(--color-accent); }
+.track-row .btn { white-space: nowrap; }
+.track-result { margin-top: 16px; }
+.track-result .tr-loading { color: var(--color-text-soft); text-align: center; }
+.track-result .tr-bad { color: var(--color-danger); text-align: center; }
+.tr-card {
+  border: 1px solid var(--color-border); border-radius: var(--radius);
+  background: var(--color-bg-soft); padding: 18px 20px;
+}
+.tr-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+.tr-no { font-weight: 700; font-size: 1.15rem; letter-spacing: .03em; color: var(--color-accent); }
+.tr-badge { padding: 5px 14px; border-radius: 999px; font-size: .82rem; font-weight: 600; }
+.tr-badge.tr-new { background: rgba(120, 144, 180, .18); color: var(--color-text); }
+.tr-badge.tr-prog { background: rgba(63, 210, 230, .16); color: var(--color-accent); }
+.tr-badge.tr-done { background: rgba(70, 200, 130, .18); color: #46c882; }
+.tr-rows { display: grid; gap: 8px; }
+.tr-rows > div { display: flex; justify-content: space-between; gap: 16px; font-size: .92rem; border-bottom: 1px dashed var(--color-border); padding-bottom: 8px; }
+.tr-rows > div:last-child { border-bottom: none; padding-bottom: 0; }
+.tr-rows span { color: var(--color-text-soft); }
+.tr-resp { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--color-border); }
+.tr-resp span { font-size: .82rem; color: var(--color-text-soft); display: block; margin-bottom: 4px; }
+.tr-resp p { margin: 0; line-height: 1.55; }
+@media (max-width: 480px) {
+  .track-row { flex-direction: column; }
+  .track-row .btn { width: 100%; }
+}
+
 /* Хөдөлгөөн багасгах хүсэлт */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }

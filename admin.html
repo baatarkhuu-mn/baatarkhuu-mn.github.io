@@ -231,11 +231,12 @@
         card.className = "fb-card";
         const loc = (r.district ? r.district + " дүүрэг" : "") + (r.khoroo ? ", " + r.khoroo + "-р хороо" : "");
         const mapLink = (r.lat && r.lng) ? `<a href="https://www.google.com/maps?q=${r.lat},${r.lng}" target="_blank" rel="noopener">🗺 Газрын зураг дээр харах</a>` : "";
+        const ticket = r.ticket_seq != null ? "AT-" + new Date(r.created_at).getFullYear() + "-" + String(r.ticket_seq).padStart(6, "0") : null;
         card.innerHTML =
           `<div class="fb-head">
              <div>
                <div class="fb-name">${esc(r.name) || "Нэргүй"}</div>
-               <div class="fb-meta"><span>📅 ${fmtDate(r.created_at)}</span>${loc ? `<span>📍 ${esc(loc)}</span>` : ""}</div>
+               <div class="fb-meta">${ticket ? `<span style="color:var(--color-accent);font-weight:600">№ ${ticket}</span>` : ""}<span>📅 ${fmtDate(r.created_at)}</span>${loc ? `<span>📍 ${esc(loc)}</span>` : ""}</div>
              </div>
              <div class="fb-badges">
                ${r.is_public ? `<span class="rate-pill" style="background:rgba(63,210,230,.14);color:var(--color-accent)">🌐 Нийтэд ил</span>` : ""}
@@ -247,6 +248,12 @@
            <div class="fb-msg">${esc(r.message)}</div>
            <div class="fb-photos" data-photos></div>
            ${mapLink ? `<div style="margin:10px 0">${mapLink}</div>` : ""}
+           <div class="fb-resp" style="margin:12px 0;padding:12px;border:1px dashed var(--color-border);border-radius:var(--radius-sm)">
+             <label style="font-size:.78rem;color:var(--color-text-soft);display:block;margin-bottom:5px">Нийтэд харагдах хариу <span style="opacity:.7">(иргэн дугаараараа явц шалгахад харна)</span></label>
+             <textarea class="resp-input" data-id="${r.id}" rows="2" placeholder="Жишээ: Таны саналыг холбогдох газарт уламжиллаа. Шийдвэрлэх хугацаа — 14 хоног." style="width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg-soft);color:var(--color-text);font-family:inherit;font-size:.9rem;resize:vertical">${esc(r.response || "")}</textarea>
+             <button class="btn btn-ghost btn-sm resp-btn" data-id="${r.id}" style="margin-top:7px">Хариу хадгалах</button>
+             <span class="resp-ok" style="font-size:.8rem;color:#46c882;margin-left:10px;display:none">✓ Хадгаллаа</span>
+           </div>
            <div class="fb-foot">
              <div class="fb-contact">
                ${r.email ? `<a href="mailto:${esc(r.email)}">✉ ${esc(r.email)}</a>` : ""}
@@ -350,6 +357,20 @@
           const badge = card.querySelector(".badge-status");
           badge.className = "badge-status " + (val === "done" ? "status-passed" : val === "in_progress" ? "status-review" : "status-draft");
           badge.textContent = STATUS_LABEL[val];
+        });
+
+        // Нийтэд харагдах хариу хадгалах
+        card.querySelector(".resp-btn").addEventListener("click", async (e) => {
+          const btn = e.currentTarget, id = btn.dataset.id;
+          const ta = card.querySelector(".resp-input");
+          const ok = card.querySelector(".resp-ok");
+          const val = ta.value.trim() || null;
+          btn.disabled = true;
+          const { error } = await sb.from("feedback").update({ response: val }).eq("id", id);
+          btn.disabled = false;
+          if (error) { alert("Алдаа: " + error.message); return; }
+          const row = allRows.find((x) => x.id === id); if (row) row.response = val;
+          ok.style.display = "inline"; setTimeout(() => { ok.style.display = "none"; }, 2500);
         });
       });
     }

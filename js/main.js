@@ -426,33 +426,32 @@
             if (upErr) throw upErr;
             photoPaths.push(path);
           }
-          // 2) Мөр оруулах
+          // 2) Мөр оруулах — submit_feedback RPC дараалсан дугаар буцаана
           const fd = new FormData(form);
-          let message = (fd.get("message") || "").toString().trim();
-          // Лавлагааны дугаар (админ хайж олох, иргэн лавлах). Жинхэнэ дараалсан дугаар + явц шалгалт нь Supabase-д хийгдэнэ.
-          const trackRef = "AT-" + new Date().getFullYear() + "-" + String(Date.now() % 1000000).padStart(6, "0");
-          message += "\n\n[Дугаар: " + trackRef + "]";
-          const row = {
-            name: (fd.get("name") || "").toString().trim(),
-            phone: (fd.get("phone") || "").toString().trim() || null,
-            subject: (fd.get("subject") || "").toString(),
-            message: message,
-            lat: latIn && latIn.value ? parseFloat(latIn.value) : null,
-            lng: lngIn && lngIn.value ? parseFloat(lngIn.value) : null,
-            rating: ratingIn && ratingIn.value ? parseInt(ratingIn.value, 10) : null,
-            photos: photoPaths,
-            is_public: isPublic,
-          };
-          const { error: insErr } = await sb.from("feedback").insert(row);
+          const message = (fd.get("message") || "").toString().trim();
+          const lat = latIn && latIn.value ? parseFloat(latIn.value) : null;
+          const rating = ratingIn && ratingIn.value ? parseInt(ratingIn.value, 10) : null;
+          const { data: ticketNo, error: insErr } = await sb.rpc("submit_feedback", {
+            p_name: (fd.get("name") || "").toString().trim(),
+            p_phone: (fd.get("phone") || "").toString().trim() || null,
+            p_subject: (fd.get("subject") || "").toString(),
+            p_message: message,
+            p_lat: lat,
+            p_lng: lngIn && lngIn.value ? parseFloat(lngIn.value) : null,
+            p_rating: rating,
+            p_photos: photoPaths,
+            p_is_public: isPublic,
+          });
           if (insErr) throw insErr;
+          const trackRef = ticketNo || "—";
 
           // Амжилт
           const parts = [];
           if (photoPaths.length) parts.push(`${photoPaths.length} зураг`);
-          if (row.lat) parts.push("GPS байршил");
-          if (row.rating) parts.push(`үнэлгээ ${row.rating}/10`);
+          if (lat) parts.push("GPS байршил");
+          if (rating) parts.push(`үнэлгээ ${rating}/10`);
           success && success.classList.add("show");
-          if (success) success.innerHTML = "✓ Таны санал <strong>#" + trackRef + "</strong> дугаартай бүртгэгдлээ" + (parts.length ? ` (${parts.join(", ")})` : "") + ". Энэ дугаараа тэмдэглэж аваарай — лавлахад хэрэг болно. Бид удахгүй хариу өгнө.";
+          if (success) success.innerHTML = "✓ Таны санал <strong>#" + trackRef + "</strong> дугаартай бүртгэгдлээ" + (parts.length ? ` (${parts.join(", ")})` : "") + ". Энэ дугаараа тэмдэглэж аваарай — «Явц шалгах» хэсэгт оруулж явцаа хянана. Бид удахгүй хариу өгнө.";
           form.reset(); files = []; renderPreviews(); resetGeo(); resetKhoroo();
           const rb = form.querySelector("[data-rating]"); if (rb && rb._resetRating) rb._resetRating();
           setTimeout(() => { success && success.classList.remove("show"); resetSuccessStyle(); }, 12000);
@@ -1184,6 +1183,60 @@
   };
 
   /* ---------- Бүгдийг эхлүүлэх ---------- */
+  /* ---------- Саналын явц шалгах (#AT-... дугаараар) ---------- */
+  const Tracker = {
+    STATUS: {
+      new: { label: "Хүлээн авсан", cls: "tr-new" },
+      in_progress: { label: "Шийдвэрлэж байна", cls: "tr-prog" },
+      done: { label: "Шийдвэрлэсэн", cls: "tr-done" },
+    },
+    esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
+    fmtDate(s) { try { return new Date(s).toLocaleDateString("mn-MN", { year: "numeric", month: "2-digit", day: "2-digit" }); } catch (_) { return ""; } },
+    init() {
+      document.querySelectorAll("[data-track]").forEach((box) => {
+        const input = box.querySelector("input");
+        const btn = box.querySelector("[data-track-btn]");
+        const out = box.querySelector("[data-track-result]");
+        if (!input || !btn || !out) return;
+        const run = async () => {
+          const t = (input.value || "").trim();
+          if (!t) { input.focus(); return; }
+          out.style.display = "block";
+          out.innerHTML = '<p class="tr-loading">Шалгаж байна…</p>';
+          const sb = window.getSB && window.getSB();
+          if (!sb) { out.innerHTML = '<p class="tr-bad">Холболт алга. Дараа дахин оролдоно уу.</p>'; return; }
+          try {
+            const { data, error } = await sb.rpc("track_feedback", { p_ticket: t });
+            if (error) throw error;
+            if (!data || !data.length) {
+              out.innerHTML = '<p class="tr-bad">Ийм дугаартай санал олдсонгүй. Дугаараа (жишээ: AT-2026-000001) шалгаад дахин оруулна уу.</p>';
+              return;
+            }
+            const r = data[0];
+            const st = Tracker.STATUS[r.status] || { label: r.status, cls: "tr-new" };
+            const subj = (PublicFeed.SUBJ && PublicFeed.SUBJ[r.subject]) || r.subject || "—";
+            const upd = r.updated_at && r.updated_at !== r.created_at ? Tracker.fmtDate(r.updated_at) : null;
+            out.innerHTML =
+              '<div class="tr-card">' +
+                '<div class="tr-top"><span class="tr-no">#' + Tracker.esc(r.ticket) + '</span>' +
+                  '<span class="tr-badge ' + st.cls + '">' + st.label + '</span></div>' +
+                '<div class="tr-rows">' +
+                  '<div><span>Ангилал</span><b>' + Tracker.esc(subj) + '</b></div>' +
+                  '<div><span>Хүлээн авсан</span><b>' + Tracker.fmtDate(r.created_at) + '</b></div>' +
+                  (upd ? '<div><span>Сүүлд шинэчилсэн</span><b>' + upd + '</b></div>' : '') +
+                '</div>' +
+                (r.response ? '<div class="tr-resp"><span>Албаны хариу:</span><p>' + Tracker.esc(r.response) + '</p></div>' : '') +
+              '</div>';
+          } catch (e) {
+            out.innerHTML = '<p class="tr-bad">Шалгахад алдаа гарлаа: ' + Tracker.esc(e.message || "сүлжээ") + '</p>';
+          }
+        };
+        btn.addEventListener("click", run);
+        input.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); run(); } });
+      });
+    },
+  };
+
   // Хөвөгч "Санал хүсэлт" товч — холбоо барих хуудаснаас бусад бүх хуудсанд
   function injectFeedbackFab() {
     if (location.pathname.includes("holboo")) return;
@@ -1198,6 +1251,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     Theme.init(); Nav.init(); Search.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
-    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); Pager.init(); Carousel.init(); Laws.init();
+    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init();
   });
 })();
