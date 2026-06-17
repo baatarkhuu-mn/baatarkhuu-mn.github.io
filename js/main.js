@@ -1438,27 +1438,30 @@
           const rest = data.filter((v) => v !== feat);
           if (featuredEl) featuredEl.innerHTML = VideoCMS.card(feat, true);
           listEl.innerHTML = (rest.length ? rest : data).map((v) => VideoCMS.card(v)).join("");
+          VideoCMS.parseFB();
         });
     },
     ytId(url) { const m = String(url).match(/(?:v=|youtu\.be\/|\/embed\/|\/shorts\/)([\w-]{11})/); return m ? m[1] : ""; },
-    aspect(v) { // reels → босоо (9/16), бусад нь хэвтээ (16/9) — жинхэнэ хэмжээ
-      if (v.platform === "youtube") return "wide";
-      return /\/reel/i.test(v.url || "") ? "portrait" : "wide";
-    },
-    src(v) {
-      if (v.platform === "youtube") return "https://www.youtube.com/embed/" + VideoCMS.ytId(v.url);
-      return "https://www.facebook.com/plugins/video.php?href=" + encodeURIComponent(v.url) + "&show_text=false";
-    },
     card(v, featured) {
       const esc = VideoCMS.esc;
-      const asp = VideoCMS.aspect(v);
       const title = v.title ? `<h3>${esc(v.title)}</h3>` : "";
       const exc = v.excerpt ? `<p>${esc(v.excerpt)}</p>` : "";
       const body = (title || exc) ? `<div class="vc-body">${title}${exc}</div>` : "";
-      return `<article class="video-card${featured ? " video-featured" : ""} reveal visible">
-        <div class="video-embed video-${asp}"><iframe src="${VideoCMS.src(v)}" title="${esc(v.title || "Видео")}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>
-        ${body}
-      </article>`;
+      let media;
+      if (v.platform === "youtube") {
+        media = `<div class="video-embed video-wide"><iframe src="https://www.youtube.com/embed/${VideoCMS.ytId(v.url)}" title="${esc(v.title || "Видео")}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>`;
+      } else {
+        // Facebook SDK fb-video — видеог жинхэнэ хэмжээгээр нь дүрсэлнэ (хар зайгүй)
+        media = `<div class="fb-wrap"><div class="fb-video" data-href="${esc(v.url)}" data-show-text="false" data-width="auto"></div></div>`;
+      }
+      return `<article class="video-card${featured ? " video-featured" : ""} reveal visible">${media}${body}</article>`;
+    },
+    parseFB() {
+      let n = 0;
+      const iv = setInterval(() => {
+        if (window.FB && window.FB.XFBML) { try { window.FB.XFBML.parse(); } catch (_) {} clearInterval(iv); }
+        else if (++n > 25) clearInterval(iv);
+      }, 300);
     },
   };
 

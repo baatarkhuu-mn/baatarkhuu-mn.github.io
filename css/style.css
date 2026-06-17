@@ -1306,13 +1306,14 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .video-card:hover { border-color: var(--color-primary-dark); box-shadow: var(--shadow); }
 .video-embed { position: relative; width: 100%; background: #000; }
 .video-embed.video-wide { aspect-ratio: 16 / 9; }
-.video-embed.video-portrait { aspect-ratio: 9 / 16; }
 .video-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+/* Facebook fb-video — жинхэнэ хэмжээгээр (SDK автоматаар тааруулна, хар зайгүй) */
+.fb-wrap { width: 100%; display: flex; justify-content: center; background: var(--color-bg-soft); }
+.fb-wrap .fb-video { width: 100%; }
+.fb-wrap span, .fb-wrap iframe { max-width: 100% !important; display: block; }
 .vc-body { padding: 16px 18px; }
 .vc-body h3 { font-size: 1.02rem; line-height: 1.35; margin: 0 0 6px; }
 .vc-body p { font-size: .88rem; color: var(--color-text-soft); margin: 0; line-height: 1.5; }
-.video-featured { max-width: 100%; }
-.video-featured .video-embed.video-portrait { max-width: 340px; margin: 0 auto; }
 
 /* Хөдөлгөөн багасгах хүсэлт */
 @media (prefers-reduced-motion: reduce) {
