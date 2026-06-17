@@ -20,6 +20,21 @@
       padding:18px; text-align:center; }
     .mini-stat .n { font-size:1.8rem; font-weight:800; color:var(--color-primary-light); line-height:1; }
     .mini-stat .l { font-size:.8rem; color:var(--color-text-soft); margin-top:6px; }
+    .toolbar { display:flex; flex-direction:column; gap:12px; margin-bottom:24px; }
+    .toolbar-main { display:flex; gap:10px; align-items:center; }
+    .toolbar-main .field { flex:1; margin:0; }
+    .toolbar-main .btn { white-space:nowrap; }
+    .toolbar-filters { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+    .toolbar input, .toolbar select {
+      width:100%; padding:11px 14px; border-radius:var(--radius-sm);
+      border:1px solid var(--color-border); background:var(--color-bg-card);
+      color:var(--color-text); font-family:inherit; font-size:.9rem; }
+    .toolbar input:focus, .toolbar select:focus { outline:none; border-color:var(--color-primary-light); }
+    @media (max-width:700px){
+      .toolbar-main { flex-wrap:wrap; }
+      .toolbar-main .field { flex:1 1 100%; }
+      .toolbar-filters { grid-template-columns:1fr; }
+    }
     .fb-card { background:var(--color-bg-card); border:1px solid var(--color-border); border-radius:var(--radius);
       padding:20px; margin-bottom:16px; }
     .fb-head { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:flex-start; margin-bottom:10px; }
@@ -87,12 +102,16 @@
       </div>
 
       <div class="toolbar">
-        <div class="field"><input type="text" id="f-q" placeholder="🔍 Нэр, агуулгаар хайх…" /></div>
-        <select id="f-district"><option value="all">Бүх дүүрэг</option><option>Чингэлтэй</option><option>Сүхбаатар</option><option>Бусад</option></select>
-        <select id="f-status"><option value="all">Бүх төлөв</option><option value="new">Шинэ</option><option value="in_progress">Шийдвэрлэж буй</option><option value="done">Шийдвэрлэсэн</option></select>
-        <select id="f-subject"><option value="all">Бүх төрөл</option><option value="sanal">Санал</option><option value="urgudul">Өргөдөл</option><option value="gomdol">Гомдол</option><option value="asuudal">Тулгамдсан асуудал</option><option value="uulzalt">Уулзалт</option><option value="busad">Бусад</option></select>
-        <button id="refresh-btn" class="btn btn-ghost btn-sm">↻ Сэргээх</button>
-        <button id="export-btn" class="btn btn-gold btn-sm">⬇ Excel рүү татах</button>
+        <div class="toolbar-main">
+          <div class="field"><input type="text" id="f-q" placeholder="Нэр, агуулгаар хайх…" /></div>
+          <button id="refresh-btn" class="btn btn-ghost btn-sm">Сэргээх</button>
+          <button id="export-btn" class="btn btn-gold btn-sm">Excel татах</button>
+        </div>
+        <div class="toolbar-filters">
+          <select id="f-district"><option value="all">Бүх дүүрэг</option><option>Чингэлтэй</option><option>Сүхбаатар</option><option>Бусад</option></select>
+          <select id="f-status"><option value="all">Бүх төлөв</option><option value="new">Шинэ</option><option value="in_progress">Шийдвэрлэж буй</option><option value="done">Шийдвэрлэсэн</option></select>
+          <select id="f-subject"><option value="all">Бүх төрөл</option><option value="sanal">Санал</option><option value="urgudul">Өргөдөл</option><option value="gomdol">Гомдол</option><option value="asuudal">Тулгамдсан асуудал</option><option value="uulzalt">Уулзалт</option><option value="busad">Бусад</option></select>
+        </div>
       </div>
 
       <div id="fb-list"></div>
