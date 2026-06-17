@@ -426,15 +426,9 @@
             if (upErr) throw upErr;
             photoPaths.push(path);
           }
-          // 2) Мөр оруулах — байршлын дэлгэрэнгүйг агуулгад нэмнэ
+          // 2) Мөр оруулах
           const fd = new FormData(form);
           let message = (fd.get("message") || "").toString().trim();
-          const locDetail = (fd.get("loc_detail") || "").toString().trim();
-          const pole = (fd.get("pole") || "").toString().trim();
-          const extra = [];
-          if (locDetail) extra.push("Байршил: " + locDetail);
-          if (pole) extra.push("Гэрлийн шон: " + pole);
-          if (extra.length) message += "\n\n" + extra.join("\n");
           // Лавлагааны дугаар (админ хайж олох, иргэн лавлах). Жинхэнэ дараалсан дугаар + явц шалгалт нь Supabase-д хийгдэнэ.
           const trackRef = "AT-" + new Date().getFullYear() + "-" + String(Date.now() % 1000000).padStart(6, "0");
           message += "\n\n[Дугаар: " + trackRef + "]";
