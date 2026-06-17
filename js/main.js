@@ -1049,46 +1049,53 @@
 
   /* ---------- 16. Хуудаслалт (pagination) ---------- */
   const Pager = {
-    init() {
-      document.querySelectorAll("[data-paginate]").forEach((grid) => {
-        const sizeLg = parseInt(grid.dataset.pageSize || "6", 10);
-        const sizeSm = parseInt(grid.dataset.pageSizeSm || "0", 10) || sizeLg;
-        const items = Array.prototype.filter.call(grid.children, (c) => c.nodeType === 1);
-        const sizeNow = () => (window.innerWidth <= 640 ? sizeSm : sizeLg);
-        let pager = null, cur = 1;
-        const build = () => {
-          const size = sizeNow();
-          if (items.length <= size) { // нэг хуудас — pager хэрэггүй
-            if (pager) { pager.remove(); pager = null; }
-            items.forEach((el) => { el.style.display = ""; });
-            return;
-          }
-          const pages = Math.ceil(items.length / size);
-          if (cur > pages) cur = pages;
-          if (!pager) { pager = document.createElement("nav"); pager.className = "pager"; pager.setAttribute("aria-label", "Хуудаслалт"); grid.after(pager); }
-          const draw = (scroll) => {
-            items.forEach((el, i) => { el.style.display = (i >= (cur - 1) * size && i < cur * size) ? "" : "none"; });
-            pager.innerHTML = "";
-            const mk = (label, target, dis, active) => {
-              const b = document.createElement("button");
-              b.type = "button"; b.textContent = label;
-              if (active) b.classList.add("active");
-              if (dis) b.disabled = true;
-              else b.addEventListener("click", () => { cur = target; draw(true); });
-              pager.appendChild(b);
-            };
-            mk("«", 1, cur === 1);
-            mk("‹", cur - 1, cur === 1);
-            for (let i = 1; i <= pages; i++) mk(String(i), i, false, i === cur);
-            mk("›", cur + 1, cur === pages);
-            mk("»", pages, cur === pages);
-            if (scroll) grid.scrollIntoView({ behavior: "smooth", block: "start" });
+    apply(grid) {
+      if (!grid) return;
+      // өмнөх pager / resize listener-ийг цэвэрлэх (динамик дахин ачаалалд)
+      if (grid._pagerNav) { grid._pagerNav.remove(); grid._pagerNav = null; }
+      if (grid._pagerResize) { window.removeEventListener("resize", grid._pagerResize); grid._pagerResize = null; }
+      const sizeLg = parseInt(grid.dataset.pageSize || "6", 10);
+      const sizeSm = parseInt(grid.dataset.pageSizeSm || "0", 10) || sizeLg;
+      const items = Array.prototype.filter.call(grid.children, (c) => c.nodeType === 1);
+      const sizeNow = () => (window.innerWidth <= 640 ? sizeSm : sizeLg);
+      let cur = 1;
+      const build = () => {
+        const size = sizeNow();
+        if (items.length <= size) { // нэг хуудас — pager хэрэггүй
+          if (grid._pagerNav) { grid._pagerNav.remove(); grid._pagerNav = null; }
+          items.forEach((el) => { el.style.display = ""; });
+          return;
+        }
+        const pages = Math.ceil(items.length / size);
+        if (cur > pages) cur = pages;
+        if (!grid._pagerNav) { const nav = document.createElement("nav"); nav.className = "pager"; nav.setAttribute("aria-label", "Хуудаслалт"); grid.after(nav); grid._pagerNav = nav; }
+        const pager = grid._pagerNav;
+        const draw = (scroll) => {
+          items.forEach((el, i) => { el.style.display = (i >= (cur - 1) * size && i < cur * size) ? "" : "none"; });
+          pager.innerHTML = "";
+          const mk = (label, target, dis, active) => {
+            const b = document.createElement("button");
+            b.type = "button"; b.textContent = label;
+            if (active) b.classList.add("active");
+            if (dis) b.disabled = true;
+            else b.addEventListener("click", () => { cur = target; draw(true); });
+            pager.appendChild(b);
           };
-          draw(false);
+          mk("«", 1, cur === 1);
+          mk("‹", cur - 1, cur === 1);
+          for (let i = 1; i <= pages; i++) mk(String(i), i, false, i === cur);
+          mk("›", cur + 1, cur === pages);
+          mk("»", pages, cur === pages);
+          if (scroll) grid.scrollIntoView({ behavior: "smooth", block: "start" });
         };
-        build();
-        let t; window.addEventListener("resize", () => { clearTimeout(t); t = setTimeout(build, 200); });
-      });
+        draw(false);
+      };
+      build();
+      grid._pagerResize = () => { clearTimeout(grid._pagerT); grid._pagerT = setTimeout(build, 200); };
+      window.addEventListener("resize", grid._pagerResize);
+    },
+    init() {
+      document.querySelectorAll("[data-paginate]").forEach((grid) => Pager.apply(grid));
     },
   };
 
@@ -1266,6 +1273,49 @@
     },
   };
 
+  /* ---------- Тайлан (CMS) — admin-аас нэмсэн тайланг ачаална ---------- */
+  const ReportsCMS = {
+    esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
+    init() {
+      const monthGrid = document.querySelector('[data-reports="month"]');
+      const yearWrap = document.querySelector('[data-reports="year"]');
+      if (!monthGrid && !yearWrap) return;
+      const sb = window.getSB && window.getSB();
+      if (!sb) return;
+      sb.from("reports").select("*").eq("published", true)
+        .order("sort", { ascending: true }).order("created_at", { ascending: false })
+        .then(({ data, error }) => {
+          if (error || !data || !data.length) return; // хоосон/алдаа → жишээ хэвээр
+          const months = data.filter((r) => r.kind !== "year");
+          const years = data.filter((r) => r.kind === "year");
+          if (monthGrid && months.length) {
+            monthGrid.innerHTML = months.map((r) => ReportsCMS.card(r)).join("");
+            Pager.apply(monthGrid);
+          }
+          if (yearWrap && years.length) {
+            yearWrap.innerHTML = years.map((r) => ReportsCMS.card(r, true)).join("");
+          }
+        });
+    },
+    card(r, year) {
+      const esc = ReportsCMS.esc;
+      const pdf = esc(r.pdf_url || "#");
+      const cover = r.cover_url
+        ? `<img src="${esc(r.cover_url)}" alt="${esc(r.title)}" loading="lazy" onerror="this.remove()" /><span class="rc-hover"><span class="rc-hint">PDF үзэх</span></span>`
+        : `<span class="rc-cover-brand"><img class="rc-emblem" src="assets/img/logo.svg" alt="" /><span class="rc-policy">Өөр Бодлого Бүтээгч Монгол</span><span class="rc-month">${esc(r.title)}</span><span class="rc-hint">PDF үзэх</span></span>`;
+      const w = year ? ' style="width:100%;max-width:300px"' : '';
+      return `<article class="report-card reveal visible"${w}>
+        <a class="rc-cover" href="${pdf}" target="_blank" rel="noopener">${cover}</a>
+        <div class="rc-body">
+          <div class="rc-cat">${esc(r.category || "")}</div>
+          <h4>${esc(r.title)}</h4>
+          <div class="rc-meta">${esc(r.meta || "PDF")}</div>
+          <div class="rc-actions"><a class="btn btn-primary btn-sm" href="${pdf}" target="_blank" rel="noopener">Үзэх</a><a class="btn btn-ghost btn-sm" href="${pdf}" download>Татах</a></div>
+        </div>
+      </article>`;
+    },
+  };
+
   // Хөвөгч "Санал хүсэлт" товч — холбоо барих хуудаснаас бусад бүх хуудсанд
   function injectFeedbackFab() {
     if (location.pathname.includes("holboo")) return;
@@ -1280,6 +1330,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     Theme.init(); Nav.init(); Search.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
-    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init();
+    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); ReportsCMS.init();
   });
 })();

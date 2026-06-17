@@ -154,6 +154,10 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m10 9 5 3-5 3z"/></svg>
           Видео
         </button>
+        <button type="button" class="nav-link" data-view="report">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+          Тайлан
+        </button>
       </nav>
       <div class="as-foot">
         <a href="index.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg> Сайт руу очих</a>
@@ -296,6 +300,37 @@
           <div id="video-list"></div>
           <div id="video-empty" class="search-empty" style="display:none">Одоогоор видео алга. Дээрх формоор нэмнэ үү.</div>
         </section><!-- /video-view -->
+
+        <!-- ============ ТАЙЛАН УДИРДАХ ============ -->
+        <section id="report-view" class="view" style="display:none">
+          <div class="form-card" style="margin-bottom:26px">
+            <h3 id="report-form-title" style="margin-bottom:16px">Шинэ тайлан нэмэх</h3>
+            <form id="report-form">
+              <input type="hidden" id="r-id" />
+              <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                <div class="form-group"><label for="r-kind">Төрөл</label>
+                  <select id="r-kind"><option value="month">Сарын тайлан</option><option value="year">Жилийн тайлан</option></select>
+                </div>
+                <div class="form-group"><label for="r-sort">Эрэмбэ (бага нь түрүүнд)</label><input type="number" id="r-sort" value="0" /></div>
+              </div>
+              <div class="form-group"><label for="r-title">Гарчиг <span style="color:var(--color-danger)">*</span></label><input type="text" id="r-title" required placeholder="2026 оны 5-р сарын тайлан" /></div>
+              <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                <div class="form-group"><label for="r-category">Ангилал бичиг</label><input type="text" id="r-category" placeholder="Сарын тайлан · 5-р сар" /></div>
+                <div class="form-group"><label for="r-meta">Тэмдэглэл</label><input type="text" id="r-meta" placeholder="PDF · 7 хуудас" /></div>
+              </div>
+              <div class="form-group"><label for="r-pdf">PDF файл</label><input type="file" id="r-pdf" accept="application/pdf" /><div id="r-pdf-cur" class="form-note" style="margin-top:6px"></div></div>
+              <div class="form-group"><label for="r-cover">Нүүр зураг (заавал биш — байхгүй бол брэндийн нүүр гарна)</label><input type="file" id="r-cover" accept="image/*" /><div id="r-cover-cur" class="form-note" style="margin-top:6px"></div></div>
+              <div class="form-group"><label style="display:flex;gap:9px;align-items:center;cursor:pointer"><input type="checkbox" id="r-published" checked style="width:18px;height:18px;accent-color:var(--color-accent)" /> Нийтлэх (сайтад харагдана)</label></div>
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                <button type="submit" class="btn btn-gold btn-sm">Хадгалах</button>
+                <button type="button" id="report-cancel" class="btn btn-ghost btn-sm" style="display:none">Цуцлах</button>
+                <span id="report-msg" class="form-note"></span>
+              </div>
+            </form>
+          </div>
+          <div id="report-list"></div>
+          <div id="report-empty" class="search-empty" style="display:none">Одоогоор тайлан алга. Дээрх формоор нэмнэ үү.</div>
+        </section><!-- /report-view -->
       </div><!-- /admin-content -->
     </div><!-- /admin-main -->
   </div><!-- /dash-view -->
@@ -799,14 +834,116 @@
 
     $("#video-cancel").addEventListener("click", resetVideoForm);
 
+    // ===== ТАЙЛАН УДИРДАХ =====
+    const REPORT_KIND = { month: "Сарын тайлан", year: "Жилийн тайлан" };
+    let reportRows = [], reportLoaded = false;
+    const reportForm = $("#report-form"), reportList = $("#report-list"), reportEmpty = $("#report-empty"), reportMsg = $("#report-msg");
+
+    function resetReportForm() {
+      reportForm.reset(); $("#r-id").value = ""; $("#r-published").checked = true; $("#r-kind").value = "month"; $("#r-sort").value = 0;
+      $("#report-form-title").textContent = "Шинэ тайлан нэмэх"; $("#report-cancel").style.display = "none";
+      $("#r-pdf-cur").textContent = ""; $("#r-cover-cur").textContent = "";
+    }
+
+    async function loadReports() {
+      reportList.innerHTML = ""; reportEmpty.style.display = "none";
+      const { data, error } = await sb.from("reports").select("*").order("sort", { ascending: true }).order("created_at", { ascending: false });
+      if (error) { reportEmpty.textContent = "Ачаалахад алдаа: " + error.message + " (supabase-reports.sql ажилласан эсэхээ шалгана уу)"; reportEmpty.style.display = "block"; return; }
+      reportRows = data || []; renderReports();
+    }
+
+    function renderReports() {
+      reportList.innerHTML = "";
+      reportEmpty.style.display = reportRows.length ? "none" : "block";
+      reportRows.forEach((r) => {
+        const row = document.createElement("div");
+        row.className = "news-row";
+        row.innerHTML =
+          `${r.cover_url ? `<img src="${esc(r.cover_url)}" alt="" />` : ""}
+           <div class="nr-body">
+             <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:4px">
+               <span class="tag" style="position:static;background:var(--color-bg-soft);color:var(--color-accent);border:1px solid var(--color-border)">${esc(REPORT_KIND[r.kind] || r.kind)}</span>
+               ${r.published ? "" : `<span class="badge-status status-draft">Ноорог</span>`}
+               <span style="font-size:.8rem;color:var(--color-text-soft)">эрэмбэ: ${r.sort}</span>
+               ${r.pdf_url ? `<a href="${esc(r.pdf_url)}" target="_blank" rel="noopener" style="font-size:.8rem;color:var(--color-primary-light)">PDF</a>` : `<span style="font-size:.8rem;color:var(--color-danger)">PDF алга</span>`}
+             </div>
+             <div style="font-weight:600">${esc(r.title)}</div>
+             <div style="font-size:.84rem;color:var(--color-text-soft);margin-top:4px">${esc(r.category || "")}${r.meta ? " · " + esc(r.meta) : ""}</div>
+           </div>
+           <div class="nr-actions">
+             <button class="btn btn-ghost btn-sm rr-edit">Засах</button>
+             <button class="btn btn-ghost btn-sm rr-del" style="color:var(--color-danger)">Устгах</button>
+           </div>`;
+        row.querySelector(".rr-edit").addEventListener("click", () => editReport(r));
+        row.querySelector(".rr-del").addEventListener("click", () => deleteReport(r));
+        reportList.appendChild(row);
+      });
+    }
+
+    function editReport(r) {
+      $("#r-id").value = r.id; $("#r-kind").value = r.kind || "month"; $("#r-sort").value = r.sort != null ? r.sort : 0;
+      $("#r-title").value = r.title || ""; $("#r-category").value = r.category || ""; $("#r-meta").value = r.meta || "";
+      $("#r-published").checked = !!r.published;
+      $("#r-pdf-cur").textContent = r.pdf_url ? "Одоогийн PDF хадгалагдана. Шинээр сонгвол солигдоно." : "";
+      $("#r-cover-cur").textContent = r.cover_url ? "Одоогийн зураг хадгалагдана. Шинээр сонгвол солигдоно." : "";
+      $("#report-form-title").textContent = "Тайлан засах"; $("#report-cancel").style.display = "inline-flex";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    async function deleteReport(r) {
+      if (!confirm("«" + (r.title || "") + "» тайланг устгах уу?")) return;
+      const { error } = await sb.from("reports").delete().eq("id", r.id);
+      if (error) { alert("Алдаа: " + error.message); return; }
+      ["pdf_url", "cover_url"].forEach(async (k) => {
+        if (r[k] && r[k].includes("/reports/")) { const p = r[k].split("/reports/")[1]; if (p) { try { await sb.storage.from("reports").remove([p]); } catch (_) {} } }
+      });
+      reportRows = reportRows.filter((x) => x.id !== r.id); renderReports();
+    }
+
+    async function uploadReportFile(file) {
+      const ext = (file.name.split(".").pop() || "bin").toLowerCase().replace(/[^a-z0-9]/g, "");
+      const path = `${Date.now()}-${Math.round(Math.random() * 1e6)}.${ext}`;
+      const { error } = await sb.storage.from("reports").upload(path, file, { contentType: file.type });
+      if (error) throw error;
+      return sb.storage.from("reports").getPublicUrl(path).data.publicUrl;
+    }
+
+    reportForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      reportMsg.textContent = ""; reportMsg.style.color = "";
+      const btn = reportForm.querySelector('button[type="submit"]'); btn.disabled = true; btn.textContent = "Хадгалж байна…";
+      try {
+        const id = $("#r-id").value;
+        const rec = {
+          kind: $("#r-kind").value, title: $("#r-title").value.trim(),
+          category: $("#r-category").value.trim() || null, meta: $("#r-meta").value.trim() || null,
+          published: $("#r-published").checked, sort: parseInt($("#r-sort").value, 10) || 0,
+        };
+        const pdfFile = $("#r-pdf").files[0]; if (pdfFile) rec.pdf_url = await uploadReportFile(pdfFile);
+        const coverFile = $("#r-cover").files[0]; if (coverFile) rec.cover_url = await uploadReportFile(coverFile);
+        let error;
+        if (id) ({ error } = await sb.from("reports").update(rec).eq("id", id));
+        else ({ error } = await sb.from("reports").insert(rec));
+        if (error) throw error;
+        reportMsg.style.color = "var(--color-success)"; reportMsg.textContent = "✓ Хадгаллаа.";
+        resetReportForm(); await loadReports();
+        setTimeout(() => { reportMsg.textContent = ""; }, 4000);
+      } catch (err) {
+        reportMsg.style.color = "var(--color-danger)"; reportMsg.textContent = "Алдаа: " + (err.message || "хадгалж чадсангүй");
+      } finally { btn.disabled = false; btn.textContent = "Хадгалах"; }
+    });
+
+    $("#report-cancel").addEventListener("click", resetReportForm);
+
     // Цонх (view) солих — sidebar навигац
-    const PAGE_TITLE = { dashboard: "Хяналтын самбар", fb: "Санал хүсэлт", news: "Мэдээ", video: "Видео" };
+    const PAGE_TITLE = { dashboard: "Хяналтын самбар", fb: "Санал хүсэлт", news: "Мэдээ", video: "Видео", report: "Тайлан" };
     function showView(name) {
       document.querySelectorAll(".view").forEach((v) => { v.style.display = v.id === name + "-view" ? "block" : "none"; });
       document.querySelectorAll(".nav-link[data-view]").forEach((b) => b.classList.toggle("active", b.dataset.view === name));
       const t = $("#page-title"); if (t) t.textContent = PAGE_TITLE[name] || "";
       if (name === "news" && !newsLoaded) { newsLoaded = true; loadNews(); }
       if (name === "video" && !videoLoaded) { videoLoaded = true; loadVideos(); }
+      if (name === "report" && !reportLoaded) { reportLoaded = true; loadReports(); }
       if (name === "dashboard") renderRecent();
       const shell = document.querySelector(".admin-shell"); if (shell) shell.classList.remove("nav-open");
       window.scrollTo({ top: 0 });
