@@ -1423,6 +1423,7 @@
 
   /* ---------- Видео (CMS) — admin-аас нэмсэн видеог ачаална ---------- */
   const VideoCMS = {
+    esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
     init() {
       const listEl = document.querySelector("[data-video-list]");
       if (!listEl) return; // зөвхөн видео хуудсанд
@@ -1435,18 +1436,29 @@
           const featuredEl = document.querySelector("[data-video-featured]");
           const feat = data.find((v) => v.featured) || data[0];
           const rest = data.filter((v) => v !== feat);
-          if (featuredEl) featuredEl.innerHTML = VideoCMS.embed(feat);
-          listEl.innerHTML = (rest.length ? rest : data).map((v) => VideoCMS.embed(v, true)).join("");
+          if (featuredEl) featuredEl.innerHTML = VideoCMS.card(feat, true);
+          listEl.innerHTML = (rest.length ? rest : data).map((v) => VideoCMS.card(v)).join("");
         });
     },
     ytId(url) { const m = String(url).match(/(?:v=|youtu\.be\/|\/embed\/|\/shorts\/)([\w-]{11})/); return m ? m[1] : ""; },
-    embed(v, reveal) {
-      const cls = "reel-embed" + (reveal ? " reveal visible" : "");
-      const title = (v.title || "Видео").replace(/"/g, "&quot;");
-      let src;
-      if (v.platform === "youtube") src = "https://www.youtube.com/embed/" + VideoCMS.ytId(v.url);
-      else src = "https://www.facebook.com/plugins/video.php?href=" + encodeURIComponent(v.url) + "&show_text=false&width=320";
-      return `<div class="${cls}"><iframe src="${src}" title="${title}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>`;
+    aspect(v) { // reels → босоо (9/16), бусад нь хэвтээ (16/9) — жинхэнэ хэмжээ
+      if (v.platform === "youtube") return "wide";
+      return /\/reel/i.test(v.url || "") ? "portrait" : "wide";
+    },
+    src(v) {
+      if (v.platform === "youtube") return "https://www.youtube.com/embed/" + VideoCMS.ytId(v.url);
+      return "https://www.facebook.com/plugins/video.php?href=" + encodeURIComponent(v.url) + "&show_text=false";
+    },
+    card(v, featured) {
+      const esc = VideoCMS.esc;
+      const asp = VideoCMS.aspect(v);
+      const title = v.title ? `<h3>${esc(v.title)}</h3>` : "";
+      const exc = v.excerpt ? `<p>${esc(v.excerpt)}</p>` : "";
+      const body = (title || exc) ? `<div class="vc-body">${title}${exc}</div>` : "";
+      return `<article class="video-card${featured ? " video-featured" : ""} reveal visible">
+        <div class="video-embed video-${asp}"><iframe src="${VideoCMS.src(v)}" title="${esc(v.title || "Видео")}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>
+        ${body}
+      </article>`;
     },
   };
 

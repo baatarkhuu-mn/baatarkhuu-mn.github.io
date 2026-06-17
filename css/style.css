@@ -1285,6 +1285,20 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .news-dots button { width: 8px; height: 8px; border-radius: 50%; border: none; background: var(--color-border); cursor: pointer; padding: 0; transition: all var(--transition); }
 .news-dots button.active { background: var(--color-accent); width: 22px; border-radius: 5px; }
 
+/* Видео — жинхэнэ хэмжээгээр (карт + товч агуулга) */
+.video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; align-items: start; }
+.video-card { background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: var(--radius); overflow: hidden; transition: border-color var(--transition), box-shadow var(--transition); }
+.video-card:hover { border-color: var(--color-primary-dark); box-shadow: var(--shadow); }
+.video-embed { position: relative; width: 100%; background: #000; }
+.video-embed.video-wide { aspect-ratio: 16 / 9; }
+.video-embed.video-portrait { aspect-ratio: 9 / 16; }
+.video-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.vc-body { padding: 16px 18px; }
+.vc-body h3 { font-size: 1.02rem; line-height: 1.35; margin: 0 0 6px; }
+.vc-body p { font-size: .88rem; color: var(--color-text-soft); margin: 0; line-height: 1.5; }
+.video-featured { max-width: 100%; }
+.video-featured .video-embed.video-portrait { max-width: 340px; margin: 0 auto; }
+
 /* Хөдөлгөөн багасгах хүсэлт */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }

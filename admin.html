@@ -57,6 +57,7 @@
     .lightbox button { position:absolute; top:20px; right:24px; background:var(--color-bg-card); color:var(--color-text);
       border:1px solid var(--color-border); border-radius:50%; width:44px; height:44px; cursor:pointer; font-size:1.1rem; }
     .cms-bar { margin-bottom:18px; }
+    .nr-date { font-size:.78rem; color:var(--color-text-soft); margin-left:auto; }
     .reg-table { width:100%; border-collapse:collapse; font-size:.86rem; }
     .reg-table th { text-align:left; color:var(--color-text-soft); font-weight:600; font-size:.78rem; padding:6px 8px; border-bottom:1px solid var(--color-border); }
     .reg-table td { padding:7px 8px; border-bottom:1px solid var(--color-border); }
@@ -311,6 +312,7 @@
                 <div class="form-group"><label for="v-sort">Эрэмбэ (бага нь түрүүнд)</label><input type="number" id="v-sort" value="0" /></div>
               </div>
               <div class="form-group"><label for="v-title">Гарчиг (заавал биш)</label><input type="text" id="v-title" placeholder="Видеоны товч нэр" /></div>
+              <div class="form-group"><label for="v-excerpt">Товч агуулга (заавал биш)</label><textarea id="v-excerpt" rows="2" placeholder="Видеоны тухай товч тайлбар…"></textarea></div>
               <div class="form-group"><label style="display:flex;gap:9px;align-items:center;cursor:pointer"><input type="checkbox" id="v-featured" style="width:18px;height:18px;accent-color:var(--color-accent)" /> «Онцлох» болгох (хамгийн дээр томоор)</label></div>
               <div class="form-group"><label style="display:flex;gap:9px;align-items:center;cursor:pointer"><input type="checkbox" id="v-published" checked style="width:18px;height:18px;accent-color:var(--color-accent)" /> Нийтлэх (сайтад харагдана)</label></div>
               <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
@@ -506,6 +508,7 @@
 
     function esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
     function fmtDate(s) { const d = new Date(s); return d.toLocaleString("mn-MN", { year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" }); }
+    function pubDate(s) { if (!s) return ""; try { return "Нийтэлсэн: " + new Date(s).toLocaleDateString("mn-MN", { year:"numeric", month:"2-digit", day:"2-digit" }); } catch (_) { return ""; } }
 
     async function signedUrl(path) {
       const { data } = await sb.storage.from("feedback-photos").createSignedUrl(path, 3600);
@@ -935,6 +938,7 @@
                ${v.featured ? `<span class="rate-pill">Онцлох</span>` : ""}
                ${v.published ? "" : `<span class="badge-status status-draft">Ноорог</span>`}
                <span style="font-size:.8rem;color:var(--color-text-soft)">эрэмбэ: ${v.sort}</span>
+               <span class="nr-date">${pubDate(v.created_at)}</span>
              </div>
              <div style="font-weight:600">${esc(v.title || "(гарчиггүй)")}</div>
              <div style="font-size:.82rem;color:var(--color-text-soft);margin-top:4px;word-break:break-all">${esc(v.url)}</div>
@@ -952,6 +956,7 @@
     function editVideo(v) {
       $("#v-id").value = v.id; $("#v-url").value = v.url || ""; $("#v-platform").value = v.platform || "facebook";
       $("#v-sort").value = v.sort != null ? v.sort : 0; $("#v-title").value = v.title || "";
+      $("#v-excerpt").value = v.excerpt || "";
       $("#v-featured").checked = !!v.featured; $("#v-published").checked = !!v.published;
       $("#video-form-title").textContent = "Видео засах"; $("#video-cancel").style.display = "inline-flex";
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -972,7 +977,8 @@
         const id = $("#v-id").value;
         const rec = {
           url: $("#v-url").value.trim(), platform: $("#v-platform").value,
-          title: $("#v-title").value.trim() || null, featured: $("#v-featured").checked,
+          title: $("#v-title").value.trim() || null, excerpt: $("#v-excerpt").value.trim() || null,
+          featured: $("#v-featured").checked,
           published: $("#v-published").checked, sort: parseInt($("#v-sort").value, 10) || 0,
         };
         let error;
@@ -1021,6 +1027,7 @@
                ${r.published ? "" : `<span class="badge-status status-draft">Ноорог</span>`}
                <span style="font-size:.8rem;color:var(--color-text-soft)">эрэмбэ: ${r.sort}</span>
                ${r.pdf_url ? `<a href="${esc(r.pdf_url)}" target="_blank" rel="noopener" style="font-size:.8rem;color:var(--color-primary-light)">PDF</a>` : `<span style="font-size:.8rem;color:var(--color-danger)">PDF алга</span>`}
+               <span class="nr-date">${pubDate(r.created_at)}</span>
              </div>
              <div style="font-weight:600">${esc(r.title)}</div>
              <div style="font-size:.84rem;color:var(--color-text-soft);margin-top:4px">${esc(r.category || "")}${r.meta ? " · " + esc(r.meta) : ""}</div>
@@ -1121,6 +1128,7 @@
                <span class="badge-status ${p.status === "done" ? "status-passed" : p.status === "planned" ? "status-draft" : "status-review"}">${esc(PROJ_STATUS[p.status] || p.status)}</span>
                ${p.published ? "" : `<span class="badge-status status-draft">Ноорог</span>`}
                <span style="font-size:.8rem;color:var(--color-text-soft)">эрэмбэ: ${p.sort}</span>
+               <span class="nr-date">${pubDate(p.created_at)}</span>
              </div>
              <div style="font-weight:600">${esc(p.title)}</div>
              <div style="font-size:.84rem;color:var(--color-text-soft);margin-top:4px">${esc(p.date_label || "")}</div>
