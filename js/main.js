@@ -524,7 +524,7 @@
     },
     dict: {
       /* ---- Чиглүүлэх / footer / нийтлэг ---- */
-      "Нүүр": "Home", "Намтар": "Biography", "Хууль, санаачилга": "Laws & Initiatives",
+      "Нүүр": "Home", "Намтар": "Biography", "Хууль": "Laws",
       "Төслүүд": "Projects", "Мэдээ": "News", "Видео": "Video", "Тайлан": "Reports",
       "Холбоо барих": "Contact", "УИХ-ын гишүүн": "Member of Parliament",
       "Цэс": "Menu", "Холбоос": "Links", "Сошиал": "Social", "Видео сан": "Video library",

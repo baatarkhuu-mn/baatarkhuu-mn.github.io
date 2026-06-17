@@ -963,7 +963,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .ef-desc { font-size: .9rem; color: var(--color-text-soft); margin-bottom: 16px; line-height: 1.55; }
 .hs-head { margin-bottom: 22px; }
 .hs-head .eyebrow { display: block; margin-bottom: 6px; }
-.hs-head h2 { font-size: clamp(1.4rem, 2.6vw, 1.9rem); }
+.hs-head h2 { font-size: clamp(1.55rem, 3vw, 2.2rem); }
 /* Баруун: мэдээ — зурагтай, мэдээний сайт маяг */
 .news-list-home { display: flex; flex-direction: column; }
 .news-item { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--color-border); align-items: flex-start; }
@@ -1049,8 +1049,9 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 }
 
 /* ---------- Санал авах: заавар | форм (2 багана) ---------- */
-.fb-split { display: grid; grid-template-columns: 1.05fr 1fr; gap: 40px; align-items: stretch; }
-.fb-guide { display: flex; flex-direction: column; justify-content: center; }
+.fb-split { display: grid; grid-template-columns: 1.05fr 1fr; gap: 40px; align-items: start; }
+.fb-guide { display: flex; flex-direction: column; }
+#feedback .fb-guide { position: sticky; top: 90px; align-self: start; }
 .fb-guide h3 { font-size: 1.25rem; margin-bottom: 18px; }
 .guide-steps { counter-reset: step; list-style: none; display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
 .guide-steps li { position: relative; padding-left: 44px; color: var(--color-text-soft); line-height: 1.5; }
