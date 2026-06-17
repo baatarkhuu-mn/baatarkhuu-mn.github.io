@@ -848,6 +848,7 @@
       const sb = window.getSB && window.getSB();
       if (!sb) { wrap.innerHTML = '<p class="feed-state">Самбар одоогоор боломжгүй байна.</p>'; return; }
       this._wrap = wrap; this._sb = sb;
+      this.setupCarousel();
       try {
         const { data: rows, error } = await sb
           .from("public_feedback").select("*").order("created_at", { ascending: false }).limit(100);
@@ -873,9 +874,45 @@
       }
     },
 
+    setupCarousel() {
+      const wrap = this._wrap;
+      if (wrap._carWrapped) return;
+      wrap._carWrapped = true;
+      const car = document.createElement("div"); car.className = "feed-carousel";
+      wrap.parentNode.insertBefore(car, wrap);
+      const prev = document.createElement("button"); prev.type = "button"; prev.className = "car-arrow car-prev"; prev.setAttribute("aria-label", "Өмнөх"); prev.textContent = "‹";
+      const next = document.createElement("button"); next.type = "button"; next.className = "car-arrow car-next"; next.setAttribute("aria-label", "Дараах"); next.textContent = "›";
+      car.appendChild(prev); car.appendChild(wrap); car.appendChild(next);
+      const dots = document.createElement("nav"); dots.className = "pager feed-dots"; dots.setAttribute("aria-label", "Хуудаслалт"); car.after(dots);
+      this._car = { car, prev, next, dots };
+      const pageW = () => wrap.clientWidth || 1;
+      prev.addEventListener("click", () => wrap.scrollBy({ left: -pageW(), behavior: "smooth" }));
+      next.addEventListener("click", () => wrap.scrollBy({ left: pageW(), behavior: "smooth" }));
+      let st; wrap.addEventListener("scroll", () => { clearTimeout(st); st = setTimeout(() => this.updateDots(), 110); });
+      let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => this.updateDots(), 200); });
+    },
+    updateDots() {
+      if (!this._car) return;
+      const wrap = this._wrap, dots = this._car.dots;
+      const pageW = wrap.clientWidth || 1;
+      if (pageW < 50) { dots.style.display = "none"; return; } // өргөн хараахан бэлэн биш (layout)
+      const pages = Math.max(1, Math.ceil((wrap.scrollWidth - 4) / pageW));
+      const cur = Math.round(wrap.scrollLeft / pageW);
+      dots.style.display = pages <= 1 ? "none" : "";
+      if (dots.children.length !== pages) {
+        dots.innerHTML = "";
+        for (let i = 0; i < pages; i++) { const b = document.createElement("button"); b.type = "button"; b.textContent = String(i + 1); b.addEventListener("click", () => wrap.scrollTo({ left: i * pageW, behavior: "smooth" })); dots.appendChild(b); }
+      }
+      Array.prototype.forEach.call(dots.children, (d, i) => d.classList.toggle("active", i === cur));
+      this._car.prev.disabled = cur <= 0;
+      this._car.next.disabled = cur >= pages - 1;
+      this._car.car.classList.toggle("one-page", pages <= 1);
+    },
+
     buildFilter() {
+      const anchor = (this._car && this._car.car) ? this._car.car : this._wrap;
       let bar = document.querySelector("[data-feed-filter]");
-      if (!bar) { bar = document.createElement("div"); bar.setAttribute("data-feed-filter", ""); this._wrap.parentNode.insertBefore(bar, this._wrap); }
+      if (!bar) { bar = document.createElement("div"); bar.setAttribute("data-feed-filter", ""); anchor.parentNode.insertBefore(bar, anchor); }
       bar.className = "feed-filter";
       const counts = {}; this._rows.forEach((r) => { counts[r.subject] = (counts[r.subject] || 0) + 1; });
       const subjects = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
@@ -898,8 +935,10 @@
       if (this._q) list = list.filter((r) => (r.message || "").toLowerCase().includes(this._q));
       if (this._sort === "support") list.sort((a, b) => (this._likeMap[b.id] || 0) - (this._likeMap[a.id] || 0));
       this._wrap.innerHTML = "";
-      if (!list.length) { this._wrap.innerHTML = '<p class="feed-state">Илэрц алга.</p>'; return; }
+      if (!list.length) { this._wrap.innerHTML = '<p class="feed-state">Илэрц алга.</p>'; this.updateDots(); return; }
       list.forEach((r) => this._wrap.appendChild(this.card(this._sb, r, this._likeMap[r.id] || 0, this._cmtMap[r.id] || [], this._liked)));
+      this._wrap.scrollLeft = 0;
+      this.updateDots();
     },
 
     card(sb, r, likeCount, comments, liked) {
@@ -932,7 +971,7 @@
            </button>
            <button class="fc-comment-toggle" type="button">Коммент <span class="ccnt">(${comments.length})</span></button>
          </div>
-         <div class="fc-comments open">
+         <div class="fc-comments">
            <div class="fc-comment-box"></div>
            <form class="fc-comment-form">
              <textarea placeholder="Зочин болж сэтгэгдэл бичих…" maxlength="1000" required></textarea>
@@ -1531,9 +1570,9 @@
         .then(async ({ data, error }) => {
           if (error || !data || !data.length) return; // хоосон → жишээ хэвээр
           const today = new Date(); today.setHours(0, 0, 0, 0);
-          let list = data.filter((e) => !e.event_date || new Date(e.event_date) >= today);
-          if (!list.length) return; // ирээдүйн арга хэмжээ алга → жишээ хэвээр
-          list = list.slice(0, 3);
+          const upcoming = data.filter((e) => !e.event_date || new Date(e.event_date) >= today);
+          // Ирээдүйн арга хэмжээ байвал тэдгээрийг (ойрынх нь түрүүнд); үгүй бол хамгийн сүүлийнхийг
+          const list = (upcoming.length ? upcoming : data.slice().reverse()).slice(0, 3);
           const counts = {};
           try { const { data: rc } = await sb.rpc("event_reg_counts"); (rc || []).forEach((r) => { counts[r.event_id] = r.cnt; }); } catch (_) {}
           box.innerHTML = "";

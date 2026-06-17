@@ -837,8 +837,16 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .consent-check input { width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; accent-color: var(--color-accent); cursor: pointer; }
 .consent-check u { text-decoration-color: var(--color-accent); }
 
-.feed-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 22px; align-items: start; }
-.feed-state { text-align: center; color: var(--color-text-soft); padding: 30px 0; }
+/* Иргэдийн санал — хэвтээ карусель (нүүрний reels шиг) */
+.feed-carousel { position: relative; }
+.feed-list { display: flex; gap: 18px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth;
+  align-items: flex-start; padding: 4px 2px; scrollbar-width: none; }
+.feed-list::-webkit-scrollbar { display: none; }
+.feed-list .feed-card { flex: 0 0 360px; width: 360px; max-width: 86vw; scroll-snap-align: start; }
+.feed-carousel.one-page .car-arrow { display: none; }
+.feed-dots { margin-top: 20px; }
+.feed-state { text-align: center; color: var(--color-text-soft); padding: 30px 0; width: 100%; }
+@media (max-width: 560px) { .feed-list .feed-card { flex-basis: 86vw; width: 86vw; } }
 
 .feed-card {
   background: var(--color-bg-card); border: 1px solid var(--color-border);
@@ -964,7 +972,13 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 }
 
 /* ---------- Нүүр: мэдээ + арга хэмжээ (2 багана) ---------- */
-.home-split { display: grid; grid-template-columns: 1fr 1.4fr; gap: 44px; align-items: start; }
+.home-split { display: grid; grid-template-columns: 1fr 1.4fr; gap: 44px; align-items: stretch; }
+.hs-events, .hs-news { display: flex; flex-direction: column; }
+.hs-events [data-events] { flex: 1; }
+.hs-events [data-events] .event-feature { height: 100%; display: flex; flex-direction: column; }
+.hs-events [data-events] .ef-body { flex: 1; display: flex; flex-direction: column; }
+.hs-events [data-events] .ef-desc { flex: 1; }
+.hs-news [data-news-home] { flex: 1; }
 /* Онцлох арга хэмжээ — зурагтай том карт */
 .event-feature { background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: var(--radius); overflow: hidden; transition: border-color var(--transition), box-shadow var(--transition); }
 .event-feature:hover { border-color: var(--color-primary-dark); box-shadow: var(--shadow); }
