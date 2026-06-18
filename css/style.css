@@ -1424,12 +1424,33 @@ a.news-card-clean { text-decoration: none; color: inherit; display: flex; flex-d
 .vc-body p { font-size: .8rem; color: var(--color-text-soft); margin: 0; line-height: 1.5;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-/* Нүүрний видео — онцлох том + хажууд жижигнүүд (grid) */
-.video-home { display: grid; grid-template-columns: 1.5fr 1fr; gap: 22px; align-items: start; }
-.video-home .vh-rest { column-count: 2; column-gap: 16px; }
-.video-home .vh-rest .video-card { margin-bottom: 16px; }
-@media (max-width: 860px) { .video-home { grid-template-columns: 1fr; } }
-@media (max-width: 560px) { .video-home .vh-rest { column-count: 1; } }
+/* Нүүрний видео карусель (coverflow) */
+.vhero-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; margin-bottom: 30px; }
+.vhero-head h2 { font-size: clamp(1.55rem, 3vw, 2.2rem); margin-top: 4px; }
+.vhero-head p { color: var(--color-text-soft); margin-top: 6px; }
+.vhero-all { white-space: nowrap; }
+.vhero-stage { position: relative; display: flex; justify-content: center; }
+.vhs { border-radius: var(--radius-lg); overflow: hidden; background: #000; box-shadow: var(--shadow-lg); }
+.vhs-main { position: relative; z-index: 3; width: min(330px, 82vw); aspect-ratio: 9 / 16; }
+.vhs-main iframe { width: 100%; height: 100%; border: 0; display: block; }
+.vhs.peek { position: absolute; top: 50%; width: 290px; aspect-ratio: 9 / 16; opacity: .3; filter: blur(2px);
+  z-index: 1; background: linear-gradient(160deg, #15294e, #0b1830); pointer-events: none; }
+[data-theme="light"] .vhs.peek { background: linear-gradient(160deg, #d6e3f7, #eef3fb); }
+.vhs.peek-left { left: 50%; transform: translate(calc(-50% - 235px), -50%) scale(.85); }
+.vhs.peek-right { left: 50%; transform: translate(calc(-50% + 235px), -50%) scale(.85); }
+.vhero-ctrl { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 24px; }
+.vhero-arrow { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--color-border);
+  background: var(--color-bg-card); color: var(--color-text); font-size: 1.5rem; line-height: 1; cursor: pointer;
+  display: grid; place-items: center; transition: var(--transition); }
+.vhero-arrow:hover { border-color: var(--color-accent); color: var(--color-accent); transform: translateY(-1px); }
+.vh-count { font-size: .9rem; color: var(--color-text-soft); min-width: 58px; text-align: center; }
+.vhero-cap { text-align: center; margin-top: 16px; }
+.vhero-cap h4 { font-size: 1.06rem; line-height: 1.45; max-width: 640px; margin: 0 auto 5px; }
+.vhero-cap .vh-date { font-size: .82rem; color: var(--color-text-soft); }
+@media (max-width: 760px) {
+  .vhs.peek { display: none; }
+  .vhero-head { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
 
 /* Мэдээний grid карт — текстийг хураангуй (бүтэн биш) */
 [data-news-feed] .card-body { display: block; }  /* flex-item болгож blockify хийхгүйн тулд */

@@ -1533,6 +1533,53 @@
     },
   };
 
+  /* ---------- Нүүрний видео карусель (coverflow) ---------- */
+  const VideoHero = {
+    esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
+    fmtDate(s) { try { return new Date(s).toLocaleDateString("mn-MN", { year: "numeric", month: "2-digit", day: "2-digit" }).replace(/\//g, "-"); } catch (_) { return ""; } },
+    async init() {
+      const wrap = document.querySelector("[data-vhero]");
+      if (!wrap) return;
+      const sb = window.getSB && window.getSB();
+      if (!sb) return;
+      try {
+        const { data, error } = await sb.from("videos").select("*").eq("published", true)
+          .order("sort", { ascending: true }).order("created_at", { ascending: false }).limit(15);
+        if (error || !data || !data.length) { wrap.innerHTML = '<p class="feed-state">Видео одоогоор алга.</p>'; return; }
+        this._vids = data; this._i = 0; this._wrap = wrap;
+        wrap.innerHTML =
+          `<div class="vhero-stage">
+             <div class="vhs peek peek-left" aria-hidden="true"></div>
+             <div class="vhs vhs-main" data-vhs-main></div>
+             <div class="vhs peek peek-right" aria-hidden="true"></div>
+           </div>
+           <div class="vhero-ctrl">
+             <button type="button" class="vhero-arrow vh-prev" aria-label="Өмнөх">‹</button>
+             <span class="vh-count"></span>
+             <button type="button" class="vhero-arrow vh-next" aria-label="Дараах">›</button>
+           </div>
+           <div class="vhero-cap"><h4 class="vh-title"></h4><span class="vh-date"></span></div>`;
+        wrap.querySelector(".vh-prev").addEventListener("click", () => this.go(-1));
+        wrap.querySelector(".vh-next").addEventListener("click", () => this.go(1));
+        this.render();
+      } catch (_) { wrap.innerHTML = '<p class="feed-state">Видео ачаалахад алдаа гарлаа.</p>'; }
+    },
+    go(d) { const n = this._vids.length; this._i = (this._i + d + n) % n; this.render(); },
+    src(v) {
+      if (v.platform === "youtube") return "https://www.youtube.com/embed/" + VideoCMS.ytId(v.url) + "?rel=0";
+      return "https://www.facebook.com/plugins/video.php?href=" + encodeURIComponent(v.url) + "&show_text=false&width=400";
+    },
+    render() {
+      const v = this._vids[this._i], esc = VideoHero.esc, w = this._wrap;
+      const main = w.querySelector("[data-vhs-main]");
+      main.style.aspectRatio = v.orientation === "landscape" ? "16 / 9" : (v.orientation === "square" ? "1 / 1" : "9 / 16");
+      main.innerHTML = `<iframe src="${this.src(v)}" title="${esc(v.title || "Видео")}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen scrolling="no" loading="lazy"></iframe>`;
+      w.querySelector(".vh-count").textContent = (this._i + 1) + " / " + this._vids.length;
+      w.querySelector(".vh-title").textContent = v.title || "";
+      w.querySelector(".vh-date").textContent = v.created_at ? this.fmtDate(v.created_at) : "";
+    },
+  };
+
   /* ---------- Тайлан (CMS) — admin-аас нэмсэн тайланг ачаална ---------- */
   const ReportsCMS = {
     esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
@@ -2031,6 +2078,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     Theme.init(); Nav.init(); Search.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
-    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); NewsPost.init(); EventPost.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); ReportsCMS.init(); ReportPost.init(); ProjectsCMS.init(); ProjectPost.init(); LawsCMS.init(); FeedbackStats.init(); EventsCMS.init(); Settings.init();
+    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); NewsPost.init(); EventPost.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); VideoHero.init(); ReportsCMS.init(); ReportPost.init(); ProjectsCMS.init(); ProjectPost.init(); LawsCMS.init(); FeedbackStats.init(); EventsCMS.init(); Settings.init();
   });
 })();
