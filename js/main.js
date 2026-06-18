@@ -1098,11 +1098,10 @@
           const { data, error } = await sb.from("news").select("*").eq("published", true).order("date", { ascending: false, nullsFirst: false }).order("created_at", { ascending: false }).limit(60);
           if (!error && data && data.length) {
             if (grid) { grid.innerHTML = data.map((n) => this.card(n)).join(""); this.wireGrid(grid, data); }
-            if (home) { const hs = data.slice(0, 8); home.innerHTML = hs.map((n) => this.homeItem(n)).join(""); this.wireGrid(home, hs); }
+            if (home) { const hs = data.slice(0, 4); home.innerHTML = hs.map((n) => this.homeItem(n)).join(""); this.wireGrid(home, hs); }
           }
         } catch (_) { /* алдаа гарвал статик хэвээр үлдээнэ */ }
       }
-      if (home) this.rotateHome(home);
     },
 
     // Нүүрний мэдээг автоматаар сольж харуулах (нэг нэгээр, fade)
@@ -1132,10 +1131,9 @@
       const img = n.image
         ? `<img src="${this.esc(n.image)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='assets/img/logo.svg';this.className='ni-ph'">`
         : `<div class="ni-cover"><img src="assets/img/logo.svg" alt="" /></div>`;
-      const excerpt = n.excerpt ? `<p class="ni-excerpt">${this.esc(n.excerpt)}</p>` : "";
       const cal = '<svg class="ni-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>';
       const dateLine = meta ? `<div class="ni-date">${cal}${meta}</div>` : "";
-      const inner = `<div class="ni-img">${img}</div><div class="ni-text"><h3 class="ni-title">${this.esc(n.title)}</h3>${excerpt}${dateLine}</div>`;
+      const inner = `<div class="ni-img">${img}</div><div class="ni-text"><h3 class="ni-title">${this.esc(n.title)}</h3>${dateLine}</div>`;
       return `<div class="news-item">${inner}</div>`;
     },
     card(n) {
@@ -1625,69 +1623,71 @@
           const today = new Date(); today.setHours(0, 0, 0, 0);
           const upcoming = data.filter((e) => !e.event_date || new Date(e.event_date) >= today);
           // Ирээдүйн арга хэмжээ байвал тэдгээрийг (ойрынх нь түрүүнд); үгүй бол хамгийн сүүлийнхийг
-          const list = (upcoming.length ? upcoming : data.slice().reverse()).slice(0, 3);
+          const list = (upcoming.length ? upcoming : data.slice().reverse()).slice(0, 4);
           const counts = {};
           try { const { data: rc } = await sb.rpc("event_reg_counts"); (rc || []).forEach((r) => { counts[r.event_id] = r.cnt; }); } catch (_) {}
+          box.className = "events-list";
           box.innerHTML = "";
-          list.forEach((ev) => box.appendChild(EventsCMS.card(sb, ev, counts[ev.id] || 0)));
+          list.forEach((ev) => box.appendChild(EventsCMS.row(sb, ev, counts[ev.id] || 0)));
         });
     },
-    card(sb, ev, regCount) {
+    // Авсаархан цаглавар мөр — огнооны тэмдэг + гарчиг; дарахад дэлгэрэнгүй+бүртгэл нээгдэнэ
+    row(sb, ev, regCount) {
       const esc = EventsCMS.esc;
       const el = document.createElement("article");
-      el.className = "event-feature reveal visible";
-      let day = "", mon = "";
+      el.className = "event-card reveal visible";
+      let day = "•", mon = "";
       if (ev.event_date) { const d = new Date(ev.event_date); day = d.getDate(); mon = (d.getMonth() + 1) + "-р сар"; }
       const meta = [ev.location, ev.time_label].filter(Boolean).map(esc).join(" · ");
       el.innerHTML =
-        `<div class="ef-img${ev.image_url ? "" : " ef-noimg"}">
-           ${ev.image_url ? `<img src="${esc(ev.image_url)}" alt="${esc(ev.title)}" onerror="this.style.display='none';this.parentNode.classList.add('ef-noimg')" />` : ""}
-           <span class="ef-tag">${esc(ev.badge || "Зарлал")}</span>
-           ${day ? `<span class="ef-date"><b>${day}</b>${mon}</span>` : ""}
+        `<div class="ev-date"><span class="d">${day}</span>${mon ? `<span class="m">${esc(mon)}</span>` : ""}</div>
+         <div class="ev-body">
+           <h4>${esc(ev.title)}</h4>
+           ${meta ? `<p class="ev-meta">${meta}</p>` : ""}
+           ${regCount ? `<p class="ev-count">${regCount} иргэн бүртгүүлсэн</p>` : ""}
          </div>
-         <div class="ef-body">
-           <h3>${esc(ev.title)}</h3>
-           ${meta ? `<p class="ef-meta">${meta}</p>` : ""}
-           ${ev.description ? `<p class="ef-desc">${esc(ev.description)}</p>` : ""}
-           ${regCount ? `<p class="ef-count">${regCount} иргэн бүртгүүлсэн</p>` : ""}
-           <div class="ef-reg"></div>
-         </div>`;
-      const regBox = el.querySelector(".ef-reg");
-      if (ev.register_url) {
-        regBox.innerHTML = `<a href="${esc(ev.register_url)}" target="_blank" rel="noopener" class="btn btn-gold">Бүртгүүлэх</a>`;
-      } else if (ev.register_enabled) {
-        regBox.innerHTML =
-          `<button type="button" class="btn btn-gold ev-reg-open">Бүртгүүлэх</button>
-           <form class="ev-reg-form" hidden>
-             <input type="text" name="name" placeholder="Таны нэр" required />
-             <input type="tel" name="phone" placeholder="Утасны дугаар" required />
-             <button type="submit" class="btn btn-gold btn-sm">Бүртгүүлэх</button>
-             <p class="ev-reg-msg" role="status"></p>
-           </form>`;
-        const openBtn = regBox.querySelector(".ev-reg-open");
-        const form = regBox.querySelector(".ev-reg-form");
-        const msg = regBox.querySelector(".ev-reg-msg");
-        openBtn.addEventListener("click", () => { form.hidden = false; openBtn.style.display = "none"; form.querySelector("input").focus(); });
-        form.addEventListener("submit", async (e) => {
-          e.preventDefault();
-          const name = form.querySelector('[name="name"]').value.trim();
-          const phone = form.querySelector('[name="phone"]').value.trim();
-          if (!name || !phone) return;
-          const btn = form.querySelector('button[type="submit"]'); btn.disabled = true;
-          try {
-            const { error } = await sb.from("event_registrations").insert({ event_id: ev.id, name, phone });
-            if (error) throw error;
-            form.innerHTML = '<p class="ev-reg-ok">✓ Бүртгэл амжилттай хүлээн авлаа. Баярлалаа!</p>';
-          } catch (err) { msg.textContent = "Алдаа: " + (err.message || "дахин оролдоно уу"); msg.style.color = "var(--color-danger)"; btn.disabled = false; }
-        });
-      }
-      Article.wire(el, () => EventsCMS.payload(ev));
+         <span class="ev-go" aria-hidden="true">→</span>`;
+      Article.wire(el, () => EventsCMS.payload(sb, ev));
       return el;
     },
-    payload(ev) {
+    // Бүртгэлийн UI — дэлгэрэнгүй цонхны дотор шинээр үүсгэнэ
+    buildReg(sb, ev) {
+      const esc = EventsCMS.esc;
+      const wrap = document.createElement("div");
+      wrap.className = "ef-reg";
+      if (ev.register_url) {
+        wrap.innerHTML = `<a href="${esc(ev.register_url)}" target="_blank" rel="noopener" class="btn btn-gold">Бүртгүүлэх</a>`;
+        return wrap;
+      }
+      if (!ev.register_enabled) return wrap;
+      wrap.innerHTML =
+        `<button type="button" class="btn btn-gold ev-reg-open">Бүртгүүлэх</button>
+         <form class="ev-reg-form" hidden>
+           <input type="text" name="name" placeholder="Таны нэр" required />
+           <input type="tel" name="phone" placeholder="Утасны дугаар" required />
+           <button type="submit" class="btn btn-gold btn-sm">Бүртгүүлэх</button>
+           <p class="ev-reg-msg" role="status"></p>
+         </form>`;
+      const openBtn = wrap.querySelector(".ev-reg-open");
+      const form = wrap.querySelector(".ev-reg-form");
+      const msg = wrap.querySelector(".ev-reg-msg");
+      openBtn.addEventListener("click", () => { form.hidden = false; openBtn.style.display = "none"; form.querySelector("input").focus(); });
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const name = form.querySelector('[name="name"]').value.trim();
+        const phone = form.querySelector('[name="phone"]').value.trim();
+        if (!name || !phone) return;
+        const btn = form.querySelector('button[type="submit"]'); btn.disabled = true;
+        try {
+          const { error } = await sb.from("event_registrations").insert({ event_id: ev.id, name, phone });
+          if (error) throw error;
+          form.innerHTML = '<p class="ev-reg-ok">✓ Бүртгэл амжилттай хүлээн авлаа. Баярлалаа!</p>';
+        } catch (err) { msg.textContent = "Алдаа: " + (err.message || "дахин оролдоно уу"); msg.style.color = "var(--color-danger)"; btn.disabled = false; }
+      });
+      return wrap;
+    },
+    payload(sb, ev) {
       const date = ev.event_date ? Article.fmtDate(ev.event_date) : "";
-      const src = [];
-      if (ev.register_url) src.push({ href: ev.register_url, label: "Бүртгүүлэх →" });
       return {
         cover: ev.image_url || "",
         tags: [ev.badge || "Зарлал"],
@@ -1695,7 +1695,7 @@
         meta: [date, ev.location, ev.time_label],
         lead: ev.body ? ev.description : "",
         body: ev.body || ev.description,
-        sources: src,
+        extra: EventsCMS.buildReg(sb, ev),
       };
     },
   };
