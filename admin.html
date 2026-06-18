@@ -8,7 +8,7 @@
   <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");</script>
   <title>Админ — Санал хүсэлт | Ц.Баатархүү</title>
   <link rel="icon" type="image/svg+xml" href="assets/img/logo.svg" />
-  <link rel="stylesheet" href="css/style.css?v=20260619f" />
+  <link rel="stylesheet" href="css/style.css?v=20260619g" />
   <style>
     .admin-top { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
       padding:16px 0; border-bottom:1px solid var(--color-border); margin-bottom:24px; }
@@ -20,6 +20,15 @@
       padding:18px; text-align:center; }
     .mini-stat .n { font-size:1.8rem; font-weight:800; color:var(--color-primary-light); line-height:1; }
     .mini-stat .l { font-size:.8rem; color:var(--color-text-soft); margin-top:6px; }
+    .sec-head { font-size:.85rem; color:var(--color-text-soft); font-weight:600; margin:0 0 12px; }
+    .sec-stats { display:grid; grid-template-columns:repeat(6,1fr); gap:12px; margin-bottom:26px; }
+    .sec-stat { background:var(--color-bg-card); border:1px solid var(--color-border); border-radius:var(--radius);
+      padding:16px 10px; text-align:center; cursor:pointer; font-family:inherit; transition:border-color .2s, box-shadow .2s; }
+    .sec-stat:hover { border-color:var(--color-primary-dark); box-shadow:var(--shadow-sm); }
+    .sec-stat .n { font-size:1.5rem; font-weight:800; color:var(--color-accent); line-height:1; }
+    .sec-stat .l { font-size:.78rem; color:var(--color-text-soft); margin-top:6px; }
+    @media (max-width:880px){ .sec-stats{ grid-template-columns:repeat(3,1fr); } }
+    @media (max-width:560px){ .sec-stats{ grid-template-columns:repeat(2,1fr); } }
     .toolbar { display:flex; flex-direction:column; gap:12px; margin-bottom:24px; }
     .toolbar-main { display:flex; gap:10px; align-items:center; }
     .toolbar-main .field { flex:1; margin:0; }
@@ -203,6 +212,8 @@
             <div class="mini-stat"><div class="n" id="st-rating">—</div><div class="l">Дундаж үнэлгээ</div></div>
             <div class="mini-stat"><div class="n" id="st-photos">—</div><div class="l">Зурагтай санал</div></div>
           </div>
+          <div class="sec-head">Сайтын агуулга (чиглэл бүрд оруулсан тоо)</div>
+          <div class="sec-stats" id="sec-stats"></div>
           <div class="dash-grid">
             <div class="panel">
               <div class="panel-head"><h3>Сүүлийн санал хүсэлт</h3><button type="button" data-goto="fb">Бүгдийг харах →</button></div>
@@ -223,6 +234,32 @@
         <!-- САНАЛ ХҮСЭЛТ -->
         <section id="fb-view" class="view" style="display:none">
 
+      <div class="cms-bar"><button type="button" class="btn btn-gold btn-sm" id="fb-new-btn">+ Шинэ асуудал нэмэх</button></div>
+      <div class="form-card cms-form" id="fb-new-card" hidden style="margin-bottom:22px">
+        <h3 style="margin-bottom:14px">Шинэ асуудал бүртгэх (админ)</h3>
+        <form id="fb-new-form">
+          <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div class="form-group"><label for="nf-name">Иргэний нэр</label><input type="text" id="nf-name" placeholder="Нэр (заавал биш)" /></div>
+            <div class="form-group"><label for="nf-phone">Утас</label><input type="text" id="nf-phone" placeholder="Утас (заавал биш)" /></div>
+          </div>
+          <div class="form-group"><label for="nf-subject">Төрөл</label>
+            <select id="nf-subject">
+              <option value="gerel">Гэрэлтүүлэг</option><option value="zam">Зам, нүх, эвдрэл</option><option value="yavgan">Явган хүний зам</option>
+              <option value="hog">Хог, орчны бохирдол</option><option value="buudal">Автобусны буудал</option><option value="surguuli">Сургууль, цэцэрлэг</option>
+              <option value="emnelg">Эмнэлэг, өрхийн эмнэлэг</option><option value="soh">СӨХ, байрны орчин</option><option value="hurteemj">Ахмад, ХБИ хүртээмж</option>
+              <option value="huuli">Хууль, бодлогын санал</option><option value="urgudul">Хувийн өргөдөл, тусламж</option><option value="busad">Бусад</option>
+            </select>
+          </div>
+          <div class="form-group"><label for="nf-message">Асуудал / агуулга <span style="color:var(--color-danger)">*</span></label><textarea id="nf-message" rows="4" required placeholder="Асуудлыг дэлгэрэнгүй бичнэ үү…"></textarea></div>
+          <div class="form-group"><label style="display:flex;gap:9px;align-items:center;cursor:pointer"><input type="checkbox" id="nf-public" style="width:18px;height:18px;accent-color:var(--color-accent)" /> Нийтэд ил болгох (сайтын самбарт харагдана)</label></div>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <button type="submit" class="btn btn-gold btn-sm">Бүртгэх</button>
+            <button type="button" id="fb-new-cancel" class="btn btn-ghost btn-sm">Цуцлах</button>
+            <span id="fb-new-msg" class="form-note"></span>
+          </div>
+        </form>
+      </div>
+
       <div class="toolbar">
         <div class="toolbar-main">
           <div class="field"><input type="text" id="f-q" placeholder="Нэр, агуулгаар хайх…" /></div>
@@ -230,6 +267,7 @@
           <button id="export-btn" class="btn btn-gold btn-sm">Excel татах</button>
         </div>
         <div class="toolbar-filters">
+          <select id="f-sort"><option value="new">Шинэ эхэндээ</option><option value="ticket">Дугаараар</option></select>
           <select id="f-status"><option value="all">Бүх төлөв</option><option value="new">Шинэ</option><option value="in_progress">Шийдвэрлэж буй</option><option value="done">Шийдвэрлэсэн</option></select>
           <select id="f-subject">
             <option value="all">Бүх төрөл</option>
@@ -488,6 +526,10 @@
                 <div class="form-group"><label for="s-facebook">Facebook холбоос</label><input type="url" id="s-facebook" placeholder="https://www.facebook.com/..." /></div>
                 <div class="form-group"><label for="s-x">X (Twitter) холбоос</label><input type="url" id="s-x" placeholder="https://x.com/..." /></div>
               </div>
+              <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                <div class="form-group"><label for="s-youtube">YouTube холбоос (заавал биш)</label><input type="url" id="s-youtube" placeholder="https://youtube.com/@..." /></div>
+                <div class="form-group"><label for="s-instagram">Instagram холбоос (заавал биш)</label><input type="url" id="s-instagram" placeholder="https://instagram.com/..." /></div>
+              </div>
               <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
                 <button type="submit" class="btn btn-gold btn-sm">Хадгалах</button>
                 <span id="settings-msg" class="form-note"></span>
@@ -560,15 +602,18 @@
       });
     }
 
+    function ticketOf(r) { return r.ticket_seq != null ? "AT-" + new Date(r.created_at).getFullYear() + "-" + String(r.ticket_seq).padStart(6, "0") : ""; }
     function applyFilters() {
       const q = $("#f-q").value.trim().toLowerCase();
       const st = $("#f-status").value, su = $("#f-subject").value;
+      const sort = ($("#f-sort") && $("#f-sort").value) || "new";
       const rows = allRows.filter((r) => {
         if (st !== "all" && r.status !== st) return false;
         if (su !== "all" && r.subject !== su) return false;
-        if (q && !((r.name || "") + (r.message || "")).toLowerCase().includes(q)) return false;
+        if (q && !((r.name || "") + (r.message || "") + " " + ticketOf(r).toLowerCase() + " " + (r.ticket_seq || "")).toLowerCase().includes(q)) return false;
         return true;
       });
+      if (sort === "ticket") rows.sort((a, b) => (a.ticket_seq || 0) - (b.ticket_seq || 0));
       currentRows = rows;
       render(rows);
     }
@@ -775,8 +820,21 @@
 
     function showDash() {
       loginView.style.display = "none"; dashView.style.display = "flex";
-      showView("dashboard"); loadFeedback();
+      showView("dashboard"); loadFeedback(); loadSectionCounts();
       sb.auth.getUser().then(({ data }) => { const e = $("#admin-email"); if (e && data.user) e.textContent = data.user.email; });
+    }
+
+    async function loadSectionCounts() {
+      const box = $("#sec-stats"); if (!box) return;
+      const defs = [["news", "Мэдээ", "news"], ["videos", "Видео", "video"], ["reports", "Тайлан", "report"], ["projects", "Төсөл", "project"], ["laws", "Хууль", "law"], ["events", "Арга хэмжээ", "event"]];
+      box.innerHTML = defs.map(([t, l, v]) => `<button type="button" class="sec-stat" data-goto="${v}"><div class="n" data-c="${t}">…</div><div class="l">${l}</div></button>`).join("");
+      box.querySelectorAll("[data-goto]").forEach((b) => b.addEventListener("click", () => showView(b.dataset.goto)));
+      for (const [t] of defs) {
+        try {
+          const { count } = await sb.from(t).select("*", { count: "exact", head: true });
+          const el = box.querySelector(`[data-c="${t}"]`); if (el) el.textContent = count != null ? count : 0;
+        } catch (_) { const el = box.querySelector(`[data-c="${t}"]`); if (el) el.textContent = "0"; }
+      }
     }
     function showLogin() { loginView.style.display = "grid"; dashView.style.display = "none"; }
 
@@ -797,8 +855,33 @@
     logoutBtn.addEventListener("click", async () => { await sb.auth.signOut(); showLogin(); });
     $("#refresh-btn").addEventListener("click", loadFeedback);
     $("#export-btn").addEventListener("click", exportXLSX);
-    ["#f-q", "#f-status", "#f-subject"].forEach((s) => {
+    ["#f-q", "#f-status", "#f-subject", "#f-sort"].forEach((s) => {
       $(s).addEventListener(s === "#f-q" ? "input" : "change", applyFilters);
+    });
+
+    // ===== Шинэ асуудал бүртгэх (админ) =====
+    $("#fb-new-btn").addEventListener("click", () => { const c = $("#fb-new-card"); c.hidden = !c.hidden; if (!c.hidden) c.scrollIntoView({ behavior: "smooth", block: "start" }); });
+    $("#fb-new-cancel").addEventListener("click", () => { $("#fb-new-card").hidden = true; });
+    $("#fb-new-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const msg = $("#fb-new-msg"); msg.style.color = ""; msg.textContent = "Бүртгэж байна…";
+      const btn = e.target.querySelector('button[type="submit"]'); btn.disabled = true;
+      try {
+        const { data, error } = await sb.rpc("submit_feedback", {
+          p_name: $("#nf-name").value.trim(),
+          p_phone: $("#nf-phone").value.trim() || null,
+          p_subject: $("#nf-subject").value,
+          p_message: $("#nf-message").value.trim(),
+          p_lat: null, p_lng: null, p_rating: null, p_photos: [],
+          p_is_public: $("#nf-public").checked,
+        });
+        if (error) throw error;
+        msg.style.color = "#46c882"; msg.textContent = "✓ Бүртгэлээ" + (data ? " (#AT-" + new Date().getFullYear() + "-" + String(data).padStart(6, "0") + ")" : "");
+        e.target.reset();
+        setTimeout(() => { $("#fb-new-card").hidden = true; msg.textContent = ""; }, 2500);
+        loadFeedback();
+      } catch (err) { msg.style.color = "var(--color-danger)"; msg.textContent = "Алдаа: " + (err.message || err); }
+      finally { btn.disabled = false; }
     });
 
     // ===== МЭДЭЭ УДИРДАХ =====
@@ -1443,7 +1526,7 @@
 
     // ===== ТОХИРГОО =====
     let settingsLoaded = false;
-    const SETTING_FIELDS = { phone: "s-phone", email: "s-email", address: "s-address", facebook: "s-facebook", x: "s-x" };
+    const SETTING_FIELDS = { phone: "s-phone", email: "s-email", address: "s-address", facebook: "s-facebook", x: "s-x", youtube: "s-youtube", instagram: "s-instagram" };
     const settingsForm = $("#settings-form"), settingsMsg = $("#settings-msg");
 
     async function loadSettings() {

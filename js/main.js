@@ -1810,7 +1810,7 @@
         const mode = el.dataset.settingType || "text";
         if (mode === "tel") { el.setAttribute("href", "tel:" + val.replace(/\s+/g, "")); if (el.dataset.settingText !== "no") el.textContent = val; }
         else if (mode === "mailto") { el.setAttribute("href", "mailto:" + val); if (el.dataset.settingText !== "no") el.textContent = val; }
-        else if (mode === "href") { el.setAttribute("href", val); }
+        else if (mode === "href") { el.setAttribute("href", val); if (el.hasAttribute("data-optional")) el.style.display = ""; }
         else { el.textContent = val; }
       });
     },
