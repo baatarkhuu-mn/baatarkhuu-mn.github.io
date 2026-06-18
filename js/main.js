@@ -1440,7 +1440,10 @@
             if (lim) arr = arr.slice(0, lim);
             listEl.innerHTML = arr.map((v) => VideoCMS.card(v)).join("");
             VideoCMS.parseFB();
-            if (!lim) Pager.apply(listEl); // видео хуудас — 10-аар хуудаслана
+            if (!lim) { // видео хуудас — 10-аар хуудаслана
+              Pager.apply(listEl);
+              if (listEl._pagerNav) listEl._pagerNav.addEventListener("click", () => setTimeout(() => VideoCMS.parseFB(), 200));
+            }
           }
           if (reelsEl) { // Нүүрний карусель — reel плагин (тогтсон хэмжээ, гүйдэг)
             reelsEl.innerHTML = data.map((v) => VideoCMS.reelEmbed(v)).join("");
@@ -1465,11 +1468,10 @@
       if (v.platform === "youtube") {
         media = `<div class="video-embed video-wide"><iframe src="https://www.youtube.com/embed/${VideoCMS.ytId(v.url)}" title="${esc(v.title || "Видео")}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>`;
       } else {
-        // Facebook reel/видео — iframe (XFBML fb-video нь reel-ийг дэмждэггүй тул хоосон гардаг)
-        // Чиглэлээр харьцааг тааруулна — хар хоосон зайгүй. Үндсэн нь босоо (reel).
+        // Facebook — fb-video SDK видеог АВТОМАТААР жинхэнэ хэмжээгээр нь дүрсэлнэ (хар зайгүй).
+        // SDK гаргаж чадахгүй бол parseFB доторх нөөц iframe рүү шилжинэ (data-ar = нөөц харьцаа).
         const ar = v.orientation === "landscape" ? "16 / 9" : (v.orientation === "square" ? "1 / 1" : "9 / 16");
-        const fbSrc = "https://www.facebook.com/plugins/video.php?href=" + encodeURIComponent(v.url) + "&show_text=false&width=640";
-        media = `<div class="reel-embed" style="aspect-ratio:${ar}"><iframe src="${fbSrc}" title="${esc(v.title || "Видео")}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen scrolling="no" loading="lazy"></iframe></div>`;
+        media = `<div class="fb-wrap" data-href="${esc(v.url)}" data-ar="${ar}"><div class="fb-video" data-href="${esc(v.url)}" data-show-text="false" data-width="auto"></div></div>`;
       }
       return `<article class="video-card${featured ? " video-featured" : ""} reveal visible">${media}${body}</article>`;
     },
