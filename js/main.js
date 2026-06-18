@@ -1466,8 +1466,10 @@
         media = `<div class="video-embed video-wide"><iframe src="https://www.youtube.com/embed/${VideoCMS.ytId(v.url)}" title="${esc(v.title || "Видео")}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>`;
       } else {
         // Facebook reel/видео — iframe (XFBML fb-video нь reel-ийг дэмждэггүй тул хоосон гардаг)
-        const fbSrc = "https://www.facebook.com/plugins/video.php?href=" + encodeURIComponent(v.url) + "&show_text=false&width=360";
-        media = `<div class="reel-embed"><iframe src="${fbSrc}" title="${esc(v.title || "Видео")}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen scrolling="no" loading="lazy"></iframe></div>`;
+        // Чиглэлээр харьцааг тааруулна — хар хоосон зайгүй. Үндсэн нь босоо (reel).
+        const ar = v.orientation === "landscape" ? "16 / 9" : (v.orientation === "square" ? "1 / 1" : "9 / 16");
+        const fbSrc = "https://www.facebook.com/plugins/video.php?href=" + encodeURIComponent(v.url) + "&show_text=false&width=640";
+        media = `<div class="reel-embed" style="aspect-ratio:${ar}"><iframe src="${fbSrc}" title="${esc(v.title || "Видео")}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen scrolling="no" loading="lazy"></iframe></div>`;
       }
       return `<article class="video-card${featured ? " video-featured" : ""} reveal visible">${media}${body}</article>`;
     },

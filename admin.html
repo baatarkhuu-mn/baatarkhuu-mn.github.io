@@ -8,7 +8,7 @@
   <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");</script>
   <title>Админ — Санал хүсэлт | Ц.Баатархүү</title>
   <link rel="icon" type="image/svg+xml" href="assets/img/logo.svg" />
-  <link rel="stylesheet" href="css/style.css?v=20260618n" />
+  <link rel="stylesheet" href="css/style.css?v=20260618o" />
   <style>
     .admin-top { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
       padding:16px 0; border-bottom:1px solid var(--color-border); margin-bottom:24px; }
@@ -306,11 +306,14 @@
             <form id="video-form">
               <input type="hidden" id="v-id" />
               <div class="form-group"><label for="v-url">Видеоны холбоос <span style="color:var(--color-danger)">*</span></label><input type="url" id="v-url" required placeholder="https://www.facebook.com/reel/… эсвэл https://youtu.be/…" /></div>
-              <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+              <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
                 <div class="form-group"><label for="v-platform">Платформ</label>
                   <select id="v-platform"><option value="facebook">Facebook Reel</option><option value="youtube">YouTube</option></select>
                 </div>
-                <div class="form-group"><label for="v-sort">Эрэмбэ (бага нь түрүүнд)</label><input type="number" id="v-sort" value="0" /></div>
+                <div class="form-group"><label for="v-orientation">Видеоны хэлбэр</label>
+                  <select id="v-orientation"><option value="vertical">Босоо (Reel)</option><option value="landscape">Хөндлөн</option><option value="square">Квадрат</option></select>
+                </div>
+                <div class="form-group"><label for="v-sort">Эрэмбэ</label><input type="number" id="v-sort" value="0" /></div>
               </div>
               <div class="form-group"><label for="v-title">Гарчиг (заавал биш)</label><input type="text" id="v-title" placeholder="Видеоны товч нэр" /></div>
               <div class="form-group"><label for="v-excerpt">Товч агуулга (заавал биш)</label><textarea id="v-excerpt" rows="2" placeholder="Видеоны тухай товч тайлбар…"></textarea></div>
@@ -919,7 +922,7 @@
 
     function resetVideoForm() {
       videoForm.reset(); $("#v-id").value = ""; $("#v-published").checked = true; $("#v-featured").checked = false;
-      $("#v-sort").value = 0; $("#v-platform").value = "facebook";
+      $("#v-sort").value = 0; $("#v-platform").value = "facebook"; $("#v-orientation").value = "vertical";
       $("#video-form-title").textContent = "Шинэ видео нэмэх"; $("#video-cancel").style.display = "none";
     }
 
@@ -961,7 +964,7 @@
     function editVideo(v) {
       $("#v-id").value = v.id; $("#v-url").value = v.url || ""; $("#v-platform").value = v.platform || "facebook";
       $("#v-sort").value = v.sort != null ? v.sort : 0; $("#v-title").value = v.title || "";
-      $("#v-excerpt").value = v.excerpt || "";
+      $("#v-excerpt").value = v.excerpt || ""; $("#v-orientation").value = v.orientation || "vertical";
       $("#v-featured").checked = !!v.featured; $("#v-published").checked = !!v.published;
       $("#video-form-title").textContent = "Видео засах"; $("#video-cancel").style.display = "inline-flex";
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -983,7 +986,7 @@
         const rec = {
           url: $("#v-url").value.trim(), platform: $("#v-platform").value,
           title: $("#v-title").value.trim() || null, excerpt: $("#v-excerpt").value.trim() || null,
-          featured: $("#v-featured").checked,
+          orientation: $("#v-orientation").value, featured: $("#v-featured").checked,
           published: $("#v-published").checked, sort: parseInt($("#v-sort").value, 10) || 0,
         };
         let error;
