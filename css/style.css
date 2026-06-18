@@ -933,8 +933,14 @@ a.news-card-clean { text-decoration: none; color: inherit; display: flex; flex-d
 
 /* Иргэдийн санал — хэвтээ карусель (нүүрний reels шиг) */
 .feed-state { text-align: center; color: var(--color-text-soft); padding: 30px 0; width: 100%; }
-.feed-list { display: flex; flex-direction: column; }
-.feed-more { display: flex; margin: 24px auto 0; }
+/* Иргэдийн санал — тогтсон өндөртэй, дотроо гүйдэг хэсэг */
+.feed-list { display: flex; flex-direction: column; max-height: 640px; overflow-y: auto;
+  padding-right: 12px; scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
+.feed-list::-webkit-scrollbar { width: 8px; }
+.feed-list::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 8px; }
+.feed-list::-webkit-scrollbar-thumb:hover { background: var(--color-primary-dark); }
+.feed-list::-webkit-scrollbar-track { background: transparent; }
+@media (max-width: 600px) { .feed-list { max-height: 78vh; padding-right: 6px; } }
 
 /* Иргэдийн нийтэлсэн санал — зураг зүүн, агуулга баруун (мэдээний жагсаалт маяг) */
 .feed-row { display: flex; gap: 20px; padding: 22px 0; border-bottom: 1px solid var(--color-border); align-items: flex-start; }

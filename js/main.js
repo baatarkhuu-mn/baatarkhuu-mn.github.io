@@ -899,24 +899,9 @@
       if (this._q) list = list.filter((r) => (r.message || "").toLowerCase().includes(this._q));
       if (this._sort === "support") list.sort((a, b) => (this._likeMap[b.id] || 0) - (this._likeMap[a.id] || 0));
       this._wrap.innerHTML = "";
-      if (!list.length) { this._wrap.innerHTML = '<p class="feed-state">Илэрц алга.</p>'; this._renderMore(0, 0); return; }
-      const show = Math.min(this._show || 6, list.length);
-      for (let i = 0; i < show; i++) {
-        const r = list[i];
-        this._wrap.appendChild(this.card(this._sb, r, this._likeMap[r.id] || 0, this._cmtMap[r.id] || [], this._liked));
-      }
-      this._renderMore(list.length, show);
-    },
-    _renderMore(total, shown) {
-      if (shown >= total) { if (this._moreBtn) { this._moreBtn.remove(); this._moreBtn = null; } return; }
-      if (!this._moreBtn) {
-        const btn = document.createElement("button");
-        btn.type = "button"; btn.className = "btn btn-ghost feed-more";
-        btn.addEventListener("click", () => { this._show = (this._show || 6) + 6; this.render(); });
-        this._wrap.after(btn);
-        this._moreBtn = btn;
-      }
-      this._moreBtn.textContent = `Цааш үзэх (+${Math.min(6, total - shown)})`;
+      if (!list.length) { this._wrap.innerHTML = '<p class="feed-state">Илэрц алга.</p>'; return; }
+      list.forEach((r) => this._wrap.appendChild(this.card(this._sb, r, this._likeMap[r.id] || 0, this._cmtMap[r.id] || [], this._liked)));
+      this._wrap.scrollTop = 0;
     },
 
     card(sb, r, likeCount, comments, liked) {
