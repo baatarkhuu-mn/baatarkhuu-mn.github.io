@@ -189,8 +189,8 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .hb-brand .emblem img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 2px 8px rgba(0,0,0,.45)); }
 .hb-name { font-size: clamp(1.05rem, 2.3vw, 1.7rem); font-weight: 800; color: #fff; letter-spacing: .04em; text-shadow: 0 2px 12px rgba(0,0,0,.55); }
 .hb-slogan { font-size: clamp(.95rem, 2vw, 1.5rem); font-weight: 800; color: var(--color-accent); letter-spacing: .12em; text-shadow: 0 2px 12px rgba(0,0,0,.55); white-space: nowrap; }
-.navbar-wrap { position: sticky; top: 0; z-index: 1000; background: color-mix(in srgb, var(--color-bg) 92%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--color-border); transition: box-shadow var(--transition); }
-[data-theme="light"] .navbar-wrap { background: color-mix(in srgb, #e9f1fd 88%, transparent); }
+.navbar-wrap { position: sticky; top: 0; z-index: 1000; background: var(--color-bg); border-bottom: 1px solid var(--color-border); transition: box-shadow var(--transition); }
+[data-theme="light"] .navbar-wrap { background: #eef3fb; }
 .navbar-wrap .navbar { justify-content: flex-start; gap: 22px; }
 @media (max-width: 640px) {
   .hb-inner { min-height: 92px; }
@@ -814,11 +814,11 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
   .contact-grid { grid-template-columns: 1fr; }
 
   .main-nav {
-    position: fixed; inset: var(--header-h) 0 auto 0; background: var(--color-bg);
+    position: absolute; top: 100%; left: 0; right: 0; background: var(--color-bg);
     border-bottom: 1px solid var(--color-border); box-shadow: var(--shadow);
-    transform: translateY(-130%); transition: transform .3s ease; max-height: calc(100vh - var(--header-h)); overflow-y: auto;
+    max-height: 0; overflow: hidden; transition: max-height .35s ease;
   }
-  .main-nav.open { transform: translateY(0); }
+  .main-nav.open { max-height: 80vh; overflow-y: auto; }
   .main-nav ul { flex-direction: column; padding: 14px; gap: 2px; }
   .main-nav a { padding: 13px 16px; }
   .main-nav a.active::after { margin: 4px 0 0; }
