@@ -1148,6 +1148,55 @@
     },
   };
 
+  /* ---------- Арга хэмжээний дэлгэрэнгүй хуудас (arga-delgerengui.html?id=…) ---------- */
+  const EventPost = {
+    esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
+    CAL: '<svg class="ni-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
+    async init() {
+      const wrap = document.querySelector("[data-event-post]");
+      if (!wrap) return;
+      const id = new URLSearchParams(location.search).get("id");
+      const sb = window.getSB && window.getSB();
+      if (!id || !sb) { wrap.innerHTML = EventPost.notFound(); return; }
+      try {
+        const { data, error } = await sb.from("events").select("*").eq("id", id).single();
+        if (error || !data) { wrap.innerHTML = EventPost.notFound(); return; }
+        document.title = data.title + " | Ц.Баатархүү";
+        const md = document.querySelector('meta[name="description"]');
+        if (md && data.description) md.setAttribute("content", data.description);
+        wrap.innerHTML = EventPost.render(data);
+        const regSlot = wrap.querySelector(".ep-reg");
+        if (regSlot) regSlot.appendChild(EventsCMS.buildReg(sb, data));
+        window.scrollTo(0, 0);
+      } catch (_) { wrap.innerHTML = EventPost.notFound(); }
+    },
+    notFound() {
+      return '<div class="np-state"><h2>Арга хэмжээ олдсонгүй</h2><p>Энэ арга хэмжээ устсан эсвэл хаяг буруу байж магадгүй.</p><a class="btn btn-primary" href="index.html">← Нүүр</a></div>';
+    },
+    render(ev) {
+      const esc = EventPost.esc;
+      let dateStr = "";
+      if (ev.event_date) { try { dateStr = new Date(ev.event_date).toLocaleDateString("mn-MN", { year: "numeric", month: "2-digit", day: "2-digit" }).replace(/\//g, "."); } catch (_) {} }
+      const metaItems = [dateStr, ev.location, ev.time_label].filter(Boolean).map(esc);
+      const meta = metaItems.length ? `<div class="np-datum">${EventPost.CAL}${metaItems.join(' <span style="opacity:.45">·</span> ')}</div>` : "";
+      const tag = ev.badge ? `<div class="am-tags" style="margin-bottom:12px"><span class="am-tag">${esc(ev.badge)}</span></div>` : "";
+      const cover = ev.image_url
+        ? `<figure class="np-cover"><img src="${esc(ev.image_url)}" alt="${esc(ev.title)}" onerror="this.closest('.np-cover').remove()"></figure>`
+        : "";
+      const lead = (ev.body && ev.description) ? `<p class="np-lead">${esc(ev.description)}</p>` : "";
+      const bodyText = ev.body || ev.description || "";
+      return `<nav class="breadcrumb" aria-label="Замчлал"><a href="index.html">Нүүр</a><span>/</span>Арга хэмжээ</nav>
+        ${tag}
+        ${meta}
+        <h1 class="np-title">${esc(ev.title)}</h1>
+        ${cover}
+        ${lead}
+        <div class="np-body article-body">${articleBodyHtml(bodyText, esc)}</div>
+        <div class="ep-reg np-sources"></div>
+        <a class="np-back" href="index.html">← Нүүр рүү буцах</a>`;
+    },
+  };
+
   /* ---------- 16. Хуудаслалт (pagination) ---------- */
   const Pager = {
     apply(grid) {
@@ -1649,20 +1698,22 @@
            ${regCount ? `<p class="ef-count">${regCount} иргэн бүртгүүлсэн</p>` : ""}
            <div class="ef-cta"></div>
          </div>`;
+      const url = "arga-delgerengui.html?id=" + encodeURIComponent(ev.id);
       const cta = el.querySelector(".ef-cta");
       if (ev.register_url) {
         const a = document.createElement("a");
         a.className = "btn btn-gold"; a.href = ev.register_url; a.target = "_blank"; a.rel = "noopener"; a.textContent = "Бүртгүүлэх";
         cta.appendChild(a);
       } else if (ev.register_enabled) {
-        const b = document.createElement("button");
-        b.type = "button"; b.className = "btn btn-gold"; b.textContent = "Бүртгүүлэх";
-        b.addEventListener("click", (e) => { e.stopPropagation(); Article.open(EventsCMS.payload(sb, ev)); });
-        cta.appendChild(b);
+        const a = document.createElement("a");
+        a.className = "btn btn-gold"; a.href = url; a.textContent = "Бүртгүүлэх";
+        cta.appendChild(a);
       }
-      const more = document.createElement("span"); more.className = "ef-more"; more.textContent = "Дэлгэрэнгүй →";
+      const more = document.createElement("a"); more.className = "ef-more"; more.href = url; more.textContent = "Дэлгэрэнгүй →";
       cta.appendChild(more);
-      Article.wire(el, () => EventsCMS.payload(sb, ev));
+      // Картыг дарахад дэлгэрэнгүй хуудас руу (товч/линкээс бусад)
+      el.classList.add("is-clickable");
+      el.addEventListener("click", (e) => { if (e.target.closest("a,button")) return; location.href = url; });
       return el;
     },
     // Бүртгэлийн UI — дэлгэрэнгүй цонхны дотор шинээр үүсгэнэ
@@ -1865,6 +1916,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     Theme.init(); Nav.init(); Search.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
-    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); NewsPost.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); ReportsCMS.init(); ProjectsCMS.init(); LawsCMS.init(); FeedbackStats.init(); EventsCMS.init(); Settings.init();
+    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); NewsPost.init(); EventPost.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); ReportsCMS.init(); ProjectsCMS.init(); LawsCMS.init(); FeedbackStats.init(); EventsCMS.init(); Settings.init();
   });
 })();
