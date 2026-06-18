@@ -1561,22 +1561,35 @@
            <div class="vhero-cap"><h4 class="vh-title"></h4><span class="vh-date"></span></div>`;
         wrap.querySelector(".vh-prev").addEventListener("click", () => this.go(-1));
         wrap.querySelector(".vh-next").addEventListener("click", () => this.go(1));
+        // Идэвхтэй player-ийн өндрийг хажуугийн картуудад тааруулна (жинхэнэ хэмжээ янз бүр)
+        const main = wrap.querySelector("[data-vhs-main]");
+        if (window.ResizeObserver) { this._ro = new ResizeObserver(() => this.syncPeeks()); this._ro.observe(main); }
         this.render();
       } catch (_) { wrap.innerHTML = '<p class="feed-state">Видео ачаалахад алдаа гарлаа.</p>'; }
     },
     go(d) { const n = this._vids.length; this._i = (this._i + d + n) % n; this.render(); },
-    src(v) {
-      if (v.platform === "youtube") return "https://www.youtube.com/embed/" + VideoCMS.ytId(v.url) + "?rel=0";
-      return "https://www.facebook.com/plugins/video.php?href=" + encodeURIComponent(v.url) + "&show_text=false&width=400";
+    syncPeeks() {
+      if (!this._wrap) return;
+      const main = this._wrap.querySelector("[data-vhs-main]");
+      const h = main ? main.getBoundingClientRect().height : 0;
+      if (h > 60) this._wrap.querySelectorAll(".vhs.peek").forEach((p) => { p.style.height = Math.round(h * 0.88) + "px"; });
     },
     render() {
       const v = this._vids[this._i], esc = VideoHero.esc, w = this._wrap;
       const main = w.querySelector("[data-vhs-main]");
-      main.style.aspectRatio = v.orientation === "landscape" ? "16 / 9" : (v.orientation === "square" ? "1 / 1" : "9 / 16");
-      main.innerHTML = `<iframe src="${this.src(v)}" title="${esc(v.title || "Видео")}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen scrolling="no" loading="lazy"></iframe>`;
+      if (v.platform === "youtube") {
+        main.classList.add("is-wide");
+        main.innerHTML = `<iframe src="https://www.youtube.com/embed/${VideoCMS.ytId(v.url)}?rel=0" title="${esc(v.title || "Видео")}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>`;
+      } else {
+        // fb-video SDK — видеог жинхэнэ хэмжээгээр нь дүрсэлнэ (хар зайгүй)
+        main.classList.remove("is-wide");
+        main.innerHTML = `<div class="fb-wrap"><div class="fb-video" data-href="${esc(v.url)}" data-show-text="false" data-width="auto"></div></div>`;
+        VideoCMS.parseFB();
+      }
       w.querySelector(".vh-count").textContent = (this._i + 1) + " / " + this._vids.length;
       w.querySelector(".vh-title").textContent = v.title || "";
       w.querySelector(".vh-date").textContent = v.created_at ? this.fmtDate(v.created_at) : "";
+      setTimeout(() => this.syncPeeks(), 400);
     },
   };
 
