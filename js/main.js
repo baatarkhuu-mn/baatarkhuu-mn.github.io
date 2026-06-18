@@ -848,7 +848,6 @@
       const sb = window.getSB && window.getSB();
       if (!sb) { wrap.innerHTML = '<p class="feed-state">Самбар одоогоор боломжгүй байна.</p>'; return; }
       this._wrap = wrap; this._sb = sb;
-      this.setupCarousel();
       try {
         const { data: rows, error } = await sb
           .from("public_feedback").select("*").order("created_at", { ascending: false }).limit(100);
@@ -866,7 +865,7 @@
           (cm || []).forEach((c) => { (cmtMap[c.feedback_id] = cmtMap[c.feedback_id] || []).push(c); });
         } catch (_) {}
         this._rows = rows; this._likeMap = likeMap; this._cmtMap = cmtMap; this._liked = this.likedSet();
-        this._active = "all"; this._q = ""; this._sort = "new";
+        this._active = "all"; this._q = ""; this._sort = "new"; this._show = 6;
         this.buildFilter();
         this.render();
       } catch (err) {
@@ -874,43 +873,8 @@
       }
     },
 
-    setupCarousel() {
-      const wrap = this._wrap;
-      if (wrap._carWrapped) return;
-      wrap._carWrapped = true;
-      const car = document.createElement("div"); car.className = "feed-carousel";
-      wrap.parentNode.insertBefore(car, wrap);
-      const prev = document.createElement("button"); prev.type = "button"; prev.className = "car-arrow car-prev"; prev.setAttribute("aria-label", "Өмнөх"); prev.textContent = "‹";
-      const next = document.createElement("button"); next.type = "button"; next.className = "car-arrow car-next"; next.setAttribute("aria-label", "Дараах"); next.textContent = "›";
-      car.appendChild(prev); car.appendChild(wrap); car.appendChild(next);
-      const dots = document.createElement("nav"); dots.className = "pager feed-dots"; dots.setAttribute("aria-label", "Хуудаслалт"); car.after(dots);
-      this._car = { car, prev, next, dots };
-      const pageW = () => wrap.clientWidth || 1;
-      prev.addEventListener("click", () => wrap.scrollBy({ left: -pageW(), behavior: "smooth" }));
-      next.addEventListener("click", () => wrap.scrollBy({ left: pageW(), behavior: "smooth" }));
-      let st; wrap.addEventListener("scroll", () => { clearTimeout(st); st = setTimeout(() => this.updateDots(), 110); });
-      let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => this.updateDots(), 200); });
-    },
-    updateDots() {
-      if (!this._car) return;
-      const wrap = this._wrap, dots = this._car.dots;
-      const pageW = wrap.clientWidth || 1;
-      if (pageW < 50) { dots.style.display = "none"; return; } // өргөн хараахан бэлэн биш (layout)
-      const pages = Math.max(1, Math.ceil((wrap.scrollWidth - 4) / pageW));
-      const cur = Math.round(wrap.scrollLeft / pageW);
-      dots.style.display = pages <= 1 ? "none" : "";
-      if (dots.children.length !== pages) {
-        dots.innerHTML = "";
-        for (let i = 0; i < pages; i++) { const b = document.createElement("button"); b.type = "button"; b.textContent = String(i + 1); b.addEventListener("click", () => wrap.scrollTo({ left: i * pageW, behavior: "smooth" })); dots.appendChild(b); }
-      }
-      Array.prototype.forEach.call(dots.children, (d, i) => d.classList.toggle("active", i === cur));
-      this._car.prev.disabled = cur <= 0;
-      this._car.next.disabled = cur >= pages - 1;
-      this._car.car.classList.toggle("one-page", pages <= 1);
-    },
-
     buildFilter() {
-      const anchor = (this._car && this._car.car) ? this._car.car : this._wrap;
+      const anchor = this._wrap;
       let bar = document.querySelector("[data-feed-filter]");
       if (!bar) { bar = document.createElement("div"); bar.setAttribute("data-feed-filter", ""); anchor.parentNode.insertBefore(bar, anchor); }
       bar.className = "feed-filter";
@@ -923,10 +887,10 @@
         `<div class="ff-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input type="text" placeholder="Асуудлаас хайх…" aria-label="Хайх" /></div>
          <div class="ff-pills">${pills}</div>
          <div class="ff-sort"><button type="button" class="ff-s${this._sort === "new" ? " active" : ""}" data-sort="new">Шинэ</button><button type="button" class="ff-s${this._sort === "support" ? " active" : ""}" data-sort="support">Хамгийн их дэмжсэн</button></div>`;
-      bar.querySelectorAll(".ff-pill").forEach((b) => b.addEventListener("click", () => { this._active = b.dataset.subj; this.buildFilter(); this.render(); }));
-      bar.querySelectorAll(".ff-s").forEach((b) => b.addEventListener("click", () => { this._sort = b.dataset.sort; this.buildFilter(); this.render(); }));
+      bar.querySelectorAll(".ff-pill").forEach((b) => b.addEventListener("click", () => { this._active = b.dataset.subj; this._show = 6; this.buildFilter(); this.render(); }));
+      bar.querySelectorAll(".ff-s").forEach((b) => b.addEventListener("click", () => { this._sort = b.dataset.sort; this._show = 6; this.buildFilter(); this.render(); }));
       const si = bar.querySelector(".ff-search input");
-      if (si) { si.value = this._q; si.addEventListener("input", () => { this._q = si.value.trim().toLowerCase(); this.render(); }); }
+      if (si) { si.value = this._q; si.addEventListener("input", () => { this._q = si.value.trim().toLowerCase(); this._show = 6; this.render(); }); }
     },
 
     render() {
@@ -935,62 +899,70 @@
       if (this._q) list = list.filter((r) => (r.message || "").toLowerCase().includes(this._q));
       if (this._sort === "support") list.sort((a, b) => (this._likeMap[b.id] || 0) - (this._likeMap[a.id] || 0));
       this._wrap.innerHTML = "";
-      if (!list.length) { this._wrap.innerHTML = '<p class="feed-state">Илэрц алга.</p>'; this.updateDots(); return; }
-      list.forEach((r) => this._wrap.appendChild(this.card(this._sb, r, this._likeMap[r.id] || 0, this._cmtMap[r.id] || [], this._liked)));
-      this._wrap.scrollLeft = 0;
-      this.updateDots();
+      if (!list.length) { this._wrap.innerHTML = '<p class="feed-state">Илэрц алга.</p>'; this._renderMore(0, 0); return; }
+      const show = Math.min(this._show || 6, list.length);
+      for (let i = 0; i < show; i++) {
+        const r = list[i];
+        this._wrap.appendChild(this.card(this._sb, r, this._likeMap[r.id] || 0, this._cmtMap[r.id] || [], this._liked));
+      }
+      this._renderMore(list.length, show);
+    },
+    _renderMore(total, shown) {
+      if (shown >= total) { if (this._moreBtn) { this._moreBtn.remove(); this._moreBtn = null; } return; }
+      if (!this._moreBtn) {
+        const btn = document.createElement("button");
+        btn.type = "button"; btn.className = "btn btn-ghost feed-more";
+        btn.addEventListener("click", () => { this._show = (this._show || 6) + 6; this.render(); });
+        this._wrap.after(btn);
+        this._moreBtn = btn;
+      }
+      this._moreBtn.textContent = `Цааш үзэх (+${Math.min(6, total - shown)})`;
     },
 
     card(sb, r, likeCount, comments, liked) {
       const el = document.createElement("article");
-      el.className = "feed-card reveal visible";
+      el.className = "feed-row reveal visible";
       const loc = [r.district ? r.district + " дүүрэг" : "", r.khoroo ? r.khoroo + "-р хороо" : ""].filter(Boolean).join(", ");
       const isLiked = liked.has(r.id);
-      const ticket = r.ticket_seq != null ? "AT-" + new Date(r.created_at).getFullYear() + "-" + String(r.ticket_seq).padStart(6, "0") : null;
       const statusBadge = r.status === "done"
         ? '<span class="fc-status fc-done">✓ Шийдвэрлэсэн</span>'
         : (r.status === "in_progress" ? '<span class="fc-status fc-prog">Шийдвэрлэж байна</span>' : "");
+      // Эхний зураг (нийтийн сангаас) — зүүн талын thumbnail
+      let photoUrl = "";
+      const photos = r.photos || [];
+      if (photos.length) { try { photoUrl = sb.storage.from("feedback-public").getPublicUrl(photos[0]).data.publicUrl; } catch (_) {} }
+      const thumb = photoUrl
+        ? `<a class="fr-thumb" href="${photoUrl}" target="_blank" rel="noopener" aria-label="Хавсаргасан зураг"><img src="${photoUrl}" alt="Иргэний хавсаргасан зураг" loading="lazy"></a>`
+        : `<div class="fr-thumb fr-thumb-ph"><img src="assets/img/logo.svg" alt=""></div>`;
       el.innerHTML =
-        `<div class="fc-top">
-           <span class="fc-subject">${this.esc(this.SUBJ[r.subject] || r.subject || "Санал")}</span>
-           ${statusBadge}
-           ${ticket ? `<span class="fc-no">#${ticket}</span>` : ""}
-         </div>
-         <div class="fc-meta">
-           <span>${this.fmt(r.created_at)}</span>
-           ${loc ? `<span>${this.esc(loc)}</span>` : ""}
-           ${r.rating != null ? `<span>Үнэлгээ ${r.rating}/10</span>` : ""}
-         </div>
-         <div class="fc-msg">${this.esc(r.message)}</div>
-         ${r.response ? `<div class="fc-response"><span class="fcr-label">Албаны хариу</span><p>${this.esc(r.response)}</p></div>` : ""}
-         <div class="fc-photos"></div>
-         <div class="fc-actions">
-           <button class="fc-like${isLiked ? " liked" : ""}" type="button" aria-pressed="${isLiked}" title="Танд бас ийм асуудал тулгарч байвал дэмжинэ үү">
-             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-             <span class="sup-label">${isLiked ? "Дэмжсэн" : "Надад бас ийм асуудал байна"}</span><span class="cnt">${likeCount}</span>
-           </button>
-           <button class="fc-comment-toggle" type="button">Коммент <span class="ccnt">(${comments.length})</span></button>
-         </div>
-         <div class="fc-comments">
-           <div class="fc-comment-box"></div>
-           <form class="fc-comment-form">
-             <textarea placeholder="Зочин болж сэтгэгдэл бичих…" maxlength="1000" required></textarea>
-             <button type="submit" class="btn btn-gold btn-sm">Илгээх</button>
-           </form>
+        thumb +
+        `<div class="fr-main">
+           <div class="fr-head">
+             <span class="fr-subject">${this.esc(this.SUBJ[r.subject] || r.subject || "Санал")}</span>
+             ${statusBadge}
+           </div>
+           <h3 class="fr-title">${this.esc(r.message)}</h3>
+           <div class="fr-meta">
+             <span>${this.fmt(r.created_at)}</span>
+             ${loc ? `<span>${this.esc(loc)}</span>` : ""}
+             ${r.rating != null ? `<span>Үнэлгээ ${r.rating}/10</span>` : ""}
+           </div>
+           ${r.response ? `<div class="fc-response"><span class="fcr-label">Албаны хариу</span><p>${this.esc(r.response)}</p></div>` : ""}
+           <div class="fc-actions">
+             <button class="fc-like${isLiked ? " liked" : ""}" type="button" aria-pressed="${isLiked}" title="Танд бас ийм асуудал тулгарч байвал дэмжинэ үү">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+               <span class="sup-label">${isLiked ? "Дэмжсэн" : "Надад бас ийм асуудал байна"}</span><span class="cnt">${likeCount}</span>
+             </button>
+             <button class="fc-comment-toggle" type="button">Коммент <span class="ccnt">(${comments.length})</span></button>
+           </div>
+           <div class="fc-comments">
+             <div class="fc-comment-box"></div>
+             <form class="fc-comment-form">
+               <textarea placeholder="Зочин болж сэтгэгдэл бичих…" maxlength="1000" required></textarea>
+               <button type="submit" class="btn btn-gold btn-sm">Илгээх</button>
+             </form>
+           </div>
          </div>`;
-
-      // Зургууд (нийтийн сангаас)
-      const pbox = el.querySelector(".fc-photos");
-      (r.photos || []).forEach((p) => {
-        let url = "";
-        try { url = sb.storage.from("feedback-public").getPublicUrl(p).data.publicUrl; } catch (_) {}
-        if (!url) return;
-        const a = document.createElement("a");
-        a.href = url; a.target = "_blank"; a.rel = "noopener";
-        a.innerHTML = `<img src="${url}" alt="Иргэний хавсаргасан зураг" loading="lazy">`;
-        pbox.appendChild(a);
-      });
-      if (!pbox.children.length) pbox.remove();
 
       // Лайк
       const likeBtn = el.querySelector(".fc-like");
