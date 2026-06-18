@@ -1440,6 +1440,7 @@
             if (lim) arr = arr.slice(0, lim);
             listEl.innerHTML = arr.map((v) => VideoCMS.card(v)).join("");
             VideoCMS.parseFB();
+            if (!lim) Pager.apply(listEl); // видео хуудас — 10-аар хуудаслана
           }
           if (reelsEl) { // Нүүрний карусель — reel плагин (тогтсон хэмжээ, гүйдэг)
             reelsEl.innerHTML = data.map((v) => VideoCMS.reelEmbed(v)).join("");
