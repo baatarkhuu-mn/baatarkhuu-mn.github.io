@@ -815,6 +815,13 @@ a.news-card-clean { text-decoration: none; color: inherit; display: flex; flex-d
 .article-body .a-fig { margin: 1.5em 0; }
 .article-body .a-fig img { width: 100%; border-radius: var(--radius); display: block; }
 .article-body .a-empty { color: var(--color-text-soft); font-style: italic; }
+.article-body strong { font-weight: 800; color: var(--color-text); }
+.article-body em { font-style: italic; }
+.article-body a { color: var(--color-primary-light); text-decoration: underline; }
+.article-body ul { margin: 0 0 1.05em; padding-left: 22px; }
+.article-body li { margin: 0 0 .45em; line-height: 1.7; font-size: 1.04rem; }
+.article-body .a-quote { border-left: 3px solid var(--color-accent); padding: 6px 0 6px 18px; margin: 1.2em 0; color: var(--color-text-soft); font-style: italic; font-size: 1.06rem; }
+.fmt-btn { padding: 5px 11px; font-size: .9rem; line-height: 1; min-width: 32px; }
 
 /* ---------- Мэдээний дэлгэрэнгүй хуудас ---------- */
 .np-section { padding-top: 40px; }

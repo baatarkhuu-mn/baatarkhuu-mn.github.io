@@ -8,7 +8,7 @@
   <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");</script>
   <title>Админ — Санал хүсэлт | Ц.Баатархүү</title>
   <link rel="icon" type="image/svg+xml" href="assets/img/logo.svg" />
-  <link rel="stylesheet" href="css/style.css?v=20260619a" />
+  <link rel="stylesheet" href="css/style.css?v=20260619b" />
   <style>
     .admin-top { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
       padding:16px 0; border-bottom:1px solid var(--color-border); margin-bottom:24px; }
@@ -1550,6 +1550,47 @@
         });
         inp.click();
       });
+    });
+
+    // Word-маягийн хэлбэрийн товчнууд (B, I, H, •, холбоос) — body талбар бүрт
+    document.querySelectorAll(".bodyimg-tool").forEach((tool) => {
+      const imgBtn = tool.querySelector("[data-bodyimg]");
+      if (!imgBtn) return;
+      const taId = imgBtn.dataset.bodyimg.split("|")[0];
+      const ta = document.getElementById(taId);
+      if (!ta) return;
+      const FMTS = [
+        { lbl: "B", title: "Тод (bold)", wrap: ["**", "**"], ph: "тод текст", style: "font-weight:800" },
+        { lbl: "I", title: "Налуу (italic)", wrap: ["*", "*"], ph: "налуу текст", style: "font-style:italic" },
+        { lbl: "H", title: "Дэд гарчиг", line: "## ", ph: "Дэд гарчиг", style: "font-weight:800" },
+        { lbl: "•", title: "Жагсаалт", line: "- ", ph: "жагсаалтын мөр" },
+        { lbl: "🔗", title: "Холбоос", link: true },
+      ];
+      const frag = document.createDocumentFragment();
+      FMTS.forEach((f) => {
+        const b = document.createElement("button");
+        b.type = "button"; b.className = "btn btn-ghost btn-sm fmt-btn"; b.textContent = f.lbl; b.title = f.title;
+        if (f.style) b.setAttribute("style", f.style);
+        b.addEventListener("click", () => {
+          const s = ta.selectionStart, e = ta.selectionEnd, sel = ta.value.slice(s, e);
+          if (f.link) {
+            const txt = sel || "холбоосын текст"; const ins = "[" + txt + "](https://)";
+            ta.value = ta.value.slice(0, s) + ins + ta.value.slice(e);
+            ta.focus(); const p = s + txt.length + 3; ta.setSelectionRange(p, p + 8);
+          } else if (f.line) {
+            const txt = sel || f.ph; const pre = (s > 0 && ta.value[s - 1] !== "\n") ? "\n" : "";
+            const ins = pre + f.line + txt;
+            ta.value = ta.value.slice(0, s) + ins + ta.value.slice(e);
+            ta.focus(); const p = s + ins.length; ta.setSelectionRange(p, p);
+          } else {
+            const txt = sel || f.ph; const ins = f.wrap[0] + txt + f.wrap[1];
+            ta.value = ta.value.slice(0, s) + ins + ta.value.slice(e);
+            ta.focus(); ta.setSelectionRange(s + f.wrap[0].length, s + f.wrap[0].length + txt.length);
+          }
+        });
+        frag.appendChild(b);
+      });
+      tool.insertBefore(frag, tool.firstChild);
     });
   })();
   </script>

@@ -1930,13 +1930,25 @@
   function articleBodyHtml(text, esc) {
     const t = (text == null ? "" : String(text)).trim();
     if (!t) return '<p class="a-empty">Дэлгэрэнгүй агуулга оруулаагүй байна.</p>';
+    // Мөр доторх Word-маягийн хэлбэр: **тод**, *налуу*, [текст](холбоос)
+    const inline = (raw) => esc(raw)
+      .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+      .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+      .replace(/(^|[^*])\*([^*\n]+)\*/g, "$1<em>$2</em>");
     const lines = t.split(/\n+/).map((l) => l.trim()).filter(Boolean);
-    return lines.map((l) => {
-      if (/^https?:\/\/\S+\.(?:jpe?g|png|webp|gif|avif)(?:\?\S*)?$/i.test(l))
-        return `<figure class="a-fig"><img src="${esc(l)}" alt="" loading="lazy"></figure>`;
-      if (/^#{1,3}\s+/.test(l)) return `<h2 class="a-sub">${esc(l.replace(/^#{1,3}\s+/, ""))}</h2>`;
-      return `<p>${esc(l)}</p>`;
-    }).join("");
+    const out = []; let list = null;
+    const flush = () => { if (list) { out.push("<ul>" + list.join("") + "</ul>"); list = null; } };
+    lines.forEach((l) => {
+      if (/^https?:\/\/\S+\.(?:jpe?g|png|webp|gif|avif)(?:\?\S*)?$/i.test(l)) {
+        flush(); out.push(`<figure class="a-fig"><img src="${esc(l)}" alt="" loading="lazy"></figure>`); return;
+      }
+      if (/^#{1,3}\s+/.test(l)) { flush(); out.push(`<h2 class="a-sub">${inline(l.replace(/^#{1,3}\s+/, ""))}</h2>`); return; }
+      if (/^[-•]\s+/.test(l)) { (list = list || []).push(`<li>${inline(l.replace(/^[-•]\s+/, ""))}</li>`); return; }
+      if (/^>\s+/.test(l)) { flush(); out.push(`<blockquote class="a-quote">${inline(l.replace(/^>\s+/, ""))}</blockquote>`); return; }
+      flush(); out.push(`<p>${inline(l)}</p>`);
+    });
+    flush();
+    return out.join("");
   }
 
   /* ---------- Дэлгэрэнгүй харагдац (Article overlay) — төсөл/арга хэмжээ ---------- */
