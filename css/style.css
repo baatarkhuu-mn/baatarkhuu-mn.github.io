@@ -379,12 +379,12 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--color-border); }
 .card .card-media { aspect-ratio: 16/9; background: linear-gradient(135deg, #15294e, #0b1830); position: relative; overflow: hidden; }
 [data-theme="light"] .card .card-media { background: linear-gradient(135deg, #d6e3f7, #eef3fb); }
-.card .card-media img { width: 100%; height: 100%; object-fit: cover; }
-.card .card-media .placeholder { position: absolute; inset: 0; display: grid; place-items: center; font-size: 2.2rem; opacity: .55; }
+.card .card-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+.card .card-media .placeholder { position: absolute; inset: 0; display: grid; place-items: center; font-size: 2.2rem; opacity: .55; z-index: 0; }
 .card .tag {
   position: absolute; top: 12px; left: 12px; background: rgba(6, 11, 22, .82); color: var(--color-accent);
   border: 1px solid rgba(224, 182, 83, .5);
-  font-size: .72rem; padding: 5px 12px; border-radius: 30px; font-weight: 600; backdrop-filter: blur(4px); z-index: 1;
+  font-size: .72rem; padding: 5px 12px; border-radius: 30px; font-weight: 600; backdrop-filter: blur(4px); z-index: 2;
 }
 .card .card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
 .card .card-date { font-size: .8rem; color: var(--color-text-soft); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
