@@ -1464,8 +1464,9 @@
       if (v.platform === "youtube") {
         media = `<div class="video-embed video-wide"><iframe src="https://www.youtube.com/embed/${VideoCMS.ytId(v.url)}" title="${esc(v.title || "Видео")}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>`;
       } else {
-        // Facebook SDK fb-video — видеог жинхэнэ хэмжээгээр нь дүрсэлнэ (хар зайгүй)
-        media = `<div class="fb-wrap"><div class="fb-video" data-href="${esc(v.url)}" data-show-text="false" data-width="auto"></div></div>`;
+        // Facebook reel/видео — iframe (XFBML fb-video нь reel-ийг дэмждэггүй тул хоосон гардаг)
+        const fbSrc = "https://www.facebook.com/plugins/video.php?href=" + encodeURIComponent(v.url) + "&show_text=false&width=360";
+        media = `<div class="reel-embed"><iframe src="${fbSrc}" title="${esc(v.title || "Видео")}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen scrolling="no" loading="lazy"></iframe></div>`;
       }
       return `<article class="video-card${featured ? " video-featured" : ""} reveal visible">${media}${body}</article>`;
     },

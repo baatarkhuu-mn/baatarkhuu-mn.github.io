@@ -1396,6 +1396,9 @@ a.news-card-clean { text-decoration: none; color: inherit; display: flex; flex-d
 .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; align-items: start; }
 .video-card { background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: var(--radius); overflow: hidden; transition: border-color var(--transition), box-shadow var(--transition); }
 .video-card:hover { border-color: var(--color-primary-dark); box-shadow: var(--shadow); }
+.video-card .reel-embed { height: 500px; border: 0; border-radius: 0; box-shadow: none; background: #000; }
+.video-featured .reel-embed { height: 560px; }
+@media (max-width: 560px) { .video-card .reel-embed { height: 460px; } }
 .video-embed { position: relative; width: 100%; background: #000; }
 .video-embed.video-wide { aspect-ratio: 16 / 9; }
 .video-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
