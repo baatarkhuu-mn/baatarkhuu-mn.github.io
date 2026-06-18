@@ -8,7 +8,7 @@
   <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");</script>
   <title>Админ — Санал хүсэлт | Ц.Баатархүү</title>
   <link rel="icon" type="image/svg+xml" href="assets/img/logo.svg" />
-  <link rel="stylesheet" href="css/style.css?v=20260618p" />
+  <link rel="stylesheet" href="css/style.css?v=20260618q" />
   <style>
     .admin-top { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
       padding:16px 0; border-bottom:1px solid var(--color-border); margin-bottom:24px; }
@@ -947,6 +947,11 @@
                ${v.published ? "" : `<span class="badge-status status-draft">Ноорог</span>`}
                <span style="font-size:.8rem;color:var(--color-text-soft)">эрэмбэ: ${v.sort}</span>
                <span class="nr-date">${pubDate(v.created_at)}</span>
+               <label style="font-size:.78rem;color:var(--color-text-soft);display:inline-flex;align-items:center;gap:5px">Хэлбэр:
+                 <select class="vr-orient" style="font-size:.78rem;padding:3px 7px;border-radius:6px;background:var(--color-bg-soft);color:var(--color-text);border:1px solid var(--color-border)">
+                   <option value="vertical">Босоо</option><option value="landscape">Хөндлөн</option><option value="square">Квадрат</option>
+                 </select>
+               </label>
              </div>
              <div style="font-weight:600">${esc(v.title || "(гарчиггүй)")}</div>
              <div style="font-size:.82rem;color:var(--color-text-soft);margin-top:4px;word-break:break-all">${esc(v.url)}</div>
@@ -957,6 +962,14 @@
            </div>`;
         row.querySelector(".vr-edit").addEventListener("click", () => editVideo(v));
         row.querySelector(".vr-del").addEventListener("click", () => deleteVideo(v));
+        const orientSel = row.querySelector(".vr-orient");
+        orientSel.value = v.orientation || "vertical";
+        orientSel.addEventListener("change", async () => {
+          const val = orientSel.value; orientSel.disabled = true;
+          try { const { error } = await sb.from("videos").update({ orientation: val }).eq("id", v.id); if (error) throw error; v.orientation = val; }
+          catch (e) { alert("Хэлбэр хадгалахад алдаа: " + (e.message || e)); orientSel.value = v.orientation || "vertical"; }
+          finally { orientSel.disabled = false; }
+        });
         videoList.appendChild(row);
       });
     }
