@@ -187,11 +187,13 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .hb-brand { display: flex; align-items: center; gap: 14px; text-decoration: none; }
 .hb-brand .emblem { width: 44px; height: 44px; flex-shrink: 0; display: block; }
 .hb-brand .emblem img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 2px 8px rgba(0,0,0,.45)); }
-.hb-name { font-size: clamp(1.05rem, 2.3vw, 1.7rem); font-weight: 800; color: #fff; letter-spacing: .04em; text-shadow: 0 2px 12px rgba(0,0,0,.55); }
+.hb-titles { display: flex; flex-direction: column; gap: 1px; }
+.hb-role { font-size: clamp(.6rem, 1.15vw, .82rem); font-weight: 600; color: rgba(255,255,255,.9); letter-spacing: .03em; text-shadow: 0 1px 8px rgba(0,0,0,.6); }
+.hb-name { font-size: clamp(1.05rem, 2.3vw, 1.7rem); font-weight: 800; color: #fff; letter-spacing: .04em; text-shadow: 0 2px 12px rgba(0,0,0,.55); line-height: 1.1; }
 .hb-slogan { font-size: clamp(.95rem, 2vw, 1.5rem); font-weight: 800; color: var(--color-accent); letter-spacing: .12em; text-shadow: 0 2px 12px rgba(0,0,0,.55); white-space: nowrap; }
 .navbar-wrap { position: sticky; top: 0; z-index: 1000; background: var(--color-bg); border-bottom: 1px solid var(--color-border); transition: box-shadow var(--transition); }
 [data-theme="light"] .navbar-wrap { background: #eef3fb; }
-.navbar-wrap .navbar { justify-content: flex-start; gap: 22px; }
+.navbar-wrap .navbar { justify-content: space-between; gap: 22px; }
 @media (max-width: 640px) {
   .hb-inner { min-height: 92px; }
   .hb-brand .emblem { width: 40px; height: 40px; }
@@ -792,6 +794,14 @@ body.am-lock { overflow: hidden; }
   filter: drop-shadow(0 0 10px rgba(224, 182, 83, .45)); }
 .site-footer .f-brand .emblem img { width: 100%; height: 100%; object-fit: contain; }
 .site-footer .f-brand p { font-size: .92rem; line-height: 1.7; opacity: .9; }
+.site-footer .f-brand .f-role { color: var(--color-accent); font-weight: 600; opacity: 1; margin-top: 2px; }
+
+/* ---------- Цэвэр мэдээний карт (нүүр + мэдээ хуудас) ---------- */
+.news-card-clean .card-body { display: block; padding: 16px 18px 20px; }
+.news-card-clean .card-date { font-size: .78rem; color: var(--color-text-soft); margin-bottom: 7px; }
+.news-card-clean h3 { font-size: 1.08rem; line-height: 1.42; font-weight: 700; margin: 0; color: var(--color-text);
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.news-card-clean:hover h3 { color: var(--color-primary-light); }
 .footer-links li { margin-bottom: 9px; }
 .footer-contact li { display: flex; gap: 10px; margin-bottom: 10px; font-size: .92rem; align-items: flex-start; }
 .fc-ic { width: 16px; height: 16px; flex-shrink: 0; margin-top: 3px; color: var(--color-accent); }

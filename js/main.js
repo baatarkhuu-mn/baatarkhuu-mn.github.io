@@ -1128,11 +1128,10 @@
       document.addEventListener("visibilitychange", () => { if (document.hidden) stop(); else start(); });
     },
     homeItem(n) {
-      const link = n.link ? this.esc(n.link) : "";
-      const meta = [n.date, this.CAT[n.category] || n.category || "Мэдээ"].filter(Boolean).map((s) => this.esc(s)).join(" · ");
+      const meta = n.date ? this.esc(n.date) : "";
       const img = n.image
         ? `<img src="${this.esc(n.image)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='assets/img/logo.svg';this.className='ni-ph'">`
-        : `<div class="ni-cover"><img src="assets/img/logo.svg" alt="" /><span>${this.esc(this.CAT[n.category] || "Мэдээ")}</span></div>`;
+        : `<div class="ni-cover"><img src="assets/img/logo.svg" alt="" /></div>`;
       const excerpt = n.excerpt ? `<p class="ni-excerpt">${this.esc(n.excerpt)}</p>` : "";
       const cal = '<svg class="ni-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>';
       const dateLine = meta ? `<div class="ni-date">${cal}${meta}</div>` : "";
@@ -1140,19 +1139,17 @@
       return `<div class="news-item">${inner}</div>`;
     },
     card(n) {
-      const tag = this.CAT[n.category] || n.category || "Мэдээ";
       const title = this.esc(n.title);
       const img = n.image ? `<img src="${this.esc(n.image)}" alt="" loading="lazy" onerror="this.remove()">` : "";
-      const more = `<span class="card-link">Дэлгэрэнгүй →</span>`;
-      return `<article class="card reveal visible" data-item data-category="${this.esc(n.category || "")}" data-title="${title}">
-        <div class="card-media"><span class="tag">${this.esc(tag)}</span>${img}<span class="placeholder"><img src="assets/img/logo.svg" alt="" style="width:46%;opacity:.4"></span></div>
-        <div class="card-body"><div class="card-date">${this.esc(n.date || "")}</div><h3>${title}</h3><p>${this.esc(n.excerpt || "")}</p>${more}</div>
+      return `<article class="card news-card-clean reveal visible" data-item data-title="${title}">
+        <div class="card-media">${img}<span class="placeholder"><img src="assets/img/logo.svg" alt="" style="width:46%;opacity:.4"></span></div>
+        <div class="card-body">${n.date ? `<div class="card-date">${this.esc(n.date)}</div>` : ""}<h3>${title}</h3></div>
       </article>`;
     },
     payload(n) {
       return {
         cover: n.image || "",
-        tags: [this.CAT[n.category] || n.category || "Мэдээ"],
+        tags: [],
         title: n.title,
         meta: [n.date],
         lead: n.body ? n.excerpt : "",
