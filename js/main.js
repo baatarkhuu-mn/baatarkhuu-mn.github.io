@@ -1550,29 +1550,80 @@
           const years = data.filter((r) => r.kind === "year");
           if (monthGrid && months.length) {
             monthGrid.innerHTML = months.map((r) => ReportsCMS.card(r)).join("");
+            ReportsCMS.wire(monthGrid);
             Pager.apply(monthGrid);
           }
           if (yearWrap && years.length) {
             yearWrap.innerHTML = years.map((r) => ReportsCMS.card(r, true)).join("");
+            ReportsCMS.wire(yearWrap);
           }
         });
     },
+    wire(container) {
+      container.querySelectorAll(".report-card[data-href]").forEach((el) => {
+        el.addEventListener("click", (e) => { if (e.target.closest("a,button")) return; location.href = el.dataset.href; });
+      });
+    },
     card(r, year) {
       const esc = ReportsCMS.esc;
-      const pdf = esc(r.pdf_url || "#");
+      const url = "tailan-delgerengui.html?id=" + encodeURIComponent(r.id);
+      const pdf = r.pdf_url ? esc(r.pdf_url) : "";
       const cover = r.cover_url
-        ? `<img src="${esc(r.cover_url)}" alt="${esc(r.title)}" loading="lazy" onerror="this.remove()" /><span class="rc-hover"><span class="rc-hint">PDF үзэх</span></span>`
-        : `<span class="rc-cover-brand"><img class="rc-emblem" src="assets/img/logo.svg" alt="" /><span class="rc-policy">Өөр Бодлого Бүтээгч Монгол</span><span class="rc-month">${esc(r.title)}</span><span class="rc-hint">PDF үзэх</span></span>`;
+        ? `<img src="${esc(r.cover_url)}" alt="${esc(r.title)}" loading="lazy" onerror="this.remove()" /><span class="rc-hover"><span class="rc-hint">Дэлгэрэнгүй</span></span>`
+        : `<span class="rc-cover-brand"><img class="rc-emblem" src="assets/img/logo.svg" alt="" /><span class="rc-policy">Өөр Бодлого Бүтээгч Монгол</span><span class="rc-month">${esc(r.title)}</span><span class="rc-hint">Дэлгэрэнгүй</span></span>`;
       const w = year ? ' style="width:100%;max-width:300px"' : '';
-      return `<article class="report-card reveal visible"${w}>
-        <a class="rc-cover" href="${pdf}" target="_blank" rel="noopener">${cover}</a>
+      const actions = `<a class="btn btn-primary btn-sm" href="${url}">Дэлгэрэнгүй →</a>` +
+        (pdf ? `<a class="btn btn-ghost btn-sm" href="${pdf}" target="_blank" rel="noopener">PDF</a>` : "");
+      return `<article class="report-card reveal visible is-clickable"${w} data-href="${url}">
+        <a class="rc-cover" href="${url}">${cover}</a>
         <div class="rc-body">
           <div class="rc-cat">${esc(r.category || "")}</div>
           <h4>${esc(r.title)}</h4>
-          <div class="rc-meta">${esc(r.meta || "PDF")}</div>
-          <div class="rc-actions"><a class="btn btn-primary btn-sm" href="${pdf}" target="_blank" rel="noopener">Үзэх</a><a class="btn btn-ghost btn-sm" href="${pdf}" download>Татах</a></div>
+          <div class="rc-meta">${esc(r.meta || "")}</div>
+          <div class="rc-actions">${actions}</div>
         </div>
       </article>`;
+    },
+  };
+
+  /* ---------- Тайлангийн дэлгэрэнгүй хуудас (tailan-delgerengui.html?id=…) ---------- */
+  const ReportPost = {
+    esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
+    async init() {
+      const wrap = document.querySelector("[data-report-post]");
+      if (!wrap) return;
+      const id = new URLSearchParams(location.search).get("id");
+      const sb = window.getSB && window.getSB();
+      if (!id || !sb) { wrap.innerHTML = ReportPost.notFound(); return; }
+      try {
+        const { data, error } = await sb.from("reports").select("*").eq("id", id).single();
+        if (error || !data) { wrap.innerHTML = ReportPost.notFound(); return; }
+        document.title = data.title + " | Ц.Баатархүү";
+        wrap.innerHTML = ReportPost.render(data);
+        window.scrollTo(0, 0);
+      } catch (_) { wrap.innerHTML = ReportPost.notFound(); }
+    },
+    notFound() {
+      return '<div class="np-state"><h2>Тайлан олдсонгүй</h2><p>Энэ тайлан устсан эсвэл хаяг буруу байж магадгүй.</p><a class="btn btn-primary" href="tailan.html">← Тайлан</a></div>';
+    },
+    render(r) {
+      const esc = ReportPost.esc;
+      const tag = r.category ? `<div class="am-tags" style="margin-bottom:12px"><span class="am-tag">${esc(r.category)}</span></div>` : "";
+      const meta = r.meta ? `<div class="np-datum">${esc(r.meta)}</div>` : "";
+      const cover = r.cover_url
+        ? `<figure class="np-cover"><img src="${esc(r.cover_url)}" alt="${esc(r.title)}" onerror="this.closest('.np-cover').remove()"></figure>`
+        : "";
+      const bodyText = r.body || "";
+      const src = r.pdf_url
+        ? `<div class="np-sources"><span class="np-src-label">Бичиг баримт:</span><a class="btn btn-primary btn-sm" href="${esc(r.pdf_url)}" target="_blank" rel="noopener">PDF үзэх</a><a class="btn btn-ghost btn-sm" href="${esc(r.pdf_url)}" download>Татах</a></div>`
+        : "";
+      return `<nav class="breadcrumb" aria-label="Замчлал"><a href="index.html">Нүүр</a><span>/</span><a href="tailan.html">Тайлан</a></nav>
+        ${tag}${meta}
+        <h1 class="np-title">${esc(r.title)}</h1>
+        ${cover}
+        <div class="np-body article-body">${articleBodyHtml(bodyText, esc)}</div>
+        ${src}
+        <a class="np-back" href="tailan.html">← Бүх тайлан руу буцах</a>`;
     },
   };
 
@@ -1968,6 +2019,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     Theme.init(); Nav.init(); Search.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
-    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); NewsPost.init(); EventPost.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); ReportsCMS.init(); ProjectsCMS.init(); ProjectPost.init(); LawsCMS.init(); FeedbackStats.init(); EventsCMS.init(); Settings.init();
+    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); NewsPost.init(); EventPost.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); ReportsCMS.init(); ReportPost.init(); ProjectsCMS.init(); ProjectPost.init(); LawsCMS.init(); FeedbackStats.init(); EventsCMS.init(); Settings.init();
   });
 })();
