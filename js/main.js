@@ -1097,8 +1097,8 @@
         try {
           const { data, error } = await sb.from("news").select("*").eq("published", true).order("date", { ascending: false, nullsFirst: false }).order("created_at", { ascending: false }).limit(60);
           if (!error && data && data.length) {
-            if (grid) { grid.innerHTML = data.map((n) => this.card(n)).join(""); this.wireGrid(grid, data); }
-            if (home) { const hs = data.slice(0, 4); home.innerHTML = hs.map((n) => this.homeItem(n)).join(""); this.wireGrid(home, hs); }
+            if (grid) { grid.innerHTML = data.map((n) => this.card(n)).join(""); }
+            if (home) { home.innerHTML = data.slice(0, 4).map((n) => this.homeItem(n)).join(""); }
           }
         } catch (_) { /* алдаа гарвал статик хэвээр үлдээнэ */ }
       }
@@ -1134,30 +1134,60 @@
       const cal = '<svg class="ni-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>';
       const dateLine = meta ? `<div class="ni-date">${cal}${meta}</div>` : "";
       const inner = `<div class="ni-img">${img}</div><div class="ni-text"><h3 class="ni-title">${this.esc(n.title)}</h3>${dateLine}</div>`;
-      return `<div class="news-item">${inner}</div>`;
+      return `<a class="news-item" href="medee-delgerengui.html?id=${encodeURIComponent(n.id)}">${inner}</a>`;
     },
     card(n) {
       const title = this.esc(n.title);
       const img = n.image ? `<img src="${this.esc(n.image)}" alt="" loading="lazy" onerror="this.remove()">` : "";
-      return `<article class="card news-card-clean reveal visible" data-item data-title="${title}">
+      return `<a class="card news-card-clean reveal visible" href="medee-delgerengui.html?id=${encodeURIComponent(n.id)}" data-item data-title="${title}">
         <div class="card-media">${img}<span class="placeholder"><img src="assets/img/logo.svg" alt="" style="width:46%;opacity:.4"></span></div>
         <div class="card-body">${n.date ? `<div class="card-date">${this.esc(n.date)}</div>` : ""}<h3>${title}</h3></div>
-      </article>`;
+      </a>`;
     },
-    payload(n) {
-      return {
-        cover: n.image || "",
-        tags: [],
-        title: n.title,
-        meta: [n.date],
-        lead: n.body ? n.excerpt : "",
-        body: n.body || n.excerpt,
-        sources: n.link ? [{ href: n.link, label: "Эх сурвалжийг үзэх →" }] : [],
-      };
+  };
+
+  /* ---------- Мэдээний дэлгэрэнгүй хуудас (medee-delgerengui.html?id=…) ---------- */
+  const NewsPost = {
+    esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
+    CAL: '<svg class="ni-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
+    async init() {
+      const wrap = document.querySelector("[data-news-post]");
+      if (!wrap) return;
+      const id = new URLSearchParams(location.search).get("id");
+      const sb = window.getSB && window.getSB();
+      if (!id || !sb) { wrap.innerHTML = NewsPost.notFound(); return; }
+      try {
+        const { data, error } = await sb.from("news").select("*").eq("id", id).single();
+        if (error || !data) { wrap.innerHTML = NewsPost.notFound(); return; }
+        document.title = data.title + " | Ц.Баатархүү";
+        const md = document.querySelector('meta[name="description"]');
+        if (md && data.excerpt) md.setAttribute("content", data.excerpt);
+        wrap.innerHTML = NewsPost.render(data);
+        window.scrollTo(0, 0);
+      } catch (_) { wrap.innerHTML = NewsPost.notFound(); }
     },
-    wireGrid(container, rows) {
-      const kids = Array.prototype.filter.call(container.children, (c) => c.nodeType === 1);
-      kids.forEach((el, i) => { const n = rows[i]; if (n) Article.wire(el, () => NewsFeed.payload(n)); });
+    notFound() {
+      return '<div class="np-state"><h2>Мэдээ олдсонгүй</h2><p>Энэ мэдээ устсан эсвэл хаяг буруу байж магадгүй.</p><a class="btn btn-primary" href="medee.html">← Бүх мэдээ</a></div>';
+    },
+    render(n) {
+      const esc = NewsPost.esc;
+      const meta = n.date ? `<div class="np-datum">${NewsPost.CAL}${esc(n.date)}</div>` : "";
+      const cover = n.image
+        ? `<figure class="np-cover"><img src="${esc(n.image)}" alt="${esc(n.title)}" onerror="this.closest('.np-cover').remove()"></figure>`
+        : "";
+      const lead = (n.body && n.excerpt) ? `<p class="np-lead">${esc(n.excerpt)}</p>` : "";
+      const bodyText = n.body || n.excerpt || "";
+      const src = n.link
+        ? `<div class="np-sources"><span class="np-src-label">Эх сурвалж:</span><a class="btn btn-primary btn-sm" href="${esc(n.link)}" target="_blank" rel="noopener">Эх сурвалжийг үзэх →</a></div>`
+        : "";
+      return `<nav class="breadcrumb" aria-label="Замчлал"><a href="index.html">Нүүр</a><span>/</span><a href="medee.html">Мэдээ</a></nav>
+        ${meta}
+        <h1 class="np-title">${esc(n.title)}</h1>
+        ${cover}
+        ${lead}
+        <div class="np-body article-body">${articleBodyHtml(bodyText, esc)}</div>
+        ${src}
+        <a class="np-back" href="medee.html">← Бүх мэдээ рүү буцах</a>`;
     },
   };
 
@@ -1753,7 +1783,24 @@
     },
   };
 
-  /* ---------- Дэлгэрэнгүй харагдац (Article overlay) — мэдээ/төсөл/арга хэмжээ ---------- */
+  /* ---------- Баялаг агуулга рендерлэх (нийтлэг) ----------
+     Энгийн текстийг догол мөр болгоно. Дотор нь:
+       • тусдаа мөрөнд бичсэн зургийн холбоос (http…jpg/png/webp) → зураг
+       • "## Дэд гарчиг" хэлбэрийн мөр → дэд гарчиг
+     болж харагдана. */
+  function articleBodyHtml(text, esc) {
+    const t = (text == null ? "" : String(text)).trim();
+    if (!t) return '<p class="a-empty">Дэлгэрэнгүй агуулга оруулаагүй байна.</p>';
+    const lines = t.split(/\n+/).map((l) => l.trim()).filter(Boolean);
+    return lines.map((l) => {
+      if (/^https?:\/\/\S+\.(?:jpe?g|png|webp|gif|avif)(?:\?\S*)?$/i.test(l))
+        return `<figure class="a-fig"><img src="${esc(l)}" alt="" loading="lazy"></figure>`;
+      if (/^#{1,3}\s+/.test(l)) return `<h2 class="a-sub">${esc(l.replace(/^#{1,3}\s+/, ""))}</h2>`;
+      return `<p>${esc(l)}</p>`;
+    }).join("");
+  }
+
+  /* ---------- Дэлгэрэнгүй харагдац (Article overlay) — төсөл/арга хэмжээ ---------- */
   const Article = {
     esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
     CAL: '<svg class="am-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
@@ -1768,11 +1815,7 @@
       this._el = m;
       return m;
     },
-    paras(text) {
-      const t = (text == null ? "" : String(text)).trim();
-      if (!t) return '<p class="am-empty">Дэлгэрэнгүй агуулга оруулаагүй байна.</p>';
-      return t.split(/\n{1,}/).map((p) => p.trim()).filter(Boolean).map((p) => `<p>${this.esc(p)}</p>`).join("");
-    },
+    paras(text) { return articleBodyHtml(text, this.esc.bind(this)); },
     open(o) {
       const m = this.ensure(); const esc = this.esc.bind(this);
       const coverSlot = m.querySelector(".am-cover-slot");
@@ -1795,7 +1838,7 @@
       content.innerHTML =
         (tags ? `<div class="am-tags">${tags}</div>` : "") +
         `<h1 class="am-title">${esc(o.title || "")}</h1>` + metaHtml + lead +
-        `<div class="am-body">${this.paras(o.body)}</div>` +
+        `<div class="am-body article-body">${this.paras(o.body)}</div>` +
         '<div class="am-extra"></div>' +
         (sources ? `<div class="am-sources">${sources}</div>` : "");
       const extra = content.querySelector(".am-extra");
@@ -1837,6 +1880,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     Theme.init(); Nav.init(); Search.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
-    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); ReportsCMS.init(); ProjectsCMS.init(); LawsCMS.init(); FeedbackStats.init(); EventsCMS.init(); Settings.init();
+    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); NewsPost.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); ReportsCMS.init(); ProjectsCMS.init(); LawsCMS.init(); FeedbackStats.init(); EventsCMS.init(); Settings.init();
   });
 })();

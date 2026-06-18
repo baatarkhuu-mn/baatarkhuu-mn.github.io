@@ -253,10 +253,9 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 
 /* Хэл солих dropdown */
 .lang-switch { position: relative; }
-.lang-btn { width: auto; gap: 6px; padding: 0 10px; font-weight: 600; }
-.lang-btn .lang-flag { width: 20px; height: 14px; border-radius: 2px; object-fit: cover; }
-.lang-btn .lang-code { font-size: .85rem; letter-spacing: .02em; }
-.lang-btn .lang-caret { transition: transform var(--transition); flex-shrink: 0; }
+.lang-btn { width: 42px; gap: 0; padding: 0; font-weight: 600; }
+.lang-btn .lang-flag { width: 22px; height: 15px; border-radius: 2px; object-fit: cover; }
+.lang-btn .lang-code, .lang-btn .lang-caret { display: none; }
 .lang-switch.open .lang-btn .lang-caret { transform: rotate(180deg); }
 .lang-menu {
   position: absolute; top: calc(100% + 8px); left: 0; min-width: 170px;
@@ -794,7 +793,10 @@ body.am-lock { overflow: hidden; }
   filter: drop-shadow(0 0 10px rgba(224, 182, 83, .45)); }
 .site-footer .f-brand .emblem img { width: 100%; height: 100%; object-fit: contain; }
 .site-footer .f-brand p { font-size: .92rem; line-height: 1.7; opacity: .9; }
-.site-footer .f-brand .f-role { color: var(--color-accent); font-weight: 600; opacity: 1; margin-top: 2px; }
+.site-footer .f-brand .f-name { font-size: 1.02rem; font-weight: 600; line-height: 1.1; margin-bottom: 1px; color: var(--color-text); }
+.site-footer .f-brand .f-name span { display: block; font-size: 1.6rem; font-weight: 800; letter-spacing: .04em; color: #fff; }
+[data-theme="light"] .site-footer .f-brand .f-name span { color: var(--color-text); }
+.site-footer .f-brand .f-role { font-size: .8rem; color: var(--color-accent); font-weight: 600; opacity: 1; margin-top: 0; }
 
 /* ---------- Цэвэр мэдээний карт (нүүр + мэдээ хуудас) ---------- */
 .news-card-clean .card-body { display: block; padding: 16px 18px 20px; }
@@ -802,6 +804,32 @@ body.am-lock { overflow: hidden; }
 .news-card-clean h3 { font-size: 1.08rem; line-height: 1.42; font-weight: 700; margin: 0; color: var(--color-text);
   display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .news-card-clean:hover h3 { color: var(--color-primary-light); }
+a.news-card-clean { text-decoration: none; color: inherit; display: flex; flex-direction: column; }
+
+/* ---------- Нийтлэг "нийтлэл" агуулга (overlay + дэлгэрэнгүй хуудас) ---------- */
+.article-body p { font-size: 1.04rem; line-height: 1.85; color: var(--color-text); margin: 0 0 1.05em; }
+.article-body .a-sub { font-size: 1.3rem; font-weight: 800; line-height: 1.3; margin: 1.5em 0 .5em; color: var(--color-text); }
+.article-body .a-fig { margin: 1.5em 0; }
+.article-body .a-fig img { width: 100%; border-radius: var(--radius); display: block; }
+.article-body .a-empty { color: var(--color-text-soft); font-style: italic; }
+
+/* ---------- Мэдээний дэлгэрэнгүй хуудас ---------- */
+.np-section { padding-top: 40px; }
+.np-narrow { max-width: 760px; }
+.news-post .breadcrumb { margin-bottom: 18px; }
+.np-datum { display: inline-flex; align-items: center; gap: 7px; font-size: .85rem; color: var(--color-text-soft); margin-bottom: 12px; }
+.np-datum .ni-cal { width: 15px; height: 15px; color: var(--color-accent); }
+.np-title { font-size: clamp(1.6rem, 4vw, 2.4rem); line-height: 1.22; margin-bottom: 24px; }
+.np-cover { margin: 0 0 26px; }
+.np-cover img { width: 100%; border-radius: var(--radius-lg); display: block; }
+.np-lead { font-size: 1.12rem; line-height: 1.7; font-weight: 600; color: var(--color-text);
+  border-left: 3px solid var(--color-accent); padding-left: 16px; margin: 0 0 24px; }
+.np-sources { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 30px 0 6px; padding-top: 22px; border-top: 1px solid var(--color-border); }
+.np-src-label { font-size: .9rem; color: var(--color-text-soft); }
+.np-back { display: inline-flex; margin-top: 22px; color: var(--color-primary-light); font-weight: 600; }
+.np-state { text-align: center; padding: 50px 0; }
+.np-state h2 { margin-bottom: 10px; }
+.np-state p { color: var(--color-text-soft); margin-bottom: 20px; }
 .footer-links li { margin-bottom: 9px; }
 .footer-contact li { display: flex; gap: 10px; margin-bottom: 10px; font-size: .92rem; align-items: flex-start; }
 .fc-ic { width: 16px; height: 16px; flex-shrink: 0; margin-top: 3px; color: var(--color-accent); }
