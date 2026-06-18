@@ -1097,8 +1097,8 @@
         try {
           const { data, error } = await sb.from("news").select("*").eq("published", true).order("date", { ascending: false, nullsFirst: false }).order("created_at", { ascending: false }).limit(60);
           if (!error && data && data.length) {
-            if (grid) grid.innerHTML = data.map((n) => this.card(n)).join("");
-            if (home) home.innerHTML = data.slice(0, 8).map((n) => this.homeItem(n)).join("");
+            if (grid) { grid.innerHTML = data.map((n) => this.card(n)).join(""); this.wireGrid(grid, data); }
+            if (home) { const hs = data.slice(0, 8); home.innerHTML = hs.map((n) => this.homeItem(n)).join(""); this.wireGrid(home, hs); }
           }
         } catch (_) { /* алдаа гарвал статик хэвээр үлдээнэ */ }
       }
@@ -1137,21 +1137,32 @@
       const cal = '<svg class="ni-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>';
       const dateLine = meta ? `<div class="ni-date">${cal}${meta}</div>` : "";
       const inner = `<div class="ni-img">${img}</div><div class="ni-text"><h3 class="ni-title">${this.esc(n.title)}</h3>${excerpt}${dateLine}</div>`;
-      return link
-        ? `<a class="news-item" href="${link}" target="_blank" rel="noopener">${inner}</a>`
-        : `<div class="news-item">${inner}</div>`;
+      return `<div class="news-item">${inner}</div>`;
     },
     card(n) {
       const tag = this.CAT[n.category] || n.category || "Мэдээ";
-      const link = n.link ? this.esc(n.link) : "";
       const title = this.esc(n.title);
       const img = n.image ? `<img src="${this.esc(n.image)}" alt="" loading="lazy" onerror="this.remove()">` : "";
-      const titleHtml = link ? `<a href="${link}" target="_blank" rel="noopener">${title}</a>` : title;
-      const more = link ? `<a href="${link}" target="_blank" rel="noopener" class="card-link">Дэлгэрэнгүй →</a>` : "";
+      const more = `<span class="card-link">Дэлгэрэнгүй →</span>`;
       return `<article class="card reveal visible" data-item data-category="${this.esc(n.category || "")}" data-title="${title}">
         <div class="card-media"><span class="tag">${this.esc(tag)}</span>${img}<span class="placeholder"><img src="assets/img/logo.svg" alt="" style="width:46%;opacity:.4"></span></div>
-        <div class="card-body"><div class="card-date">${this.esc(n.date || "")}</div><h3>${titleHtml}</h3><p>${this.esc(n.excerpt || "")}</p>${more}</div>
+        <div class="card-body"><div class="card-date">${this.esc(n.date || "")}</div><h3>${title}</h3><p>${this.esc(n.excerpt || "")}</p>${more}</div>
       </article>`;
+    },
+    payload(n) {
+      return {
+        cover: n.image || "",
+        tags: [this.CAT[n.category] || n.category || "Мэдээ"],
+        title: n.title,
+        meta: [n.date],
+        lead: n.body ? n.excerpt : "",
+        body: n.body || n.excerpt,
+        sources: n.link ? [{ href: n.link, label: "Эх сурвалжийг үзэх →" }] : [],
+      };
+    },
+    wireGrid(container, rows) {
+      const kids = Array.prototype.filter.call(container.children, (c) => c.nodeType === 1);
+      kids.forEach((el, i) => { const n = rows[i]; if (n) Article.wire(el, () => NewsFeed.payload(n)); });
     },
   };
 
@@ -1543,6 +1554,8 @@
         .then(({ data, error }) => {
           if (error || !data || !data.length) return; // хоосон/алдаа → жишээ хэвээр
           grid.innerHTML = data.map((p) => ProjectsCMS.card(p)).join("");
+          const kids = Array.prototype.filter.call(grid.children, (c) => c.nodeType === 1);
+          kids.forEach((el, i) => { const p = data[i]; if (p) Article.wire(el, () => ProjectsCMS.payload(p)); });
         });
     },
     card(p) {
@@ -1551,16 +1564,27 @@
       const media = (p.image_url
         ? `<img src="${esc(p.image_url)}" alt="${esc(p.title)}" loading="lazy" onerror="this.remove()" />`
         : "") + `<span class="placeholder"><img src="assets/img/logo.svg" alt="" style="width:46%;opacity:.4" /></span>`;
-      const link = p.link ? esc(p.link) : "";
       return `<article class="card reveal visible" data-item data-title="${esc(p.title)}">
         <div class="card-media"><span class="tag">${esc(p.category || "Төсөл")}</span><span class="tag status-tag badge-status" style="${st.style}">${st.label}</span>${media}</div>
         <div class="card-body">
           <div class="card-date">${esc(p.date_label || "")}</div>
-          <h3>${link ? `<a href="${link}" target="_blank" rel="noopener">${esc(p.title)}</a>` : esc(p.title)}</h3>
+          <h3>${esc(p.title)}</h3>
           <p>${esc(p.description || "")}</p>
-          ${link ? `<a href="${link}" target="_blank" rel="noopener" class="card-link">Дэлгэрэнгүй →</a>` : ""}
+          <span class="card-link">Дэлгэрэнгүй →</span>
         </div>
       </article>`;
+    },
+    payload(p) {
+      const st = ProjectsCMS.STATUS[p.status] || ProjectsCMS.STATUS.ongoing;
+      return {
+        cover: p.image_url || "",
+        tags: [p.category || "Төсөл", st.label],
+        title: p.title,
+        meta: [p.date_label],
+        lead: p.body ? p.description : "",
+        body: p.body || p.description,
+        sources: p.link ? [{ href: p.link, label: "Дэлгэрэнгүй холбоос →" }] : [],
+      };
     },
   };
 
@@ -1660,7 +1684,22 @@
           } catch (err) { msg.textContent = "Алдаа: " + (err.message || "дахин оролдоно уу"); msg.style.color = "var(--color-danger)"; btn.disabled = false; }
         });
       }
+      Article.wire(el, () => EventsCMS.payload(ev));
       return el;
+    },
+    payload(ev) {
+      const date = ev.event_date ? Article.fmtDate(ev.event_date) : "";
+      const src = [];
+      if (ev.register_url) src.push({ href: ev.register_url, label: "Бүртгүүлэх →" });
+      return {
+        cover: ev.image_url || "",
+        tags: [ev.badge || "Зарлал"],
+        title: ev.title,
+        meta: [date, ev.location, ev.time_label],
+        lead: ev.body ? ev.description : "",
+        body: ev.body || ev.description,
+        sources: src,
+      };
     },
   };
 
@@ -1714,6 +1753,76 @@
         <div><h4>${esc(l.title)}</h4><div class="meta">${meta}</div></div>
         <div class="law-actions"><span class="badge-status ${LawsCMS.CLS[status] || "status-review"}">${esc(LawsCMS.LABEL[status] || status)}</span>${pdf}<span class="law-more">Дэлгэрэнгүй →</span></div>
       </article>`;
+    },
+  };
+
+  /* ---------- Дэлгэрэнгүй харагдац (Article overlay) — мэдээ/төсөл/арга хэмжээ ---------- */
+  const Article = {
+    esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
+    CAL: '<svg class="am-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
+    ensure() {
+      if (this._el) return this._el;
+      const m = document.createElement("div");
+      m.className = "article-modal"; m.setAttribute("aria-hidden", "true");
+      m.innerHTML = '<div class="am-box" role="dialog" aria-modal="true"><button type="button" class="am-close" aria-label="Хаах">✕</button><div class="am-cover-slot"></div><div class="am-content"></div></div>';
+      document.body.appendChild(m);
+      m.addEventListener("click", (e) => { if (e.target === m || e.target.closest(".am-close")) this.close(); });
+      document.addEventListener("keydown", (e) => { if (e.key === "Escape" && m.classList.contains("open")) this.close(); });
+      this._el = m;
+      return m;
+    },
+    paras(text) {
+      const t = (text == null ? "" : String(text)).trim();
+      if (!t) return '<p class="am-empty">Дэлгэрэнгүй агуулга оруулаагүй байна.</p>';
+      return t.split(/\n{1,}/).map((p) => p.trim()).filter(Boolean).map((p) => `<p>${this.esc(p)}</p>`).join("");
+    },
+    open(o) {
+      const m = this.ensure(); const esc = this.esc.bind(this);
+      const coverSlot = m.querySelector(".am-cover-slot");
+      if (o.cover) {
+        const img = document.createElement("img");
+        img.className = "am-cover"; img.src = o.cover; img.alt = o.title || ""; img.loading = "lazy";
+        img.onerror = () => { coverSlot.innerHTML = '<div class="am-cover-ph"><img src="assets/img/logo.svg" alt=""></div>'; };
+        coverSlot.innerHTML = ""; coverSlot.appendChild(img);
+      } else {
+        coverSlot.innerHTML = '<div class="am-cover-ph"><img src="assets/img/logo.svg" alt=""></div>';
+      }
+      const tags = (o.tags || []).filter(Boolean).map((t) => `<span class="am-tag">${esc(t)}</span>`).join("");
+      const meta = (o.meta || []).filter(Boolean);
+      const metaHtml = meta.length ? `<div class="am-meta">${this.CAL}${meta.map(esc).join(' <span style="opacity:.45">·</span> ')}</div>` : "";
+      const lead = o.lead ? `<p class="am-lead">${esc(o.lead)}</p>` : "";
+      const sources = (o.sources || []).filter(Boolean).map((s) =>
+        `<a class="btn ${s.ghost ? "btn-ghost" : "btn-primary"} btn-sm" href="${esc(s.href)}"${s.download ? " download" : ' target="_blank" rel="noopener"'}>${esc(s.label)}</a>`
+      ).join("");
+      const content = m.querySelector(".am-content");
+      content.innerHTML =
+        (tags ? `<div class="am-tags">${tags}</div>` : "") +
+        `<h1 class="am-title">${esc(o.title || "")}</h1>` + metaHtml + lead +
+        `<div class="am-body">${this.paras(o.body)}</div>` +
+        '<div class="am-extra"></div>' +
+        (sources ? `<div class="am-sources">${sources}</div>` : "");
+      const extra = content.querySelector(".am-extra");
+      if (o.extra instanceof Node) extra.appendChild(o.extra);
+      else if (typeof o.extra === "string" && o.extra) extra.innerHTML = o.extra;
+      else extra.remove();
+      m.classList.add("open"); m.setAttribute("aria-hidden", "false");
+      document.body.classList.add("am-lock"); m.scrollTop = 0;
+      m.querySelector(".am-close").focus();
+    },
+    close() {
+      if (!this._el) return;
+      this._el.classList.remove("open"); this._el.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("am-lock");
+    },
+    fmtDate(s) { try { return new Date(s).toLocaleDateString("mn-MN", { year: "numeric", month: "2-digit", day: "2-digit" }).replace(/\//g, "."); } catch (_) { return ""; } },
+    // Картыг дарж нээдэг болгох — дотор линк/товч/форм дарвал үл хамаарна
+    wire(el, payloadFn) {
+      if (!el) return;
+      el.classList.add("is-clickable");
+      el.setAttribute("tabindex", "0"); el.setAttribute("role", "button");
+      const fire = () => Article.open(payloadFn());
+      el.addEventListener("click", (e) => { if (e.target.closest("a,button,input,textarea,form,.ef-reg")) return; fire(); });
+      el.addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target === el) { e.preventDefault(); fire(); } });
     },
   };
 

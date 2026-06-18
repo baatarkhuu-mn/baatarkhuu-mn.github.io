@@ -8,7 +8,7 @@
   <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");</script>
   <title>Админ — Санал хүсэлт | Ц.Баатархүү</title>
   <link rel="icon" type="image/svg+xml" href="assets/img/logo.svg" />
-  <link rel="stylesheet" href="css/style.css?v=20260617i" />
+  <link rel="stylesheet" href="css/style.css?v=20260618a" />
   <style>
     .admin-top { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
       padding:16px 0; border-bottom:1px solid var(--color-border); margin-bottom:24px; }
@@ -281,8 +281,9 @@
                 </select>
               </div>
             </div>
-            <div class="form-group"><label for="n-excerpt">Товч агуулга</label><textarea id="n-excerpt" rows="3" placeholder="Мэдээний товч тайлбар…"></textarea></div>
-            <div class="form-group"><label for="n-link">Эх сурвалж / дэлгэрэнгүй холбоос (заавал биш)</label><input type="url" id="n-link" placeholder="https://..." /></div>
+            <div class="form-group"><label for="n-excerpt">Товч агуулга (жагсаалтад харагдана)</label><textarea id="n-excerpt" rows="3" placeholder="Мэдээний товч тайлбар…"></textarea></div>
+            <div class="form-group"><label for="n-body">Дэлгэрэнгүй агуулга (бүрэн текст — дарахад нээгдэх мэдээний хуудас)</label><textarea id="n-body" rows="9" placeholder="Мэдээний бүрэн агуулгыг энд бичнэ. Догол мөр бүрийг хооронд нь хоосон мөрөөр тусгаарлана."></textarea></div>
+            <div class="form-group"><label for="n-link">Эх сурвалж / гадаад холбоос (заавал биш)</label><input type="url" id="n-link" placeholder="https://..." /></div>
             <div class="form-group"><label for="n-image">Зураг (заавал биш)</label><input type="file" id="n-image" accept="image/*" /><div id="n-image-cur" class="form-note" style="margin-top:6px"></div></div>
             <div class="form-group"><label style="display:flex;gap:9px;align-items:center;cursor:pointer"><input type="checkbox" id="n-published" checked style="width:18px;height:18px;accent-color:var(--color-accent)" /> Нийтлэх (сайтад харагдана)</label></div>
             <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
@@ -377,8 +378,9 @@
                 <div class="form-group"><label for="p-sort">Эрэмбэ (бага нь түрүүнд)</label><input type="number" id="p-sort" value="0" /></div>
               </div>
               <div class="form-group"><label for="p-date">Огноо / байршлын бичиг</label><input type="text" id="p-date" placeholder="Чингэлтэй дүүрэг · 2016 оноос" /></div>
-              <div class="form-group"><label for="p-desc">Тайлбар</label><textarea id="p-desc" rows="3" placeholder="Төслийн товч тайлбар…"></textarea></div>
-              <div class="form-group"><label for="p-link">Дэлгэрэнгүй холбоос (заавал биш)</label><input type="url" id="p-link" placeholder="https://..." /></div>
+              <div class="form-group"><label for="p-desc">Тайлбар (жагсаалтад харагдана)</label><textarea id="p-desc" rows="3" placeholder="Төслийн товч тайлбар…"></textarea></div>
+              <div class="form-group"><label for="p-body">Дэлгэрэнгүй агуулга (бүрэн текст — дарахад нээгдэх төслийн хуудас)</label><textarea id="p-body" rows="8" placeholder="Төслийн бүрэн тайлбар, үр дүн, оролцогчид… Догол мөрийг хоосон мөрөөр тусгаарлана."></textarea></div>
+              <div class="form-group"><label for="p-link">Гадаад холбоос (заавал биш)</label><input type="url" id="p-link" placeholder="https://..." /></div>
               <div class="form-group"><label for="p-image">Зураг (заавал биш)</label><input type="file" id="p-image" accept="image/*" /><div id="p-image-cur" class="form-note" style="margin-top:6px"></div></div>
               <div class="form-group"><label style="display:flex;gap:9px;align-items:center;cursor:pointer"><input type="checkbox" id="p-published" checked style="width:18px;height:18px;accent-color:var(--color-accent)" /> Нийтлэх (сайтад харагдана)</label></div>
               <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
@@ -452,7 +454,8 @@
                 <div class="form-group"><label for="e-location">Байршил</label><input type="text" id="e-location" placeholder="Чингэлтэй дүүрэг" /></div>
                 <div class="form-group"><label for="e-badge">Шошго</label><input type="text" id="e-badge" placeholder="Зарлал" /></div>
               </div>
-              <div class="form-group"><label for="e-desc">Тайлбар</label><textarea id="e-desc" rows="3" placeholder="Арга хэмжээний товч тайлбар…"></textarea></div>
+              <div class="form-group"><label for="e-desc">Тайлбар (жагсаалтад харагдана)</label><textarea id="e-desc" rows="3" placeholder="Арга хэмжээний товч тайлбар…"></textarea></div>
+              <div class="form-group"><label for="e-body">Дэлгэрэнгүй агуулга (бүрэн текст — дарахад нээгдэх хуудас)</label><textarea id="e-body" rows="8" placeholder="Арга хэмжээний дэлгэрэнгүй мэдээлэл, хөтөлбөр… Догол мөрийг хоосон мөрөөр тусгаарлана."></textarea></div>
               <div class="form-group"><label for="e-image">Зураг (заавал биш)</label><input type="file" id="e-image" accept="image/*" /><div id="e-image-cur" class="form-note" style="margin-top:6px"></div></div>
               <div class="form-group"><label style="display:flex;gap:9px;align-items:center;cursor:pointer"><input type="checkbox" id="e-register" checked style="width:18px;height:18px;accent-color:var(--color-accent)" /> Бүртгэл хүлээн авах (сайт дээр «Бүртгүүлэх» форм гарна)</label></div>
               <div class="form-group"><label for="e-regurl">Эсвэл гадаад бүртгэлийн холбоос (заавал биш)</label><input type="url" id="e-regurl" placeholder="https://forms.gle/… (бөглөвөл дотоод формын оронд энэ рүү чиглүүлнэ)" /></div>
@@ -845,6 +848,7 @@
       $("#n-date").value = n.date || "";
       $("#n-category").value = n.category || "busad";
       $("#n-excerpt").value = n.excerpt || "";
+      $("#n-body").value = n.body || "";
       $("#n-link").value = n.link || "";
       $("#n-published").checked = !!n.published;
       $("#n-image-cur").textContent = n.image ? "Одоогийн зураг хадгалагдана. Шинээр сонгвол солигдоно." : "";
@@ -885,6 +889,7 @@
           date: $("#n-date").value.trim() || null,
           category: $("#n-category").value,
           excerpt: $("#n-excerpt").value.trim() || null,
+          body: $("#n-body").value.trim() || null,
           link: $("#n-link").value.trim() || null,
           published: $("#n-published").checked,
         };
@@ -1146,7 +1151,7 @@
     function editProject(p) {
       $("#p-id").value = p.id; $("#p-title").value = p.title || ""; $("#p-category").value = p.category || "";
       $("#p-status").value = p.status || "ongoing"; $("#p-district").value = p.district || ""; $("#p-sort").value = p.sort != null ? p.sort : 0;
-      $("#p-date").value = p.date_label || ""; $("#p-desc").value = p.description || ""; $("#p-link").value = p.link || "";
+      $("#p-date").value = p.date_label || ""; $("#p-desc").value = p.description || ""; $("#p-body").value = p.body || ""; $("#p-link").value = p.link || "";
       $("#p-published").checked = !!p.published;
       $("#p-image-cur").textContent = p.image_url ? "Одоогийн зураг хадгалагдана. Шинээр сонгвол солигдоно." : "";
       $("#project-form-title").textContent = "Төсөл засах"; $("#project-cancel").style.display = "inline-flex";
@@ -1171,6 +1176,7 @@
           title: $("#p-title").value.trim(), category: $("#p-category").value.trim() || null,
           status: $("#p-status").value, district: $("#p-district").value.trim() || null,
           date_label: $("#p-date").value.trim() || null, description: $("#p-desc").value.trim() || null,
+          body: $("#p-body").value.trim() || null,
           link: $("#p-link").value.trim() || null, published: $("#p-published").checked, sort: parseInt($("#p-sort").value, 10) || 0,
         };
         const file = $("#p-image").files[0];
@@ -1367,7 +1373,7 @@
 
     function editEvent(ev) {
       $("#e-id").value = ev.id; $("#e-title").value = ev.title || ""; $("#e-date").value = ev.event_date || ""; $("#e-time").value = ev.time_label || "";
-      $("#e-location").value = ev.location || ""; $("#e-badge").value = ev.badge || ""; $("#e-desc").value = ev.description || "";
+      $("#e-location").value = ev.location || ""; $("#e-badge").value = ev.badge || ""; $("#e-desc").value = ev.description || ""; $("#e-body").value = ev.body || "";
       $("#e-sort").value = ev.sort != null ? ev.sort : 0; $("#e-register").checked = !!ev.register_enabled; $("#e-regurl").value = ev.register_url || ""; $("#e-published").checked = !!ev.published;
       $("#e-image-cur").textContent = ev.image_url ? "Одоогийн зураг хадгалагдана. Шинээр сонгвол солигдоно." : "";
       $("#event-form-title").textContent = "Арга хэмжээ засах"; $("#event-cancel").style.display = "inline-flex";
@@ -1391,6 +1397,7 @@
         const rec = {
           title: $("#e-title").value.trim(), event_date: $("#e-date").value || null, time_label: $("#e-time").value.trim() || null,
           location: $("#e-location").value.trim() || null, badge: $("#e-badge").value.trim() || "Зарлал", description: $("#e-desc").value.trim() || null,
+          body: $("#e-body").value.trim() || null,
           register_enabled: $("#e-register").checked, register_url: $("#e-regurl").value.trim() || null, published: $("#e-published").checked, sort: parseInt($("#e-sort").value, 10) || 0,
         };
         const file = $("#e-image").files[0];
