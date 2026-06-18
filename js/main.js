@@ -1610,30 +1610,49 @@
           const today = new Date(); today.setHours(0, 0, 0, 0);
           const upcoming = data.filter((e) => !e.event_date || new Date(e.event_date) >= today);
           // Ирээдүйн арга хэмжээ байвал тэдгээрийг (ойрынх нь түрүүнд); үгүй бол хамгийн сүүлийнхийг
-          const list = (upcoming.length ? upcoming : data.slice().reverse()).slice(0, 4);
-          const counts = {};
-          try { const { data: rc } = await sb.rpc("event_reg_counts"); (rc || []).forEach((r) => { counts[r.event_id] = r.cnt; }); } catch (_) {}
-          box.className = "events-list";
+          // Зөвхөн 1 — ойрын ирэх (үгүй бол хамгийн сүүлийн) арга хэмжээ
+          const ev = (upcoming.length ? upcoming[0] : data[data.length - 1]);
+          if (!ev) return;
+          let regCount = 0;
+          try { const { data: rc } = await sb.rpc("event_reg_counts"); (rc || []).forEach((r) => { if (r.event_id === ev.id) regCount = r.cnt; }); } catch (_) {}
+          box.className = "";
           box.innerHTML = "";
-          list.forEach((ev) => box.appendChild(EventsCMS.row(sb, ev, counts[ev.id] || 0)));
+          box.appendChild(EventsCMS.featureCard(sb, ev, regCount));
         });
     },
-    // Авсаархан цаглавар мөр — огнооны тэмдэг + гарчиг; дарахад дэлгэрэнгүй+бүртгэл нээгдэнэ
-    row(sb, ev, regCount) {
+    // Онцлох арга хэмжээ — зурагтай карт + бүртгүүлэх товч; дарахад дэлгэрэнгүй нээгдэнэ
+    featureCard(sb, ev, regCount) {
       const esc = EventsCMS.esc;
       const el = document.createElement("article");
-      el.className = "event-card reveal visible";
-      let day = "•", mon = "";
+      el.className = "event-feature reveal visible";
+      let day = "", mon = "";
       if (ev.event_date) { const d = new Date(ev.event_date); day = d.getDate(); mon = (d.getMonth() + 1) + "-р сар"; }
       const meta = [ev.location, ev.time_label].filter(Boolean).map(esc).join(" · ");
       el.innerHTML =
-        `<div class="ev-date"><span class="d">${day}</span>${mon ? `<span class="m">${esc(mon)}</span>` : ""}</div>
-         <div class="ev-body">
-           <h4>${esc(ev.title)}</h4>
-           ${meta ? `<p class="ev-meta">${meta}</p>` : ""}
-           ${regCount ? `<p class="ev-count">${regCount} иргэн бүртгүүлсэн</p>` : ""}
+        `<div class="ef-img${ev.image_url ? "" : " ef-noimg"}">
+           ${ev.image_url ? `<img src="${esc(ev.image_url)}" alt="${esc(ev.title)}" onerror="this.style.display='none';this.parentNode.classList.add('ef-noimg')" />` : ""}
+           <span class="ef-tag">${esc(ev.badge || "Зарлал")}</span>
+           ${day ? `<span class="ef-date"><b>${day}</b>${esc(mon)}</span>` : ""}
          </div>
-         <span class="ev-go" aria-hidden="true">→</span>`;
+         <div class="ef-body">
+           <h3>${esc(ev.title)}</h3>
+           ${meta ? `<p class="ef-meta">${meta}</p>` : ""}
+           ${regCount ? `<p class="ef-count">${regCount} иргэн бүртгүүлсэн</p>` : ""}
+           <div class="ef-cta"></div>
+         </div>`;
+      const cta = el.querySelector(".ef-cta");
+      if (ev.register_url) {
+        const a = document.createElement("a");
+        a.className = "btn btn-gold"; a.href = ev.register_url; a.target = "_blank"; a.rel = "noopener"; a.textContent = "Бүртгүүлэх";
+        cta.appendChild(a);
+      } else if (ev.register_enabled) {
+        const b = document.createElement("button");
+        b.type = "button"; b.className = "btn btn-gold"; b.textContent = "Бүртгүүлэх";
+        b.addEventListener("click", (e) => { e.stopPropagation(); Article.open(EventsCMS.payload(sb, ev)); });
+        cta.appendChild(b);
+      }
+      const more = document.createElement("span"); more.className = "ef-more"; more.textContent = "Дэлгэрэнгүй →";
+      cta.appendChild(more);
       Article.wire(el, () => EventsCMS.payload(sb, ev));
       return el;
     },
