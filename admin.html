@@ -8,7 +8,7 @@
   <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");</script>
   <title>Админ — Санал хүсэлт | Ц.Баатархүү</title>
   <link rel="icon" type="image/svg+xml" href="assets/img/logo.svg" />
-  <link rel="stylesheet" href="css/style.css?v=20260618w" />
+  <link rel="stylesheet" href="css/style.css?v=20260618x" />
   <style>
     .admin-top { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
       padding:16px 0; border-bottom:1px solid var(--color-border); margin-bottom:24px; }
@@ -282,7 +282,7 @@
               </div>
             </div>
             <div class="form-group"><label for="n-excerpt">Товч агуулга (жагсаалтад харагдана)</label><textarea id="n-excerpt" rows="3" placeholder="Мэдээний товч тайлбар…"></textarea></div>
-            <div class="form-group"><label for="n-body">Дэлгэрэнгүй агуулга (бүрэн текст — дарахад нээгдэх мэдээний хуудас)</label><textarea id="n-body" rows="9" placeholder="Мэдээний бүрэн агуулгыг энд бичнэ. Догол мөр бүрийг хооронд нь хоосон мөрөөр тусгаарлана."></textarea></div>
+            <div class="form-group"><label for="n-body">Дэлгэрэнгүй агуулга (бүрэн текст — дарахад нээгдэх мэдээний хуудас)</label><textarea id="n-body" rows="9" placeholder="Мэдээний бүрэн агуулгыг энд бичнэ. Догол мөр бүрийг хооронд нь хоосон мөрөөр тусгаарлана. Зургийг доорх товчоор оруулна."></textarea><div class="bodyimg-tool" style="margin-top:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap"><button type="button" class="btn btn-ghost btn-sm" data-bodyimg="n-body|news-photos">＋ Агуулгад зураг оруулах</button><span class="form-note" data-bodyimg-msg></span></div></div>
             <div class="form-group"><label for="n-link">Эх сурвалж / гадаад холбоос (заавал биш)</label><input type="url" id="n-link" placeholder="https://..." /></div>
             <div class="form-group"><label for="n-image">Зураг (заавал биш)</label><input type="file" id="n-image" accept="image/*" /><div id="n-image-cur" class="form-note" style="margin-top:6px"></div></div>
             <div class="form-group"><label style="display:flex;gap:9px;align-items:center;cursor:pointer"><input type="checkbox" id="n-published" checked style="width:18px;height:18px;accent-color:var(--color-accent)" /> Нийтлэх (сайтад харагдана)</label></div>
@@ -382,7 +382,7 @@
               </div>
               <div class="form-group"><label for="p-date">Огноо / байршлын бичиг</label><input type="text" id="p-date" placeholder="Чингэлтэй дүүрэг · 2016 оноос" /></div>
               <div class="form-group"><label for="p-desc">Тайлбар (жагсаалтад харагдана)</label><textarea id="p-desc" rows="3" placeholder="Төслийн товч тайлбар…"></textarea></div>
-              <div class="form-group"><label for="p-body">Дэлгэрэнгүй агуулга (бүрэн текст — дарахад нээгдэх төслийн хуудас)</label><textarea id="p-body" rows="8" placeholder="Төслийн бүрэн тайлбар, үр дүн, оролцогчид… Догол мөрийг хоосон мөрөөр тусгаарлана."></textarea></div>
+              <div class="form-group"><label for="p-body">Дэлгэрэнгүй агуулга (бүрэн текст — дарахад нээгдэх төслийн хуудас)</label><textarea id="p-body" rows="8" placeholder="Төслийн бүрэн тайлбар, үр дүн, оролцогчид… Догол мөрийг хоосон мөрөөр тусгаарлана. Зургийг доорх товчоор оруулна."></textarea><div class="bodyimg-tool" style="margin-top:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap"><button type="button" class="btn btn-ghost btn-sm" data-bodyimg="p-body|projects">＋ Агуулгад зураг оруулах</button><span class="form-note" data-bodyimg-msg></span></div></div>
               <div class="form-group"><label for="p-link">Гадаад холбоос (заавал биш)</label><input type="url" id="p-link" placeholder="https://..." /></div>
               <div class="form-group"><label for="p-image">Зураг (заавал биш)</label><input type="file" id="p-image" accept="image/*" /><div id="p-image-cur" class="form-note" style="margin-top:6px"></div></div>
               <div class="form-group"><label style="display:flex;gap:9px;align-items:center;cursor:pointer"><input type="checkbox" id="p-published" checked style="width:18px;height:18px;accent-color:var(--color-accent)" /> Нийтлэх (сайтад харагдана)</label></div>
@@ -458,7 +458,7 @@
                 <div class="form-group"><label for="e-badge">Шошго</label><input type="text" id="e-badge" placeholder="Зарлал" /></div>
               </div>
               <div class="form-group"><label for="e-desc">Тайлбар (жагсаалтад харагдана)</label><textarea id="e-desc" rows="3" placeholder="Арга хэмжээний товч тайлбар…"></textarea></div>
-              <div class="form-group"><label for="e-body">Дэлгэрэнгүй агуулга (бүрэн текст — дарахад нээгдэх хуудас)</label><textarea id="e-body" rows="8" placeholder="Арга хэмжээний дэлгэрэнгүй мэдээлэл, хөтөлбөр… Догол мөрийг хоосон мөрөөр тусгаарлана."></textarea></div>
+              <div class="form-group"><label for="e-body">Дэлгэрэнгүй агуулга (бүрэн текст — дарахад нээгдэх хуудас)</label><textarea id="e-body" rows="8" placeholder="Арга хэмжээний дэлгэрэнгүй мэдээлэл, хөтөлбөр… Догол мөрийг хоосон мөрөөр тусгаарлана. Зургийг доорх товчоор оруулна."></textarea><div class="bodyimg-tool" style="margin-top:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap"><button type="button" class="btn btn-ghost btn-sm" data-bodyimg="e-body|events">＋ Агуулгад зураг оруулах</button><span class="form-note" data-bodyimg-msg></span></div></div>
               <div class="form-group"><label for="e-image">Зураг (заавал биш)</label><input type="file" id="e-image" accept="image/*" /><div id="e-image-cur" class="form-note" style="margin-top:6px"></div></div>
               <div class="form-group"><label style="display:flex;gap:9px;align-items:center;cursor:pointer"><input type="checkbox" id="e-register" checked style="width:18px;height:18px;accent-color:var(--color-accent)" /> Бүртгэл хүлээн авах (сайт дээр «Бүртгүүлэх» форм гарна)</label></div>
               <div class="form-group"><label for="e-regurl">Эсвэл гадаад бүртгэлийн холбоос (заавал биш)</label><input type="url" id="e-regurl" placeholder="https://forms.gle/… (бөглөвөл дотоод формын оронд энэ рүү чиглүүлнэ)" /></div>
@@ -1514,6 +1514,40 @@
     const shell = document.querySelector(".admin-shell");
     $("#sidebar-toggle").addEventListener("click", () => shell.classList.toggle("nav-open"));
     $("#admin-backdrop").addEventListener("click", () => shell.classList.remove("nav-open"));
+
+    // «Дэлгэрэнгүй агуулга» дотор зураг байршуулж, холбоосыг текстэд оруулах
+    document.querySelectorAll("[data-bodyimg]").forEach((btn) => {
+      const [taId, bucket] = btn.dataset.bodyimg.split("|");
+      const msg = btn.parentElement.querySelector("[data-bodyimg-msg]");
+      btn.addEventListener("click", () => {
+        const ta = document.getElementById(taId);
+        const inp = document.createElement("input");
+        inp.type = "file"; inp.accept = "image/*";
+        inp.addEventListener("change", async () => {
+          const file = inp.files && inp.files[0];
+          if (!file || !ta) return;
+          btn.disabled = true;
+          if (msg) { msg.style.color = ""; msg.textContent = "Зураг байршуулж байна…"; }
+          try {
+            const ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+            const path = "body/" + Date.now() + "-" + Math.round(Math.random() * 1e6) + "." + ext;
+            const { error: upErr } = await sb.storage.from(bucket).upload(path, file, { contentType: file.type });
+            if (upErr) throw upErr;
+            const url = sb.storage.from(bucket).getPublicUrl(path).data.publicUrl;
+            const ins = (ta.value && !ta.value.endsWith("\n") ? "\n\n" : "") + url + "\n";
+            const start = ta.selectionStart != null ? ta.selectionStart : ta.value.length;
+            const end = ta.selectionEnd != null ? ta.selectionEnd : ta.value.length;
+            ta.value = ta.value.slice(0, start) + ins + ta.value.slice(end);
+            ta.focus();
+            const pos = start + ins.length; ta.setSelectionRange(pos, pos);
+            if (msg) { msg.style.color = "#46c882"; msg.textContent = "✓ Зураг агуулгад нэмэгдлээ"; }
+          } catch (err) {
+            if (msg) { msg.style.color = "var(--color-danger)"; msg.textContent = "Алдаа: " + (err.message || err); }
+          } finally { btn.disabled = false; }
+        });
+        inp.click();
+      });
+    });
   })();
   </script>
 </body>
