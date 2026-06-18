@@ -1595,7 +1595,12 @@
           if (error || !data || !data.length) return; // хоосон/алдаа → жишээ хэвээр
           grid.innerHTML = data.map((p) => ProjectsCMS.card(p)).join("");
           const kids = Array.prototype.filter.call(grid.children, (c) => c.nodeType === 1);
-          kids.forEach((el, i) => { const p = data[i]; if (p) Article.wire(el, () => ProjectsCMS.payload(p)); });
+          kids.forEach((el, i) => {
+            const p = data[i]; if (!p) return;
+            const url = "tusul-delgerengui.html?id=" + encodeURIComponent(p.id);
+            el.classList.add("is-clickable");
+            el.addEventListener("click", (e) => { if (e.target.closest("a,button")) return; location.href = url; });
+          });
         });
     },
     card(p) {
@@ -1625,6 +1630,53 @@
         body: p.body || p.description,
         sources: p.link ? [{ href: p.link, label: "Дэлгэрэнгүй холбоос →" }] : [],
       };
+    },
+  };
+
+  /* ---------- Төслийн дэлгэрэнгүй хуудас (tusul-delgerengui.html?id=…) ---------- */
+  const ProjectPost = {
+    esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
+    CAL: '<svg class="ni-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
+    async init() {
+      const wrap = document.querySelector("[data-project-post]");
+      if (!wrap) return;
+      const id = new URLSearchParams(location.search).get("id");
+      const sb = window.getSB && window.getSB();
+      if (!id || !sb) { wrap.innerHTML = ProjectPost.notFound(); return; }
+      try {
+        const { data, error } = await sb.from("projects").select("*").eq("id", id).single();
+        if (error || !data) { wrap.innerHTML = ProjectPost.notFound(); return; }
+        document.title = data.title + " | Ц.Баатархүү";
+        const md = document.querySelector('meta[name="description"]');
+        if (md && data.description) md.setAttribute("content", data.description);
+        wrap.innerHTML = ProjectPost.render(data);
+        window.scrollTo(0, 0);
+      } catch (_) { wrap.innerHTML = ProjectPost.notFound(); }
+    },
+    notFound() {
+      return '<div class="np-state"><h2>Төсөл олдсонгүй</h2><p>Энэ төсөл устсан эсвэл хаяг буруу байж магадгүй.</p><a class="btn btn-primary" href="tusul.html">← Төслүүд</a></div>';
+    },
+    render(p) {
+      const esc = ProjectPost.esc;
+      const st = ProjectsCMS.STATUS[p.status] || ProjectsCMS.STATUS.ongoing;
+      const tags = [p.category || "Төсөл", st.label].filter(Boolean).map((t) => `<span class="am-tag">${esc(t)}</span>`).join("");
+      const tagWrap = tags ? `<div class="am-tags" style="margin-bottom:12px">${tags}</div>` : "";
+      const meta = p.date_label ? `<div class="np-datum">${ProjectPost.CAL}${esc(p.date_label)}</div>` : "";
+      const cover = p.image_url
+        ? `<figure class="np-cover"><img src="${esc(p.image_url)}" alt="${esc(p.title)}" onerror="this.closest('.np-cover').remove()"></figure>`
+        : "";
+      const lead = (p.body && p.description) ? `<p class="np-lead">${esc(p.description)}</p>` : "";
+      const bodyText = p.body || p.description || "";
+      const src = p.link
+        ? `<div class="np-sources"><span class="np-src-label">Холбоос:</span><a class="btn btn-primary btn-sm" href="${esc(p.link)}" target="_blank" rel="noopener">Дэлгэрэнгүй →</a></div>`
+        : "";
+      return `<nav class="breadcrumb" aria-label="Замчлал"><a href="index.html">Нүүр</a><span>/</span><a href="tusul.html">Төслүүд</a></nav>
+        ${tagWrap}${meta}
+        <h1 class="np-title">${esc(p.title)}</h1>
+        ${cover}${lead}
+        <div class="np-body article-body">${articleBodyHtml(bodyText, esc)}</div>
+        ${src}
+        <a class="np-back" href="tusul.html">← Бүх төсөл рүү буцах</a>`;
     },
   };
 
@@ -1916,6 +1968,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     Theme.init(); Nav.init(); Search.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
-    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); NewsPost.init(); EventPost.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); ReportsCMS.init(); ProjectsCMS.init(); LawsCMS.init(); FeedbackStats.init(); EventsCMS.init(); Settings.init();
+    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); NewsPost.init(); EventPost.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); ReportsCMS.init(); ProjectsCMS.init(); ProjectPost.init(); LawsCMS.init(); FeedbackStats.init(); EventsCMS.init(); Settings.init();
   });
 })();
