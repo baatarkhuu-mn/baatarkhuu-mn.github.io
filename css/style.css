@@ -189,22 +189,9 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .hb-brand .emblem img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 2px 8px rgba(0,0,0,.45)); }
 .hb-name { font-size: clamp(1.05rem, 2.3vw, 1.7rem); font-weight: 800; color: #fff; letter-spacing: .04em; text-shadow: 0 2px 12px rgba(0,0,0,.55); }
 .hb-slogan { font-size: clamp(.95rem, 2vw, 1.5rem); font-weight: 800; color: var(--color-accent); letter-spacing: .12em; text-shadow: 0 2px 12px rgba(0,0,0,.55); white-space: nowrap; }
-.navbar-wrap { position: sticky; top: 0; z-index: 1000; background: linear-gradient(90deg, #0b2a6b, #16439c); border-bottom: none; box-shadow: 0 2px 14px rgba(0,0,0,.28); transition: box-shadow var(--transition); }
-[data-theme="light"] .navbar-wrap { background: linear-gradient(90deg, #0b2a6b, #16439c); }
+.navbar-wrap { position: sticky; top: 0; z-index: 1000; background: color-mix(in srgb, var(--color-bg) 92%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--color-border); transition: box-shadow var(--transition); }
+[data-theme="light"] .navbar-wrap { background: color-mix(in srgb, #e9f1fd 88%, transparent); }
 .navbar-wrap .navbar { justify-content: flex-start; gap: 22px; }
-/* Хөх нав мөр — цагаан цэс, цагаан хэрэгслүүд */
-.navbar-wrap .main-nav a { color: #eaf1ff; }
-.navbar-wrap .main-nav a:hover { background: rgba(255,255,255,.14); color: #fff; }
-.navbar-wrap .main-nav a.active { color: var(--color-accent); }
-.navbar-wrap .main-nav a.active::after { background: var(--color-accent); }
-.navbar-wrap .icon-btn { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.28); color: #fff; }
-.navbar-wrap .icon-btn:hover { background: rgba(255,255,255,.22); color: #fff; border-color: rgba(255,255,255,.55); box-shadow: none; }
-.navbar-wrap .lang-btn .lang-code { color: #fff; }
-@media (max-width: 1080px) {
-  /* Мобайл dropdown цэс — бараан дэвсгэр дээр уншигдахуйц текст */
-  .navbar-wrap .main-nav a { color: var(--color-text); }
-  .navbar-wrap .main-nav a.active { color: var(--color-primary-light); }
-}
 @media (max-width: 640px) {
   .hb-inner { min-height: 92px; }
   .hb-brand .emblem { width: 40px; height: 40px; }

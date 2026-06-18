@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://baatarkhuu-mn.github.io/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://baatarkhuu-mn.github.io/namtar.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://baatarkhuu-mn.github.io/huuli.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://baatarkhuu-mn.github.io/tusul.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://baatarkhuu-mn.github.io/medee.html</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
-  <url><loc>https://baatarkhuu-mn.github.io/video.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://baatarkhuu-mn.github.io/tailan.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://baatarkhuu-mn.github.io/holboo.html</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://baatarkhuu.mn/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://baatarkhuu.mn/namtar.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://baatarkhuu.mn/huuli.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://baatarkhuu.mn/tusul.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://baatarkhuu.mn/medee.html</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://baatarkhuu.mn/video.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://baatarkhuu.mn/tailan.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://baatarkhuu.mn/holboo.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
 </urlset>
