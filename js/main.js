@@ -1429,10 +1429,13 @@
           if (error || !data || !data.length) return; // хоосон/алдаа → жишээ хэвээр
           if (listEl) { // Видео хуудас — fb-video карт (жинхэнэ хэмжээ)
             const featuredEl = document.querySelector("[data-video-featured]");
-            const feat = data.find((v) => v.featured) || data[0];
-            const rest = data.filter((v) => v !== feat);
-            if (featuredEl) featuredEl.innerHTML = VideoCMS.card(feat, true);
-            let arr = rest.length ? rest : data;
+            let arr = data;
+            if (featuredEl) { // онцлох хэсэг байвал тусгаарлана; үгүй бол бүгдийг жагсаана
+              const feat = data.find((v) => v.featured) || data[0];
+              featuredEl.innerHTML = VideoCMS.card(feat, true);
+              const rest = data.filter((v) => v !== feat);
+              arr = rest.length ? rest : data;
+            }
             const lim = parseInt(listEl.dataset.videoLimit || "0", 10);
             if (lim) arr = arr.slice(0, lim);
             listEl.innerHTML = arr.map((v) => VideoCMS.card(v)).join("");
