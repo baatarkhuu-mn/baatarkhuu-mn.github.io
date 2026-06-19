@@ -1434,8 +1434,8 @@
                  </select>
                </label>
              </div>
-             <div style="font-weight:600">${esc(v.title || "(гарчиггүй)")}</div>
-             <div style="font-size:.82rem;color:var(--color-text-soft);margin-top:4px;word-break:break-all">${esc(v.url)}</div>
+             <div class="nr-title" style="font-weight:600">${esc(v.title || "(гарчиггүй)")}</div>
+             <div class="nr-exc" style="font-size:.82rem;color:var(--color-text-soft);margin-top:4px;word-break:break-all">${esc(v.url)}</div>
            </div>
            <div class="nr-actions">
              <button class="btn btn-ghost btn-sm vr-edit">Засах</button>
@@ -1532,8 +1532,8 @@
                ${r.pdf_url ? `<a href="${esc(r.pdf_url)}" target="_blank" rel="noopener" style="font-size:.8rem;color:var(--color-primary-light)">PDF</a>` : `<span style="font-size:.8rem;color:var(--color-danger)">PDF алга</span>`}
                <span class="nr-date">${pubDate(r.created_at)}</span>
              </div>
-             <div style="font-weight:600">${esc(r.title)}</div>
-             <div style="font-size:.84rem;color:var(--color-text-soft);margin-top:4px">${esc(r.category || "")}${r.meta ? " · " + esc(r.meta) : ""}</div>
+             <div class="nr-title" style="font-weight:600">${esc(r.title)}</div>
+             <div class="nr-exc" style="font-size:.84rem;color:var(--color-text-soft);margin-top:4px">${esc(r.category || "")}${r.meta ? " · " + esc(r.meta) : ""}</div>
            </div>
            <div class="nr-actions">
              <button class="btn btn-ghost btn-sm rr-edit">Засах</button>
@@ -1635,8 +1635,8 @@
                <span style="font-size:.8rem;color:var(--color-text-soft)">эрэмбэ: ${p.sort}</span>
                <span class="nr-date">${pubDate(p.created_at)}</span>
              </div>
-             <div style="font-weight:600">${esc(p.title)}</div>
-             <div style="font-size:.84rem;color:var(--color-text-soft);margin-top:4px">${esc(p.date_label || "")}</div>
+             <div class="nr-title" style="font-weight:600">${esc(p.title)}</div>
+             <div class="nr-exc" style="font-size:.84rem;color:var(--color-text-soft);margin-top:4px">${esc(p.date_label || "")}</div>
            </div>
            <div class="nr-actions">
              <button class="btn btn-ghost btn-sm pr-edit">Засах</button>
@@ -1734,8 +1734,8 @@
                <span style="font-size:.8rem;color:var(--color-text-soft)">эрэмбэ: ${l.sort}</span>
                ${l.pdf_url ? `<a href="${esc(l.pdf_url)}" target="_blank" rel="noopener" style="font-size:.8rem;color:var(--color-primary-light)">PDF/холбоос</a>` : ""}
              </div>
-             <div style="font-weight:600">${esc(l.title)}</div>
-             <div style="font-size:.84rem;color:var(--color-text-soft);margin-top:4px">${esc(l.date_label || "")}${l.topic ? " · " + esc(l.topic) : ""}</div>
+             <div class="nr-title" style="font-weight:600">${esc(l.title)}</div>
+             <div class="nr-exc" style="font-size:.84rem;color:var(--color-text-soft);margin-top:4px">${esc(l.date_label || "")}${l.topic ? " · " + esc(l.topic) : ""}</div>
            </div>
            <div class="nr-actions">
              <button class="btn btn-ghost btn-sm lr-edit">Засах</button>
@@ -1834,8 +1834,8 @@
                ${ev.published ? "" : `<span class="badge-status status-draft">Ноорог</span>`}
                <span style="font-size:.8rem;color:var(--color-text-soft)">${esc(ev.event_date || "огноогүй")}${ev.time_label ? " · " + esc(ev.time_label) : ""}</span>
              </div>
-             <div style="font-weight:600">${esc(ev.title)}</div>
-             <div style="font-size:.84rem;color:var(--color-text-soft);margin-top:4px">${esc(ev.location || "")}</div>
+             <div class="nr-title" style="font-weight:600">${esc(ev.title)}</div>
+             <div class="nr-exc" style="font-size:.84rem;color:var(--color-text-soft);margin-top:4px">${esc(ev.location || "")}</div>
              <button type="button" class="btn btn-ghost btn-sm ev-regs-btn" style="margin-top:8px">Бүртгэл (${cnt})</button>
              <div class="ev-regs" style="display:none;margin-top:10px"></div>
            </div>
