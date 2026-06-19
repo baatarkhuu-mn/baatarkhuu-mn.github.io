@@ -40,7 +40,7 @@
     .toolbar-main { display:flex; gap:10px; align-items:stretch; }
     .toolbar-main .field { flex:1; margin:0; }
     .toolbar-main .btn { white-space:nowrap; display:inline-flex; align-items:center; }
-    .toolbar-filters { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:10px; }
+    .toolbar-filters { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
     .toolbar input, .toolbar select {
       width:100%; padding:11px 14px; border-radius:var(--radius-sm);
       border:1px solid var(--color-border); background:var(--color-bg-card);
@@ -141,6 +141,11 @@
     .admin-topbar h1 { font-size:1.3rem; margin:0; }
     .topbar-user { margin-left:auto; display:flex; align-items:center; gap:12px; font-size:.86rem; color:var(--color-text-soft); }
     .as-toggle { display:none; background:none; border:none; color:var(--color-text); font-size:1.4rem; cursor:pointer; line-height:1; }
+    .topbar-back { background:var(--color-bg-soft); border:1px solid var(--color-border); color:var(--color-text);
+      border-radius:var(--radius-sm); padding:8px 14px; font-family:inherit; font-size:.86rem; font-weight:600; cursor:pointer;
+      transition:border-color .15s, color .15s; }
+    .topbar-back:hover { border-color:var(--color-accent); color:var(--color-accent); }
+    .topbar-back[hidden] { display:none; }
     .admin-content { padding:26px; max-width:1100px; width:100%; }
     .dash-grid { display:grid; grid-template-columns:1.5fr 1fr; gap:18px; margin-top:6px; }
     .panel { background:var(--color-bg-card); border:1px solid var(--color-border); border-radius:var(--radius); padding:20px; }
@@ -240,6 +245,7 @@
     <div class="admin-main">
       <header class="admin-topbar">
         <button type="button" class="as-toggle" id="sidebar-toggle" aria-label="Цэс">☰</button>
+        <button type="button" class="topbar-back" id="back-btn" hidden>← Буцах</button>
         <h1 id="page-title">Хяналтын самбар</h1>
         <div class="topbar-user"><span id="admin-email"></span></div>
       </header>
@@ -1695,7 +1701,13 @@
 
     // Цонх (view) солих — sidebar навигац
     const PAGE_TITLE = { dashboard: "Хяналтын самбар", fb: "Санал хүсэлт", news: "Мэдээ", video: "Видео", report: "Тайлан", project: "Төслүүд", law: "Хууль", event: "Арга хэмжээ", settings: "Тохиргоо" };
-    function showView(name) {
+    let currentView = "dashboard";
+    const viewHistory = [];
+    function updateBackBtn() { const b = $("#back-btn"); if (b) b.hidden = viewHistory.length === 0; }
+    function showView(name, opts) {
+      opts = opts || {};
+      if (!opts.isBack && name !== currentView) viewHistory.push(currentView);
+      currentView = name;
       document.querySelectorAll(".view").forEach((v) => { v.style.display = v.id === name + "-view" ? "block" : "none"; });
       document.querySelectorAll(".nav-link[data-view]").forEach((b) => b.classList.toggle("active", b.dataset.view === name));
       const t = $("#page-title"); if (t) t.textContent = PAGE_TITLE[name] || "";
@@ -1709,10 +1721,17 @@
       if (name === "dashboard") renderRecent();
       document.querySelectorAll(".cms-form").forEach((f) => { f.hidden = true; }); // view сольиход формыг нуух
       const shell = document.querySelector(".admin-shell"); if (shell) shell.classList.remove("nav-open");
+      updateBackBtn();
       window.scrollTo({ top: 0 });
     }
     document.querySelectorAll(".nav-link[data-view]").forEach((b) => {
       b.addEventListener("click", () => showView(b.dataset.view));
+    });
+    // ← Буцах — өмнөх үзсэн хэсэг рүү
+    const backBtn = $("#back-btn");
+    if (backBtn) backBtn.addEventListener("click", () => {
+      if (!viewHistory.length) return;
+      showView(viewHistory.pop(), { isBack: true });
     });
 
     // ===== Жагсаалт + "Шинэ нэмэх" (форм нуух/харуулах) =====
