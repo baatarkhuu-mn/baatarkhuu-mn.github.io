@@ -85,6 +85,11 @@ body {
   overflow-x: hidden;
 }
 
+/* Десктоп дээр сайтыг 80%-ийн хэмжээгээр (цомхон) харуулах. Зөвхөн сайт — админд нөлөөлөхгүй. */
+@media (min-width: 1024px) {
+  body.fx-digital { zoom: 0.8; }
+}
+
 /* Дижитал торон дэвсгэр — минимал горимд маш намуухан, зөвхөн дээд хэсэгт */
 body::before {
   content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
@@ -1392,11 +1397,10 @@ a.news-card-clean { text-decoration: none; color: inherit; display: flex; flex-d
 
 /* Асуудлын явц (timeline) + хариуцах газар + албан бичиг */
 .fb-route { margin: 12px 0; }
-.fb-timeline { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0; }
-.fb-timeline .ft-step { display: flex; align-items: center; gap: 10px; position: relative; padding: 5px 0 5px 2px; font-size: .85rem; color: var(--color-text-soft); }
-.fb-timeline .ft-step::before { content: ""; position: absolute; left: 6px; top: 0; bottom: 0; width: 2px; background: var(--color-border); }
-.fb-timeline .ft-step:first-child::before { top: 50%; }
-.fb-timeline .ft-step:last-child::before { bottom: 50%; }
+.fb-timeline { list-style: none; margin: 0; padding: 4px 0; display: flex; flex-direction: row; gap: 0; }
+.fb-timeline .ft-step { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; position: relative; padding: 2px 4px; font-size: .72rem; line-height: 1.3; text-align: center; color: var(--color-text-soft); }
+.fb-timeline .ft-step::before { content: ""; position: absolute; left: -50%; right: 50%; top: 9px; height: 2px; background: var(--color-border); }
+.fb-timeline .ft-step:first-child::before { display: none; }
 .fb-timeline .ft-dot { width: 14px; height: 14px; border-radius: 50%; background: var(--color-bg-soft); border: 2px solid var(--color-border); flex-shrink: 0; z-index: 1; }
 .fb-timeline .ft-step.done { color: var(--color-text); font-weight: 600; }
 .fb-timeline .ft-step.done .ft-dot { background: var(--color-accent); border-color: var(--color-accent); }
