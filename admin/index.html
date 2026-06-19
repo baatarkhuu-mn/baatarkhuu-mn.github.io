@@ -119,22 +119,27 @@
       border:1px solid var(--color-border); border-radius:50%; width:44px; height:44px; cursor:pointer; font-size:1.1rem; }
     .cms-bar { margin-bottom:18px; }
     .nr-date { font-size:.78rem; color:var(--color-text-soft); margin-left:auto; }
-    /* CMS жагсаалтуудыг feedback шиг картан grid болгох */
+    /* CMS жагсаалтуудыг feedback шиг ЖИГД нэг хэмжээтэй картан grid болгох */
     #news-list, #video-list, #report-list, #project-list, #law-list, #event-list {
-      display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:14px; align-items:start; }
+      display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:14px; align-items:stretch; }
     #news-list .news-row, #video-list .news-row, #report-list .news-row,
     #project-list .news-row, #law-list .news-row, #event-list .news-row {
-      flex-direction:column; align-items:stretch; gap:10px; margin-bottom:0; overflow:hidden;
+      flex-direction:column; align-items:stretch; gap:10px; margin-bottom:0; overflow:hidden; height:100%;
       transition:border-color .15s, box-shadow .15s, transform .15s; }
     #news-list .news-row:hover, #video-list .news-row:hover, #report-list .news-row:hover,
     #project-list .news-row:hover, #law-list .news-row:hover, #event-list .news-row:hover {
       border-color:var(--color-primary-dark); box-shadow:var(--shadow-sm); transform:translateY(-2px); }
     #news-list .news-row img, #report-list .news-row img, #project-list .news-row img,
     #event-list .news-row img, #law-list .news-row img {
-      width:100%; height:140px; }
+      width:100%; height:150px; flex-shrink:0; }
+    #news-list .news-row .nr-body, #video-list .news-row .nr-body, #report-list .news-row .nr-body,
+    #project-list .news-row .nr-body, #law-list .news-row .nr-body, #event-list .news-row .nr-body { flex:1 1 auto; }
     #news-list .nr-actions, #video-list .nr-actions, #report-list .nr-actions,
     #project-list .nr-actions, #law-list .nr-actions, #event-list .nr-actions {
       margin-top:auto; flex-wrap:wrap; }
+    /* Урт текстийг таслаж жигд өндөр барих */
+    .news-row .nr-title { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+    .news-row .nr-exc { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
     .reg-table { width:100%; border-collapse:collapse; font-size:.86rem; }
     .reg-table th { text-align:left; color:var(--color-text-soft); font-weight:600; font-size:.78rem; padding:6px 8px; border-bottom:1px solid var(--color-border); }
     .reg-table td { padding:7px 8px; border-bottom:1px solid var(--color-border); }
@@ -166,7 +171,40 @@
     .admin-topbar { display:flex; align-items:center; gap:16px; padding:16px 26px; border-bottom:1px solid var(--color-border);
       background:var(--color-bg); position:sticky; top:0; z-index:20; }
     .admin-topbar h1 { font-size:1.3rem; margin:0; }
-    .topbar-user { margin-left:auto; display:flex; align-items:center; gap:12px; font-size:.86rem; color:var(--color-text-soft); }
+    .topbar-user { margin-left:auto; position:relative; }
+    .user-btn { display:flex; align-items:center; gap:9px; background:var(--color-bg-soft); border:1px solid var(--color-border);
+      border-radius:30px; padding:5px 12px 5px 5px; cursor:pointer; font-family:inherit; color:var(--color-text); }
+    .user-btn:hover { border-color:var(--color-primary); }
+    .user-ava, .ud-ava { width:30px; height:30px; border-radius:50%; background:var(--color-accent); color:#fff;
+      display:grid; place-items:center; font-size:.85rem; font-weight:700; flex-shrink:0; text-transform:uppercase; }
+    .user-email { font-size:.84rem; color:var(--color-text-soft); max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .user-caret { width:15px; height:15px; color:var(--color-text-soft); }
+    .user-dropdown { position:absolute; top:calc(100% + 8px); right:0; z-index:120; width:248px;
+      background:var(--color-bg-card); border:1px solid var(--color-border); border-radius:var(--radius); box-shadow:var(--shadow-lg); padding:6px; }
+    .user-dropdown[hidden] { display:none; }
+    .ud-head { display:flex; align-items:center; gap:10px; padding:10px 10px 12px; border-bottom:1px solid var(--color-border); margin-bottom:6px; }
+    .ud-ava { width:38px; height:38px; font-size:1rem; }
+    .ud-id { min-width:0; }
+    .ud-name { font-weight:700; font-size:.9rem; }
+    .ud-mail { font-size:.78rem; color:var(--color-text-soft); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .ud-item { display:flex; align-items:center; gap:10px; width:100%; text-align:left; padding:9px 11px; border:none;
+      background:none; color:var(--color-text); font-family:inherit; font-size:.86rem; cursor:pointer; border-radius:var(--radius-sm); text-decoration:none; }
+    .ud-item:hover { background:var(--color-bg-soft); color:var(--color-text); }
+    .ud-item svg { width:17px; height:17px; flex-shrink:0; color:var(--color-text-soft); }
+    .ud-item.ud-danger { color:var(--color-danger); }
+    .ud-item.ud-danger svg { color:var(--color-danger); }
+    .ud-item.ud-danger:hover { background:rgba(240,98,98,.1); }
+    /* Нууц үг солих цонх */
+    .ud-modal { position:fixed; inset:0; z-index:3200; background:rgba(2,8,18,.55); display:none; place-items:center; padding:24px; }
+    .ud-modal.open { display:grid; }
+    .ud-modal-box { width:100%; max-width:380px; background:var(--color-bg-card); border:1px solid var(--color-border); border-radius:var(--radius); box-shadow:var(--shadow-lg); }
+    .ud-modal-head { display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid var(--color-border); }
+    .ud-modal-head h3 { margin:0; font-size:1rem; }
+    .ud-modal-x { width:30px; height:30px; border-radius:50%; border:1px solid var(--color-border); background:var(--color-bg-soft); color:var(--color-text-soft); cursor:pointer; font-size:.9rem; line-height:1; }
+    .ud-modal-body { padding:16px 18px; }
+    .ud-modal-body label { display:block; font-size:.8rem; color:var(--color-text-soft); margin:10px 0 5px; }
+    .ud-modal-body input { width:100%; padding:10px 12px; border-radius:var(--radius-sm); border:1px solid var(--color-border); background:var(--color-bg-soft); color:var(--color-text); font-family:inherit; font-size:.9rem; }
+    .ud-modal-body input:focus { outline:none; border-color:var(--color-primary); }
     .as-toggle { display:none; background:none; border:none; color:var(--color-text); font-size:1.4rem; cursor:pointer; line-height:1; }
     .topbar-back { background:var(--color-bg-soft); border:1px solid var(--color-border); color:var(--color-text);
       border-radius:var(--radius-sm); padding:8px 14px; font-family:inherit; font-size:.86rem; font-weight:600; cursor:pointer;
@@ -196,6 +234,8 @@
       .as-toggle { display:block; }
       .admin-content { padding:18px 16px; }
       .admin-topbar { padding:14px 16px; }
+      .user-email { display:none; }
+      #page-title { font-size:1.05rem; }
     }
   </style>
 </head>
@@ -274,8 +314,42 @@
         <button type="button" class="as-toggle" id="sidebar-toggle" aria-label="Цэс">☰</button>
         <button type="button" class="topbar-back" id="back-btn" hidden>← Буцах</button>
         <h1 id="page-title">Хяналтын самбар</h1>
-        <div class="topbar-user"><span id="admin-email"></span></div>
+        <div class="topbar-user" id="user-menu">
+          <button type="button" class="user-btn" id="user-btn" aria-haspopup="true" aria-expanded="false">
+            <span class="user-ava" id="user-ava">A</span>
+            <span class="user-email" id="admin-email"></span>
+            <svg class="user-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="user-dropdown" id="user-dropdown" hidden>
+            <div class="ud-head">
+              <span class="ud-ava" id="user-ava2">A</span>
+              <div class="ud-id"><div class="ud-name">Админ</div><div class="ud-mail" id="user-mail-full">—</div></div>
+            </div>
+            <button type="button" class="ud-item" id="ud-settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Сайтын тохиргоо</button>
+            <button type="button" class="ud-item" id="ud-password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Нууц үг солих</button>
+            <a class="ud-item" href="/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg> Сайт руу очих</a>
+            <button type="button" class="ud-item ud-danger" id="ud-logout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg> Гарах</button>
+          </div>
+        </div>
       </header>
+
+      <!-- Нууц үг солих цонх -->
+      <div class="ud-modal" id="pw-modal">
+        <div class="ud-modal-box">
+          <div class="ud-modal-head"><h3>Нууц үг солих</h3><button type="button" class="ud-modal-x" data-pw-close aria-label="Хаах">✕</button></div>
+          <div class="ud-modal-body">
+            <label for="pw-new">Шинэ нууц үг</label>
+            <input type="password" id="pw-new" autocomplete="new-password" placeholder="Хамгийн багадаа 6 тэмдэгт" />
+            <label for="pw-confirm">Дахин оруулна уу</label>
+            <input type="password" id="pw-confirm" autocomplete="new-password" placeholder="Шинэ нууц үгээ давтана уу" />
+            <div id="pw-msg" class="form-note"></div>
+            <div style="display:flex;gap:10px;margin-top:12px">
+              <button type="button" class="btn btn-gold btn-sm" id="pw-save">Хадгалах</button>
+              <button type="button" class="btn btn-ghost btn-sm" data-pw-close>Цуцлах</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div class="admin-content">
         <!-- ХЯНАЛТЫН САМБАР -->
@@ -995,7 +1069,15 @@
     function showDash() {
       loginView.style.display = "none"; dashView.style.display = "flex";
       showView("dashboard"); loadFeedback(); loadSectionCounts();
-      sb.auth.getUser().then(({ data }) => { const e = $("#admin-email"); if (e && data.user) e.textContent = data.user.email; });
+      sb.auth.getUser().then(({ data }) => {
+        if (!data.user) return;
+        const mail = data.user.email || "";
+        const e = $("#admin-email"); if (e) e.textContent = mail;
+        const mf = $("#user-mail-full"); if (mf) mf.textContent = mail;
+        const ini = (mail[0] || "A").toUpperCase();
+        const a1 = $("#user-ava"), a2 = $("#user-ava2");
+        if (a1) a1.textContent = ini; if (a2) a2.textContent = ini;
+      });
     }
 
     async function loadSectionCounts() {
@@ -1027,6 +1109,43 @@
     });
 
     logoutBtn.addEventListener("click", async () => { await sb.auth.signOut(); showLogin(); });
+
+    // ===== Топбар хэрэглэгчийн цэс =====
+    const userBtn = $("#user-btn"), userDropdown = $("#user-dropdown");
+    function closeUserMenu() { if (userDropdown) { userDropdown.hidden = true; userBtn.setAttribute("aria-expanded", "false"); } }
+    if (userBtn) {
+      userBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const open = userDropdown.hidden;
+        userDropdown.hidden = !open;
+        userBtn.setAttribute("aria-expanded", open ? "true" : "false");
+      });
+      document.addEventListener("click", (e) => { if (!$("#user-menu").contains(e.target)) closeUserMenu(); });
+      document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeUserMenu(); });
+    }
+    const udSettings = $("#ud-settings"); if (udSettings) udSettings.addEventListener("click", () => { closeUserMenu(); showView("settings"); });
+    const udLogout = $("#ud-logout"); if (udLogout) udLogout.addEventListener("click", async () => { closeUserMenu(); await sb.auth.signOut(); showLogin(); });
+
+    // ===== Нууц үг солих =====
+    const pwModal = $("#pw-modal"), pwMsg = $("#pw-msg");
+    function openPw() { closeUserMenu(); if (pwMsg) { pwMsg.textContent = ""; pwMsg.style.color = ""; } $("#pw-new").value = ""; $("#pw-confirm").value = ""; pwModal.classList.add("open"); setTimeout(() => $("#pw-new").focus(), 50); }
+    function closePw() { pwModal.classList.remove("open"); }
+    const udPassword = $("#ud-password"); if (udPassword) udPassword.addEventListener("click", openPw);
+    if (pwModal) {
+      pwModal.addEventListener("click", (e) => { if (e.target === pwModal || e.target.closest("[data-pw-close]")) closePw(); });
+      document.addEventListener("keydown", (e) => { if (e.key === "Escape" && pwModal.classList.contains("open")) closePw(); });
+      $("#pw-save").addEventListener("click", async () => {
+        const p1 = $("#pw-new").value, p2 = $("#pw-confirm").value;
+        pwMsg.style.color = "var(--color-danger)";
+        if (p1.length < 6) { pwMsg.textContent = "⚠ Нууц үг 6-аас доошгүй тэмдэгт байх ёстой."; return; }
+        if (p1 !== p2) { pwMsg.textContent = "⚠ Нууц үг таарахгүй байна."; return; }
+        pwMsg.style.color = "var(--color-text-soft)"; pwMsg.textContent = "Хадгалж байна…";
+        const { error } = await sb.auth.updateUser({ password: p1 });
+        if (error) { pwMsg.style.color = "var(--color-danger)"; pwMsg.textContent = "⚠ " + error.message; return; }
+        pwMsg.style.color = "#46c882"; pwMsg.textContent = "✓ Нууц үг амжилттай солигдлоо.";
+        setTimeout(closePw, 1200);
+      });
+    }
     $("#refresh-btn").addEventListener("click", loadFeedback);
     $("#export-btn").addEventListener("click", exportXLSX);
     ["#f-q", "#f-status", "#f-subject", "#f-sort"].forEach((s) => {
@@ -1090,8 +1209,8 @@
                ${n.published ? "" : `<span class="badge-status status-draft">Ноорог</span>`}
                <span style="font-size:.8rem;color:var(--color-text-soft)">${esc(n.date || "")}</span>
              </div>
-             <div style="font-weight:600">${esc(n.title)}</div>
-             <div style="font-size:.86rem;color:var(--color-text-soft);margin-top:4px">${esc((n.excerpt || "").slice(0, 130))}</div>
+             <div class="nr-title" style="font-weight:600">${esc(n.title)}</div>
+             <div class="nr-exc" style="font-size:.86rem;color:var(--color-text-soft);margin-top:4px">${esc((n.excerpt || "").slice(0, 130))}</div>
            </div>
            <div class="nr-actions">
              <button class="btn btn-ghost btn-sm nr-edit">Засах</button>
