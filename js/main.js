@@ -444,7 +444,7 @@
           const message = (fd.get("message") || "").toString().trim();
           const lat = latIn && latIn.value ? parseFloat(latIn.value) : null;
           const rating = ratingIn && ratingIn.value ? parseInt(ratingIn.value, 10) : null;
-          const { data: ticketNo, error: insErr } = await sb.rpc("submit_feedback", {
+          const baseArgs = {
             p_name: (fd.get("name") || "").toString().trim(),
             p_phone: (fd.get("phone") || "").toString().trim() || null,
             p_subject: (fd.get("subject") || "").toString(),
@@ -454,7 +454,17 @@
             p_rating: rating,
             p_photos: photoPaths,
             p_is_public: isPublic,
-          });
+          };
+          const locArgs = {
+            ...baseArgs,
+            p_district: district && district.value ? district.value : null,
+            p_khoroo: khoroo && khoroo.value ? khoroo.value : null,
+          };
+          let { data: ticketNo, error: insErr } = await sb.rpc("submit_feedback", locArgs);
+          // supabase-feedback-location.sql ажиллуулаагүй бол (хуучин 9-параметрт функц) байршилгүйгээр дахин оролдоно
+          if (insErr && /district|khoroo|function|PGRST202|schema cache|argument/i.test(insErr.message || "")) {
+            ({ data: ticketNo, error: insErr } = await sb.rpc("submit_feedback", baseArgs));
+          }
           if (insErr) throw insErr;
           const trackRef = ticketNo || "—";
           // Дугаарыг энэ төхөөрөмжид хадгална (иргэн дугаараа мартсан ч саналаа олох)
