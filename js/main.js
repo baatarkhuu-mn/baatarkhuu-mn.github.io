@@ -59,14 +59,14 @@
   /* ---------- 3. Хайлт (Search) ---------- */
   // CMS/Admin-аас динамикаар дүүргэх боломжтой — одоогоор статик индекс
   const SEARCH_INDEX = (window.SITE_SEARCH_INDEX) || [
-    { cat: "Нүүр", title: "Нүүр хуудас", url: "index.html" },
-    { cat: "Намтар", title: "Гишүүний намтар, боловсрол, туршлага", url: "namtar.html" },
-    { cat: "Хууль", title: "Өргөн барьсан болон хамтран санаачилсан хуулиуд", url: "huuli.html" },
-    { cat: "Төслүүд", title: "Тойрогт хэрэгжүүлсэн төслүүд", url: "tusul.html" },
-    { cat: "Мэдээ", title: "Сүүлийн үеийн мэдээ мэдээлэл", url: "medee.html" },
-    { cat: "Видео", title: "Ярилцлага, чуулганы үг хэлсэн бичлэгүүд", url: "video.html" },
-    { cat: "Тайлан", title: "Сар бүрийн ба жилийн тайлан, инфографик", url: "tailan.html" },
-    { cat: "Холбоо барих", title: "Хаяг, утас, и-мэйл, санал хүсэлт", url: "holboo.html" },
+    { cat: "Нүүр", title: "Нүүр хуудас", url: "/" },
+    { cat: "Намтар", title: "Гишүүний намтар, боловсрол, туршлага", url: "/namtar/" },
+    { cat: "Хууль", title: "Өргөн барьсан болон хамтран санаачилсан хуулиуд", url: "/huuli/" },
+    { cat: "Төслүүд", title: "Тойрогт хэрэгжүүлсэн төслүүд", url: "/tusul/" },
+    { cat: "Мэдээ", title: "Сүүлийн үеийн мэдээ мэдээлэл", url: "/medee/" },
+    { cat: "Видео", title: "Ярилцлага, чуулганы үг хэлсэн бичлэгүүд", url: "/video/" },
+    { cat: "Тайлан", title: "Сар бүрийн ба жилийн тайлан, инфографик", url: "/tailan/" },
+    { cat: "Холбоо барих", title: "Хаяг, утас, и-мэйл, санал хүсэлт", url: "/holboo/" },
   ];
 
   const Search = {
@@ -545,7 +545,7 @@
       document.querySelectorAll("[data-year]").forEach((el) => (el.textContent = new Date().getFullYear()));
 
       // Идэвхтэй цэсийг тэмдэглэх
-      const path = location.pathname.split("/").pop() || "index.html";
+      const path = location.pathname.split("/").pop() || "/";
       document.querySelectorAll(".main-nav a").forEach((a) => {
         if (a.getAttribute("href") === path) a.classList.add("active");
       });
@@ -918,7 +918,7 @@
       if (photos.length) { try { photoUrl = sb.storage.from("feedback-public").getPublicUrl(photos[0]).data.publicUrl; } catch (_) {} }
       const thumb = photoUrl
         ? `<a class="fr-thumb" href="${photoUrl}" target="_blank" rel="noopener" aria-label="Хавсаргасан зураг"><img src="${photoUrl}" alt="Иргэний хавсаргасан зураг" loading="lazy"></a>`
-        : `<div class="fr-thumb fr-thumb-ph"><img src="assets/img/logo.svg" alt=""></div>`;
+        : `<div class="fr-thumb fr-thumb-ph"><img src="/assets/img/logo.svg" alt=""></div>`;
       el.innerHTML =
         thumb +
         `<div class="fr-main">
@@ -1086,24 +1086,24 @@
     homeItem(n) {
       const meta = n.date ? this.esc(n.date) : "";
       const img = n.image
-        ? `<img src="${this.esc(n.image)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='assets/img/logo.svg';this.className='ni-ph'">`
-        : `<div class="ni-cover"><img src="assets/img/logo.svg" alt="" /></div>`;
+        ? `<img src="${this.esc(n.image)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='/assets/img/logo.svg';this.className='ni-ph'">`
+        : `<div class="ni-cover"><img src="/assets/img/logo.svg" alt="" /></div>`;
       const cal = '<svg class="ni-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>';
       const dateLine = meta ? `<div class="ni-date">${cal}${meta}</div>` : "";
       const inner = `<div class="ni-img">${img}</div><div class="ni-text"><h3 class="ni-title">${this.esc(n.title)}</h3>${dateLine}</div>`;
-      return `<a class="news-item" href="medee-delgerengui.html?id=${encodeURIComponent(n.id)}">${inner}</a>`;
+      return `<a class="news-item" href="/medee-delgerengui/?id=${encodeURIComponent(n.id)}">${inner}</a>`;
     },
     card(n) {
       const title = this.esc(n.title);
       const img = n.image ? `<img src="${this.esc(n.image)}" alt="" loading="lazy" onerror="this.remove()">` : "";
-      return `<a class="card news-card-clean reveal visible" href="medee-delgerengui.html?id=${encodeURIComponent(n.id)}" data-item data-title="${title}">
-        <div class="card-media">${img}<span class="placeholder"><img src="assets/img/logo.svg" alt="" style="width:46%;opacity:.4"></span></div>
+      return `<a class="card news-card-clean reveal visible" href="/medee-delgerengui/?id=${encodeURIComponent(n.id)}" data-item data-title="${title}">
+        <div class="card-media">${img}<span class="placeholder"><img src="/assets/img/logo.svg" alt="" style="width:46%;opacity:.4"></span></div>
         <div class="card-body">${n.date ? `<div class="card-date">${this.esc(n.date)}</div>` : ""}<h3>${title}</h3></div>
       </a>`;
     },
   };
 
-  /* ---------- Мэдээний дэлгэрэнгүй хуудас (medee-delgerengui.html?id=…) ---------- */
+  /* ---------- Мэдээний дэлгэрэнгүй хуудас (/medee-delgerengui/?id=…) ---------- */
   const NewsPost = {
     esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
     CAL: '<svg class="ni-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
@@ -1125,7 +1125,7 @@
       } catch (_) { wrap.innerHTML = NewsPost.notFound(); }
     },
     notFound() {
-      return '<div class="np-state"><h2>Мэдээ олдсонгүй</h2><p>Энэ мэдээ устсан эсвэл хаяг буруу байж магадгүй.</p><a class="btn btn-primary" href="medee.html">← Бүх мэдээ</a></div>';
+      return '<div class="np-state"><h2>Мэдээ олдсонгүй</h2><p>Энэ мэдээ устсан эсвэл хаяг буруу байж магадгүй.</p><a class="btn btn-primary" href="/medee/">← Бүх мэдээ</a></div>';
     },
     render(n) {
       const esc = NewsPost.esc;
@@ -1138,7 +1138,7 @@
       const src = n.link
         ? `<div class="np-sources"><span class="np-src-label">Эх сурвалж:</span><a class="btn btn-primary btn-sm" href="${esc(n.link)}" target="_blank" rel="noopener">Эх сурвалжийг үзэх →</a></div>`
         : "";
-      return `<nav class="breadcrumb" aria-label="Замчлал"><a href="/">Нүүр</a><span>/</span><a href="medee.html">Мэдээ</a></nav>
+      return `<nav class="breadcrumb" aria-label="Замчлал"><a href="/">Нүүр</a><span>/</span><a href="/medee/">Мэдээ</a></nav>
         ${meta}
         <h1 class="np-title">${esc(n.title)}</h1>
         ${cover}
@@ -1146,11 +1146,11 @@
         <div class="np-body article-body">${articleBodyHtml(bodyText, esc)}</div>
         ${src}
         ${engageBlock("news", n.id)}
-        <a class="np-back" href="medee.html">← Бүх мэдээ рүү буцах</a>`;
+        <a class="np-back" href="/medee/">← Бүх мэдээ рүү буцах</a>`;
     },
   };
 
-  /* ---------- Арга хэмжээний дэлгэрэнгүй хуудас (arga-delgerengui.html?id=…) ---------- */
+  /* ---------- Арга хэмжээний дэлгэрэнгүй хуудас (/arga-delgerengui/?id=…) ---------- */
   const EventPost = {
     esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
     CAL: '<svg class="ni-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
@@ -1630,11 +1630,11 @@
     },
     card(r, year) {
       const esc = ReportsCMS.esc;
-      const url = "tailan-delgerengui.html?id=" + encodeURIComponent(r.id);
+      const url = "/tailan-delgerengui/?id=" + encodeURIComponent(r.id);
       const pdf = r.pdf_url ? esc(r.pdf_url) : "";
       const cover = r.cover_url
         ? `<img src="${esc(r.cover_url)}" alt="${esc(r.title)}" loading="lazy" onerror="this.remove()" /><span class="rc-hover"><span class="rc-hint">Дэлгэрэнгүй</span></span>`
-        : `<span class="rc-cover-brand"><img class="rc-emblem" src="assets/img/logo.svg" alt="" /><span class="rc-policy">Өөр Бодлого Бүтээгч Монгол</span><span class="rc-month">${esc(r.title)}</span><span class="rc-hint">Дэлгэрэнгүй</span></span>`;
+        : `<span class="rc-cover-brand"><img class="rc-emblem" src="/assets/img/logo.svg" alt="" /><span class="rc-policy">Өөр Бодлого Бүтээгч Монгол</span><span class="rc-month">${esc(r.title)}</span><span class="rc-hint">Дэлгэрэнгүй</span></span>`;
       const w = year ? ' style="width:100%;max-width:300px"' : '';
       const actions = `<a class="btn btn-primary btn-sm" href="${url}">Дэлгэрэнгүй →</a>` +
         (pdf ? `<a class="btn btn-ghost btn-sm" href="${pdf}" target="_blank" rel="noopener">PDF</a>` : "");
@@ -1650,7 +1650,7 @@
     },
   };
 
-  /* ---------- Тайлангийн дэлгэрэнгүй хуудас (tailan-delgerengui.html?id=…) ---------- */
+  /* ---------- Тайлангийн дэлгэрэнгүй хуудас (/tailan-delgerengui/?id=…) ---------- */
   const ReportPost = {
     esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
     async init() {
@@ -1669,7 +1669,7 @@
       } catch (_) { wrap.innerHTML = ReportPost.notFound(); }
     },
     notFound() {
-      return '<div class="np-state"><h2>Тайлан олдсонгүй</h2><p>Энэ тайлан устсан эсвэл хаяг буруу байж магадгүй.</p><a class="btn btn-primary" href="tailan.html">← Тайлан</a></div>';
+      return '<div class="np-state"><h2>Тайлан олдсонгүй</h2><p>Энэ тайлан устсан эсвэл хаяг буруу байж магадгүй.</p><a class="btn btn-primary" href="/tailan/">← Тайлан</a></div>';
     },
     render(r) {
       const esc = ReportPost.esc;
@@ -1682,14 +1682,14 @@
       const src = r.pdf_url
         ? `<div class="np-sources"><span class="np-src-label">Бичиг баримт:</span><a class="btn btn-primary btn-sm" href="${esc(r.pdf_url)}" target="_blank" rel="noopener">PDF үзэх</a><a class="btn btn-ghost btn-sm" href="${esc(r.pdf_url)}" download>Татах</a></div>`
         : "";
-      return `<nav class="breadcrumb" aria-label="Замчлал"><a href="/">Нүүр</a><span>/</span><a href="tailan.html">Тайлан</a></nav>
+      return `<nav class="breadcrumb" aria-label="Замчлал"><a href="/">Нүүр</a><span>/</span><a href="/tailan/">Тайлан</a></nav>
         ${tag}${meta}
         <h1 class="np-title">${esc(r.title)}</h1>
         ${cover}
         <div class="np-body article-body">${articleBodyHtml(bodyText, esc)}</div>
         ${src}
         ${engageBlock("report", r.id)}
-        <a class="np-back" href="tailan.html">← Бүх тайлан руу буцах</a>`;
+        <a class="np-back" href="/tailan/">← Бүх тайлан руу буцах</a>`;
     },
   };
 
@@ -1714,7 +1714,7 @@
           const kids = Array.prototype.filter.call(grid.children, (c) => c.nodeType === 1);
           kids.forEach((el, i) => {
             const p = data[i]; if (!p) return;
-            const url = "tusul-delgerengui.html?id=" + encodeURIComponent(p.id);
+            const url = "/tusul-delgerengui/?id=" + encodeURIComponent(p.id);
             el.classList.add("is-clickable");
             el.addEventListener("click", (e) => { if (e.target.closest("a,button")) return; location.href = url; });
           });
@@ -1725,7 +1725,7 @@
       const st = ProjectsCMS.STATUS[p.status] || ProjectsCMS.STATUS.ongoing;
       const media = (p.image_url
         ? `<img src="${esc(p.image_url)}" alt="${esc(p.title)}" loading="lazy" onerror="this.remove()" />`
-        : "") + `<span class="placeholder"><img src="assets/img/logo.svg" alt="" style="width:46%;opacity:.4" /></span>`;
+        : "") + `<span class="placeholder"><img src="/assets/img/logo.svg" alt="" style="width:46%;opacity:.4" /></span>`;
       return `<article class="card reveal visible" data-item data-title="${esc(p.title)}">
         <div class="card-media"><span class="tag">${esc(p.category || "Төсөл")}</span><span class="tag status-tag badge-status" style="${st.style}">${st.label}</span>${media}</div>
         <div class="card-body">
@@ -1750,7 +1750,7 @@
     },
   };
 
-  /* ---------- Төслийн дэлгэрэнгүй хуудас (tusul-delgerengui.html?id=…) ---------- */
+  /* ---------- Төслийн дэлгэрэнгүй хуудас (/tusul-delgerengui/?id=…) ---------- */
   const ProjectPost = {
     esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
     CAL: '<svg class="ni-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
@@ -1772,7 +1772,7 @@
       } catch (_) { wrap.innerHTML = ProjectPost.notFound(); }
     },
     notFound() {
-      return '<div class="np-state"><h2>Төсөл олдсонгүй</h2><p>Энэ төсөл устсан эсвэл хаяг буруу байж магадгүй.</p><a class="btn btn-primary" href="tusul.html">← Төслүүд</a></div>';
+      return '<div class="np-state"><h2>Төсөл олдсонгүй</h2><p>Энэ төсөл устсан эсвэл хаяг буруу байж магадгүй.</p><a class="btn btn-primary" href="/tusul/">← Төслүүд</a></div>';
     },
     render(p) {
       const esc = ProjectPost.esc;
@@ -1788,14 +1788,14 @@
       const src = p.link
         ? `<div class="np-sources"><span class="np-src-label">Холбоос:</span><a class="btn btn-primary btn-sm" href="${esc(p.link)}" target="_blank" rel="noopener">Дэлгэрэнгүй →</a></div>`
         : "";
-      return `<nav class="breadcrumb" aria-label="Замчлал"><a href="/">Нүүр</a><span>/</span><a href="tusul.html">Төслүүд</a></nav>
+      return `<nav class="breadcrumb" aria-label="Замчлал"><a href="/">Нүүр</a><span>/</span><a href="/tusul/">Төслүүд</a></nav>
         ${tagWrap}${meta}
         <h1 class="np-title">${esc(p.title)}</h1>
         ${cover}${lead}
         <div class="np-body article-body">${articleBodyHtml(bodyText, esc)}</div>
         ${src}
         ${engageBlock("project", p.id)}
-        <a class="np-back" href="tusul.html">← Бүх төсөл рүү буцах</a>`;
+        <a class="np-back" href="/tusul/">← Бүх төсөл рүү буцах</a>`;
     },
   };
 
@@ -1869,7 +1869,7 @@
            ${regCount ? `<p class="ef-count">${regCount} иргэн бүртгүүлсэн</p>` : ""}
            <div class="ef-cta"></div>
          </div>`;
-      const url = "arga-delgerengui.html?id=" + encodeURIComponent(ev.id);
+      const url = "/arga-delgerengui/?id=" + encodeURIComponent(ev.id);
       const cta = el.querySelector(".ef-cta");
       if (ev.register_url) {
         const a = document.createElement("a");
@@ -2097,10 +2097,10 @@
       if (o.cover) {
         const img = document.createElement("img");
         img.className = "am-cover"; img.src = o.cover; img.alt = o.title || ""; img.loading = "lazy";
-        img.onerror = () => { coverSlot.innerHTML = '<div class="am-cover-ph"><img src="assets/img/logo.svg" alt=""></div>'; };
+        img.onerror = () => { coverSlot.innerHTML = '<div class="am-cover-ph"><img src="/assets/img/logo.svg" alt=""></div>'; };
         coverSlot.innerHTML = ""; coverSlot.appendChild(img);
       } else {
-        coverSlot.innerHTML = '<div class="am-cover-ph"><img src="assets/img/logo.svg" alt=""></div>';
+        coverSlot.innerHTML = '<div class="am-cover-ph"><img src="/assets/img/logo.svg" alt=""></div>';
       }
       const tags = (o.tags || []).filter(Boolean).map((t) => `<span class="am-tag">${esc(t)}</span>`).join("");
       const meta = (o.meta || []).filter(Boolean);
@@ -2145,7 +2145,7 @@
   function injectFeedbackFab() {
     if (location.pathname.includes("holboo")) return;
     const a = document.createElement("a");
-    a.href = "holboo.html";
+    a.href = "/holboo/";
     a.className = "fab-feedback";
     a.setAttribute("aria-label", "Санал хүсэлт илгээх");
     a.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="fab-label">Санал хүсэлт</span>';
