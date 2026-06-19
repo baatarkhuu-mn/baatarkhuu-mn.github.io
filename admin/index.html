@@ -195,6 +195,8 @@
     .ud-id { min-width:0; }
     .ud-name { font-weight:700; font-size:.9rem; }
     .ud-mail { font-size:.78rem; color:var(--color-text-soft); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .ud-last { font-size:.74rem; color:var(--color-text-soft); padding:0 11px 8px; border-bottom:1px solid var(--color-border); margin-bottom:6px; }
+    .ud-last:empty { display:none; }
     .ud-item { display:flex; align-items:center; gap:10px; width:100%; text-align:left; padding:9px 11px; border:none;
       background:none; color:var(--color-text); font-family:inherit; font-size:.86rem; cursor:pointer; border-radius:var(--radius-sm); text-decoration:none; }
     .ud-item:hover { background:var(--color-bg-soft); color:var(--color-text); }
@@ -336,8 +338,10 @@
           <div class="user-dropdown" id="user-dropdown" hidden>
             <div class="ud-head">
               <span class="ud-ava" id="user-ava2">A</span>
-              <div class="ud-id"><div class="ud-name">Админ</div><div class="ud-mail" id="user-mail-full">—</div></div>
+              <div class="ud-id"><div class="ud-name" id="user-name-disp">Админ</div><div class="ud-mail" id="user-mail-full">—</div></div>
             </div>
+            <div class="ud-last" id="user-last"></div>
+            <button type="button" class="ud-item" id="ud-profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Профайл засах</button>
             <button type="button" class="ud-item" id="ud-settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Сайтын тохиргоо</button>
             <button type="button" class="ud-item" id="ud-password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Нууц үг солих</button>
             <a class="ud-item" href="/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg> Сайт руу очих</a>
@@ -359,6 +363,25 @@
             <div style="display:flex;gap:10px;margin-top:12px">
               <button type="button" class="btn btn-gold btn-sm" id="pw-save">Хадгалах</button>
               <button type="button" class="btn btn-ghost btn-sm" data-pw-close>Цуцлах</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Профайл засах цонх (нэр + и-мэйл) -->
+      <div class="ud-modal" id="profile-modal">
+        <div class="ud-modal-box">
+          <div class="ud-modal-head"><h3>Профайл засах</h3><button type="button" class="ud-modal-x" data-prof-close aria-label="Хаах">✕</button></div>
+          <div class="ud-modal-body">
+            <label for="pf-name">Харагдах нэр</label>
+            <input type="text" id="pf-name" placeholder="Жишээ: Ц.Баатархүү" />
+            <label for="pf-email">И-мэйл хаяг</label>
+            <input type="email" id="pf-email" placeholder="name@mail.mn" />
+            <div class="form-note" style="margin-top:6px;font-size:.74rem">И-мэйл солиход шинэ хаяг руу баталгаажуулах захидал илгээгдэнэ (Supabase Email тохирсон байх ёстой).</div>
+            <div id="pf-msg" class="form-note"></div>
+            <div style="display:flex;gap:10px;margin-top:12px">
+              <button type="button" class="btn btn-gold btn-sm" id="pf-save">Хадгалах</button>
+              <button type="button" class="btn btn-ghost btn-sm" data-prof-close>Цуцлах</button>
             </div>
           </div>
         </div>
@@ -1084,12 +1107,18 @@
       showView("dashboard"); loadFeedback(); loadSectionCounts();
       sb.auth.getUser().then(({ data }) => {
         if (!data.user) return;
-        const mail = data.user.email || "";
-        const e = $("#admin-email"); if (e) e.textContent = mail;
+        const u = data.user;
+        const mail = u.email || "";
+        const name = (u.user_metadata && u.user_metadata.display_name) || "";
+        const e = $("#admin-email"); if (e) e.textContent = name || mail;
         const mf = $("#user-mail-full"); if (mf) mf.textContent = mail;
-        const ini = (mail[0] || "A").toUpperCase();
+        const nd = $("#user-name-disp"); if (nd) nd.textContent = name || "Админ";
+        const ini = ((name || mail)[0] || "A").toUpperCase();
         const a1 = $("#user-ava"), a2 = $("#user-ava2");
         if (a1) a1.textContent = ini; if (a2) a2.textContent = ini;
+        const last = $("#user-last"); if (last && u.last_sign_in_at) last.textContent = "Сүүлд нэвтэрсэн: " + fmtDate(u.last_sign_in_at);
+        const pn = $("#pf-name"); if (pn) pn.value = name;
+        const pe = $("#pf-email"); if (pe) pe.value = mail;
       });
     }
 
@@ -1183,6 +1212,40 @@
         setTimeout(closePw, 1200);
       });
     }
+
+    // ===== Профайл засах (харагдах нэр + и-мэйл) =====
+    const profModal = $("#profile-modal"), pfMsg = $("#pf-msg");
+    function openProfile() { closeUserMenu(); if (pfMsg) { pfMsg.textContent = ""; pfMsg.style.color = ""; } profModal.classList.add("open"); setTimeout(() => $("#pf-name").focus(), 50); }
+    function closeProfile() { profModal.classList.remove("open"); }
+    const udProfile = $("#ud-profile"); if (udProfile) udProfile.addEventListener("click", openProfile);
+    if (profModal) {
+      profModal.addEventListener("click", (e) => { if (e.target === profModal || e.target.closest("[data-prof-close]")) closeProfile(); });
+      document.addEventListener("keydown", (e) => { if (e.key === "Escape" && profModal.classList.contains("open")) closeProfile(); });
+      $("#pf-save").addEventListener("click", async () => {
+        const name = $("#pf-name").value.trim();
+        const email = $("#pf-email").value.trim();
+        const { data: cur } = await sb.auth.getUser();
+        const oldEmail = (cur && cur.user && cur.user.email) || "";
+        const oldName = (cur && cur.user && cur.user.user_metadata && cur.user.user_metadata.display_name) || "";
+        pfMsg.style.color = "var(--color-text-soft)"; pfMsg.textContent = "Хадгалж байна…";
+        // 1) Харагдах нэр
+        if (name !== oldName) {
+          const { error } = await sb.auth.updateUser({ data: { display_name: name } });
+          if (error) { pfMsg.style.color = "var(--color-danger)"; pfMsg.textContent = "⚠ Нэр: " + error.message; return; }
+        }
+        // 2) И-мэйл (баталгаажуулах захидал шаардана)
+        if (email && email !== oldEmail) {
+          const { error } = await sb.auth.updateUser({ email });
+          if (error) { pfMsg.style.color = "var(--color-danger)"; pfMsg.textContent = "⚠ И-мэйл: " + error.message; return; }
+          pfMsg.style.color = "#46c882"; pfMsg.textContent = "✓ Нэр хадгалагдлаа. И-мэйл солих баталгаажуулах захидлыг шинэ хаяг руу илгээлээ.";
+        } else {
+          pfMsg.style.color = "#46c882"; pfMsg.textContent = "✓ Хадгалагдлаа.";
+        }
+        showDash();
+        setTimeout(closeProfile, 1400);
+      });
+    }
+
     $("#refresh-btn").addEventListener("click", loadFeedback);
     $("#export-btn").addEventListener("click", exportXLSX);
     ["#f-q", "#f-status", "#f-subject", "#f-sort"].forEach((s) => {
