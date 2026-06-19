@@ -1138,7 +1138,7 @@
       const src = n.link
         ? `<div class="np-sources"><span class="np-src-label">Эх сурвалж:</span><a class="btn btn-primary btn-sm" href="${esc(n.link)}" target="_blank" rel="noopener">Эх сурвалжийг үзэх →</a></div>`
         : "";
-      return `<nav class="breadcrumb" aria-label="Замчлал"><a href="index.html">Нүүр</a><span>/</span><a href="medee.html">Мэдээ</a></nav>
+      return `<nav class="breadcrumb" aria-label="Замчлал"><a href="/">Нүүр</a><span>/</span><a href="medee.html">Мэдээ</a></nav>
         ${meta}
         <h1 class="np-title">${esc(n.title)}</h1>
         ${cover}
@@ -1174,7 +1174,7 @@
       } catch (_) { wrap.innerHTML = EventPost.notFound(); }
     },
     notFound() {
-      return '<div class="np-state"><h2>Арга хэмжээ олдсонгүй</h2><p>Энэ арга хэмжээ устсан эсвэл хаяг буруу байж магадгүй.</p><a class="btn btn-primary" href="index.html">← Нүүр</a></div>';
+      return '<div class="np-state"><h2>Арга хэмжээ олдсонгүй</h2><p>Энэ арга хэмжээ устсан эсвэл хаяг буруу байж магадгүй.</p><a class="btn btn-primary" href="/">← Нүүр</a></div>';
     },
     render(ev) {
       const esc = EventPost.esc;
@@ -1188,7 +1188,7 @@
         : "";
       const lead = (ev.body && ev.description) ? `<p class="np-lead">${esc(ev.description)}</p>` : "";
       const bodyText = ev.body || ev.description || "";
-      return `<nav class="breadcrumb" aria-label="Замчлал"><a href="index.html">Нүүр</a><span>/</span>Арга хэмжээ</nav>
+      return `<nav class="breadcrumb" aria-label="Замчлал"><a href="/">Нүүр</a><span>/</span>Арга хэмжээ</nav>
         ${tag}
         ${meta}
         <h1 class="np-title">${esc(ev.title)}</h1>
@@ -1197,7 +1197,7 @@
         <div class="np-body article-body">${articleBodyHtml(bodyText, esc)}</div>
         <div class="ep-reg np-sources"></div>
         ${engageBlock("event", ev.id)}
-        <a class="np-back" href="index.html">← Нүүр рүү буцах</a>`;
+        <a class="np-back" href="/">← Нүүр рүү буцах</a>`;
     },
   };
 
@@ -1682,7 +1682,7 @@
       const src = r.pdf_url
         ? `<div class="np-sources"><span class="np-src-label">Бичиг баримт:</span><a class="btn btn-primary btn-sm" href="${esc(r.pdf_url)}" target="_blank" rel="noopener">PDF үзэх</a><a class="btn btn-ghost btn-sm" href="${esc(r.pdf_url)}" download>Татах</a></div>`
         : "";
-      return `<nav class="breadcrumb" aria-label="Замчлал"><a href="index.html">Нүүр</a><span>/</span><a href="tailan.html">Тайлан</a></nav>
+      return `<nav class="breadcrumb" aria-label="Замчлал"><a href="/">Нүүр</a><span>/</span><a href="tailan.html">Тайлан</a></nav>
         ${tag}${meta}
         <h1 class="np-title">${esc(r.title)}</h1>
         ${cover}
@@ -1788,7 +1788,7 @@
       const src = p.link
         ? `<div class="np-sources"><span class="np-src-label">Холбоос:</span><a class="btn btn-primary btn-sm" href="${esc(p.link)}" target="_blank" rel="noopener">Дэлгэрэнгүй →</a></div>`
         : "";
-      return `<nav class="breadcrumb" aria-label="Замчлал"><a href="index.html">Нүүр</a><span>/</span><a href="tusul.html">Төслүүд</a></nav>
+      return `<nav class="breadcrumb" aria-label="Замчлал"><a href="/">Нүүр</a><span>/</span><a href="tusul.html">Төслүүд</a></nav>
         ${tagWrap}${meta}
         <h1 class="np-title">${esc(p.title)}</h1>
         ${cover}${lead}
