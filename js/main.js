@@ -1112,7 +1112,13 @@
         : `<div class="ni-cover"><img src="/assets/img/logo.svg" alt="" /></div>`;
       const cal = '<svg class="ni-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>';
       const dateLine = meta ? `<div class="ni-date">${cal}${meta}</div>` : "";
-      const inner = `<div class="ni-img">${img}</div><div class="ni-text"><h3 class="ni-title">${this.esc(n.title)}</h3>${dateLine}</div>`;
+      const raw = (n.excerpt || n.body || "")
+        .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
+        .replace(/https?:\/\/\S+/g, " ")
+        .replace(/[#>*`_\[\]]/g, "")
+        .replace(/\s+/g, " ").trim();
+      const exc = raw ? `<p class="ni-excerpt">${this.esc(raw.slice(0, 140))}${raw.length > 140 ? "…" : ""}</p>` : "";
+      const inner = `<div class="ni-img">${img}</div><div class="ni-text"><h3 class="ni-title">${this.esc(n.title)}</h3>${exc}${dateLine}</div>`;
       return `<a class="news-item" href="/medee-delgerengui/?id=${encodeURIComponent(n.id)}">${inner}</a>`;
     },
     card(n) {
