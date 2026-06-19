@@ -166,6 +166,13 @@
     .as-brand small { font-size:.72rem; color:var(--color-accent); }
     .as-nav { display:flex; flex-direction:column; gap:3px; padding:14px 12px; flex:1; }
     .as-foot { padding:14px 12px; border-top:1px solid var(--color-border); display:flex; flex-direction:column; gap:3px; }
+    .as-acct { display:flex; align-items:center; gap:10px; padding:6px 10px 10px; }
+    .as-ava { width:34px; height:34px; border-radius:50%; background:var(--color-accent); color:#fff; display:grid; place-items:center; font-size:.9rem; font-weight:700; flex-shrink:0; text-transform:uppercase; }
+    .as-acct-id { min-width:0; }
+    .as-acct-name { font-size:.86rem; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .as-acct-mail { font-size:.74rem; color:var(--color-text-soft); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .as-last { font-size:.7rem; color:var(--color-text-soft); padding:0 10px 8px; }
+    .as-last:empty { display:none; }
     .nav-link { display:flex; align-items:center; gap:11px; width:100%; text-align:left; padding:11px 14px; border:none;
       background:transparent; color:var(--color-text-soft); font:inherit; font-size:.92rem; border-radius:var(--radius-sm);
       cursor:pointer; transition:background .15s,color .15s; text-decoration:none; }
@@ -319,6 +326,16 @@
         </button>
       </nav>
       <div class="as-foot">
+        <div class="as-acct">
+          <span class="as-ava" id="user-ava">A</span>
+          <div class="as-acct-id">
+            <div class="as-acct-name" id="user-name-disp">Админ</div>
+            <div class="as-acct-mail" id="admin-email">—</div>
+          </div>
+        </div>
+        <div class="as-last" id="user-last"></div>
+        <button type="button" class="nav-link" id="ud-profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Профайл засах</button>
+        <button type="button" class="nav-link" id="ud-password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Нууц үг солих</button>
         <a href="/" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg> Сайт руу очих</a>
         <button type="button" id="logout-btn" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg> Гарах</button>
       </div>
@@ -329,25 +346,6 @@
         <button type="button" class="as-toggle" id="sidebar-toggle" aria-label="Цэс">☰</button>
         <button type="button" class="topbar-back" id="back-btn" hidden>← Буцах</button>
         <h1 id="page-title">Хяналтын самбар</h1>
-        <div class="topbar-user" id="user-menu">
-          <button type="button" class="user-btn" id="user-btn" aria-haspopup="true" aria-expanded="false">
-            <span class="user-ava" id="user-ava">A</span>
-            <span class="user-email" id="admin-email"></span>
-            <svg class="user-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-          </button>
-          <div class="user-dropdown" id="user-dropdown" hidden>
-            <div class="ud-head">
-              <span class="ud-ava" id="user-ava2">A</span>
-              <div class="ud-id"><div class="ud-name" id="user-name-disp">Админ</div><div class="ud-mail" id="user-mail-full">—</div></div>
-            </div>
-            <div class="ud-last" id="user-last"></div>
-            <button type="button" class="ud-item" id="ud-profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Профайл засах</button>
-            <button type="button" class="ud-item" id="ud-settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Сайтын тохиргоо</button>
-            <button type="button" class="ud-item" id="ud-password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Нууц үг солих</button>
-            <a class="ud-item" href="/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg> Сайт руу очих</a>
-            <button type="button" class="ud-item ud-danger" id="ud-logout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg> Гарах</button>
-          </div>
-        </div>
       </header>
 
       <!-- Нууц үг солих цонх -->
@@ -1110,12 +1108,10 @@
         const u = data.user;
         const mail = u.email || "";
         const name = (u.user_metadata && u.user_metadata.display_name) || "";
-        const e = $("#admin-email"); if (e) e.textContent = name || mail;
-        const mf = $("#user-mail-full"); if (mf) mf.textContent = mail;
+        const e = $("#admin-email"); if (e) e.textContent = mail;
         const nd = $("#user-name-disp"); if (nd) nd.textContent = name || "Админ";
         const ini = ((name || mail)[0] || "A").toUpperCase();
-        const a1 = $("#user-ava"), a2 = $("#user-ava2");
-        if (a1) a1.textContent = ini; if (a2) a2.textContent = ini;
+        const a1 = $("#user-ava"); if (a1) a1.textContent = ini;
         const last = $("#user-last"); if (last && u.last_sign_in_at) last.textContent = "Сүүлд нэвтэрсэн: " + fmtDate(u.last_sign_in_at);
         const pn = $("#pf-name"); if (pn) pn.value = name;
         const pe = $("#pf-email"); if (pe) pe.value = mail;
