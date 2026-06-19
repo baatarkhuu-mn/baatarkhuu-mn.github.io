@@ -8,7 +8,7 @@
   <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");</script>
   <title>Админ — Санал хүсэлт | Ц.Баатархүү</title>
   <link rel="icon" type="image/svg+xml" href="/assets/img/logo.svg" />
-  <link rel="stylesheet" href="/css/style.css?v=20260619k" />
+  <link rel="stylesheet" href="/css/style.css?v=20260619l" />
   <style>
     .admin-top { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
       padding:16px 0; border-bottom:1px solid var(--color-border); margin-bottom:24px; }
@@ -739,7 +739,6 @@
              </div>
              <input class="rt-letterurl" placeholder="Албан бичгийн холбоос (PDF, заавал биш)" value="${esc(r.letter_url || "")}" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg-soft);color:var(--color-text);font-family:inherit;font-size:.88rem;margin-bottom:7px" />
              <button class="btn btn-ghost btn-sm rt-save" data-id="${r.id}">Хадгалах</button>
-             <button class="btn btn-ghost btn-sm rt-mail" type="button">📧 Газарт имэйлдэх</button>
              <span class="rt-ok" style="font-size:.8rem;color:#46c882;margin-left:8px;display:none">✓ Хадгаллаа</span>
            </div>
            <div class="fb-foot">
@@ -876,18 +875,6 @@
           renderOrgStats();
         });
 
-        // Холбогдох газарт имэйлдэх (mailto — иргэний бүртгэл хэрэггүй)
-        card.querySelector(".rt-mail").addEventListener("click", () => {
-          const org = card.querySelector(".rt-org").value.trim();
-          const subj = "Иргэний санал хүсэлт" + (ticket ? " — " + ticket : "");
-          const body = "Хүндэт " + (org || "холбогдох байгууллага") + ",\n\n"
-            + "Иргэнээс ирүүлсэн дараах асуудлыг уламжилж байна:\n\n"
-            + (r.message || "") + "\n\n"
-            + (loc ? "Байршил: " + loc + "\n" : "")
-            + (ticket ? "Хяналтын дугаар: " + ticket + "\n" : "")
-            + "\nХүндэтгэсэн,\nУИХ-ын гишүүн Ц.Баатархүүгийн ажлын алба";
-          window.location.href = "mailto:?subject=" + encodeURIComponent(subj) + "&body=" + encodeURIComponent(body);
-        });
       });
     }
 
