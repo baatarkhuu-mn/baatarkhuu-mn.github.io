@@ -323,8 +323,13 @@
         }
         if (!leafMap) {
           geoMap.innerHTML = "";
-          leafMap = L.map(geoMap, { scrollWheelZoom: false }).setView([lat, lng], 16);
-          L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap" }).addTo(leafMap);
+          leafMap = L.map(geoMap, { scrollWheelZoom: false }).setView([lat, lng], 17);
+          // Одоогийн хиймэл дагуулын зураг (Esri) — анхдагч; энгийн зураг руу сэлгэж болно
+          const sat = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", { maxZoom: 19, attribution: "Хиймэл дагуул © Esri" });
+          const labels = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}", { maxZoom: 19, opacity: 0.9 });
+          const street = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap" });
+          const satGroup = L.layerGroup([sat, labels]).addTo(leafMap);
+          L.control.layers({ "🛰 Хиймэл дагуул": satGroup, "🗺 Энгийн зураг": street }, null, { collapsed: false }).addTo(leafMap);
           leafMarker = L.marker([lat, lng], { draggable: true }).addTo(leafMap);
           leafMarker.on("dragend", () => { const p = leafMarker.getLatLng(); setLL(p.lat, p.lng); pinMsg(p.lat, p.lng); });
           leafMap.on("click", (e) => { leafMarker.setLatLng(e.latlng); setLL(e.latlng.lat, e.latlng.lng); pinMsg(e.latlng.lat, e.latlng.lng); });
