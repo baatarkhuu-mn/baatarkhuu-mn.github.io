@@ -8,7 +8,7 @@
   <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");</script>
   <title>Админ — Санал хүсэлт | Ц.Баатархүү</title>
   <link rel="icon" type="image/svg+xml" href="/assets/img/logo.svg" />
-  <link rel="stylesheet" href="/css/style.css?v=20260619t" />
+  <link rel="stylesheet" href="/css/style.css?v=20260619u" />
   <style>
     /* ===== Админ: цайвар, албан ёсны ХӨХ сэдэв (зөвхөн энэ хуудсанд; сайтад нөлөөлөхгүй) ===== */
     [data-theme] {
@@ -42,6 +42,14 @@
     .admin-top .brand { gap:10px; }
     .login-wrap { min-height:80vh; display:grid; place-items:center; }
     .login-card { width:100%; max-width:400px; }
+    .login-row { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:2px 0 16px; flex-wrap:wrap; }
+    .login-remember { display:flex; align-items:center; gap:7px; font-size:.85rem; color:var(--color-text-soft); cursor:pointer; }
+    .login-remember input { width:16px; height:16px; accent-color:var(--color-accent); }
+    .login-link { background:none; border:none; color:var(--color-primary); font-family:inherit; font-size:.85rem; cursor:pointer; padding:0; }
+    .login-link:hover { text-decoration:underline; }
+    .login-back { display:flex; align-items:center; justify-content:center; gap:7px; margin-top:18px; font-size:.86rem; color:var(--color-text-soft); }
+    .login-back svg { width:16px; height:16px; }
+    .login-back:hover { color:var(--color-primary); }
     .stat-row { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:24px; }
     .mini-stat { background:var(--color-bg-card); border:1px solid var(--color-border); border-radius:var(--radius);
       padding:18px; text-align:center; }
@@ -251,9 +259,14 @@
           <input type="email" id="l-email" required autocomplete="username" /></div>
         <div class="form-group"><label for="l-pass">Нууц үг</label>
           <input type="password" id="l-pass" required autocomplete="current-password" /></div>
+        <div class="login-row">
+          <label class="login-remember"><input type="checkbox" id="l-remember" checked /> Намайг сана</label>
+          <button type="button" class="login-link" id="l-forgot">Нууц үг мартсан?</button>
+        </div>
         <button type="submit" class="btn btn-gold" style="width:100%">Нэвтрэх</button>
         <div id="login-err" class="form-note" style="color:var(--color-danger);margin-top:10px"></div>
       </form>
+      <a class="login-back" href="/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Сайт руу буцах</a>
     </div>
   </div>
 
@@ -1102,11 +1115,35 @@
 
     $("#login-form").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const errEl = $("#login-err"); errEl.textContent = "";
-      const { error } = await sb.auth.signInWithPassword({ email: $("#l-email").value.trim(), password: $("#l-pass").value });
+      const errEl = $("#login-err"); errEl.style.color = "var(--color-danger)"; errEl.textContent = "";
+      const email = $("#l-email").value.trim();
+      const { error } = await sb.auth.signInWithPassword({ email, password: $("#l-pass").value });
       if (error) { errEl.textContent = "⚠ " + (error.message === "Invalid login credentials" ? "И-мэйл эсвэл нууц үг буруу байна." : error.message); return; }
+      if ($("#l-remember") && $("#l-remember").checked) localStorage.setItem("adminEmail", email);
+      else localStorage.removeItem("adminEmail");
       showDash();
     });
+
+    // Намайг сана — сүүлд нэвтэрсэн и-мэйлийг урьдчилан бөглөх
+    (function () {
+      const saved = localStorage.getItem("adminEmail");
+      if (saved && $("#l-email")) { $("#l-email").value = saved; if ($("#l-remember")) $("#l-remember").checked = true; }
+    })();
+
+    // Нууц үг мартсан — сэргээх холбоосыг и-мэйлээр илгээх
+    const forgotBtn = $("#l-forgot");
+    if (forgotBtn) forgotBtn.addEventListener("click", async () => {
+      const errEl = $("#login-err");
+      const email = $("#l-email").value.trim();
+      if (!email) { errEl.style.color = "var(--color-danger)"; errEl.textContent = "⚠ Эхлээд и-мэйл хаягаа оруулна уу."; return; }
+      errEl.style.color = "var(--color-text-soft)"; errEl.textContent = "Илгээж байна…";
+      const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + "/admin/" });
+      if (error) { errEl.style.color = "var(--color-danger)"; errEl.textContent = "⚠ " + error.message; return; }
+      errEl.style.color = "#46c882"; errEl.textContent = "✓ Сэргээх холбоосыг " + email + " рүү илгээлээ. И-мэйлээ шалгана уу.";
+    });
+
+    // Сэргээх холбоосоор орж ирвэл шууд нууц үг солих цонх нээх
+    sb.auth.onAuthStateChange((event) => { if (event === "PASSWORD_RECOVERY") { showDash(); if (typeof openPw === "function") openPw(); } });
 
     logoutBtn.addEventListener("click", async () => { await sb.auth.signOut(); showLogin(); });
 
