@@ -326,16 +326,6 @@
         </button>
       </nav>
       <div class="as-foot">
-        <div class="as-acct">
-          <span class="as-ava" id="user-ava">A</span>
-          <div class="as-acct-id">
-            <div class="as-acct-name" id="user-name-disp">Админ</div>
-            <div class="as-acct-mail" id="admin-email">—</div>
-          </div>
-        </div>
-        <div class="as-last" id="user-last"></div>
-        <button type="button" class="nav-link" id="ud-profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Профайл засах</button>
-        <button type="button" class="nav-link" id="ud-password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Нууц үг солих</button>
         <a href="/" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg> Сайт руу очих</a>
         <button type="button" id="logout-btn" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg> Гарах</button>
       </div>
@@ -346,6 +336,22 @@
         <button type="button" class="as-toggle" id="sidebar-toggle" aria-label="Цэс">☰</button>
         <button type="button" class="topbar-back" id="back-btn" hidden>← Буцах</button>
         <h1 id="page-title">Хяналтын самбар</h1>
+        <div class="topbar-user" id="user-menu">
+          <button type="button" class="user-btn" id="user-btn" aria-haspopup="true" aria-expanded="false">
+            <span class="user-ava" id="user-ava">A</span>
+            <span class="user-email" id="user-btn-name">Админ</span>
+            <svg class="user-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="user-dropdown" id="user-dropdown" hidden>
+            <div class="ud-head">
+              <span class="ud-ava" id="user-ava2">A</span>
+              <div class="ud-id"><div class="ud-name" id="user-name-disp">Админ</div><div class="ud-mail" id="admin-email">—</div></div>
+            </div>
+            <div class="ud-last" id="user-last"></div>
+            <button type="button" class="ud-item" id="ud-profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Профайл засах</button>
+            <button type="button" class="ud-item" id="ud-password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Нууц үг солих</button>
+          </div>
+        </div>
       </header>
 
       <!-- Нууц үг солих цонх -->
@@ -1110,8 +1116,10 @@
         const name = (u.user_metadata && u.user_metadata.display_name) || "";
         const e = $("#admin-email"); if (e) e.textContent = mail;
         const nd = $("#user-name-disp"); if (nd) nd.textContent = name || "Админ";
+        const bn = $("#user-btn-name"); if (bn) bn.textContent = name || mail || "Админ";
         const ini = ((name || mail)[0] || "A").toUpperCase();
         const a1 = $("#user-ava"); if (a1) a1.textContent = ini;
+        const a2 = $("#user-ava2"); if (a2) a2.textContent = ini;
         const last = $("#user-last"); if (last && u.last_sign_in_at) last.textContent = "Сүүлд нэвтэрсэн: " + fmtDate(u.last_sign_in_at);
         const pn = $("#pf-name"); if (pn) pn.value = name;
         const pe = $("#pf-email"); if (pe) pe.value = mail;
