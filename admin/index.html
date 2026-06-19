@@ -8,7 +8,7 @@
   <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");</script>
   <title>Админ — Санал хүсэлт | Ц.Баатархүү</title>
   <link rel="icon" type="image/svg+xml" href="/assets/img/logo.svg" />
-  <link rel="stylesheet" href="/css/style.css?v=20260619r" />
+  <link rel="stylesheet" href="/css/style.css?v=20260619s" />
   <style>
     /* ===== Админ: цайвар, албан ёсны ХӨХ сэдэв (зөвхөн энэ хуудсанд; сайтад нөлөөлөхгүй) ===== */
     [data-theme] {
@@ -35,6 +35,8 @@
     body { background: var(--color-bg); }
     .btn-gold, .btn-gold:hover { color: #fff; }     /* хөх товчин дээр цагаан текст */
     .admin-topbar { background: var(--color-bg-card); }   /* цагаан толгой мөр */
+    html { font-size: 14px; }      /* бүх админ контентийг жигдээр жижигрүүлэх (rem-д суурилсан) */
+    body { font-size: 1rem; }
     .admin-top { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
       padding:16px 0; border-bottom:1px solid var(--color-border); margin-bottom:24px; }
     .admin-top .brand { gap:10px; }

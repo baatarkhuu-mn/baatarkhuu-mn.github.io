@@ -100,6 +100,14 @@
           : `<div class="search-empty">"${q}" гэсэн илэрц олдсонгүй.</div>`;
       }
       input.addEventListener("input", (e) => render(e.target.value));
+      const form = overlay.querySelector(".search-bar");
+      if (form) form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const q = input.value.trim().toLowerCase();
+        if (!q) return;
+        const m = SEARCH_INDEX.filter((i) => i.title.toLowerCase().includes(q) || i.cat.toLowerCase().includes(q));
+        if (m.length) location.href = m[0].url;
+      });
     },
   };
 
@@ -564,6 +572,7 @@
   const I18n = {
     ph: {
       "Түлхүүр үг бичнэ үү…": "Type a keyword…",
+      "Сайтаас хайх — мэдээ, хууль, төсөл, тайлан…": "Search the site — news, laws, projects, reports…",
       "Хуулийн нэрээр хайх…": "Search by law name…",
       "Таны овог нэр": "Your full name",
       "+976 ХХХХ-ХХХХ": "+976 XXXX-XXXX",
@@ -577,7 +586,7 @@
       "Холбоо барих": "Contact", "УИХ-ын гишүүн": "Member of Parliament",
       "Цэс": "Menu", "Холбоос": "Links", "Сошиал": "Social", "Видео сан": "Video library",
       "X (Twitter)": "X (Twitter)", "Үндсэн агуулга руу очих": "Skip to main content",
-      "Сайтаас хайх": "Search the site", "Хаах": "Close",
+      "Сайтаас хайх": "Search the site", "Хаах": "Close", "Хайх": "Search",
       "Ил тод байдал": "Transparency",
       "Иргэдийн нийтэлсэн санал": "Citizens' published feedback",
       "Иргэд өөрсдөө зөвшөөрсний дагуу нийтэлсэн асуудлууд. Саналыг дэмжиж, коммент хэлбэрээр үлдээгээрэй.":
