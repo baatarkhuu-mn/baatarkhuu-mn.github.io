@@ -8,7 +8,7 @@
   <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");</script>
   <title>Админ — Санал хүсэлт | Ц.Баатархүү</title>
   <link rel="icon" type="image/svg+xml" href="assets/img/logo.svg" />
-  <link rel="stylesheet" href="css/style.css?v=20260619g" />
+  <link rel="stylesheet" href="css/style.css?v=20260619h" />
   <style>
     .admin-top { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
       padding:16px 0; border-bottom:1px solid var(--color-border); margin-bottom:24px; }
@@ -354,6 +354,7 @@
                 <div class="form-group"><label for="v-sort">Эрэмбэ</label><input type="number" id="v-sort" value="0" /></div>
               </div>
               <div class="form-group"><label for="v-title">Гарчиг (заавал биш)</label><input type="text" id="v-title" placeholder="Видеоны товч нэр" /></div>
+              <div class="form-group"><label for="v-date">Нийтэлсэн огноо (Facebook reel нийтэлсэн он сар)</label><input type="text" id="v-date" placeholder="2026-06-17" /></div>
               <div class="form-group"><label for="v-excerpt">Товч агуулга (заавал биш)</label><textarea id="v-excerpt" rows="2" placeholder="Видеоны тухай товч тайлбар…"></textarea></div>
               <div class="form-group"><label style="display:flex;gap:9px;align-items:center;cursor:pointer"><input type="checkbox" id="v-featured" style="width:18px;height:18px;accent-color:var(--color-accent)" /> «Онцлох» болгох (хамгийн дээр томоор)</label></div>
               <div class="form-group"><label style="display:flex;gap:9px;align-items:center;cursor:pointer"><input type="checkbox" id="v-published" checked style="width:18px;height:18px;accent-color:var(--color-accent)" /> Нийтлэх (сайтад харагдана)</label></div>
@@ -1061,7 +1062,7 @@
     function editVideo(v) {
       $("#v-id").value = v.id; $("#v-url").value = v.url || ""; $("#v-platform").value = v.platform || "facebook";
       $("#v-sort").value = v.sort != null ? v.sort : 0; $("#v-title").value = v.title || "";
-      $("#v-excerpt").value = v.excerpt || ""; $("#v-orientation").value = v.orientation || "vertical";
+      $("#v-excerpt").value = v.excerpt || ""; $("#v-orientation").value = v.orientation || "vertical"; $("#v-date").value = v.video_date || "";
       $("#v-featured").checked = !!v.featured; $("#v-published").checked = !!v.published;
       $("#video-form-title").textContent = "Видео засах"; $("#video-cancel").style.display = "inline-flex";
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1083,6 +1084,7 @@
         const rec = {
           url: $("#v-url").value.trim(), platform: $("#v-platform").value,
           title: $("#v-title").value.trim() || null, excerpt: $("#v-excerpt").value.trim() || null,
+          video_date: $("#v-date").value.trim() || null,
           orientation: $("#v-orientation").value, featured: $("#v-featured").checked,
           published: $("#v-published").checked, sort: parseInt($("#v-sort").value, 10) || 0,
         };

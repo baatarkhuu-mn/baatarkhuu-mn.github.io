@@ -1120,6 +1120,7 @@
         const md = document.querySelector('meta[name="description"]');
         if (md && data.excerpt) md.setAttribute("content", data.excerpt);
         wrap.innerHTML = NewsPost.render(data);
+        Reactions.init();
         window.scrollTo(0, 0);
       } catch (_) { wrap.innerHTML = NewsPost.notFound(); }
     },
@@ -1144,6 +1145,7 @@
         ${lead}
         <div class="np-body article-body">${articleBodyHtml(bodyText, esc)}</div>
         ${src}
+        ${engageBlock("news", n.id)}
         <a class="np-back" href="medee.html">← Бүх мэдээ рүү буцах</a>`;
     },
   };
@@ -1167,6 +1169,7 @@
         wrap.innerHTML = EventPost.render(data);
         const regSlot = wrap.querySelector(".ep-reg");
         if (regSlot) regSlot.appendChild(EventsCMS.buildReg(sb, data));
+        Reactions.init();
         window.scrollTo(0, 0);
       } catch (_) { wrap.innerHTML = EventPost.notFound(); }
     },
@@ -1193,6 +1196,7 @@
         ${lead}
         <div class="np-body article-body">${articleBodyHtml(bodyText, esc)}</div>
         <div class="ep-reg np-sources"></div>
+        ${engageBlock("event", ev.id)}
         <a class="np-back" href="index.html">← Нүүр рүү буцах</a>`;
     },
   };
@@ -1588,7 +1592,7 @@
       }
       w.querySelector(".vh-count").textContent = (this._i + 1) + " / " + this._vids.length;
       w.querySelector(".vh-title").textContent = v.title || "";
-      w.querySelector(".vh-date").textContent = v.created_at ? this.fmtDate(v.created_at) : "";
+      w.querySelector(".vh-date").textContent = v.video_date || (v.created_at ? this.fmtDate(v.created_at) : "");
       setTimeout(() => this.syncPeeks(), 400);
     },
   };
@@ -1660,6 +1664,7 @@
         if (error || !data) { wrap.innerHTML = ReportPost.notFound(); return; }
         document.title = data.title + " | Ц.Баатархүү";
         wrap.innerHTML = ReportPost.render(data);
+        Reactions.init();
         window.scrollTo(0, 0);
       } catch (_) { wrap.innerHTML = ReportPost.notFound(); }
     },
@@ -1683,6 +1688,7 @@
         ${cover}
         <div class="np-body article-body">${articleBodyHtml(bodyText, esc)}</div>
         ${src}
+        ${engageBlock("report", r.id)}
         <a class="np-back" href="tailan.html">← Бүх тайлан руу буцах</a>`;
     },
   };
@@ -1761,6 +1767,7 @@
         const md = document.querySelector('meta[name="description"]');
         if (md && data.description) md.setAttribute("content", data.description);
         wrap.innerHTML = ProjectPost.render(data);
+        Reactions.init();
         window.scrollTo(0, 0);
       } catch (_) { wrap.innerHTML = ProjectPost.notFound(); }
     },
@@ -1787,6 +1794,7 @@
         ${cover}${lead}
         <div class="np-body article-body">${articleBodyHtml(bodyText, esc)}</div>
         ${src}
+        ${engageBlock("project", p.id)}
         <a class="np-back" href="tusul.html">← Бүх төсөл рүү буцах</a>`;
     },
   };
@@ -2010,6 +2018,62 @@
     flush();
     return out.join("");
   }
+
+  /* ---------- Хуваалцах + эможи реакц (дэлгэрэнгүй хуудсанд) ---------- */
+  function engageBlock(type, id) {
+    const url = encodeURIComponent(location.href);
+    const title = encodeURIComponent(document.title);
+    return `<div class="post-engage">
+      <div class="post-react" data-reactions="${type}:${id}"></div>
+      <div class="post-share">
+        <span class="ps-label">Хуваалцах:</span>
+        <a class="ps-btn ps-fb" href="https://www.facebook.com/sharer/sharer.php?u=${url}" target="_blank" rel="noopener" aria-label="Facebook-д хуваалцах"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 22v-8h3l1-4h-4V7c0-1 .3-2 2-2h2V1.5C18.5 1.4 17.3 1 16 1c-3 0-5 2-5 5v3H7v4h4v8h2z"/></svg></a>
+        <a class="ps-btn ps-x" href="https://twitter.com/intent/tweet?url=${url}&text=${title}" target="_blank" rel="noopener" aria-label="X-д хуваалцах"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.657l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <button type="button" class="ps-btn ps-copy" aria-label="Холбоос хуулах"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg></button>
+      </div>
+    </div>`;
+  }
+
+  const Reactions = {
+    EMO: [["like", "👍", "Таалагдлаа"], ["love", "❤️", "Хайртай"], ["haha", "😆", "Инээдтэй"], ["wow", "😮", "Гайхлаа"], ["sad", "😢", "Гунигтай"], ["angry", "😠", "Уурлав"]],
+    clientId() { let id = localStorage.getItem("fb_client"); if (!id) { id = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.round(performance.now())); localStorage.setItem("fb_client", id); } return id; },
+    key(t, i) { return "react_" + t + "_" + i; },
+    init() {
+      document.querySelectorAll("[data-reactions]:not([data-rinit])").forEach((box) => {
+        box.setAttribute("data-rinit", "1");
+        const [type, id] = box.dataset.reactions.split(":");
+        box.innerHTML = '<div class="pr-q">Энэ мэдээлэлд хэрхэн хандаж байна?</div><div class="pr-row"></div>';
+        const row = box.querySelector(".pr-row");
+        Reactions.EMO.forEach(([k, emo, label]) => {
+          const b = document.createElement("button");
+          b.type = "button"; b.className = "pr-btn"; b.dataset.k = k; b.title = label;
+          b.innerHTML = `<span class="pr-emo">${emo}</span><span class="pr-c">0</span>`;
+          b.addEventListener("click", () => Reactions.react(type, id, k, box));
+          row.appendChild(b);
+        });
+        Reactions.refresh(type, id, box);
+        const copy = box.parentElement && box.parentElement.querySelector(".ps-copy");
+        if (copy) copy.addEventListener("click", async () => { try { await navigator.clipboard.writeText(location.href); copy.classList.add("done"); setTimeout(() => copy.classList.remove("done"), 1500); } catch (_) {} });
+      });
+    },
+    async refresh(type, id, box) {
+      const sb = window.getSB && window.getSB();
+      const counts = {};
+      if (sb) { try { const { data } = await sb.rpc("reaction_counts", { p_type: type, p_item: String(id) }); (data || []).forEach((r) => { counts[r.reaction] = r.cnt; }); } catch (_) {} }
+      const mine = localStorage.getItem(Reactions.key(type, id));
+      box.querySelectorAll(".pr-btn").forEach((b) => {
+        b.querySelector(".pr-c").textContent = counts[b.dataset.k] || 0;
+        b.classList.toggle("active", mine === b.dataset.k);
+      });
+    },
+    async react(type, id, k, box) {
+      const sb = window.getSB && window.getSB(); if (!sb) return;
+      const mk = Reactions.key(type, id), prev = localStorage.getItem(mk);
+      if (prev === k) localStorage.removeItem(mk); else localStorage.setItem(mk, k);
+      try { await sb.rpc("toggle_reaction", { p_type: type, p_item: String(id), p_reaction: k, p_client: Reactions.clientId() }); } catch (_) {}
+      Reactions.refresh(type, id, box);
+    },
+  };
 
   /* ---------- Дэлгэрэнгүй харагдац (Article overlay) — төсөл/арга хэмжээ ---------- */
   const Article = {
