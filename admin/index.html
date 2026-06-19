@@ -8,7 +8,7 @@
   <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");</script>
   <title>Админ — Санал хүсэлт | Ц.Баатархүү</title>
   <link rel="icon" type="image/svg+xml" href="/assets/img/logo.svg" />
-  <link rel="stylesheet" href="/css/style.css?v=20260619l" />
+  <link rel="stylesheet" href="/css/style.css?v=20260619m" />
   <style>
     .admin-top { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
       padding:16px 0; border-bottom:1px solid var(--color-border); margin-bottom:24px; }
@@ -52,12 +52,21 @@
       .toolbar-filters { grid-template-columns:1fr; }
     }
     .fb-card { background:var(--color-bg-card); border:1px solid var(--color-border); border-radius:var(--radius);
-      padding:20px; margin-bottom:16px; }
-    .fb-head { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:flex-start; margin-bottom:10px; }
-    .fb-name { font-weight:700; font-size:1.05rem; }
-    .fb-meta { font-size:.82rem; color:var(--color-text-soft); display:flex; gap:12px; flex-wrap:wrap; margin-top:4px; }
-    .fb-badges { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
-    .fb-msg { color:var(--color-text); margin:12px 0; white-space:pre-wrap; line-height:1.6; }
+      margin-bottom:10px; overflow:hidden; transition:border-color .15s, box-shadow .15s; }
+    .fb-card.open { border-color:var(--color-primary-dark); box-shadow:var(--shadow-sm); }
+    /* Авсаархан мөр (дарахад нээгдэнэ) */
+    .fb-sum { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:13px 16px; cursor:pointer; }
+    .fb-sum:hover { background:var(--color-bg-soft); }
+    .fb-sum-main { min-width:0; flex:1; }
+    .fb-name { font-weight:700; font-size:.98rem; }
+    .fb-tk { font-weight:600; font-size:.8rem; color:var(--color-accent); margin-left:4px; }
+    .fb-preview { font-size:.86rem; color:var(--color-text-soft); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%; }
+    .fb-meta { font-size:.78rem; color:var(--color-text-soft); display:flex; gap:12px; flex-wrap:wrap; margin-top:4px; }
+    .fb-badges { display:flex; gap:6px; flex-wrap:wrap; align-items:center; flex-shrink:0; }
+    .fb-chev { color:var(--color-text-soft); transition:transform .2s; margin-left:2px; }
+    .fb-card.open .fb-chev { transform:rotate(180deg); }
+    .fb-detail { padding:0 16px 16px; border-top:1px solid var(--color-border); }
+    .fb-msg { color:var(--color-text); margin:14px 0; white-space:pre-wrap; line-height:1.6; }
     .fb-photos { display:flex; gap:8px; flex-wrap:wrap; margin:12px 0; }
     .fb-photos img { width:90px; height:90px; object-fit:cover; border-radius:var(--radius-sm); border:1px solid var(--color-border); cursor:pointer; }
     .fb-foot { display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between; margin-top:12px;
@@ -709,19 +718,23 @@
         const loc = (r.district ? r.district + " дүүрэг" : "") + (r.khoroo ? ", " + r.khoroo + "-р хороо" : "");
         const mapLink = (r.lat && r.lng) ? `<a href="https://www.google.com/maps?q=${r.lat},${r.lng}" target="_blank" rel="noopener">🗺 Газрын зураг дээр харах</a>` : "";
         const ticket = r.ticket_seq != null ? "AT-" + new Date(r.created_at).getFullYear() + "-" + String(r.ticket_seq).padStart(6, "0") : null;
+        const preview = esc((r.message || "").replace(/\n/g, " ").trim().slice(0, 90));
         card.innerHTML =
-          `<div class="fb-head">
-             <div>
-               <div class="fb-name">${esc(r.name) || "Нэргүй"}</div>
-               <div class="fb-meta">${ticket ? `<span style="color:var(--color-accent);font-weight:600">№ ${ticket}</span>` : ""}<span>📅 ${fmtDate(r.created_at)}</span>${loc ? `<span>📍 ${esc(loc)}</span>` : ""}</div>
+          `<div class="fb-sum">
+             <div class="fb-sum-main">
+               <div class="fb-name">${esc(r.name) || "Нэргүй"}${ticket ? ` <span class="fb-tk">№ ${ticket}</span>` : ""}</div>
+               <div class="fb-preview">${preview || "(хоосон)"}</div>
+               <div class="fb-meta"><span>📅 ${fmtDate(r.created_at)}</span>${loc ? `<span>📍 ${esc(loc)}</span>` : ""}</div>
              </div>
              <div class="fb-badges">
-               ${r.is_public ? `<span class="rate-pill" style="background:rgba(63,210,230,.14);color:var(--color-accent)">🌐 Нийтэд ил</span>` : ""}
+               ${r.is_public ? `<span class="rate-pill" style="background:rgba(63,210,230,.14);color:var(--color-accent)">🌐 Ил</span>` : ""}
                <span class="badge-status ${r.status === "done" ? "status-passed" : r.status === "in_progress" ? "status-review" : "status-draft"}">${STATUS_LABEL[r.status] || r.status}</span>
                <span class="tag" style="position:static;background:var(--color-bg-soft);color:var(--color-accent);border:1px solid var(--color-border)">${SUBJECT_LABEL[r.subject] || r.subject || "—"}</span>
-               ${r.rating != null ? `<span class="rate-pill">⭐ ${r.rating}/10</span>` : ""}
+               ${r.rating != null ? `<span class="rate-pill">⭐ ${r.rating}</span>` : ""}
+               <span class="fb-chev" aria-hidden="true">▾</span>
              </div>
            </div>
+           <div class="fb-detail" hidden>
            <div class="fb-msg">${esc(r.message)}</div>
            <div class="fb-photos" data-photos></div>
            ${mapLink ? `<div style="margin:10px 0">${mapLink}</div>` : ""}
@@ -759,8 +772,12 @@
                <button class="btn btn-ghost btn-sm del-btn" data-id="${r.id}" style="color:var(--color-danger)">🗑 Устгах</button>
              </div>
            </div>
-           <div class="fb-comments" data-comments style="display:none;margin-top:12px"></div>`;
+           <div class="fb-comments" data-comments style="display:none;margin-top:12px"></div>
+           </div>`;
         listEl.appendChild(card);
+        // Авсаархан мөр — дарахад дэлгэрэнгүй нээх/хаах (accordion)
+        const sumEl = card.querySelector(".fb-sum"), detailEl = card.querySelector(".fb-detail");
+        sumEl.addEventListener("click", () => { const willOpen = detailEl.hidden; detailEl.hidden = !willOpen; card.classList.toggle("open", willOpen); });
 
         // Нийтэд ил / нуух toggle
         card.querySelector(".pub-btn").addEventListener("click", async (e) => {
