@@ -103,6 +103,36 @@
     },
   };
 
+  /* ---------- 3.1 Нүүрний ил хайлт (input + товч, доороо илэрц) ---------- */
+  const HomeSearch = {
+    esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
+    match(q) { return SEARCH_INDEX.filter((i) => i.title.toLowerCase().includes(q) || i.cat.toLowerCase().includes(q)); },
+    init() {
+      const form = document.querySelector("[data-home-search]");
+      if (!form) return;
+      const input = form.querySelector(".home-search-input");
+      const results = form.querySelector("[data-home-results]");
+      const render = () => {
+        const q = input.value.trim().toLowerCase();
+        if (!q) { results.hidden = true; results.innerHTML = ""; return; }
+        const m = HomeSearch.match(q);
+        results.innerHTML = m.length
+          ? m.map((x) => `<a href="${x.url}"><div class="res-cat">${HomeSearch.esc(x.cat)}</div><div class="res-title">${HomeSearch.esc(x.title)}</div></a>`).join("")
+          : `<div class="search-empty">"${HomeSearch.esc(input.value.trim())}" гэсэн илэрц олдсонгүй.</div>`;
+        results.hidden = false;
+      };
+      input.addEventListener("input", render);
+      input.addEventListener("focus", () => { if (input.value.trim()) render(); });
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const m = HomeSearch.match(input.value.trim().toLowerCase());
+        if (m.length) location.href = m[0].url;
+      });
+      input.addEventListener("keydown", (e) => { if (e.key === "Escape") { results.hidden = true; input.blur(); } });
+      document.addEventListener("click", (e) => { if (!form.contains(e.target)) results.hidden = true; });
+    },
+  };
+
   /* ---------- 4. Reveal on scroll ---------- */
   const Reveal = {
     init() {
@@ -2182,7 +2212,7 @@
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    Theme.init(); Nav.init(); Search.init(); Reveal.init();
+    Theme.init(); Nav.init(); Search.init(); HomeSearch.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
     Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); NewsPost.init(); EventPost.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); VideoHero.init(); ReportsCMS.init(); ReportPost.init(); ProjectsCMS.init(); ProjectPost.init(); LawsCMS.init(); FeedbackStats.init(); EventsCMS.init(); Settings.init();
   });
