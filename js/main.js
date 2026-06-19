@@ -1118,9 +1118,15 @@
     card(n) {
       const title = this.esc(n.title);
       const img = n.image ? `<img src="${this.esc(n.image)}" alt="" loading="lazy" onerror="this.remove()">` : "";
+      const raw = (n.excerpt || n.body || "")
+        .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")      // зургийн markdown
+        .replace(/https?:\/\/\S+/g, " ")              // ил URL (дангаар зураг г.м.)
+        .replace(/[#>*`_\[\]]/g, "")                  // markdown тэмдгүүд
+        .replace(/\s+/g, " ").trim();
+      const exc = raw ? `<p class="card-excerpt">${this.esc(raw.slice(0, 120))}${raw.length > 120 ? "…" : ""}</p>` : "";
       return `<a class="card news-card-clean reveal visible" href="/medee-delgerengui/?id=${encodeURIComponent(n.id)}" data-item data-title="${title}">
         <div class="card-media">${img}<span class="placeholder"><img src="/assets/img/logo.svg" alt="" style="width:46%;opacity:.4"></span></div>
-        <div class="card-body">${n.date ? `<div class="card-date">${this.esc(n.date)}</div>` : ""}<h3>${title}</h3></div>
+        <div class="card-body">${n.date ? `<div class="card-date">${this.esc(n.date)}</div>` : ""}<h3>${title}</h3>${exc}</div>
       </a>`;
     },
   };

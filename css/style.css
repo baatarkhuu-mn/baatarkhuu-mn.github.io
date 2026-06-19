@@ -807,6 +807,8 @@ body.am-lock { overflow: hidden; }
 .news-card-clean h3 { font-size: 1.08rem; line-height: 1.42; font-weight: 700; margin: 0; color: var(--color-text);
   display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .news-card-clean:hover h3 { color: var(--color-primary-light); }
+.news-card-clean .card-excerpt { margin: 8px 0 0; font-size: .9rem; line-height: 1.55; color: var(--color-text-soft);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 a.news-card-clean { text-decoration: none; color: inherit; display: flex; flex-direction: column; }
 
 /* ---------- Нийтлэг "нийтлэл" агуулга (overlay + дэлгэрэнгүй хуудас) ---------- */
