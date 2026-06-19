@@ -188,7 +188,14 @@
     .admin-topbar { display:flex; align-items:center; gap:16px; padding:16px 26px; border-bottom:1px solid var(--color-border);
       background:var(--color-bg); position:sticky; top:0; z-index:20; }
     .admin-topbar h1 { font-size:1.3rem; margin:0; }
-    .topbar-user { margin-left:auto; position:relative; }
+    .topbar-user { position:relative; }
+    .user-btn.brand-btn { border:none; background:transparent; padding:5px 8px; border-radius:var(--radius-sm); gap:9px; }
+    .user-btn.brand-btn:hover { background:var(--color-bg-soft); }
+    .brand-btn .emblem { width:30px; height:30px; flex-shrink:0; }
+    .brand-btn .emblem img { width:100%; height:100%; }
+    .brand-txt { display:flex; flex-direction:column; align-items:flex-start; line-height:1.15; }
+    .brand-txt strong { font-size:.92rem; }
+    .brand-txt small { font-size:.68rem; color:var(--color-accent); }
     .user-btn { display:flex; align-items:center; gap:9px; background:var(--color-bg-soft); border:1px solid var(--color-border);
       border-radius:30px; padding:5px 12px 5px 5px; cursor:pointer; font-family:inherit; color:var(--color-text); }
     .user-btn:hover { border-color:var(--color-primary); }
@@ -196,7 +203,7 @@
       display:grid; place-items:center; font-size:.85rem; font-weight:700; flex-shrink:0; text-transform:uppercase; }
     .user-email { font-size:.84rem; color:var(--color-text-soft); max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .user-caret { width:15px; height:15px; color:var(--color-text-soft); }
-    .user-dropdown { position:absolute; top:calc(100% + 8px); right:0; z-index:120; width:248px;
+    .user-dropdown { position:absolute; top:calc(100% + 8px); left:0; z-index:120; width:248px;
       background:var(--color-bg-card); border:1px solid var(--color-border); border-radius:var(--radius); box-shadow:var(--shadow-lg); padding:6px; }
     .user-dropdown[hidden] { display:none; }
     .ud-head { display:flex; align-items:center; gap:10px; padding:10px 10px 12px; border-bottom:1px solid var(--color-border); margin-bottom:6px; }
@@ -253,8 +260,7 @@
       .as-toggle { display:block; }
       .admin-content { padding:18px 16px; }
       .admin-topbar { padding:14px 16px; gap:10px; }
-      .admin-topbar .as-brand { border-right:none; padding-right:0; }
-      .as-brand strong, .as-brand small { display:none; }
+      .brand-txt { display:none; }
       .user-email { display:none; }
       #page-title { font-size:1.05rem; }
     }
@@ -287,16 +293,10 @@
   <div id="dash-view" class="admin-app" style="display:none">
     <header class="admin-topbar">
       <button type="button" class="as-toggle" id="sidebar-toggle" aria-label="Цэс">☰</button>
-      <a class="as-brand" href="/" onclick="return false">
-        <span class="emblem"><img src="/assets/img/logo.svg" alt="" /></span>
-        <span><strong>Админ самбар</strong><small>baatarkhuu.mn</small></span>
-      </a>
-      <button type="button" class="topbar-back" id="back-btn" hidden>← Буцах</button>
-      <h1 id="page-title">Хяналтын самбар</h1>
       <div class="topbar-user" id="user-menu">
-        <button type="button" class="user-btn" id="user-btn" aria-haspopup="true" aria-expanded="false">
-          <span class="user-ava" id="user-ava">A</span>
-          <span class="user-email" id="user-btn-name">Админ</span>
+        <button type="button" class="user-btn brand-btn" id="user-btn" aria-haspopup="true" aria-expanded="false">
+          <span class="emblem"><img src="/assets/img/logo.svg" alt="" /></span>
+          <span class="brand-txt"><strong>Админ самбар</strong><small>baatarkhuu.mn</small></span>
           <svg class="user-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
         </button>
         <div class="user-dropdown" id="user-dropdown" hidden>
@@ -311,6 +311,8 @@
           <button type="button" class="ud-item ud-danger" id="ud-logout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg> Гарах</button>
         </div>
       </div>
+      <button type="button" class="topbar-back" id="back-btn" hidden>← Буцах</button>
+      <h1 id="page-title">Хяналтын самбар</h1>
     </header>
     <div class="admin-shell">
     <div class="admin-backdrop" id="admin-backdrop"></div>
