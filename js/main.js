@@ -833,6 +833,22 @@
     },
   };
 
+  /* ---------- Асуудлын явц/чиглүүлэлт (timeline + хариуцах газар + албан бичиг) ---------- */
+  function feedbackRouteHtml(r, esc) {
+    const steps = [
+      { label: "Хүлээн авсан", done: true },
+      { label: r.org ? ("Хариуцагчид уламжилсан: " + esc(r.org)) : "Хариуцах газарт уламжлах", done: !!r.org },
+      { label: "Албаны хариу өгсөн", done: !!r.response },
+      { label: "Шийдвэрлэсэн", done: r.status === "done" },
+    ];
+    const tl = '<ol class="fb-timeline">' + steps.map((s) =>
+      '<li class="ft-step' + (s.done ? " done" : "") + '"><span class="ft-dot"></span><span class="ft-l">' + s.label + '</span></li>').join("") + '</ol>';
+    const letter = r.letter_no
+      ? '<div class="fb-letter">📄 Албан бичиг: <b>' + esc(r.letter_no) + '</b>' + (r.letter_url ? ' · <a href="' + esc(r.letter_url) + '" target="_blank" rel="noopener">үзэх</a>' : '') + '</div>'
+      : "";
+    return '<div class="fb-route">' + tl + letter + '</div>';
+  }
+
   /* ---------- 12. Ил тод санал самбар (public feed) ---------- */
   const PublicFeed = {
     SUBJ: { gerel: "Гэрэлтүүлэг", zam: "Зам, нүх, эвдрэл", yavgan: "Явган хүний зам", hog: "Хог, орчны бохирдол", buudal: "Автобусны буудал", surguuli: "Сургууль, цэцэрлэг", emnelg: "Эмнэлэг, өрхийн эмнэлэг", soh: "СӨХ, байрны орчин", hurteemj: "Ахмад, ХБИ хүртээмж", huuli: "Хууль, бодлогын санал", urgudul: "Хувийн өргөдөл, тусламж", sanal: "Санал", gomdol: "Гомдол", asuudal: "Тулгамдсан асуудал", uulzalt: "Уулзалтын хүсэлт", busad: "Бусад" },
@@ -938,6 +954,7 @@
              ${r.rating != null ? `<span>Үнэлгээ ${r.rating}/10</span>` : ""}
            </div>
            ${r.response ? `<div class="fc-response"><span class="fcr-label">Албаны хариу</span><p>${this.esc(r.response)}</p></div>` : ""}
+           ${feedbackRouteHtml(r, this.esc.bind(this))}
            <div class="fc-actions">
              <button class="fc-like${isLiked ? " liked" : ""}" type="button" aria-pressed="${isLiked}" title="Танд бас ийм асуудал тулгарч байвал дэмжинэ үү">
                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
@@ -1441,6 +1458,7 @@
                   (upd ? '<div><span>Сүүлд шинэчилсэн</span><b>' + upd + '</b></div>' : '') +
                 '</div>' +
                 (r.response ? '<div class="tr-resp"><span>Албаны хариу:</span><p>' + Tracker.esc(r.response) + '</p></div>' : '') +
+                feedbackRouteHtml(r, Tracker.esc) +
               '</div>';
           } catch (e) {
             out.innerHTML = '<p class="tr-bad">Шалгахад алдаа гарлаа: ' + Tracker.esc(e.message || "сүлжээ") + '</p>';

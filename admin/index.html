@@ -8,7 +8,7 @@
   <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");</script>
   <title>Админ — Санал хүсэлт | Ц.Баатархүү</title>
   <link rel="icon" type="image/svg+xml" href="/assets/img/logo.svg" />
-  <link rel="stylesheet" href="/css/style.css?v=20260619j" />
+  <link rel="stylesheet" href="/css/style.css?v=20260619k" />
   <style>
     .admin-top { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
       padding:16px 0; border-bottom:1px solid var(--color-border); margin-bottom:24px; }
@@ -27,6 +27,13 @@
     .sec-stat:hover { border-color:var(--color-primary-dark); box-shadow:var(--shadow-sm); }
     .sec-stat .n { font-size:1.5rem; font-weight:800; color:var(--color-accent); line-height:1; }
     .sec-stat .l { font-size:.78rem; color:var(--color-text-soft); margin-top:6px; }
+    .org-row { display:grid; grid-template-columns:1.4fr 2fr auto; gap:12px; align-items:center; padding:9px 0; border-bottom:1px solid var(--color-border); }
+    .org-row:last-child { border-bottom:none; }
+    .org-name { font-size:.9rem; font-weight:600; }
+    .org-bar { height:8px; background:var(--color-bg-soft); border-radius:6px; overflow:hidden; }
+    .org-bar span { display:block; height:100%; background:linear-gradient(90deg,var(--color-primary),var(--color-accent)); }
+    .org-num { font-size:.8rem; color:var(--color-text-soft); white-space:nowrap; }
+    @media (max-width:560px){ .org-row { grid-template-columns:1fr; gap:4px; } }
     @media (max-width:880px){ .sec-stats{ grid-template-columns:repeat(3,1fr); } }
     @media (max-width:560px){ .sec-stats{ grid-template-columns:repeat(2,1fr); } }
     .toolbar { display:flex; flex-direction:column; gap:12px; margin-bottom:24px; }
@@ -229,6 +236,10 @@
               </div>
             </div>
           </div>
+          <div class="panel" style="margin-top:18px">
+            <div class="panel-head"><h3>Хариуцагч байгууллагаар (уламжилсан асуудал)</h3></div>
+            <div id="org-stats"><p class="form-note">Ачаалж байна…</p></div>
+          </div>
         </section>
 
         <!-- САНАЛ ХҮСЭЛТ -->
@@ -293,6 +304,22 @@
         </div>
       </div>
 
+      <datalist id="org-list">
+        <option value="Чингэлтэй дүүргийн ЗДТГ"></option>
+        <option value="Сүхбаатар дүүргийн ЗДТГ"></option>
+        <option value="Улаанбаатар хотын Захирагчийн ажлын алба"></option>
+        <option value="Нийслэлийн Засаг даргын Тамгын газар"></option>
+        <option value="Авто замын хөгжлийн газар"></option>
+        <option value="Нийтийн тээврийн үйлчилгээний газар"></option>
+        <option value="Ус сувгийн удирдах газар"></option>
+        <option value="Улаанбаатар цахилгаан түгээх сүлжээ"></option>
+        <option value="Гэр хорооллын дэд бүтцийн газар"></option>
+        <option value="Цагдаагийн газар"></option>
+        <option value="Онцгой байдлын газар"></option>
+        <option value="Боловсролын газар"></option>
+        <option value="Эрүүл мэндийн газар"></option>
+        <option value="Хот тохижилтын газар"></option>
+      </datalist>
       <div id="fb-list"></div>
       <div id="fb-empty" class="search-empty" style="display:none">Илэрц алга.</div>
       <div id="fb-loading" class="search-empty">Ачааллаж байна…</div>
@@ -581,6 +608,25 @@
       $("#st-photos").textContent = rows.filter((r) => r.photos && r.photos.length).length;
       const nc = $("#nav-fb-count"); if (nc) nc.textContent = newCount ? newCount : "";
       renderRecent();
+      renderOrgStats();
+    }
+
+    function renderOrgStats() {
+      const box = $("#org-stats"); if (!box) return;
+      const map = {};
+      allRows.forEach((r) => {
+        if (!r.org) return;
+        const m = map[r.org] || (map[r.org] = { total: 0, done: 0 });
+        m.total++; if (r.status === "done") m.done++;
+      });
+      const orgs = Object.keys(map).sort((a, b) => map[b].total - map[a].total);
+      if (!orgs.length) { box.innerHTML = '<p class="form-note">Хариуцах байгууллага оноогоогүй байна. Санал хүсэлт дээр «Хариуцах байгууллага»-г сонгоно уу.</p>'; return; }
+      box.innerHTML = orgs.map((o) => {
+        const m = map[o], pct = m.total ? Math.round(m.done / m.total * 100) : 0;
+        return `<div class="org-row"><div class="org-name">${esc(o)}</div>`
+          + `<div class="org-bar"><span style="width:${pct}%"></span></div>`
+          + `<div class="org-num">${m.done}/${m.total} шийдсэн</div></div>`;
+      }).join("");
     }
 
     function renderRecent() {
@@ -684,6 +730,17 @@
              <textarea class="resp-input" data-id="${r.id}" rows="2" placeholder="Жишээ: Таны саналыг холбогдох газарт уламжиллаа. Шийдвэрлэх хугацаа — 14 хоног." style="width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg-soft);color:var(--color-text);font-family:inherit;font-size:.9rem;resize:vertical">${esc(r.response || "")}</textarea>
              <button class="btn btn-ghost btn-sm resp-btn" data-id="${r.id}" style="margin-top:7px">Хариу хадгалах</button>
              <span class="resp-ok" style="font-size:.8rem;color:#46c882;margin-left:10px;display:none">✓ Хадгаллаа</span>
+           </div>
+           <div class="fb-route-edit" style="margin:12px 0;padding:12px;border:1px dashed var(--color-border);border-radius:var(--radius-sm)">
+             <label style="font-size:.78rem;color:var(--color-text-soft);display:block;margin-bottom:6px">Хариуцах байгууллага / албан бичиг <span style="opacity:.7">(иргэнд ил тод явц харагдана)</span></label>
+             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:7px">
+               <input class="rt-org" list="org-list" placeholder="Хариуцах байгууллага" value="${esc(r.org || "")}" style="padding:8px 10px;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg-soft);color:var(--color-text);font-family:inherit;font-size:.88rem" />
+               <input class="rt-letterno" placeholder="Албан бичгийн дугаар" value="${esc(r.letter_no || "")}" style="padding:8px 10px;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg-soft);color:var(--color-text);font-family:inherit;font-size:.88rem" />
+             </div>
+             <input class="rt-letterurl" placeholder="Албан бичгийн холбоос (PDF, заавал биш)" value="${esc(r.letter_url || "")}" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg-soft);color:var(--color-text);font-family:inherit;font-size:.88rem;margin-bottom:7px" />
+             <button class="btn btn-ghost btn-sm rt-save" data-id="${r.id}">Хадгалах</button>
+             <button class="btn btn-ghost btn-sm rt-mail" type="button">📧 Газарт имэйлдэх</button>
+             <span class="rt-ok" style="font-size:.8rem;color:#46c882;margin-left:8px;display:none">✓ Хадгаллаа</span>
            </div>
            <div class="fb-foot">
              <div class="fb-contact">
@@ -802,6 +859,34 @@
           if (error) { alert("Алдаа: " + error.message); return; }
           const row = allRows.find((x) => x.id === id); if (row) row.response = val;
           ok.style.display = "inline"; setTimeout(() => { ok.style.display = "none"; }, 2500);
+        });
+
+        // Хариуцах байгууллага / албан бичиг хадгалах
+        card.querySelector(".rt-save").addEventListener("click", async (e) => {
+          const btn = e.currentTarget, id = btn.dataset.id;
+          const org = card.querySelector(".rt-org").value.trim() || null;
+          const ln = card.querySelector(".rt-letterno").value.trim() || null;
+          const lu = card.querySelector(".rt-letterurl").value.trim() || null;
+          btn.disabled = true;
+          const { error } = await sb.from("feedback").update({ org, letter_no: ln, letter_url: lu }).eq("id", id);
+          btn.disabled = false;
+          if (error) { alert("Алдаа: " + error.message); return; }
+          const row = allRows.find((x) => x.id === id); if (row) { row.org = org; row.letter_no = ln; row.letter_url = lu; }
+          const ok = card.querySelector(".rt-ok"); ok.style.display = "inline"; setTimeout(() => { ok.style.display = "none"; }, 2500);
+          renderOrgStats();
+        });
+
+        // Холбогдох газарт имэйлдэх (mailto — иргэний бүртгэл хэрэггүй)
+        card.querySelector(".rt-mail").addEventListener("click", () => {
+          const org = card.querySelector(".rt-org").value.trim();
+          const subj = "Иргэний санал хүсэлт" + (ticket ? " — " + ticket : "");
+          const body = "Хүндэт " + (org || "холбогдох байгууллага") + ",\n\n"
+            + "Иргэнээс ирүүлсэн дараах асуудлыг уламжилж байна:\n\n"
+            + (r.message || "") + "\n\n"
+            + (loc ? "Байршил: " + loc + "\n" : "")
+            + (ticket ? "Хяналтын дугаар: " + ticket + "\n" : "")
+            + "\nХүндэтгэсэн,\nУИХ-ын гишүүн Ц.Баатархүүгийн ажлын алба";
+          window.location.href = "mailto:?subject=" + encodeURIComponent(subj) + "&body=" + encodeURIComponent(body);
         });
       });
     }

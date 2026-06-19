@@ -1379,6 +1379,20 @@ a.news-card-clean { text-decoration: none; color: inherit; display: flex; flex-d
 .fc-response .fcr-label { font-size: .74rem; font-weight: 700; color: var(--color-accent); text-transform: uppercase; letter-spacing: .05em; display: block; margin-bottom: 4px; }
 .fc-response p { margin: 0; font-size: .9rem; line-height: 1.55; }
 
+/* Асуудлын явц (timeline) + хариуцах газар + албан бичиг */
+.fb-route { margin: 12px 0; }
+.fb-timeline { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0; }
+.fb-timeline .ft-step { display: flex; align-items: center; gap: 10px; position: relative; padding: 5px 0 5px 2px; font-size: .85rem; color: var(--color-text-soft); }
+.fb-timeline .ft-step::before { content: ""; position: absolute; left: 6px; top: 0; bottom: 0; width: 2px; background: var(--color-border); }
+.fb-timeline .ft-step:first-child::before { top: 50%; }
+.fb-timeline .ft-step:last-child::before { bottom: 50%; }
+.fb-timeline .ft-dot { width: 14px; height: 14px; border-radius: 50%; background: var(--color-bg-soft); border: 2px solid var(--color-border); flex-shrink: 0; z-index: 1; }
+.fb-timeline .ft-step.done { color: var(--color-text); font-weight: 600; }
+.fb-timeline .ft-step.done .ft-dot { background: var(--color-accent); border-color: var(--color-accent); }
+.fb-letter { margin-top: 10px; font-size: .85rem; color: var(--color-text-soft); }
+.fb-letter a { color: var(--color-primary-light); }
+.tr-resp + .fb-route, .fc-response + .fb-route { margin-top: 14px; }
+
 /* Бидний тухай — платформын танилцуулга */
 .about-flow { display: flex; align-items: stretch; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 8px 0 40px; }
 .af-step { flex: 1; min-width: 160px; max-width: 235px; text-align: center; background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 24px 16px; }
