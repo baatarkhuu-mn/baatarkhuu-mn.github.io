@@ -312,37 +312,51 @@
       const geoMap = form.querySelector("#geo-map");
       const latIn = form.querySelector("#f-lat");
       const lngIn = form.querySelector("#f-lng");
-      let leafMap = null, leafMarker = null;
+      let gMap = null, gMarker = null;
       const UB = [47.9187, 106.9178];
+      // Google Maps JavaScript API (key нь HTTP referrer-ээр хязгаарлагдсан байх ёстой)
+      const GMAPS_KEY = "AIzaSyB-vVQYQPqIpxqYFqH-xXKOGyhG0b2Y6jg";
+      let gmapsPromise = null;
+      const loadGoogleMaps = () => {
+        if (window.google && window.google.maps) return Promise.resolve();
+        if (gmapsPromise) return gmapsPromise;
+        gmapsPromise = new Promise((resolve, reject) => {
+          const s = document.createElement("script");
+          s.src = "https://maps.googleapis.com/maps/api/js?key=" + GMAPS_KEY + "&loading=async";
+          s.async = true; s.defer = true;
+          s.onload = () => resolve();
+          s.onerror = () => reject(new Error("gmaps load failed"));
+          document.head.appendChild(s);
+        });
+        return gmapsPromise;
+      };
       const setLL = (lat, lng) => { latIn.value = (+lat).toFixed(6); lngIn.value = (+lng).toFixed(6); };
       const pinMsg = (lat, lng) => { if (geoStatus) geoStatus.innerHTML = `Pin: <strong>${(+lat).toFixed(5)}, ${(+lng).toFixed(5)}</strong> — газрын зураг дээр чирж засна уу`; };
       const resetGeo = () => {
         if (geoStatus) geoStatus.textContent = "Байршил тогтоогоогүй";
         if (geoMap) { geoMap.style.display = "none"; geoMap.innerHTML = ""; }
         if (latIn) latIn.value = ""; if (lngIn) lngIn.value = "";
-        leafMap = null; leafMarker = null;
+        gMap = null; gMarker = null;
       };
       const showMap = (lat, lng) => {
         if (!geoMap) return;
         geoMap.style.display = "block";
-        if (typeof L === "undefined") {
+        loadGoogleMaps().then(() => {
+          if (!gMap) {
+            geoMap.innerHTML = "";
+            gMap = new google.maps.Map(geoMap, {
+              center: { lat: +lat, lng: +lng }, zoom: 17, mapTypeId: "hybrid",
+              streetViewControl: false, fullscreenControl: true, mapTypeControl: true, gestureHandling: "cooperative",
+            });
+            gMarker = new google.maps.Marker({ position: { lat: +lat, lng: +lng }, map: gMap, draggable: true });
+            gMarker.addListener("dragend", () => { const p = gMarker.getPosition(); setLL(p.lat(), p.lng()); pinMsg(p.lat(), p.lng()); });
+            gMap.addListener("click", (e) => { gMarker.setPosition(e.latLng); setLL(e.latLng.lat(), e.latLng.lng()); pinMsg(e.latLng.lat(), e.latLng.lng()); });
+          } else {
+            gMap.setCenter({ lat: +lat, lng: +lng }); gMarker.setPosition({ lat: +lat, lng: +lng });
+          }
+        }).catch(() => {
           geoMap.innerHTML = `<iframe src="https://www.google.com/maps?q=${lat},${lng}&z=17&output=embed" title="Байршил" loading="lazy" style="width:100%;height:100%;border:0;display:block"></iframe>`;
-          return;
-        }
-        if (!leafMap) {
-          geoMap.innerHTML = "";
-          leafMap = L.map(geoMap, { scrollWheelZoom: false }).setView([lat, lng], 17);
-          // Одоогийн хиймэл дагуулын зураг (Esri) — анхдагч; энгийн зураг руу сэлгэж болно
-          const sat = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", { maxZoom: 19, attribution: "Хиймэл дагуул © Esri" });
-          const labels = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}", { maxZoom: 19, opacity: 0.9 });
-          const street = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap" });
-          const satGroup = L.layerGroup([sat, labels]).addTo(leafMap);
-          L.control.layers({ "🛰 Хиймэл дагуул": satGroup, "🗺 Энгийн зураг": street }, null, { collapsed: false }).addTo(leafMap);
-          leafMarker = L.marker([lat, lng], { draggable: true }).addTo(leafMap);
-          leafMarker.on("dragend", () => { const p = leafMarker.getLatLng(); setLL(p.lat, p.lng); pinMsg(p.lat, p.lng); });
-          leafMap.on("click", (e) => { leafMarker.setLatLng(e.latlng); setLL(e.latlng.lat, e.latlng.lng); pinMsg(e.latlng.lat, e.latlng.lng); });
-          setTimeout(() => leafMap.invalidateSize(), 250);
-        } else { leafMap.setView([lat, lng], 16); leafMarker.setLatLng([lat, lng]); }
+        });
       };
       if (geoBtn) {
         geoBtn.addEventListener("click", () => {
