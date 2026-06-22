@@ -8,7 +8,7 @@
   <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");</script>
   <title>Админ — Санал хүсэлт | Ц.Баатархүү</title>
   <link rel="icon" type="image/svg+xml" href="/assets/img/logo.svg" />
-  <link rel="stylesheet" href="/css/style.css?v=20260620o" />
+  <link rel="stylesheet" href="/css/style.css?v=20260620p" />
   <style>
     /* ===== Админ: цайвар, албан ёсны ХӨХ сэдэв (зөвхөн энэ хуудсанд; сайтад нөлөөлөхгүй) ===== */
     [data-theme] {
@@ -397,14 +397,14 @@
       <div class="admin-content">
         <!-- ХЯНАЛТЫН САМБАР -->
         <section id="dashboard-view" class="view">
+          <div class="sec-head">Сайтын агуулга (чиглэл бүрд оруулсан тоо)</div>
+          <div class="sec-stats" id="sec-stats"></div>
           <div class="stat-row">
             <div class="mini-stat"><div class="n" id="st-total">—</div><div class="l">Нийт санал</div></div>
             <div class="mini-stat"><div class="n" id="st-new">—</div><div class="l">Шинэ (хариугүй)</div></div>
             <div class="mini-stat"><div class="n" id="st-rating">—</div><div class="l">Дундаж үнэлгээ</div></div>
             <div class="mini-stat"><div class="n" id="st-photos">—</div><div class="l">Зурагтай санал</div></div>
           </div>
-          <div class="sec-head">Сайтын агуулга (чиглэл бүрд оруулсан тоо)</div>
-          <div class="sec-stats" id="sec-stats"></div>
           <div class="dash-grid">
             <div class="panel">
               <div class="panel-head"><h3>Сүүлийн санал хүсэлт</h3><button type="button" data-goto="fb">Бүгдийг харах →</button></div>
@@ -769,7 +769,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="/js/supabase-config.js?v=20260620o"></script>
+  <script src="/js/supabase-config.js?v=20260620p"></script>
   <script>
   (function () {
     const SUBJECT_LABEL = { gerel:"Гэрэлтүүлэг", zam:"Зам, нүх, эвдрэл", yavgan:"Явган хүний зам", hog:"Хог, орчны бохирдол", buudal:"Автобусны буудал", surguuli:"Сургууль, цэцэрлэг", emnelg:"Эмнэлэг, өрхийн эмнэлэг", soh:"СӨХ, байрны орчин", hurteemj:"Ахмад, ХБИ хүртээмж", huuli:"Хууль, бодлогын санал", urgudul:"Хувийн өргөдөл, тусламж", sanal:"Санал", gomdol:"Гомдол", asuudal:"Тулгамдсан асуудал", uulzalt:"Уулзалтын хүсэлт", busad:"Бусад" };

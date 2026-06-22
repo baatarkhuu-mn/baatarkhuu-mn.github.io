@@ -1170,9 +1170,10 @@ a.news-card-clean { text-decoration: none; color: inherit; display: flex; flex-d
 .hs-head .eyebrow { display: block; margin-bottom: 6px; }
 .hs-head h2 { font-size: clamp(1.55rem, 3vw, 2.2rem); }
 /* Баруун: мэдээ — зурагтай, мэдээний сайт маяг */
-.news-list-home { display: flex; flex-direction: column; }
+.news-list-home { display: flex; flex-direction: column; justify-content: space-between; }
 .news-item { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--color-border); align-items: flex-start; }
 .news-item:first-child { padding-top: 0; }
+.news-list-home .news-item:last-child { border-bottom: none; padding-bottom: 0; }
 .ni-img { width: 188px; height: 132px; flex-shrink: 0; border-radius: var(--radius-sm); overflow: hidden;
   background: linear-gradient(160deg, #15294e, #0b1830); display: grid; place-items: center; }
 [data-theme="light"] .ni-img { background: linear-gradient(160deg, #d6e3f7, #eef3fb); }
