@@ -925,8 +925,16 @@
       rows.forEach((r) => {
         const card = document.createElement("div");
         card.className = "fb-card";
-        const loc = (r.district ? r.district + " дүүрэг" : "") + (r.khoroo ? ", " + r.khoroo + "-р хороо" : "");
-        const mapLink = (r.lat && r.lng) ? `<a href="https://www.google.com/maps?q=${r.lat},${r.lng}" target="_blank" rel="noopener">🗺 Газрын зураг дээр харах</a>` : "";
+        const loc = (r.district ? r.district + " дүүрэг" : "") + (r.khoroo ? (r.district ? ", " : "") + r.khoroo + "-р хороо" : "");
+        const hasGeo = r.lat && r.lng;
+        const locBlock =
+          `<div style="margin:12px 0;padding:12px;border:1px solid var(--color-border);border-radius:var(--radius-sm)">`
+          + `<div style="font-size:.82rem;color:var(--color-text-soft);margin-bottom:8px">📍 Байршил${loc ? `: <b style="color:var(--color-text)">${esc(loc)}</b>` : ""}</div>`
+          + (hasGeo
+              ? `<iframe src="https://www.google.com/maps?q=${r.lat},${r.lng}&z=16&output=embed" style="width:100%;height:230px;border:1px solid var(--color-border);border-radius:var(--radius-sm);display:block" loading="lazy" title="Байршил"></iframe>`
+                + `<div style="font-size:.78rem;color:var(--color-text-soft);margin-top:7px">${(+r.lat).toFixed(5)}, ${(+r.lng).toFixed(5)} · <a href="https://www.google.com/maps?q=${r.lat},${r.lng}" target="_blank" rel="noopener">Google Maps дээр нээх ↗</a></div>`
+              : (loc ? "" : `<div style="font-size:.82rem;color:var(--color-text-soft)">Иргэн байршил оруулаагүй.</div>`))
+          + `</div>`;
         const ticket = r.ticket_seq != null ? "AT-" + new Date(r.created_at).getFullYear() + "-" + String(r.ticket_seq).padStart(6, "0") : null;
         const preview = esc((r.message || "").replace(/\n/g, " ").trim().slice(0, 90));
         card.innerHTML =
@@ -945,7 +953,7 @@
            <div class="fb-detail" hidden>
            <div class="fb-msg">${esc(r.message)}</div>
            <div class="fb-photos" data-photos></div>
-           ${mapLink ? `<div style="margin:10px 0">${mapLink}</div>` : ""}
+           ${locBlock}
            <div class="fb-resp" style="margin:12px 0;padding:12px;border:1px dashed var(--color-border);border-radius:var(--radius-sm)">
              <label style="font-size:.78rem;color:var(--color-text-soft);display:block;margin-bottom:5px">Нийтэд харагдах хариу <span style="opacity:.7">(иргэн дугаараараа явц шалгахад харна)</span></label>
              <textarea class="resp-input" data-id="${r.id}" rows="2" placeholder="Жишээ: Таны саналыг холбогдох газарт уламжиллаа. Шийдвэрлэх хугацаа — 14 хоног." style="width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg-soft);color:var(--color-text);font-family:inherit;font-size:.9rem;resize:vertical">${esc(r.response || "")}</textarea>
