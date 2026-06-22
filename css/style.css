@@ -261,15 +261,15 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 
 /* Хэл солих dropdown */
 /* Хэл солих — ON/OFF маягийн toggle (монгол ↔ англи далбаа) */
-.lang-sw { display: inline-flex; align-items: center; padding: 3px; height: 30px;
+.lang-sw { display: inline-flex; align-items: center; padding: 4px; height: 42px;
   border-radius: 30px; background: var(--color-bg-soft); border: 1px solid var(--color-border);
   position: relative; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .lang-sw:hover { border-color: var(--color-primary); }
-.lang-sw .lts-ind { position: absolute; top: 3px; left: 3px; width: 30px; height: 24px;
+.lang-sw .lts-ind { position: absolute; top: 4px; left: 4px; width: 36px; height: 34px;
   border-radius: 30px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.28); transition: transform .2s ease; z-index: 0; }
-.lang-sw.en .lts-ind { transform: translateX(30px); }
-.lang-sw .lts-opt { width: 30px; height: 24px; display: grid; place-items: center; position: relative; z-index: 1; }
-.lang-sw .lts-opt img { width: 20px; height: 14px; border-radius: 2px; object-fit: cover; opacity: .5; transition: opacity .2s; display: block; }
+.lang-sw.en .lts-ind { transform: translateX(36px); }
+.lang-sw .lts-opt { width: 36px; height: 34px; display: grid; place-items: center; position: relative; z-index: 1; }
+.lang-sw .lts-opt img { width: 24px; height: 16px; border-radius: 2px; object-fit: cover; opacity: .5; transition: opacity .2s; display: block; }
 .lang-sw:not(.en) .lts-mn img, .lang-sw.en .lts-en img { opacity: 1; }
 
 /* ---------- 6. Хайлтын модал ---------- */
@@ -995,6 +995,11 @@ a.news-card-clean { text-decoration: none; color: inherit; display: flex; flex-d
   .lang-btn .lang-code, .lang-btn .lang-caret { display: none; }
   .icon-btn { width: 36px; height: 36px; }
   .icon-btn svg { width: 18px; height: 18px; }
+  .lang-sw { height: 36px; padding: 3px; }
+  .lang-sw .lts-ind { top: 3px; left: 3px; width: 32px; height: 30px; }
+  .lang-sw.en .lts-ind { transform: translateX(32px); }
+  .lang-sw .lts-opt { width: 32px; height: 30px; }
+  .lang-sw .lts-opt img { width: 22px; height: 15px; }
 }
 
 /* ---------- 20. Ил тод санал самбар (public feed) ---------- */
