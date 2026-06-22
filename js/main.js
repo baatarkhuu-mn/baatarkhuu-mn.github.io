@@ -752,6 +752,7 @@
       "Хуулийн төслүүдийн албан ёсны бүртгэлийг": "Find the official registry of bills at",
       /* үүрэг + хуулийн төлөв */
       "Санаачлагч": "Initiator", "Хамтран санаачлагч": "Co-initiator",
+      "Ажлын хэсгийн гишүүн": "Working group member", "Байнгын хорооны илтгэгч": "Standing committee rapporteur", "Санал боловсруулагч": "Proposal drafter",
       "Боловсруулж буй": "In preparation", "Хэлэлцүүлгийн шатанд": "At discussion stage",
       "Буцаагдсан / татагдсан": "Returned / withdrawn",
 
@@ -2282,6 +2283,7 @@
     ICON: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="26" height="26"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>',
     LABEL: { drafting: "Боловсруулж буй", submitted: "Өргөн барьсан", discussion: "Хэлэлцүүлгийн шатанд", passed: "Батлагдсан", returned: "Буцаагдсан / татагдсан" },
     CLS: { drafting: "status-draft", submitted: "status-support", discussion: "status-review", passed: "status-passed", returned: "status-notstarted" },
+    ROLE: { own: "Санаачлагч", co: "Хамтран санаачлагч", workgroup: "Ажлын хэсгийн гишүүн", rapporteur: "Байнгын хорооны илтгэгч", drafter: "Санал боловсруулагч" },
     init() {
       const list = document.querySelector("[data-laws]");
       if (!list) return;
@@ -2298,7 +2300,7 @@
     item(l) {
       const esc = LawsCMS.esc;
       const status = l.status || "submitted";
-      const role = l.category === "co" ? "Хамтран санаачлагч" : "Санаачлагч";
+      const role = LawsCMS.ROLE[l.category] || "Санаачлагч";
       const meta = [l.date_label, role, l.topic].filter(Boolean).map((m) => `<span>${esc(m)}</span>`).join("");
       const pdf = l.pdf_url ? `<a class="btn btn-ghost btn-sm" href="${esc(l.pdf_url)}" target="_blank" rel="noopener">PDF</a>` : "";
       return `<article class="law-item" data-item data-title="${esc(l.title)}" data-category="${esc(l.category || "own")}" data-status="${esc(status)}" data-summary="${esc(l.summary || "")}">

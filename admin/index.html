@@ -8,7 +8,7 @@
   <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");</script>
   <title>Админ — Санал хүсэлт | Ц.Баатархүү</title>
   <link rel="icon" type="image/svg+xml" href="/assets/img/logo.svg" />
-  <link rel="stylesheet" href="/css/style.css?v=20260620l" />
+  <link rel="stylesheet" href="/css/style.css?v=20260620m" />
   <style>
     /* ===== Админ: цайвар, албан ёсны ХӨХ сэдэв (зөвхөн энэ хуудсанд; сайтад нөлөөлөхгүй) ===== */
     [data-theme] {
@@ -673,7 +673,13 @@
                   </select>
                 </div>
                 <div class="form-group"><label for="l-category">Үүрэг</label>
-                  <select id="l-category"><option value="own">Санаачлагч</option><option value="co">Хамтран санаачлагч</option></select>
+                  <select id="l-category">
+                    <option value="own">Санаачлагч</option>
+                    <option value="co">Хамтран санаачлагч</option>
+                    <option value="workgroup">Ажлын хэсгийн гишүүн</option>
+                    <option value="rapporteur">Байнгын хорооны илтгэгч</option>
+                    <option value="drafter">Санал боловсруулагч</option>
+                  </select>
                 </div>
               </div>
               <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
@@ -763,7 +769,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="/js/supabase-config.js?v=20260620l"></script>
+  <script src="/js/supabase-config.js?v=20260620m"></script>
   <script>
   (function () {
     const SUBJECT_LABEL = { gerel:"Гэрэлтүүлэг", zam:"Зам, нүх, эвдрэл", yavgan:"Явган хүний зам", hog:"Хог, орчны бохирдол", buudal:"Автобусны буудал", surguuli:"Сургууль, цэцэрлэг", emnelg:"Эмнэлэг, өрхийн эмнэлэг", soh:"СӨХ, байрны орчин", hurteemj:"Ахмад, ХБИ хүртээмж", huuli:"Хууль, бодлогын санал", urgudul:"Хувийн өргөдөл, тусламж", sanal:"Санал", gomdol:"Гомдол", asuudal:"Тулгамдсан асуудал", uulzalt:"Уулзалтын хүсэлт", busad:"Бусад" };
@@ -1714,6 +1720,7 @@
     // ===== ХУУЛЬ УДИРДАХ =====
     const LAW_STATUS = { drafting: "Боловсруулж буй", submitted: "Өргөн барьсан", discussion: "Хэлэлцүүлгийн шатанд", passed: "Батлагдсан", returned: "Буцаагдсан / татагдсан" };
     const LAW_CLS = { drafting: "status-draft", submitted: "status-support", discussion: "status-review", passed: "status-passed", returned: "status-notstarted" };
+    const LAW_ROLE = { own: "Санаачлагч", co: "Хамтран санаачлагч", workgroup: "Ажлын хэсгийн гишүүн", rapporteur: "Байнгын хорооны илтгэгч", drafter: "Санал боловсруулагч" };
     let lawRows = [], lawLoaded = false;
     const lawForm = $("#law-form"), lawList = $("#law-list"), lawEmpty = $("#law-empty"), lawMsg = $("#law-msg");
 
@@ -1739,7 +1746,7 @@
           `<div class="nr-body">
              <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:4px">
                <span class="badge-status ${LAW_CLS[l.status] || "status-review"}">${esc(LAW_STATUS[l.status] || l.status)}</span>
-               <span class="tag" style="position:static;background:var(--color-bg-soft);color:var(--color-accent);border:1px solid var(--color-border)">${l.category === "co" ? "Хамтран санаачлагч" : "Санаачлагч"}</span>
+               <span class="tag" style="position:static;background:var(--color-bg-soft);color:var(--color-accent);border:1px solid var(--color-border)">${LAW_ROLE[l.category] || "Санаачлагч"}</span>
                ${l.published ? "" : `<span class="badge-status status-draft">Ноорог</span>`}
                <span style="font-size:.8rem;color:var(--color-text-soft)">эрэмбэ: ${l.sort}</span>
                ${l.pdf_url ? `<a href="${esc(l.pdf_url)}" target="_blank" rel="noopener" style="font-size:.8rem;color:var(--color-primary-light)">PDF/холбоос</a>` : ""}
