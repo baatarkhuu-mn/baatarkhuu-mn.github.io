@@ -1367,7 +1367,7 @@
           const { data, error } = await sb.from("news").select("*").eq("published", true).order("date", { ascending: false, nullsFirst: false }).order("created_at", { ascending: false }).limit(60);
           if (!error && data && data.length) {
             if (grid) { grid.innerHTML = data.map((n) => this.card(n)).join(""); }
-            if (home) { home.innerHTML = data.slice(0, 4).map((n) => this.homeItem(n)).join(""); }
+            if (home) { home.innerHTML = data.slice(0, 3).map((n) => this.homeItem(n)).join(""); }
           }
         } catch (_) { /* алдаа гарвал статик хэвээр үлдээнэ */ }
       }
