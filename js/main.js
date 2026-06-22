@@ -1025,23 +1025,11 @@
       this.orig = new WeakMap();    // текстийн зангилаа → анхны монгол утга
       this.phOrig = new WeakMap();  // placeholder элемент → анхны монгол утга
       this.lang = localStorage.getItem("lang") || "mn";
-      const sw = document.getElementById("lang-switch");
-      btn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        const open = sw.classList.toggle("open");
-        btn.setAttribute("aria-expanded", open ? "true" : "false");
-      });
-      document.querySelectorAll(".lang-menu [data-lang]").forEach((mi) => {
-        mi.addEventListener("click", () => {
-          this.lang = mi.dataset.lang;
-          localStorage.setItem("lang", this.lang);
-          sw.classList.remove("open");
-          btn.setAttribute("aria-expanded", "false");
-          this.apply();
-        });
-      });
-      document.addEventListener("click", (e) => {
-        if (sw && !sw.contains(e.target)) { sw.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); }
+      // ON/OFF маягийн toggle — монгол ↔ англи далбаа
+      btn.addEventListener("click", () => {
+        this.lang = (this.lang === "en") ? "mn" : "en";
+        localStorage.setItem("lang", this.lang);
+        this.apply();
       });
       // Динамик контентыг (CMS, статистик, шүүлтүүр г.м.) автоматаар орчуулах
       try {
@@ -1088,11 +1076,8 @@
       document.documentElement.setAttribute("lang", this.lang);
       this.scan(document.body);
       this.scanPh(document);
-      const flag = document.querySelector("#lang-toggle .lang-flag");
-      const code = document.querySelector("#lang-toggle .lang-code");
-      if (flag) flag.src = en ? "https://flagcdn.com/w40/gb.png" : "https://flagcdn.com/w40/mn.png";
-      if (code) code.textContent = en ? "Eng" : "Мон";
-      document.querySelectorAll(".lang-menu [data-lang]").forEach((mi) => mi.setAttribute("aria-current", mi.dataset.lang === this.lang ? "true" : "false"));
+      const sw = document.getElementById("lang-toggle");
+      if (sw) { sw.classList.toggle("en", en); sw.setAttribute("aria-checked", en ? "true" : "false"); }
     },
   };
 
