@@ -1076,11 +1076,15 @@
 
   /* ---------- Асуудлын явц/чиглүүлэлт (timeline + хариуцах газар + албан бичиг) ---------- */
   function feedbackRouteHtml(r, esc) {
+    // Иргэнд харагдах явц нь админы төлөвтэй монотон уялдана:
+    //   Шинэ → 1; Шийдвэрлэж байна → 1-2 (хариу/газар бөглөвөл цааш); Шийдвэрлэсэн → бүгд
+    const inProg = r.status === "in_progress" || r.status === "done";
+    const isDone = r.status === "done";
     const steps = [
       { label: "Хүлээн авсан", done: true },
-      { label: r.org ? ("Хариуцагчид уламжилсан: " + esc(r.org)) : "Хариуцах газарт уламжлах", done: !!r.org },
-      { label: "Албаны хариу өгсөн", done: !!r.response },
-      { label: "Шийдвэрлэсэн", done: r.status === "done" },
+      { label: r.org ? ("Хариуцагчид уламжилсан: " + esc(r.org)) : "Хариуцах газарт уламжлах", done: !!r.org || inProg },
+      { label: "Албаны хариу өгсөн", done: !!r.response || isDone },
+      { label: "Шийдвэрлэсэн", done: isDone },
     ];
     const tl = '<ol class="fb-timeline">' + steps.map((s) =>
       '<li class="ft-step' + (s.done ? " done" : "") + '"><span class="ft-dot"></span><span class="ft-l">' + s.label + '</span></li>').join("") + '</ol>';
