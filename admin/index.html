@@ -8,7 +8,7 @@
   <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");</script>
   <title>Админ — Санал хүсэлт | Ц.Баатархүү</title>
   <link rel="icon" type="image/svg+xml" href="/assets/img/logo.svg" />
-  <link rel="stylesheet" href="/css/style.css?v=20260620j" />
+  <link rel="stylesheet" href="/css/style.css?v=20260620k" />
   <style>
     /* ===== Админ: цайвар, албан ёсны ХӨХ сэдэв (зөвхөн энэ хуудсанд; сайтад нөлөөлөхгүй) ===== */
     [data-theme] {
@@ -665,18 +665,11 @@
               <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
                 <div class="form-group"><label for="l-status">Төлөв</label>
                   <select id="l-status">
-                    <option value="submitted">Өргөн мэдүүлсэн</option>
-                    <option value="notstarted">Хэлэлцэж эхлээгүй</option>
-                    <option value="considering">Хэлэлцэх эсэхийг хэлэлцэж буй</option>
-                    <option value="support">Хэлэлцэх эсэхийг дэмжсэн</option>
-                    <option value="first">Анхны хэлэлцүүлэгт</option>
-                    <option value="final">Эцсийн хэлэлцүүлэгт</option>
-                    <option value="review">Хэлэлцэж буй</option>
-                    <option value="discussed">Хэлэлцүүлэг хийсэн</option>
+                    <option value="drafting">Боловсруулж буй</option>
+                    <option value="submitted">Өргөн барьсан</option>
+                    <option value="discussion">Хэлэлцүүлгийн шатанд</option>
                     <option value="passed">Батлагдсан</option>
-                    <option value="inforce">Хүчин төгөлдөр болсон</option>
-                    <option value="rejected">Татгалзсан</option>
-                    <option value="withdrawn">Татаж авсан</option>
+                    <option value="returned">Буцаагдсан / татагдсан</option>
                   </select>
                 </div>
                 <div class="form-group"><label for="l-category">Үүрэг</label>
@@ -770,7 +763,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="/js/supabase-config.js?v=20260620j"></script>
+  <script src="/js/supabase-config.js?v=20260620k"></script>
   <script>
   (function () {
     const SUBJECT_LABEL = { gerel:"Гэрэлтүүлэг", zam:"Зам, нүх, эвдрэл", yavgan:"Явган хүний зам", hog:"Хог, орчны бохирдол", buudal:"Автобусны буудал", surguuli:"Сургууль, цэцэрлэг", emnelg:"Эмнэлэг, өрхийн эмнэлэг", soh:"СӨХ, байрны орчин", hurteemj:"Ахмад, ХБИ хүртээмж", huuli:"Хууль, бодлогын санал", urgudul:"Хувийн өргөдөл, тусламж", sanal:"Санал", gomdol:"Гомдол", asuudal:"Тулгамдсан асуудал", uulzalt:"Уулзалтын хүсэлт", busad:"Бусад" };
@@ -1719,13 +1712,13 @@
     $("#project-cancel").addEventListener("click", resetProjectForm);
 
     // ===== ХУУЛЬ УДИРДАХ =====
-    const LAW_STATUS = { submitted: "Өргөн мэдүүлсэн", notstarted: "Хэлэлцэж эхлээгүй", considering: "Хэлэлцэх эсэхийг хэлэлцэж буй", support: "Хэлэлцэх эсэхийг дэмжсэн", first: "Анхны хэлэлцүүлэгт", final: "Эцсийн хэлэлцүүлэгт", review: "Хэлэлцэж буй", discussed: "Хэлэлцүүлэг хийсэн", passed: "Батлагдсан", inforce: "Хүчин төгөлдөр болсон", rejected: "Татгалзсан", withdrawn: "Татаж авсан" };
-    const LAW_CLS = { submitted: "status-support", notstarted: "status-notstarted", considering: "status-review", support: "status-support", first: "status-review", final: "status-review", review: "status-review", discussed: "status-review", passed: "status-passed", inforce: "status-passed", rejected: "status-draft", withdrawn: "status-draft" };
+    const LAW_STATUS = { drafting: "Боловсруулж буй", submitted: "Өргөн барьсан", discussion: "Хэлэлцүүлгийн шатанд", passed: "Батлагдсан", returned: "Буцаагдсан / татагдсан" };
+    const LAW_CLS = { drafting: "status-draft", submitted: "status-support", discussion: "status-review", passed: "status-passed", returned: "status-notstarted" };
     let lawRows = [], lawLoaded = false;
     const lawForm = $("#law-form"), lawList = $("#law-list"), lawEmpty = $("#law-empty"), lawMsg = $("#law-msg");
 
     function resetLawForm() {
-      lawForm.reset(); $("#l-id").value = ""; $("#l-published").checked = true; $("#l-status").value = "submitted"; $("#l-category").value = "own"; $("#l-sort").value = 0;
+      lawForm.reset(); $("#l-id").value = ""; $("#l-published").checked = true; $("#l-status").value = "drafting"; $("#l-category").value = "own"; $("#l-sort").value = 0;
       $("#law-form-title").textContent = "Шинэ хууль нэмэх"; $("#law-cancel").style.display = "none"; $("#l-pdf-cur").textContent = "";
     }
 
