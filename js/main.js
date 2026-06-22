@@ -809,35 +809,131 @@
       "Илгээх": "Send", "Үзэх": "View", "Татах": "Download",
       "Газрын зураг": "Map", "Байршил": "Location",
 
+      /* ---- Нүүр (дахин бүтэцлэсэн хэсгүүд) ---- */
+      "БҮТЭЭГЧ МОНГОЛ": "BUILDER MONGOLIA",
+      "Монгол": "Mongolian",
+      "Арга хэмжээ, бүртгэл": "Events & registration",
+      "УДАХГҮЙ БОЛОХ": "UPCOMING",
+      "Өмнө хийсэн уулзалт, төслүүд →": "Past meetings & projects →",
+      "Байр суурь": "Standpoint",
+      "ӨӨР БОДЛОГО": "A DIFFERENT POLICY",
+      "Бүх мэдээ үзэх →": "View all news →",
+      "Иргэн төвтэй систем": "Citizen-centered system",
+      "Иргэдийн дуу хоолойг сонсох нэгдсэн систем": "A unified system to hear citizens' voices",
+      "Иргэдийн санал, гомдол, өргөдөл олон нийтийн сүлжээнд хязгаарлагдан үлдэх бус,":
+        "Citizens' feedback, complaints and petitions should not remain confined to social media —",
+      "шийдвэр гаргах түвшинд хүрч, ил тод хянагддаг":
+        "they must reach the decision-making level and be transparently overseen",
+      "байх ёстой. Энэхүү платформ нь иргэдийн гаргасан асуудал, өргөдөл, саналыг нэгтгэн бүртгэж,":
+        ". This platform registers and consolidates the issues, petitions and suggestions raised by citizens, showing",
+      "байршлын мэдээлэл, шийдвэрлэлтийн үе шат, хэрэгжилтийн явцыг":
+        "their location, resolution stages and implementation progress",
+      "нээлттэй харуулах цогц систем юм.": "openly in one comprehensive system.",
+      "Зураг илгээ": "Submit a photo",
+      "Асуудлаа зураг, бичлэгээр харуул": "Show your issue with a photo or video",
+      "Байршил заа": "Mark the location",
+      "Газрын зураг дээр pin тавь": "Drop a pin on the map",
+      "Явцыг хар": "Track progress",
+      "Дугаараараа төлөвөө хяна": "Check status by your number",
+      "Хариу, шийдвэрлэлт": "Response & resolution",
+      "Албаны хариу, шийдвэрлэсэн төлөвийг ил тод хар": "Transparently see the official response and resolved status",
+
+      /* ---- Нүүр / Холбоо: санал хүсэлтийн форм + заавар ---- */
+      "Санал хүсэлтээ хэрхэн илгээх вэ?": "How do you send feedback?",
+      "Энд": "Enter", "нэрээ": "your name", "бичнэ": "here",
+      "утсаа": "your phone", "зураг, бичлэгээ": "photos/videos", "оруулна": "here",
+      "Нэр": "Name", "Б. Болд": "B. Bold", "Асуудал": "Issue",
+      "Гэр хорооллын гэрэлтүүлэг асахгүй удаж байна.": "The ger-district street lights have been out for a while.",
+      "1 зураг хавсаргав · байршил тогтоосон": "1 photo attached · location set",
+      "Маягтаа бөглөж, зураг хавсаргаад «Илгээх» дарахад л болно — энгийн.":
+        "Just fill in the form, attach a photo and press “Send” — it's that simple.",
+      "Нэрээ": "Your name", "бичнэ,": " — fill it in; ", "утас заавал": "your phone is required", "бичнэ.": ".",
+      "Төрлөө сонгож,": "Select a type, then describe", "асуудал/саналаа": "your issue/suggestion", "дэлгэрэнгүй бичнэ.": "in detail.",
+      "Зураг, бичлэг": "Attach photos/videos", "хавсаргаж,": " and", "байршлаа": "set your location", "тогтооно.": ".",
+      "Гишүүний ажилд": "You can rate", "үнэлгээ": "the member's work", "өгч болно (заавал биш).": " (optional).",
+      "«Олон нийтэд харуулах» сонговол доорх": "If you choose “Make public,” it appears on the",
+      "самбарт нийтлэгдэнэ": "board below",
+      "«Илгээх»": "Press “Send”", "дарна.": ".",
+      "Таны мэдээллийг зөвхөн хариу өгөх зорилгоор ашиглана. Хувийн мэдээлэл (нэр, утас, байршил) нийтэд харагдахгүй.":
+        "Your information is used only to respond to you. Personal data (name, phone, location) is never shown publicly.",
+      "Гэрэлтүүлэг": "Street lighting",
+      "Зам, нүх, эвдрэл": "Roads, potholes, damage",
+      "Явган хүний зам": "Pedestrian walkways",
+      "Хог, орчны бохирдол": "Waste & pollution",
+      "Автобусны буудал": "Bus stops",
+      "Сургууль, цэцэрлэг": "Schools & kindergartens",
+      "Эмнэлэг, өрхийн эмнэлэг": "Hospitals & family clinics",
+      "СӨХ, байрны орчин": "HOA & building surroundings",
+      "Ахмад, ХБИ-ийн хүртээмж": "Accessibility for elders & people with disabilities",
+      "Хууль, бодлогын санал": "Law & policy proposals",
+      "Хувийн өргөдөл, тусламж хүсэлт": "Personal petitions & help requests",
+      "Зураг, бичлэг хавсаргах": "Attach photos or videos",
+      "Энд дарж зураг, бичлэг оруулах эсвэл чирч тавина уу": "Click to add photos/videos, or drag and drop",
+      "Утаснаас шууд авах боломжтой · Зураг 8MB, бичлэг 50MB хүртэл · нийт 5 хүртэл":
+        "Capture directly from your phone · Photos up to 8MB, videos up to 50MB · up to 5 total",
+      "Асуудлын байршил": "Issue location",
+      "Байршлаа тогтоох": "Set your location",
+      "Байршил тогтоогоогүй": "Location not set",
+      "Гишүүний ажилд өгөх таны үнэлгээ": "Your rating of the member's work",
+      "(заавал биш)": "(optional)",
+      "Миний": "I", "асуудлыг олон нийтэд ил харуулахыг": "consent to showing my issue publicly", "зөвшөөрч байна.": ".",
+      "Нэр, утас, яг байршил": "Name, phone and exact location",
+      "харагдахгүй": "are hidden",
+      "— зөвхөн асуудал, зураг, үнэлгээ. Бусад иргэд дэмжиж, коммент бичиж болно.":
+        " — only the issue, photo and rating. Other citizens can support and comment.",
+      "Вебсайт (бичихгүй)": "Website (leave blank)",
+      "* Заавал бөглөх талбар.": "* Required field.",
+
+      /* ---- Нүүр: явц шалгах + ил тод самбар + видео ---- */
+      "Хяналт": "Tracking",
+      "Саналын явц шалгах": "Check your submission status",
+      "Санал илгээхэд авсан дугаараа (жишээ:": "Enter the reference number you received (e.g.,",
+      ") оруулаад явцаа шалгана уу.": ") to check its progress.",
+      "Шалгах": "Check",
+      "Иргэд өөрсдөө зөвшөөрсний дагуу нийтэлсэн асуудлууд байнга шинэчлэгдэнэ. Саналыг дэмжиж, коммент хэлбэрээр үлдээгээрэй.":
+        "Issues published with citizens' own consent, updated continuously. Show your support and leave a comment.",
+      "Нийт санал": "Total submissions",
+      "Энэ сард ирсэн": "Received this month",
+      "Шийдвэрлэсэн": "Resolved",
+      "Иргэдийн дэмжлэг": "Citizen support",
+      "Бүгд": "All", "Шинэ": "New", "Хамгийн их дэмжсэн": "Most supported",
+      "Видео мэдээ": "Video news",
+      "Сүүлийн үеийн видео мэдээг эндээс үзээрэй.": "Watch the latest video news here.",
+      "Бүгдийг харах →": "View all →",
+      "Хотын асуудал олон байгаадаа биш. Судалгаагүй шийдвэр, төлөвлөлтгүй хэрэгжилт, хариуцлагагүй тогтолцоонд бий.":
+        "The city's problems aren't about their number. They lie in unstudied decisions, unplanned implementation and an unaccountable system.",
+      "Цэндийн": "Tsendiin", "БААТАРХҮҮ": "BAATARKHUU",
+      "Монгол Улс 14201 Улаанбаатар хот, Сүхбаатар дүүрэг, Жанжин Д.Сүхбаатарын талбай 1, Төрийн ордон.":
+        "Mongolia 14201, Ulaanbaatar, Sukhbaatar District, D. Sukhbaatar Square 1, State Palace.",
+      "Ц.Баатархүү. Бүх эрх хуулиар хамгаалагдсан.": "Ts.Baatarkhuu. All rights reserved.",
+
+      /* ---- Динамик UI: арга хэмжээ, ил тод feed, явцын timeline ---- */
+      "Зарлал": "Announcement", "Бүртгүүлэх": "Register",
+      "Хүлээн авсан": "Received",
+      "Хариуцах газарт уламжлах": "Forwarded to responsible agency",
+      "Албаны хариу өгсөн": "Official response given",
+      "Надад бас ийм асуудал байна": "I have this issue too",
+      "Дэмжсэн": "Supported",
+      "Коммент": "Comment",
+      "Хараахан сэтгэгдэл алга. Эхэлж бичээрэй.": "No comments yet. Be the first to write one.",
+      "Шийдвэрлэж байна": "In progress",
+      "Зочин болж сэтгэгдэл бичих…": "Comment as a guest…",
+
       /* ---- Төлөв / шошго давхар ---- */
       "Дэлгэрэнгүй": "Details",
     },
     init() {
       const btn = document.getElementById("lang-toggle");
       if (!btn) return;
-      this.nodes = [];
-      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
-      let node;
-      while ((node = walker.nextNode())) {
-        const key = node.nodeValue.trim();
-        if (key && this.dict[key]) {
-          this.nodes.push({ node, mn: node.nodeValue, en: node.nodeValue.replace(key, this.dict[key]) });
-        }
-      }
-      this.phEls = [];
-      document.querySelectorAll("[placeholder]").forEach((el) => {
-        const k = el.getAttribute("placeholder");
-        if (this.ph[k]) this.phEls.push({ el, mn: k, en: this.ph[k] });
-      });
+      this.orig = new WeakMap();    // текстийн зангилаа → анхны монгол утга
+      this.phOrig = new WeakMap();  // placeholder элемент → анхны монгол утга
       this.lang = localStorage.getItem("lang") || "mn";
       const sw = document.getElementById("lang-switch");
-      // Dropdown нээх/хаах
       btn.addEventListener("click", (e) => {
         e.stopPropagation();
         const open = sw.classList.toggle("open");
         btn.setAttribute("aria-expanded", open ? "true" : "false");
       });
-      // Хэл сонгох
       document.querySelectorAll(".lang-menu [data-lang]").forEach((mi) => {
         mi.addEventListener("click", () => {
           this.lang = mi.dataset.lang;
@@ -847,17 +943,54 @@
           this.apply();
         });
       });
-      // Гадна дарахад хаах
       document.addEventListener("click", (e) => {
         if (sw && !sw.contains(e.target)) { sw.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); }
       });
+      // Динамик контентыг (CMS, статистик, шүүлтүүр г.м.) автоматаар орчуулах
+      try {
+        this._obs = new MutationObserver((muts) => {
+          if (this.lang !== "en") return;
+          muts.forEach((m) => m.addedNodes.forEach((nd) => {
+            if (nd.nodeType === 3) this.tNode(nd);
+            else if (nd.nodeType === 1) { this.scan(nd); this.scanPh(nd); }
+          }));
+        });
+        this._obs.observe(document.body, { childList: true, subtree: true });
+      } catch (_) {}
       this.apply();
     },
+    tNode(node) {
+      if (!node || node.nodeType !== 3) return;
+      let mn = this.orig.get(node);
+      if (mn === undefined) {
+        const k0 = (node.nodeValue || "").trim();
+        if (!(k0 && this.dict[k0])) return;   // орчуулагдахааргүй текст — алгасах
+        mn = node.nodeValue; this.orig.set(node, mn);
+      }
+      const key = mn.trim();
+      node.nodeValue = (this.lang === "en" && this.dict[key]) ? mn.replace(key, this.dict[key]) : mn;
+    },
+    scan(root) {
+      const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+      let n; while ((n = w.nextNode())) this.tNode(n);
+    },
+    scanPh(root) {
+      const els = root.querySelectorAll ? root.querySelectorAll("[placeholder]") : [];
+      els.forEach((el) => {
+        let mn = this.phOrig.get(el);
+        if (mn === undefined) {
+          const cur = el.getAttribute("placeholder");
+          if (!this.ph[cur]) return;
+          mn = cur; this.phOrig.set(el, mn);
+        }
+        el.setAttribute("placeholder", (this.lang === "en" && this.ph[mn]) ? this.ph[mn] : mn);
+      });
+    },
     apply() {
-      document.documentElement.setAttribute("lang", this.lang);
       const en = this.lang === "en";
-      this.nodes.forEach((o) => { o.node.nodeValue = en ? o.en : o.mn; });
-      this.phEls.forEach((o) => { o.el.setAttribute("placeholder", en ? o.en : o.mn); });
+      document.documentElement.setAttribute("lang", this.lang);
+      this.scan(document.body);
+      this.scanPh(document);
       const flag = document.querySelector("#lang-toggle .lang-flag");
       const code = document.querySelector("#lang-toggle .lang-code");
       if (flag) flag.src = en ? "https://flagcdn.com/w40/gb.png" : "https://flagcdn.com/w40/mn.png";
