@@ -2462,6 +2462,37 @@
     },
   };
 
+  /* ---------- Тайлангийн үзүүлэлт — оруулсан өгөгдлөөс автоматаар ---------- */
+  const ReportStats = {
+    async init() {
+      const els = document.querySelectorAll("[data-rstat]");
+      if (!els.length) return;
+      const sb = window.getSB && window.getSB();
+      if (!sb) return;
+      try {
+        const { data, error } = await sb.rpc("report_stats");
+        if (error || !data || !data.length) return; // алдаа → жишээ тоо хэвээр
+        const s = data[0];
+        const feedback = +s.feedback_total || 0;
+        const done = +s.feedback_done || 0;
+        const vals = {
+          meetings: +s.events_total || 0,
+          feedback: feedback,
+          resolved: feedback ? Math.round((done / feedback) * 100) : 0,
+          initiatives: (+s.laws_total || 0) + (+s.projects_total || 0),
+        };
+        els.forEach((el) => {
+          const k = el.dataset.rstat;
+          if (vals[k] == null) return;
+          el.dataset.count = vals[k];                          // Counters энэ рүү анимэйт хийнэ
+          el.textContent = vals[k].toLocaleString("mn-MN");    // аль хэдийн анимэйт хийсэн бол шууд бодит утга
+          const suffix = el.parentElement.querySelector(".suffix");
+          if (suffix && k !== "resolved") suffix.textContent = ""; // бодит тоо тул "+" хасна
+        });
+      } catch (_) {}
+    },
+  };
+
   // Хөвөгч "Санал хүсэлт" товч — холбоо барих хуудаснаас бусад бүх хуудсанд
   function injectFeedbackFab() {
     if (location.pathname.includes("holboo")) return;
@@ -2476,6 +2507,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     Theme.init(); Nav.init(); Search.init(); TextSize.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
-    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); NewsPost.init(); EventPost.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); VideoHero.init(); ReportsCMS.init(); ReportPost.init(); ProjectsCMS.init(); ProjectPost.init(); LawsCMS.init(); FeedbackStats.init(); EventsCMS.init(); Settings.init();
+    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); NewsPost.init(); EventPost.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); VideoHero.init(); ReportsCMS.init(); ReportPost.init(); ProjectsCMS.init(); ProjectPost.init(); LawsCMS.init(); FeedbackStats.init(); EventsCMS.init(); Settings.init(); ReportStats.init();
   });
 })();
