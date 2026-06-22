@@ -103,24 +103,35 @@
     },
   };
 
-  /* ---------- 3.1 Үсгийн хэмжээ (A− / A+) ---------- */
+  /* ---------- 3.1 Үсгийн хэмжээ (A− / A / A+) — хажуугийн хөвөгч хэрэгсэл ---------- */
   const TextSize = {
     levels: [0.9, 1.0, 1.12, 1.25, 1.4],
+    DEFAULT: 1,
     init() {
-      const dec = document.querySelector(".ts-dec");
-      const inc = document.querySelector(".ts-inc");
-      if (!dec || !inc) return;
+      if (document.querySelector(".text-size")) return;
+      const wrap = document.createElement("div");
+      wrap.className = "text-size";
+      wrap.setAttribute("role", "group");
+      wrap.setAttribute("aria-label", "Үсгийн хэмжээ");
+      wrap.innerHTML =
+        '<button class="ts-btn ts-dec" type="button" aria-label="Үсэг багасгах" title="Үсэг багасгах">A−</button>' +
+        '<button class="ts-btn ts-reset" type="button" aria-label="Анхны хэмжээ" title="Анхны хэмжээ">A</button>' +
+        '<button class="ts-btn ts-inc" type="button" aria-label="Үсэг томруулах" title="Үсэг томруулах">A+</button>';
+      document.body.appendChild(wrap);
+      const dec = wrap.querySelector(".ts-dec"), reset = wrap.querySelector(".ts-reset"), inc = wrap.querySelector(".ts-inc");
       let i = parseInt(localStorage.getItem("textSize"), 10);
-      if (isNaN(i) || i < 0 || i >= this.levels.length) i = 1; // 1.0 = анхдагч
+      if (isNaN(i) || i < 0 || i >= this.levels.length) i = this.DEFAULT;
       const apply = () => {
         i = Math.max(0, Math.min(this.levels.length - 1, i));
         document.documentElement.style.fontSize = (16 * this.levels[i]).toFixed(2) + "px";
         localStorage.setItem("textSize", i);
         dec.disabled = i === 0;
         inc.disabled = i === this.levels.length - 1;
+        reset.classList.toggle("active", i === this.DEFAULT);
       };
       dec.addEventListener("click", () => { i--; apply(); });
       inc.addEventListener("click", () => { i++; apply(); });
+      reset.addEventListener("click", () => { i = this.DEFAULT; apply(); });
       apply();
     },
   };

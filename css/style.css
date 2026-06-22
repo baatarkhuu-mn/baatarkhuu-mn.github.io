@@ -319,13 +319,22 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .nav-search-results .res-cat { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--color-accent); }
 .nav-search-results .res-title { font-weight: 600; color: var(--color-text); }
 
-/* ---------- Үсгийн хэмжээ (A− / A+) ---------- */
-.text-size { display: inline-flex; align-items: center; gap: 2px; }
-.text-size .icon-btn { font-weight: 700; font-family: inherit; }
-.text-size .ts-dec { font-size: .8rem; }
-.text-size .ts-inc { font-size: 1.05rem; }
-.text-size .icon-btn:disabled { opacity: .35; cursor: default; }
-@media (max-width: 560px) { .text-size .ts-dec { font-size: .75rem; } .text-size .ts-inc { font-size: .95rem; } }
+/* ---------- Үсгийн хэмжээ (A− / A / A+) — хажуугийн хөвөгч хэрэгсэл ---------- */
+.text-size { position: fixed; left: 0; top: 50%; transform: translateY(-50%); z-index: 900;
+  display: flex; flex-direction: column; background: var(--color-bg-card);
+  border: 1px solid var(--color-border); border-left: none;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0; box-shadow: var(--shadow-sm); overflow: hidden; }
+.text-size .ts-btn { width: 40px; height: 38px; border: none; background: none; color: var(--color-text);
+  font-family: inherit; font-weight: 700; cursor: pointer; display: grid; place-items: center;
+  transition: background var(--transition), color var(--transition); }
+.text-size .ts-btn + .ts-btn { border-top: 1px solid var(--color-border); }
+.text-size .ts-dec { font-size: .82rem; }
+.text-size .ts-reset { font-size: .98rem; }
+.text-size .ts-inc { font-size: 1.12rem; }
+.text-size .ts-btn:hover { background: var(--color-bg-soft); color: var(--color-accent); }
+.text-size .ts-btn:disabled { opacity: .3; cursor: default; }
+.text-size .ts-reset.active { color: var(--color-accent); background: var(--color-accent-soft); }
+@media (max-width: 560px) { .text-size .ts-btn { width: 34px; height: 34px; } }
 
 /* ---------- 7. Hero ---------- */
 .hero {
