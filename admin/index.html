@@ -8,7 +8,7 @@
   <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");</script>
   <title>Админ — Санал хүсэлт | Ц.Баатархүү</title>
   <link rel="icon" type="image/svg+xml" href="/assets/img/logo.svg" />
-  <link rel="stylesheet" href="/css/style.css?v=20260620i" />
+  <link rel="stylesheet" href="/css/style.css?v=20260620j" />
   <style>
     /* ===== Админ: цайвар, албан ёсны ХӨХ сэдэв (зөвхөн энэ хуудсанд; сайтад нөлөөлөхгүй) ===== */
     [data-theme] {
@@ -665,16 +665,22 @@
               <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
                 <div class="form-group"><label for="l-status">Төлөв</label>
                   <select id="l-status">
-                    <option value="review">Хэлэлцэж буй</option>
-                    <option value="passed">Батлагдсан</option>
-                    <option value="support">Хэлэлцэх эсэхийг дэмжсэн</option>
-                    <option value="discussed">Хэлэлцүүлэг хийсэн</option>
+                    <option value="submitted">Өргөн мэдүүлсэн</option>
                     <option value="notstarted">Хэлэлцэж эхлээгүй</option>
+                    <option value="considering">Хэлэлцэх эсэхийг хэлэлцэж буй</option>
+                    <option value="support">Хэлэлцэх эсэхийг дэмжсэн</option>
+                    <option value="first">Анхны хэлэлцүүлэгт</option>
+                    <option value="final">Эцсийн хэлэлцүүлэгт</option>
+                    <option value="review">Хэлэлцэж буй</option>
+                    <option value="discussed">Хэлэлцүүлэг хийсэн</option>
+                    <option value="passed">Батлагдсан</option>
+                    <option value="inforce">Хүчин төгөлдөр болсон</option>
+                    <option value="rejected">Татгалзсан</option>
                     <option value="withdrawn">Татаж авсан</option>
                   </select>
                 </div>
                 <div class="form-group"><label for="l-category">Үүрэг</label>
-                  <select id="l-category"><option value="own">Өргөн барьсан</option><option value="co">Хамтран санаачилсан</option></select>
+                  <select id="l-category"><option value="own">Санаачлагч</option><option value="co">Хамтран санаачлагч</option></select>
                 </div>
               </div>
               <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
@@ -764,7 +770,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="/js/supabase-config.js?v=20260620i"></script>
+  <script src="/js/supabase-config.js?v=20260620j"></script>
   <script>
   (function () {
     const SUBJECT_LABEL = { gerel:"Гэрэлтүүлэг", zam:"Зам, нүх, эвдрэл", yavgan:"Явган хүний зам", hog:"Хог, орчны бохирдол", buudal:"Автобусны буудал", surguuli:"Сургууль, цэцэрлэг", emnelg:"Эмнэлэг, өрхийн эмнэлэг", soh:"СӨХ, байрны орчин", hurteemj:"Ахмад, ХБИ хүртээмж", huuli:"Хууль, бодлогын санал", urgudul:"Хувийн өргөдөл, тусламж", sanal:"Санал", gomdol:"Гомдол", asuudal:"Тулгамдсан асуудал", uulzalt:"Уулзалтын хүсэлт", busad:"Бусад" };
@@ -1705,13 +1711,13 @@
     $("#project-cancel").addEventListener("click", resetProjectForm);
 
     // ===== ХУУЛЬ УДИРДАХ =====
-    const LAW_STATUS = { passed: "Батлагдсан", review: "Хэлэлцэж буй", support: "Хэлэлцэх эсэхийг дэмжсэн", discussed: "Хэлэлцүүлэг хийсэн", notstarted: "Хэлэлцэж эхлээгүй", withdrawn: "Татаж авсан" };
-    const LAW_CLS = { passed: "status-passed", review: "status-review", support: "status-support", discussed: "status-review", notstarted: "status-notstarted", withdrawn: "status-draft" };
+    const LAW_STATUS = { submitted: "Өргөн мэдүүлсэн", notstarted: "Хэлэлцэж эхлээгүй", considering: "Хэлэлцэх эсэхийг хэлэлцэж буй", support: "Хэлэлцэх эсэхийг дэмжсэн", first: "Анхны хэлэлцүүлэгт", final: "Эцсийн хэлэлцүүлэгт", review: "Хэлэлцэж буй", discussed: "Хэлэлцүүлэг хийсэн", passed: "Батлагдсан", inforce: "Хүчин төгөлдөр болсон", rejected: "Татгалзсан", withdrawn: "Татаж авсан" };
+    const LAW_CLS = { submitted: "status-support", notstarted: "status-notstarted", considering: "status-review", support: "status-support", first: "status-review", final: "status-review", review: "status-review", discussed: "status-review", passed: "status-passed", inforce: "status-passed", rejected: "status-draft", withdrawn: "status-draft" };
     let lawRows = [], lawLoaded = false;
     const lawForm = $("#law-form"), lawList = $("#law-list"), lawEmpty = $("#law-empty"), lawMsg = $("#law-msg");
 
     function resetLawForm() {
-      lawForm.reset(); $("#l-id").value = ""; $("#l-published").checked = true; $("#l-status").value = "review"; $("#l-category").value = "own"; $("#l-sort").value = 0;
+      lawForm.reset(); $("#l-id").value = ""; $("#l-published").checked = true; $("#l-status").value = "submitted"; $("#l-category").value = "own"; $("#l-sort").value = 0;
       $("#law-form-title").textContent = "Шинэ хууль нэмэх"; $("#law-cancel").style.display = "none"; $("#l-pdf-cur").textContent = "";
     }
 
@@ -1732,7 +1738,7 @@
           `<div class="nr-body">
              <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:4px">
                <span class="badge-status ${LAW_CLS[l.status] || "status-review"}">${esc(LAW_STATUS[l.status] || l.status)}</span>
-               <span class="tag" style="position:static;background:var(--color-bg-soft);color:var(--color-accent);border:1px solid var(--color-border)">${l.category === "co" ? "Хамтран санаачилсан" : "Өргөн барьсан"}</span>
+               <span class="tag" style="position:static;background:var(--color-bg-soft);color:var(--color-accent);border:1px solid var(--color-border)">${l.category === "co" ? "Хамтран санаачлагч" : "Санаачлагч"}</span>
                ${l.published ? "" : `<span class="badge-status status-draft">Ноорог</span>`}
                <span style="font-size:.8rem;color:var(--color-text-soft)">эрэмбэ: ${l.sort}</span>
                ${l.pdf_url ? `<a href="${esc(l.pdf_url)}" target="_blank" rel="noopener" style="font-size:.8rem;color:var(--color-primary-light)">PDF/холбоос</a>` : ""}

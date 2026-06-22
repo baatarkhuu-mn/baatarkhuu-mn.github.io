@@ -750,6 +750,12 @@
       "Бүх ангилал": "All categories", "Бүх төлөв": "All statuses",
       "Батлагдсан": "Passed", "Хэлэлцэж буй": "Under review", "Төсөл": "Draft",
       "Хуулийн төслүүдийн албан ёсны бүртгэлийг": "Find the official registry of bills at",
+      /* үүрэг + хууль тогтоох албан ёсны үе шат */
+      "Санаачлагч": "Initiator", "Хамтран санаачлагч": "Co-initiator",
+      "Өргөн мэдүүлсэн": "Submitted", "Хэлэлцэх эсэхийг хэлэлцэж буй": "Under consideration to discuss",
+      "Анхны хэлэлцүүлэгт": "First reading", "Эцсийн хэлэлцүүлэгт": "Final reading",
+      "Хэлэлцүүлэг хийсэн": "Discussed", "Хүчин төгөлдөр болсон": "In force",
+      "Татгалзсан": "Rejected", "Татаж авсан": "Withdrawn",
 
       /* ---- Төслүүд ---- */
       "Хэрэгжүүлсэн төслүүд": "Implemented projects", "Тойргийн ажил": "Constituency work",
@@ -1618,8 +1624,8 @@
 
   /* ---------- 18. Хууль — chip + pill шүүлтүүр ---------- */
   const Laws = {
-    ORDER: ["passed", "discussed", "support", "review", "notstarted", "withdrawn"],
-    LABEL: { passed: "Батлагдсан", discussed: "Хэлэлцүүлэг хийсэн", support: "Хэлэлцэх эсэхийг дэмжсэн", review: "Хэлэлцэж буй", notstarted: "Хэлэлцэж эхлээгүй", withdrawn: "Татаж авсан" },
+    ORDER: ["passed", "inforce", "final", "first", "review", "discussed", "support", "considering", "submitted", "notstarted", "rejected", "withdrawn"],
+    LABEL: { submitted: "Өргөн мэдүүлсэн", notstarted: "Хэлэлцэж эхлээгүй", considering: "Хэлэлцэх эсэхийг хэлэлцэж буй", support: "Хэлэлцэх эсэхийг дэмжсэн", first: "Анхны хэлэлцүүлэгт", final: "Эцсийн хэлэлцүүлэгт", review: "Хэлэлцэж буй", discussed: "Хэлэлцүүлэг хийсэн", passed: "Батлагдсан", inforce: "Хүчин төгөлдөр болсон", rejected: "Татгалзсан", withdrawn: "Татаж авсан" },
     init() {
       const list = document.querySelector("[data-laws]");
       if (!list) return;
@@ -1636,9 +1642,11 @@
       if (chipsBox) {
         const chip = (label, n) => `<span class="law-chip"><b>${n}</b> ${label}</span>`;
         let h = chip("Нийт", total);
-        if (counts.passed) h += chip("Батлагдсан", counts.passed);
-        const inProc = (counts.review || 0) + (counts.support || 0) + (counts.discussed || 0);
-        if (inProc) h += chip("Хэлэлцэж буй", inProc);
+        const done = (counts.passed || 0) + (counts.inforce || 0);
+        if (done) h += chip("Батлагдсан", done);
+        const closed = (counts.rejected || 0) + (counts.withdrawn || 0);
+        const inProc = total - done - closed;
+        if (inProc > 0) h += chip("Хэлэлцэж буй", inProc);
         chipsBox.innerHTML = h;
       }
       const apply = () => {
@@ -2274,8 +2282,8 @@
   const LawsCMS = {
     esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
     ICON: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="26" height="26"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>',
-    LABEL: { passed: "Батлагдсан", review: "Хэлэлцэж буй", support: "Хэлэлцэх эсэхийг дэмжсэн", discussed: "Хэлэлцүүлэг хийсэн", notstarted: "Хэлэлцэж эхлээгүй", withdrawn: "Татаж авсан" },
-    CLS: { passed: "status-passed", review: "status-review", support: "status-support", discussed: "status-review", notstarted: "status-notstarted", withdrawn: "status-draft" },
+    LABEL: { submitted: "Өргөн мэдүүлсэн", notstarted: "Хэлэлцэж эхлээгүй", considering: "Хэлэлцэх эсэхийг хэлэлцэж буй", support: "Хэлэлцэх эсэхийг дэмжсэн", first: "Анхны хэлэлцүүлэгт", final: "Эцсийн хэлэлцүүлэгт", review: "Хэлэлцэж буй", discussed: "Хэлэлцүүлэг хийсэн", passed: "Батлагдсан", inforce: "Хүчин төгөлдөр болсон", rejected: "Татгалзсан", withdrawn: "Татаж авсан" },
+    CLS: { submitted: "status-support", notstarted: "status-notstarted", considering: "status-review", support: "status-support", first: "status-review", final: "status-review", review: "status-review", discussed: "status-review", passed: "status-passed", inforce: "status-passed", rejected: "status-draft", withdrawn: "status-draft" },
     init() {
       const list = document.querySelector("[data-laws]");
       if (!list) return;
@@ -2292,7 +2300,7 @@
     item(l) {
       const esc = LawsCMS.esc;
       const status = l.status || "review";
-      const role = l.category === "co" ? "Хамтран санаачилсан" : "Өргөн барьсан";
+      const role = l.category === "co" ? "Хамтран санаачлагч" : "Санаачлагч";
       const meta = [l.date_label, role, l.topic].filter(Boolean).map((m) => `<span>${esc(m)}</span>`).join("");
       const pdf = l.pdf_url ? `<a class="btn btn-ghost btn-sm" href="${esc(l.pdf_url)}" target="_blank" rel="noopener">PDF</a>` : "";
       return `<article class="law-item" data-item data-title="${esc(l.title)}" data-category="${esc(l.category || "own")}" data-status="${esc(status)}" data-summary="${esc(l.summary || "")}">
