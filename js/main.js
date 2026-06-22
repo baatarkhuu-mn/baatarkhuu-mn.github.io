@@ -820,6 +820,13 @@
       "Хууль тогтоох ажил": "Legislative work", "Тойргийн иргэдийн ажил": "Constituency work",
       "Цахим хөгжлийн бодлого": "Digital development policy", "Олон улсын хамтын ажиллагаа": "International cooperation",
       "Бусад": "Other",
+      /* Үйл ажиллагааны чиглэл (шинэ) */
+      "Хууль санаачлах, боловсронгуй болгох": "Initiating & refining laws",
+      "Хууль батлах үйл явц": "Law adoption process",
+      "Хяналт тавих чиг үүрэг": "Oversight function",
+      "Сонгогчдын төлөөлөл (иргэдтэй ажиллах)": "Representing constituents (citizen work)",
+      "Бодлого, хөгжлийн чиглэл тодорхойлох": "Setting policy & development direction",
+      "Олон улсын харилцаа": "International relations",
       "Татаж авах": "Download", "Жилийн тайлан": "Annual report",
       "Гишүүний бүрэн эрхийн хугацааны үйл ажиллагааны тайлан.": "Activity reports for the member's term.",
       "2025 оны үйл ажиллагааны тайлан": "2025 activity report", "2024 оны үйл ажиллагааны тайлан": "2024 activity report",
