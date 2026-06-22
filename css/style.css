@@ -303,6 +303,22 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .search-results .res-title { font-weight: 600; color: var(--color-text); }
 .search-empty { color: var(--color-text-soft); padding: 14px; text-align: center; }
 
+/* ---------- Inline хайлт (навбар дотор богино талбар) ---------- */
+.nav-search { position: relative; display: inline-flex; align-items: center; }
+.nav-search-input { width: 0; min-width: 0; padding: 0; margin: 0; border: 1px solid transparent; opacity: 0;
+  pointer-events: none; height: 34px; border-radius: var(--radius-sm); background: var(--color-bg-card); color: var(--color-text);
+  font-family: inherit; font-size: .9rem; transition: width .22s ease, opacity .18s, padding .22s, margin .22s; }
+.nav-search.open .nav-search-input { width: 190px; max-width: 46vw; opacity: 1; pointer-events: auto; padding: 0 12px; margin-left: 6px; border-color: var(--color-border); }
+.nav-search.open .nav-search-input:focus { outline: none; border-color: var(--color-primary); box-shadow: var(--glow-blue); }
+.nav-search-results { position: absolute; top: calc(100% + 8px); right: 0; width: 320px; max-width: 86vw;
+  background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: var(--radius);
+  box-shadow: var(--shadow-lg); padding: 6px; display: none; z-index: 1100; max-height: 60vh; overflow-y: auto; }
+.nav-search.open .nav-search-results:not(:empty) { display: block; }
+.nav-search-results a { display: block; padding: 10px 13px; border-radius: var(--radius-sm); text-decoration: none; border: 1px solid transparent; }
+.nav-search-results a:hover { background: var(--color-bg-soft); border-color: var(--color-border); }
+.nav-search-results .res-cat { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--color-accent); }
+.nav-search-results .res-title { font-weight: 600; color: var(--color-text); }
+
 /* ---------- 7. Hero ---------- */
 .hero {
   position: relative; overflow: hidden;

@@ -71,43 +71,35 @@
 
   const Search = {
     init() {
-      const openBtn = document.querySelector(".search-open");
-      const overlay = document.querySelector(".search-overlay");
-      if (!openBtn || !overlay) return;
-      const input = overlay.querySelector("input[type=search]");
-      const results = overlay.querySelector(".search-results");
-
-      const open = () => { overlay.classList.add("open"); setTimeout(() => input.focus(), 50); };
-      const close = () => { overlay.classList.remove("open"); input.value = ""; render(""); };
-
-      openBtn.addEventListener("click", open);
-      overlay.addEventListener("click", (e) => { if (e.target === overlay) close(); });
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") close();
-        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); open(); }
-      });
-      const closeBtn = overlay.querySelector(".search-close");
-      if (closeBtn) closeBtn.addEventListener("click", close);
-
-      function render(q) {
-        const query = q.trim().toLowerCase();
-        if (!query) { results.innerHTML = ""; return; }
-        const matches = SEARCH_INDEX.filter(
-          (i) => i.title.toLowerCase().includes(query) || i.cat.toLowerCase().includes(query)
-        );
-        results.innerHTML = matches.length
-          ? matches.map((m) => `<a href="${m.url}"><div class="res-cat">${m.cat}</div><div class="res-title">${m.title}</div></a>`).join("")
-          : `<div class="search-empty">"${q}" гэсэн илэрц олдсонгүй.</div>`;
-      }
-      input.addEventListener("input", (e) => render(e.target.value));
-      const form = overlay.querySelector(".search-bar");
-      if (form) form.addEventListener("submit", (e) => {
-        e.preventDefault();
+      const wrap = document.querySelector(".nav-search");
+      if (!wrap) return;
+      const openBtn = wrap.querySelector(".search-open");
+      const input = wrap.querySelector(".nav-search-input");
+      const results = wrap.querySelector(".nav-search-results");
+      const match = (q) => SEARCH_INDEX.filter((i) => i.title.toLowerCase().includes(q) || i.cat.toLowerCase().includes(q));
+      const render = () => {
         const q = input.value.trim().toLowerCase();
-        if (!q) return;
-        const m = SEARCH_INDEX.filter((i) => i.title.toLowerCase().includes(q) || i.cat.toLowerCase().includes(q));
-        if (m.length) location.href = m[0].url;
+        if (!q) { results.innerHTML = ""; return; }
+        const m = match(q);
+        results.innerHTML = m.length
+          ? m.map((x) => `<a href="${x.url}"><div class="res-cat">${x.cat}</div><div class="res-title">${x.title}</div></a>`).join("")
+          : `<div class="search-empty">"${input.value.trim()}" — илэрц алга.</div>`;
+      };
+      const open = () => { wrap.classList.add("open"); setTimeout(() => input.focus(), 30); };
+      const close = () => { wrap.classList.remove("open"); input.value = ""; results.innerHTML = ""; };
+      const go = () => { const m = match(input.value.trim().toLowerCase()); if (input.value.trim() && m.length) { location.href = m[0].url; return true; } return false; };
+      openBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (wrap.classList.contains("open")) { if (!go()) close(); }
+        else open();
       });
+      input.addEventListener("input", render);
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") { close(); }
+        else if (e.key === "Enter") { e.preventDefault(); go(); }
+      });
+      document.addEventListener("click", (e) => { if (!wrap.contains(e.target)) close(); });
+      document.addEventListener("keydown", (e) => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); open(); } });
     },
   };
 
@@ -597,6 +589,7 @@
     ph: {
       "Түлхүүр үг бичнэ үү…": "Type a keyword…",
       "Сайтаас хайх — мэдээ, хууль, төсөл, тайлан…": "Search the site — news, laws, projects, reports…",
+      "Сайтаас хайх…": "Search the site…",
       "Хуулийн нэрээр хайх…": "Search by law name…",
       "Таны овог нэр": "Your full name",
       "+976 ХХХХ-ХХХХ": "+976 XXXX-XXXX",

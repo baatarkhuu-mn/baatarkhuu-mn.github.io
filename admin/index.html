@@ -8,7 +8,7 @@
   <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");</script>
   <title>Админ — Санал хүсэлт | Ц.Баатархүү</title>
   <link rel="icon" type="image/svg+xml" href="/assets/img/logo.svg" />
-  <link rel="stylesheet" href="/css/style.css?v=20260620d" />
+  <link rel="stylesheet" href="/css/style.css?v=20260620e" />
   <style>
     /* ===== Админ: цайвар, албан ёсны ХӨХ сэдэв (зөвхөн энэ хуудсанд; сайтад нөлөөлөхгүй) ===== */
     [data-theme] {
@@ -463,7 +463,7 @@
         </div>
         <div class="toolbar-filters">
           <select id="f-sort"><option value="ticket">№ дугаараар (шинэ нь дээр)</option><option value="ticket_asc">№ дугаараар (эхнээс)</option><option value="new">Огноогоор</option></select>
-          <select id="f-status"><option value="all">Бүх төлөв</option><option value="new">Шинэ</option><option value="in_progress">Шийдвэрлэж буй</option><option value="done">Шийдвэрлэсэн</option></select>
+          <select id="f-status"><option value="all">Бүх төлөв</option><option value="new">Шинэ</option><option value="in_progress">Шийдвэрлэж байна</option><option value="done">Шийдвэрлэсэн</option></select>
           <select id="f-subject">
             <option value="all">Бүх төрөл</option>
             <option value="gerel">Гэрэлтүүлэг</option>
@@ -764,11 +764,11 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="/js/supabase-config.js?v=20260620d"></script>
+  <script src="/js/supabase-config.js?v=20260620e"></script>
   <script>
   (function () {
     const SUBJECT_LABEL = { gerel:"Гэрэлтүүлэг", zam:"Зам, нүх, эвдрэл", yavgan:"Явган хүний зам", hog:"Хог, орчны бохирдол", buudal:"Автобусны буудал", surguuli:"Сургууль, цэцэрлэг", emnelg:"Эмнэлэг, өрхийн эмнэлэг", soh:"СӨХ, байрны орчин", hurteemj:"Ахмад, ХБИ хүртээмж", huuli:"Хууль, бодлогын санал", urgudul:"Хувийн өргөдөл, тусламж", sanal:"Санал", gomdol:"Гомдол", asuudal:"Тулгамдсан асуудал", uulzalt:"Уулзалтын хүсэлт", busad:"Бусад" };
-    const STATUS_LABEL = { new:"Шинэ", in_progress:"Шийдвэрлэж буй", done:"Шийдвэрлэсэн" };
+    const STATUS_LABEL = { new:"Шинэ", in_progress:"Шийдвэрлэж байна", done:"Шийдвэрлэсэн" };
     const $ = (s) => document.querySelector(s);
     const loginView = $("#login-view"), dashView = $("#dash-view"), logoutBtn = $("#logout-btn");
     const listEl = $("#fb-list"), emptyEl = $("#fb-empty"), loadingEl = $("#fb-loading");
@@ -965,7 +965,7 @@
                <label style="font-size:.82rem;color:var(--color-text-soft)">Төлөв:
                  <select class="status-sel" data-id="${r.id}">
                    <option value="new" ${r.status === "new" ? "selected" : ""}>Шинэ</option>
-                   <option value="in_progress" ${r.status === "in_progress" ? "selected" : ""}>Шийдвэрлэж буй</option>
+                   <option value="in_progress" ${r.status === "in_progress" ? "selected" : ""}>Шийдвэрлэж байна</option>
                    <option value="done" ${r.status === "done" ? "selected" : ""}>Шийдвэрлэсэн</option>
                  </select>
                </label>
