@@ -103,6 +103,28 @@
     },
   };
 
+  /* ---------- 3.1 Үсгийн хэмжээ (A− / A+) ---------- */
+  const TextSize = {
+    levels: [0.9, 1.0, 1.12, 1.25, 1.4],
+    init() {
+      const dec = document.querySelector(".ts-dec");
+      const inc = document.querySelector(".ts-inc");
+      if (!dec || !inc) return;
+      let i = parseInt(localStorage.getItem("textSize"), 10);
+      if (isNaN(i) || i < 0 || i >= this.levels.length) i = 1; // 1.0 = анхдагч
+      const apply = () => {
+        i = Math.max(0, Math.min(this.levels.length - 1, i));
+        document.documentElement.style.fontSize = (16 * this.levels[i]).toFixed(2) + "px";
+        localStorage.setItem("textSize", i);
+        dec.disabled = i === 0;
+        inc.disabled = i === this.levels.length - 1;
+      };
+      dec.addEventListener("click", () => { i--; apply(); });
+      inc.addEventListener("click", () => { i++; apply(); });
+      apply();
+    },
+  };
+
   /* ---------- 4. Reveal on scroll ---------- */
   const Reveal = {
     init() {
@@ -2433,7 +2455,7 @@
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    Theme.init(); Nav.init(); Search.init(); Reveal.init();
+    Theme.init(); Nav.init(); Search.init(); TextSize.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
     Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); NewsPost.init(); EventPost.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); VideoHero.init(); ReportsCMS.init(); ReportPost.init(); ProjectsCMS.init(); ProjectPost.init(); LawsCMS.init(); FeedbackStats.init(); EventsCMS.init(); Settings.init();
   });
