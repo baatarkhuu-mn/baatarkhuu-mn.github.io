@@ -2208,7 +2208,6 @@
          </div>
          <div class="ef-body">
            <h3>${esc(ev.title)}</h3>
-           ${meta ? `<p class="ef-meta">${meta}</p>` : ""}
            ${regCount ? `<p class="ef-count">${regCount} иргэн бүртгүүлсэн</p>` : ""}
            <div class="ef-cta"></div>
          </div>`;
@@ -2222,6 +2221,11 @@
         const a = document.createElement("a");
         a.className = "btn btn-gold"; a.href = url; a.textContent = "Бүртгүүлэх";
         cta.appendChild(a);
+      }
+      if (ev.location || ev.time_label) {
+        const m = document.createElement("span"); m.className = "ef-meta";
+        m.textContent = [ev.location, ev.time_label].filter(Boolean).join(" · ");
+        cta.appendChild(m);
       }
       const more = document.createElement("a"); more.className = "ef-more"; more.href = url; more.textContent = "Дэлгэрэнгүй →";
       cta.appendChild(more);
