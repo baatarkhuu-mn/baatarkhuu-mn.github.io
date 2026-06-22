@@ -1367,7 +1367,7 @@
           const { data, error } = await sb.from("news").select("*").eq("published", true).order("date", { ascending: false, nullsFirst: false }).order("created_at", { ascending: false }).limit(60);
           if (!error && data && data.length) {
             if (grid) { grid.innerHTML = data.map((n) => this.card(n)).join(""); }
-            if (home) { home.innerHTML = data.slice(0, 3).map((n) => this.homeItem(n)).join(""); }
+            if (home) { home.innerHTML = data.slice(0, 5).map((n) => this.homeCard(n)).join(""); this.rotateHome(home); }
           }
         } catch (_) { /* алдаа гарвал статик хэвээр үлдээнэ */ }
       }
@@ -1385,7 +1385,7 @@
         const a = items[n]; a.classList.remove("nf-in"); void a.offsetWidth; a.classList.add("nf-in");
         Array.prototype.forEach.call(dots.children, (d, i) => d.classList.toggle("active", i === n));
       };
-      const start = () => { if (!timer) timer = setInterval(() => { cur = (cur + 1) % items.length; show(cur); }, 5000); };
+      const start = () => { if (!timer) timer = setInterval(() => { cur = (cur + 1) % items.length; show(cur); }, 3000); };
       const stop = () => { if (timer) { clearInterval(timer); timer = null; } };
       const restart = () => { stop(); start(); };
       dots.innerHTML = "";
@@ -1410,6 +1410,22 @@
       const exc = raw ? `<p class="ni-excerpt">${this.esc(raw.slice(0, 140))}${raw.length > 140 ? "…" : ""}</p>` : "";
       const inner = `<div class="ni-img">${img}</div><div class="ni-text"><h3 class="ni-title">${this.esc(n.title)}</h3>${exc}${dateLine}</div>`;
       return `<a class="news-item" href="/medee-delgerengui/?id=${encodeURIComponent(n.id)}">${inner}</a>`;
+    },
+    // Нүүрний автомат-эргэдэг босоо карт (зураг дээр → огноо → гарчиг → тайлбар)
+    homeCard(n) {
+      const img = n.image
+        ? `<img src="${this.esc(n.image)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='/assets/img/logo.svg';this.className='nh-ph'">`
+        : `<img src="/assets/img/logo.svg" alt="" class="nh-ph">`;
+      const cal = '<svg class="ni-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>';
+      const dateLine = n.date ? `<div class="ni-date">${cal}${this.esc(n.date)}</div>` : "";
+      const raw = (n.excerpt || n.body || "")
+        .replace(/!\[[^\]]*\]\([^)]*\)/g, " ").replace(/https?:\/\/\S+/g, " ")
+        .replace(/[#>*`_\[\]]/g, "").replace(/\s+/g, " ").trim();
+      const exc = raw ? `<p class="ni-excerpt">${this.esc(raw.slice(0, 160))}${raw.length > 160 ? "…" : ""}</p>` : "";
+      return `<a class="nh-card" href="/medee-delgerengui/?id=${encodeURIComponent(n.id)}">
+        <div class="nh-img">${img}</div>
+        <div class="nh-body">${dateLine}<h3 class="nh-title">${this.esc(n.title)}</h3>${exc}</div>
+      </a>`;
     },
     card(n) {
       const title = this.esc(n.title);
