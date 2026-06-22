@@ -900,8 +900,6 @@
       "Видео мэдээ": "Video news",
       "Сүүлийн үеийн видео мэдээг эндээс үзээрэй.": "Watch the latest video news here.",
       "Бүгдийг харах →": "View all →",
-      "Хотын асуудал олон байгаадаа биш. Судалгаагүй шийдвэр, төлөвлөлтгүй хэрэгжилт, хариуцлагагүй тогтолцоонд бий.":
-        "The city's problems aren't about their number. They lie in unstudied decisions, unplanned implementation and an unaccountable system.",
       "Цэндийн": "Tsendiin", "БААТАРХҮҮ": "BAATARKHUU",
       "Монгол Улс 14201 Улаанбаатар хот, Сүхбаатар дүүрэг, Жанжин Д.Сүхбаатарын талбай 1, Төрийн ордон.":
         "Mongolia 14201, Ulaanbaatar, Sukhbaatar District, D. Sukhbaatar Square 1, State Palace.",
