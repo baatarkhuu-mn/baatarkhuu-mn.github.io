@@ -1375,11 +1375,11 @@
 
     // Нүүрний мэдээг автоматаар сольж харуулах (нэг нэгээр, fade)
     rotateHome(home) {
-      const items = Array.prototype.filter.call(home.children, (n) => n.nodeType === 1);
+      const items = Array.prototype.filter.call(home.children, (n) => n.nodeType === 1 && !(n.classList && n.classList.contains("news-dots")));
       if (items.length <= 1) return;
       let cur = 0, timer = null;
-      let dots = (home.nextElementSibling && home.nextElementSibling.classList && home.nextElementSibling.classList.contains("news-dots")) ? home.nextElementSibling : null;
-      if (!dots) { dots = document.createElement("div"); dots.className = "news-dots"; home.after(dots); }
+      let dots = home.querySelector(":scope > .news-dots");
+      if (!dots) { dots = document.createElement("div"); dots.className = "news-dots"; home.appendChild(dots); }
       const show = (n) => {
         items.forEach((el, i) => { el.style.display = i === n ? "" : "none"; });
         const a = items[n]; a.classList.remove("nf-in"); void a.offsetWidth; a.classList.add("nf-in");
