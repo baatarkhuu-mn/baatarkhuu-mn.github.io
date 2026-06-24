@@ -1490,6 +1490,52 @@
     },
   };
 
+  /* ---------- Хуулийн дэлгэрэнгүй хуудас (/huuli-delgerengui/?id=…) ---------- */
+  const LawPost = {
+    esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
+    CAL: '<svg class="ni-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
+    async init() {
+      const wrap = document.querySelector("[data-law-post]");
+      if (!wrap) return;
+      const id = new URLSearchParams(location.search).get("id");
+      const sb = window.getSB && window.getSB();
+      if (!id || !sb) { wrap.innerHTML = LawPost.notFound(); return; }
+      try {
+        const { data, error } = await sb.from("laws").select("*").eq("id", id).single();
+        if (error || !data) { wrap.innerHTML = LawPost.notFound(); return; }
+        document.title = data.title + " | Ц.Баатархүү";
+        wrap.innerHTML = LawPost.render(data);
+        Reactions.init();
+        window.scrollTo(0, 0);
+      } catch (_) { wrap.innerHTML = LawPost.notFound(); }
+    },
+    notFound() {
+      return '<div class="np-state"><h2>Хууль олдсонгүй</h2><p>Энэ хууль устсан эсвэл хаяг буруу байж магадгүй.</p><a class="btn btn-primary" href="/huuli/">← Бүх хууль</a></div>';
+    },
+    render(l) {
+      const esc = LawPost.esc;
+      const status = l.status || "submitted";
+      const statusLabel = (LawsCMS.LABEL && LawsCMS.LABEL[status]) || status;
+      const statusCls = (LawsCMS.CLS && LawsCMS.CLS[status]) || "status-review";
+      const role = (LawsCMS.ROLE && LawsCMS.ROLE[l.category]) || "Санаачлагч";
+      const dateChip = l.date_label ? `<span class="np-role">${LawPost.CAL}${esc(l.date_label)}</span>` : "";
+      const badges = `<div class="np-badges"><span class="badge-status ${statusCls}">${esc(statusLabel)}</span><span class="np-role">Үүрэг: ${esc(role)}</span>${dateChip}</div>`;
+      const topic = l.topic ? `<p class="np-lead">${esc(l.topic)}</p>` : "";
+      const body = articleBodyHtml(l.summary || "", esc);
+      const pdf = l.pdf_url
+        ? `<div class="np-sources"><span class="np-src-label">Хуулийн эх бичиг:</span><a class="btn btn-primary btn-sm" href="${esc(l.pdf_url)}" target="_blank" rel="noopener">PDF / эх бичгийг үзэх →</a></div>`
+        : "";
+      return `<nav class="breadcrumb" aria-label="Замчлал"><a href="/">Нүүр</a><span>/</span><a href="/huuli/">Хууль</a></nav>
+        ${badges}
+        <h1 class="np-title">${esc(l.title)}</h1>
+        ${topic}
+        <div class="np-body article-body">${body || '<p class="np-state">Дэлгэрэнгүй тайлбар оруулаагүй байна.</p>'}</div>
+        ${pdf}
+        ${engageBlock("law", l.id)}
+        <a class="np-back" href="/huuli/">← Бүх хууль рүү буцах</a>`;
+    },
+  };
+
   /* ---------- Арга хэмжээний дэлгэрэнгүй хуудас (/arga-delgerengui/?id=…) ---------- */
   const EventPost = {
     esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
@@ -1721,7 +1767,11 @@
         };
         items.forEach((it) => {
           it.setAttribute("tabindex", "0");
-          it.addEventListener("click", (e) => { if (e.target.closest("a")) return; openModal(it); });
+          it.addEventListener("click", (e) => {
+            if (e.target.closest("a")) return;
+            if (it.dataset.id) { location.href = "/huuli-delgerengui/?id=" + encodeURIComponent(it.dataset.id); return; }
+            openModal(it);
+          });
           it.addEventListener("keydown", (e) => { if (e.key === "Enter") openModal(it); });
         });
         if (!modal._wired) {
@@ -2330,7 +2380,7 @@
       const role = LawsCMS.ROLE[l.category] || "Санаачлагч";
       const meta = [l.date_label, role, l.topic].filter(Boolean).map((m) => `<span>${esc(m)}</span>`).join("");
       const pdf = l.pdf_url ? `<a class="btn btn-ghost btn-sm" href="${esc(l.pdf_url)}" target="_blank" rel="noopener">PDF</a>` : "";
-      return `<article class="law-item" data-item data-title="${esc(l.title)}" data-category="${esc(l.category || "own")}" data-status="${esc(status)}" data-summary="${esc(l.summary || "")}">
+      return `<article class="law-item is-clickable" data-id="${esc(l.id)}" data-item data-title="${esc(l.title)}" data-category="${esc(l.category || "own")}" data-status="${esc(status)}" data-summary="${esc(l.summary || "")}">
         <div class="law-icon">${LawsCMS.ICON}</div>
         <div><h4>${esc(l.title)}</h4><div class="meta">${meta}</div></div>
         <div class="law-actions"><span class="badge-status ${LawsCMS.CLS[status] || "status-review"}">${esc(LawsCMS.LABEL[status] || status)}</span>${pdf}<span class="law-more">Дэлгэрэнгүй →</span></div>
@@ -2534,6 +2584,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     Theme.init(); Nav.init(); Search.init(); TextSize.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
-    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); NewsPost.init(); EventPost.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); VideoHero.init(); ReportsCMS.init(); ReportPost.init(); ProjectsCMS.init(); ProjectPost.init(); LawsCMS.init(); FeedbackStats.init(); EventsCMS.init(); Settings.init(); ReportStats.init();
+    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); NewsPost.init(); LawPost.init(); EventPost.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); VideoHero.init(); ReportsCMS.init(); ReportPost.init(); ProjectsCMS.init(); ProjectPost.init(); LawsCMS.init(); FeedbackStats.init(); EventsCMS.init(); Settings.init(); ReportStats.init();
   });
 })();
