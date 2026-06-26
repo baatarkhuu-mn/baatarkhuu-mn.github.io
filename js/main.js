@@ -6,6 +6,30 @@
 (function () {
   "use strict";
 
+  /* ---------- Контентийг ӨӨРИЙНХ НЬ огноогоор эрэмбэлэх (хамгийн сүүлийнх түрүүнд) ----------
+     Хэрэглэгчийн оруулсан огнооны бичгээс (date / event_date / video_date / date_label / гарчиг)
+     огноог уншиж YYYYMMDD түлхүүр болгоно. Огноо олдохгүй бол нэмсэн огноогоор (created_at).
+     Ингэснээр админ нийтэлсэн дараалал биш, контентийн жинхэнэ огноогоор жагсана. */
+  function contentDateKey(row) {
+    const raw = String((row && (row.date || row.event_date || row.video_date || row.date_label || row.title)) || "");
+    const ym = raw.match(/(?:19|20)\d{2}/); // эхний жил (1900-2099)
+    if (ym) {
+      const after = raw.slice(ym.index + 4).match(/\d{1,2}/g) || []; // жилийн араас сар, өдөр
+      const mo = after[0] ? String(Math.min(12, +after[0])).padStart(2, "0") : "00";
+      const d = after[1] ? String(Math.min(31, +after[1])).padStart(2, "0") : "00";
+      return ym[0] + mo + d;
+    }
+    const c = String((row && row.created_at) || "").replace(/\D/g, "");
+    return c ? c.slice(0, 8) : "00000000";
+  }
+  function sortByContentDate(rows) {
+    return (rows || []).slice().sort((a, b) => {
+      const ka = contentDateKey(a), kb = contentDateKey(b);
+      if (ka !== kb) return ka < kb ? 1 : -1; // буурахаар (шинэ нь түрүүнд)
+      return String((b && b.created_at) || "").localeCompare(String((a && a.created_at) || ""));
+    });
+  }
+
   /* ---------- 1. Dark / Light Theme ---------- */
   const Theme = {
     init() {
@@ -1870,9 +1894,10 @@
       const sb = window.getSB && window.getSB();
       if (!sb) return;
       sb.from("videos").select("*").eq("published", true)
-        .order("sort", { ascending: true }).order("created_at", { ascending: false })
+        .order("created_at", { ascending: false })
         .then(({ data, error }) => {
           if (error || !data || !data.length) return; // хоосон/алдаа → жишээ хэвээр
+          data = sortByContentDate(data); // контентийн огноогоор (нийтэлсэн он сар)
           if (listEl) { // Видео хуудас — fb-video карт (жинхэнэ хэмжээ)
             const featuredEl = document.querySelector("[data-video-featured]");
             let arr = data;
@@ -1941,9 +1966,9 @@
       if (!sb) return;
       try {
         const { data, error } = await sb.from("videos").select("*").eq("published", true)
-          .order("sort", { ascending: true }).order("created_at", { ascending: false }).limit(15);
+          .order("created_at", { ascending: false }).limit(15);
         if (error || !data || !data.length) { wrap.innerHTML = '<p class="feed-state">Видео одоогоор алга.</p>'; return; }
-        this._vids = data; this._i = 0; this._wrap = wrap;
+        this._vids = sortByContentDate(data); this._i = 0; this._wrap = wrap;
         wrap.innerHTML =
           `<div class="vhero-stage">
              <div class="vhs peek peek-left" aria-hidden="true"></div>
@@ -1999,10 +2024,13 @@
       if (!monthGrid && !yearWrap) return;
       const sb = window.getSB && window.getSB();
       if (!sb) return;
+      // "date" багана нэмэгдээгүй ч хуудас эвдрэхгүйн тулд серверт created_at-аар татаж,
+      // контентийн огноогоор (байвал) клиент талд эрэмбэлнэ. Хамгийн сүүлийн огноо эхэндээ.
       sb.from("reports").select("*").eq("published", true)
-        .order("sort", { ascending: true }).order("created_at", { ascending: false })
+        .order("created_at", { ascending: false })
         .then(({ data, error }) => {
           if (error || !data || !data.length) return; // хоосон/алдаа → жишээ хэвээр
+          data = sortByContentDate(data); // контентийн огноогоор (гарчигт буй он сар)
           const months = data.filter((r) => r.kind !== "year");
           const years = data.filter((r) => r.kind === "year");
           if (monthGrid && months.length) {
@@ -2100,9 +2128,10 @@
       const sb = window.getSB && window.getSB();
       if (!sb) return;
       sb.from("projects").select("*").eq("published", true)
-        .order("sort", { ascending: true }).order("created_at", { ascending: false })
+        .order("created_at", { ascending: false })
         .then(({ data, error }) => {
           if (error || !data || !data.length) return; // хоосон/алдаа → жишээ хэвээр
+          data = sortByContentDate(data); // контентийн огноогоор (байршил/огнооны бичгээс)
           grid.innerHTML = data.map((p) => ProjectsCMS.card(p)).join("");
           const kids = Array.prototype.filter.call(grid.children, (c) => c.nodeType === 1);
           kids.forEach((el, i) => {
@@ -2367,9 +2396,10 @@
       const sb = window.getSB && window.getSB();
       if (!sb) return;
       sb.from("laws").select("*").eq("published", true)
-        .order("sort", { ascending: true }).order("created_at", { ascending: false })
+        .order("created_at", { ascending: false })
         .then(({ data, error }) => {
           if (error || !data || !data.length) return; // хоосон/алдаа → жишээ хэвээр
+          data = sortByContentDate(data); // контентийн огноогоор (date_label-аас)
           list.innerHTML = data.map((l) => LawsCMS.item(l)).join("");
           Laws.init(); // чипс / пилл / хайлтыг шинэ өгөгдлөөр дахин үүсгэх
         });
