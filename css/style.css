@@ -1795,3 +1795,23 @@ body.hp .navbar-wrap { border-bottom: 1px solid rgba(255,255,255,.06); }
   .hh-tiles { grid-template-columns: repeat(3, 1fr); }
 }
 @media (max-width: 520px) { .hh-tiles { grid-template-columns: repeat(2, 1fr); } }
+
+
+/* ============ Header-ийн төрийн далбаа (видео) -г авч цулгуй болгов ============ */
+.hb-video { display: none; }
+body.fx-digital .hb-overlay, .hb-overlay { display: none; }
+.hero-banner { background: transparent; }
+.hb-name { color: var(--color-text); text-shadow: none; }
+.hb-role { color: var(--color-text-soft); text-shadow: none; }
+.hb-slogan { text-shadow: none; }
+.hb-brand .emblem img { filter: none; }
+.hb-inner { min-height: 112px; }
+
+/* ============ Hero — хөрөггүй, төвлөрсөн, соёмбо тэмдэгтэй ============ */
+.hh-grid { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+.hh-mark { width: 64px; height: 64px; margin: 0 auto 20px; }
+.hh-mark img { width: 100%; height: 100%; object-fit: contain; }
+[data-theme="light"] .hh-mark img { filter: drop-shadow(0 4px 14px rgba(70,80,150,.18)); }
+.hh-cta { justify-content: center; }
+.hh-tiles { max-width: 780px; margin-left: auto; margin-right: auto; }
+@media (max-width: 860px) { .hh-grid { grid-template-columns: 1fr; } }
