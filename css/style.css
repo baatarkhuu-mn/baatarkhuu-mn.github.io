@@ -764,17 +764,17 @@ body.am-lock { overflow: hidden; }
 .page-hero {
   position: relative; overflow: hidden;
   background:
-    radial-gradient(ellipse 60% 110% at 80% 0%, rgba(77,141,240,.20), transparent 60%),
-    radial-gradient(ellipse 55% 90% at 8% 100%, rgba(63,210,230,.12), transparent 60%),
-    linear-gradient(150deg, #050d1d, #0a1c3c);
+    radial-gradient(ellipse 60% 110% at 80% 0%, rgba(255,122,46,.16), transparent 60%),
+    radial-gradient(ellipse 55% 90% at 8% 100%, rgba(99,86,240,.2), transparent 60%),
+    linear-gradient(150deg, #0b1430, #0c1838);
   color: #fff; padding: 56px 0; border-bottom: 1px solid var(--color-border);
 }
 /* Банер ч цагаан тексттэй — хоёр горимд ижил гүн дижитал өнгө */
 [data-theme="light"] .page-hero {
   background:
-    radial-gradient(ellipse 60% 110% at 80% 0%, rgba(77,141,240,.20), transparent 60%),
-    radial-gradient(ellipse 55% 90% at 8% 100%, rgba(63,210,230,.12), transparent 60%),
-    linear-gradient(150deg, #050d1d, #0a1c3c);
+    radial-gradient(ellipse 60% 110% at 80% 0%, rgba(255,122,46,.16), transparent 60%),
+    radial-gradient(ellipse 55% 90% at 8% 100%, rgba(99,86,240,.2), transparent 60%),
+    linear-gradient(150deg, #0b1430, #0c1838);
   border-bottom: 1px solid #14233f;
 }
 /* Дижитал торон хээ — нийтлэг банер */
@@ -810,9 +810,9 @@ body.am-lock { overflow: hidden; }
 .site-footer { color: #9db0cc; padding: 56px 0 0; margin-top: 40px;
   border-top: 1px solid var(--color-border); position: relative; overflow: hidden;
   background:
-    radial-gradient(ellipse 50% 130% at 85% 0%, rgba(77,141,240,.14), transparent 60%),
-    radial-gradient(ellipse 40% 110% at 8% 100%, rgba(63,210,230,.08), transparent 60%),
-    linear-gradient(160deg, #050b16, #040a15); }
+    radial-gradient(ellipse 50% 130% at 85% 0%, rgba(255,122,46,.12), transparent 60%),
+    radial-gradient(ellipse 40% 110% at 8% 100%, rgba(99,86,240,.14), transparent 60%),
+    linear-gradient(160deg, #0a1228, #080f20); }
 .site-footer::before {
   content: ""; position: absolute; top: -1px; left: 0; right: 0; height: 2px;
   background: linear-gradient(90deg, transparent, var(--color-primary), var(--color-accent), transparent);
@@ -821,9 +821,9 @@ body.am-lock { overflow: hidden; }
 [data-theme="light"] .site-footer {
   color: #9db0cc; border-top: none;
   background:
-    radial-gradient(ellipse 50% 130% at 85% 0%, rgba(77,141,240,.14), transparent 60%),
-    radial-gradient(ellipse 40% 110% at 8% 100%, rgba(63,210,230,.08), transparent 60%),
-    linear-gradient(160deg, #050b16, #040a15);
+    radial-gradient(ellipse 50% 130% at 85% 0%, rgba(255,122,46,.12), transparent 60%),
+    radial-gradient(ellipse 40% 110% at 8% 100%, rgba(99,86,240,.14), transparent 60%),
+    linear-gradient(160deg, #0a1228, #080f20);
 }
 .footer-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1.2fr; gap: 36px; align-items: start; }
 .site-footer h4 { color: #fff; margin-bottom: 16px; font-size: 1.05rem; }
@@ -1867,3 +1867,15 @@ body.hp .navbar-wrap { position: fixed; left: 0; right: 0; top: 0;
   transform: translateY(-105%); opacity: 0; pointer-events: none;
   transition: transform .4s cubic-bezier(.22,.61,.36,1), opacity .3s ease; }
 body.hp.nav-on .navbar-wrap { transform: none; opacity: 1; pointer-events: auto; }
+
+
+/* ============ Хуулийн карт: төлөв ДЭЭД талд бүтэн зурвас ============ */
+.law-item { overflow: hidden; }
+.law-item .law-status-bar {
+  display: flex; align-items: center; gap: 7px; justify-content: flex-start;
+  margin: -22px -22px 2px; padding: 11px 20px;
+  border: none; border-radius: 0; width: auto;
+  font-size: .82rem; font-weight: 700; white-space: normal;
+}
+.law-item .law-status-bar::before { width: 15px; height: 15px; }
+.law-item .law-actions { margin-top: auto; }

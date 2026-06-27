@@ -2465,10 +2465,12 @@
       const role = LawsCMS.ROLE[l.category] || "Санаачлагч";
       const meta = [l.date_label, role, l.topic].filter(Boolean).map((m) => `<span>${esc(m)}</span>`).join("");
       const pdf = l.pdf_url ? `<a class="btn btn-ghost btn-sm" href="${esc(l.pdf_url)}" target="_blank" rel="noopener">PDF</a>` : "";
+      const cls = LawsCMS.CLS[status] || "status-review";
       return `<article class="law-item is-clickable" data-id="${esc(l.id)}" data-item data-title="${esc(l.title)}" data-category="${esc(l.category || "own")}" data-status="${esc(status)}" data-summary="${esc(l.summary || "")}">
+        <div class="law-status-bar badge-status ${cls}">${esc(LawsCMS.LABEL[status] || status)}</div>
         <div class="law-icon">${LawsCMS.ICON}</div>
         <div><h4>${esc(l.title)}</h4><div class="meta">${meta}</div></div>
-        <div class="law-actions"><span class="badge-status ${LawsCMS.CLS[status] || "status-review"}">${esc(LawsCMS.LABEL[status] || status)}</span>${pdf}<span class="law-more">Дэлгэрэнгүй →</span></div>
+        <div class="law-actions">${pdf}<span class="law-more">Дэлгэрэнгүй →</span></div>
       </article>`;
     },
   };
