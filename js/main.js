@@ -1986,9 +1986,7 @@
             }
           }
           if (reelsEl) { // Нүүрний карусель — reel плагин (тогтсон хэмжээ, гүйдэг)
-            const rlim = parseInt(reelsEl.dataset.videoLimit || "0", 10);
-            const rarr = rlim ? data.slice(0, rlim) : data;
-            reelsEl.innerHTML = rarr.map((v) => VideoCMS.reelEmbed(v)).join("");
+            reelsEl.innerHTML = data.map((v) => VideoCMS.reelEmbed(v)).join("");
             window.dispatchEvent(new Event("resize")); // каруселийн цэгийг шинэчлэх
           }
         });
