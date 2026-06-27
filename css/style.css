@@ -1977,9 +1977,6 @@ body.hp:not(.nav-on) .navbar-wrap,
 }
 body.hp.nav-on .navbar-wrap { box-shadow: 0 10px 34px -18px rgba(0,0,0,.55); }
 
-/* Нүүрний видео мэдээ — 3 жинхэнэ видеог дунд төвлөрүүлэн харуулна */
-body.hp .video-grid { max-width: 1040px; margin: 0 auto; }
-
 /* ---------- Санал хүсэлтийн форм самбар (жишээ загвар) ---------- */
 .form-card .fc-title {
   font-size: 1.42rem; font-weight: 800; letter-spacing: -.01em; margin: 0 0 4px;
