@@ -91,15 +91,12 @@ body {
   body.fx-digital { zoom: 0.8; --container: 1500px; }
 }
 
-/* Дижитал торон дэвсгэр — минимал горимд маш намуухан, зөвхөн дээд хэсэгт */
+/* Дэвсгэр — дээрээс уусах зөөлөн туяа (улбар шар → индиго), тор хээгүй */
 body::before {
   content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
-  background-image:
-    linear-gradient(var(--grid-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-  background-size: 72px 72px;
-  mask-image: radial-gradient(ellipse 80% 50% at 50% 0%, #000 10%, transparent 80%);
-  -webkit-mask-image: radial-gradient(ellipse 80% 50% at 50% 0%, #000 10%, transparent 80%);
+  background:
+    radial-gradient(62% 40% at 50% -4%, rgba(255, 122, 46, .17), transparent 70%),
+    radial-gradient(98% 62% at 50% -12%, rgba(86, 108, 228, .14), transparent 78%);
 }
 [data-theme="light"] body::before { display: none; }
 
