@@ -1849,3 +1849,21 @@ body.fx-digital .hb-overlay, .hb-overlay { display: none; }
 .tr-new { --ic: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272.4%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Ccircle%20cx%3D%2712%27%20cy%3D%2712%27%20r%3D%279%27%2F%3E%3Cpath%20d%3D%27M12%207.5V12l3%202%27%2F%3E%3C%2Fsvg%3E"); }
 .tr-prog { --ic: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272.4%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Ccircle%20cx%3D%2712%27%20cy%3D%2712%27%20r%3D%279%27%2F%3E%3Cpath%20d%3D%27M12%207.5V12l3%202%27%2F%3E%3C%2Fsvg%3E"); }
 .tr-done { --ic: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272.4%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M20%206%209%2017l-5-5%27%2F%3E%3C%2Fsvg%3E"); }
+
+
+/* ============ Hero: зүүн дээд брэнд + 6 tile + navbar reveal ============ */
+.hh-topbar { position: absolute; top: 24px; left: 0; right: 0; z-index: 4; }
+.hh-topbar .hb-brand { display: inline-flex; align-items: center; gap: 13px; }
+.home-hero .hb-name { letter-spacing: .03em; }
+.home-hero .hb-brand .emblem { width: 46px; height: 46px; }
+
+/* Намтар нэмэгдсэн тул 6 баганатай */
+.hh-tiles { grid-template-columns: repeat(6, 1fr); max-width: 940px; }
+@media (max-width: 860px) { .hh-tiles { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 520px) { .hh-tiles { grid-template-columns: repeat(2, 1fr); } }
+
+/* Нүүр: navbar-ыг hero өнгөрсний дараа scroll-доход гаргах */
+body.hp .navbar-wrap { position: fixed; left: 0; right: 0; top: 0;
+  transform: translateY(-105%); opacity: 0; pointer-events: none;
+  transition: transform .4s cubic-bezier(.22,.61,.36,1), opacity .3s ease; }
+body.hp.nav-on .navbar-wrap { transform: none; opacity: 1; pointer-events: auto; }

@@ -103,10 +103,18 @@
         })
       );
 
-      // Header scroll shadow
+      // Header scroll shadow + нүүрэнд navbar-ыг hero өнгөрсний дараа гаргах
       const header = document.querySelector(".site-header");
+      const hero = document.querySelector(".home-hero");
+      const isHome = document.body.classList.contains("hp");
       if (header) {
-        const onScroll = () => header.classList.toggle("scrolled", window.scrollY > 10);
+        const onScroll = () => {
+          header.classList.toggle("scrolled", window.scrollY > 10);
+          if (isHome && hero) {
+            // hero бараг гүйлгэж өнгөрсөн үед (доод тал нь дэлгэцийн дээд хэсэгт ойртвол) navbar гарна
+            document.body.classList.toggle("nav-on", hero.getBoundingClientRect().bottom < 90 || window.scrollY > window.innerHeight * 0.85);
+          }
+        };
         window.addEventListener("scroll", onScroll, { passive: true });
         onScroll();
       }
