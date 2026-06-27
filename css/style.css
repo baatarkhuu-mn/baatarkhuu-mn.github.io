@@ -335,6 +335,8 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .text-size .ts-btn:disabled { opacity: .3; cursor: default; }
 .text-size .ts-reset.active { color: var(--color-accent); background: var(--color-accent-soft); }
 @media (max-width: 560px) { .text-size .ts-btn { width: 34px; height: 34px; } }
+/* Гар утсанд хажуугийн A−/A/A+ хэрэгсэл агуулгыг халхалдаг тул нуудаг (браузер өөрөө zoom хийнэ) */
+@media (max-width: 768px) { .text-size { display: none; } }
 
 /* ---------- 7. Hero ---------- */
 .hero {
