@@ -1739,3 +1739,59 @@ body.fx-digital .news-card-clean:hover {
   border-color: rgba(232,89,12,.4);
   box-shadow: 0 22px 48px -20px rgba(232,89,12,.22);
 }
+
+
+/* ============ Нүүрний AURORA / BENTO HERO ============ */
+body.hp .hero-banner { display: none; }
+body.hp .navbar-wrap { border-bottom: 1px solid rgba(255,255,255,.06); }
+
+.home-hero { position: relative; overflow: hidden; padding: 58px 0 46px;
+  background:
+    radial-gradient(75% 90% at 88% -12%, rgba(255,122,46,.26), transparent 55%),
+    radial-gradient(82% 100% at -6% 0%, rgba(86,108,228,.34), transparent 55%),
+    radial-gradient(85% 95% at 106% 106%, rgba(150,82,205,.3), transparent 55%),
+    linear-gradient(158deg, #0b1430 0%, #0c1838 58%, #0a1126 100%); }
+[data-theme="light"] .home-hero {
+  background:
+    radial-gradient(70% 85% at 6% -8%, #e2e7ff, transparent 55%),
+    radial-gradient(60% 75% at 97% -6%, #ffe6e0, transparent 52%),
+    radial-gradient(72% 85% at 96% 106%, #d7f2ea, transparent 55%),
+    radial-gradient(55% 60% at 18% 112%, #eee2ff, transparent 58%),
+    #f5f7fc; }
+
+.hh-grid { display: grid; grid-template-columns: 1.12fr .88fr; gap: 36px; align-items: center; position: relative; z-index: 2; }
+.hh-eyebrow { display: inline-flex; align-items: center; gap: 9px; font-size: .74rem; letter-spacing: .2em; text-transform: uppercase; color: #aab8d6; padding: 7px 15px; border-radius: 30px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.13); }
+[data-theme="light"] .hh-eyebrow { color: #6a7890; background: rgba(255,255,255,.62); border-color: rgba(255,255,255,.9); }
+.hh-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-accent); box-shadow: 0 0 10px var(--color-accent); }
+.hh-name { font-size: clamp(2.7rem, 6.2vw, 4.7rem); font-weight: 800; line-height: .98; letter-spacing: -.025em; color: #f4f7fd; margin: 20px 0 16px; }
+[data-theme="light"] .hh-name { color: #14233f; }
+.hh-slogan { font-size: clamp(1rem, 2.3vw, 1.5rem); font-weight: 700; letter-spacing: .32em; color: var(--color-accent); margin-bottom: 30px; padding-left: .2em; }
+.hh-cta { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.hh-btn { font-size: 1rem; padding: 14px 26px; display: inline-flex; align-items: center; gap: 10px; border-radius: 12px; box-shadow: 0 16px 36px -12px rgba(255,122,46,.5); }
+[data-theme="light"] .hh-btn { box-shadow: 0 16px 34px -14px rgba(232,89,12,.5); }
+.hh-link { display: inline-flex; align-items: center; padding: 14px 24px; border-radius: 12px; font-weight: 600; color: #dde5f2; border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.06); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+[data-theme="light"] .hh-link { color: #33425e; border-color: #cdd6e3; background: rgba(255,255,255,.62); }
+.hh-link:hover { color: #fff; border-color: var(--color-accent); }
+[data-theme="light"] .hh-link:hover { color: #14233f; }
+
+.hh-portrait { position: relative; z-index: 2; }
+.hh-frame { position: relative; border-radius: 22px; overflow: hidden; aspect-ratio: 1 / 1.12; border: 1px solid rgba(255,255,255,.14);
+  background: radial-gradient(120% 90% at 50% 0%, #4a5fae, #243363 50%, #16204a); box-shadow: 0 34px 64px -26px rgba(0,0,0,.62); }
+.hh-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+.hh-emblem { position: absolute; right: 14px; bottom: 14px; width: 46px; height: 46px; border-radius: 12px; background: rgba(10,16,38,.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center; padding: 7px; }
+.hh-emblem img { width: 100%; height: 100%; object-fit: contain; }
+
+.hh-tiles { display: grid; grid-template-columns: repeat(5, 1fr); gap: 13px; margin-top: 42px; position: relative; z-index: 2; }
+.hh-tile { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 20px 10px; border-radius: 16px; color: #c8d3e8; font-size: .9rem; font-weight: 600; text-align: center;
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); transition: transform .2s, border-color .2s, background .2s, color .2s; }
+.hh-tile svg { color: var(--color-accent); }
+.hh-tile:hover { transform: translateY(-4px); border-color: rgba(255,122,46,.45); background: rgba(255,255,255,.1); color: #fff; }
+[data-theme="light"] .hh-tile { color: #2c3a5c; background: rgba(255,255,255,.64); border-color: rgba(255,255,255,.85); box-shadow: 0 12px 28px -18px rgba(70,80,150,.3); }
+[data-theme="light"] .hh-tile:hover { border-color: rgba(232,89,12,.4); color: #14233f; }
+
+@media (max-width: 860px) {
+  .hh-grid { grid-template-columns: 1fr; gap: 26px; }
+  .hh-portrait { max-width: 300px; margin: 0 auto; }
+  .hh-tiles { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 520px) { .hh-tiles { grid-template-columns: repeat(2, 1fr); } }
