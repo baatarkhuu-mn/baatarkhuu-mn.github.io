@@ -925,7 +925,7 @@
       "ӨӨР БОДЛОГО": "A DIFFERENT POLICY",
       "Бүх мэдээ үзэх →": "View all news →",
       "Иргэн төвтэй систем": "Citizen-centered system",
-      "Иргэдийн дуу хоолойг сонсох нэгдсэн систем": "A unified system to hear citizens' voices",
+      "Иргэдээ сонсох нэгдсэн систем": "A unified system to hear citizens",
       "Иргэдийн санал, гомдол, өргөдөл олон нийтийн сүлжээнд хязгаарлагдан үлдэх бус,":
         "Citizens' feedback, complaints and petitions should not remain confined to social media —",
       "шийдвэр гаргах түвшинд хүрч, ил тод хянагддаг":
@@ -1289,7 +1289,7 @@
       const loc = [r.district ? r.district + " дүүрэг" : "", r.khoroo ? r.khoroo + "-р хороо" : ""].filter(Boolean).join(", ");
       const isLiked = liked.has(r.id);
       const statusBadge = r.status === "done"
-        ? '<span class="fc-status fc-done">✓ Шийдвэрлэсэн</span>'
+        ? '<span class="fc-status fc-done">Шийдвэрлэсэн</span>'
         : (r.status === "in_progress" ? '<span class="fc-status fc-prog">Шийдвэрлэж байна</span>' : "");
       // Эхний зураг (нийтийн сангаас) — зүүн талын thumbnail
       let photoUrl = "";
@@ -2165,9 +2165,9 @@
   const ProjectsCMS = {
     esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
     STATUS: {
-      ongoing: { label: "Хэрэгжиж буй", style: "background:rgba(240,164,55,.92);color:#2a1c03" },
-      done: { label: "Хэрэгжсэн", style: "background:rgba(52,201,124,.9);color:#06281a" },
-      planned: { label: "Төлөвлөж буй", style: "background:rgba(120,144,180,.55);color:#fff" },
+      ongoing: { label: "Хэрэгжиж буй", cls: "status-review" },
+      done: { label: "Хэрэгжсэн", cls: "status-passed" },
+      planned: { label: "Төлөвлөж буй", cls: "status-draft" },
     },
     init() {
       const grid = document.querySelector("[data-projects]");
@@ -2196,7 +2196,7 @@
         ? `<img src="${esc(p.image_url)}" alt="${esc(p.title)}" loading="lazy" onerror="this.remove()" />`
         : "") + `<span class="placeholder"><img src="/assets/img/logo.svg" alt="" style="width:46%;opacity:.4" /></span>`;
       return `<article class="card reveal visible" data-item data-title="${esc(p.title)}">
-        <div class="card-media"><span class="tag">${esc(p.category || "Төсөл")}</span><span class="tag status-tag badge-status" style="${st.style}">${st.label}</span>${media}</div>
+        <div class="card-media"><span class="tag">${esc(p.category || "Төсөл")}</span><span class="tag status-tag badge-status ${st.cls}">${st.label}</span>${media}</div>
         <div class="card-body">
           <div class="card-date">${esc(p.date_label || "")}</div>
           <h3>${esc(p.title)}</h3>
