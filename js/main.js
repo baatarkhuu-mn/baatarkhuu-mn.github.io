@@ -556,7 +556,9 @@
           // Гарчиг (заавал биш) — агуулгын эхэнд нэмж хадгална
           const titleVal = (fd.get("title") || "").toString().trim();
           const bodyVal = (fd.get("message") || "").toString().trim();
-          const message = titleVal ? (titleVal + "\n\n" + bodyVal) : bodyVal;
+          const emailVal = (fd.get("email") || "").toString().trim();
+          let message = titleVal ? (titleVal + "\n\n" + bodyVal) : bodyVal;
+          if (emailVal) message += "\n\nИмэйл: " + emailVal;
           const lat = latIn && latIn.value ? parseFloat(latIn.value) : null;
           const rating = ratingIn && ratingIn.value ? parseInt(ratingIn.value, 10) : null;
           const baseArgs = {

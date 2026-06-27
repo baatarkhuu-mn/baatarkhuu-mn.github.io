@@ -1966,3 +1966,24 @@ body.hp .hh-topbar { top: 92px; }
 /* Хаалттай (хураангуй) dropdown — ирмэг/сүүдэр/дэвсгэр нуух (hamburger доорх цэнхэр зураас арилгана) */
 body.hp:not(.nav-on) .main-nav { border-color: transparent; box-shadow: none; background: transparent; }
 body.hp:not(.nav-on) .main-nav.open { border-color: var(--color-border); box-shadow: var(--shadow); background: var(--color-bg-card); }
+
+/* ---------- Санал хүсэлтийн форм самбар (жишээ загвар) ---------- */
+.form-card .fc-title {
+  font-size: 1.42rem; font-weight: 800; letter-spacing: -.01em; margin: 0 0 4px;
+  color: var(--color-text);
+}
+.form-card .fc-title + .form-row { margin-top: 16px; }
+/* Холбоо барих мэдээлэл — тусдаа бүлэг */
+.fc-contact { margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--color-border); }
+.fc-grouplabel {
+  display: flex; align-items: center; gap: 8px;
+  font-weight: 700; font-size: 1rem; margin-bottom: 12px !important; color: var(--color-text);
+}
+.fc-grouplabel::before {
+  content: ""; width: 18px; height: 18px; flex: none; background: var(--color-accent);
+  -webkit-mask: var(--ic-user) center/contain no-repeat; mask: var(--ic-user) center/contain no-repeat;
+}
+.fc-contact-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+.fc-contact-row input { width: 100%; }
+@media (max-width: 720px) { .fc-contact-row { grid-template-columns: 1fr; } }
+:root { --ic-user: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E"); }

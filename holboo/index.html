@@ -9,7 +9,7 @@
   <meta name="description" content="УИХ-ын гишүүн Ц.Баатархүүтэй холбоо барих: утас, и-мэйл, оффисын хаяг, санал хүсэлтийн форм." />
   <link rel="canonical" href="https://baatarkhuu.mn/holboo/" />
   <link rel="icon" type="image/svg+xml" href="/assets/img/logo.svg" />
-  <link rel="stylesheet" href="/css/style.css?v=20260624z" />
+  <link rel="stylesheet" href="/css/style.css?v=20260627a" />
 </head>
 <body class="fx-digital">
   <a class="skip-link" href="#main">Үндсэн агуулга руу очих</a>
@@ -212,16 +212,7 @@
           <div class="form-card reveal">
             <h3 style="margin-bottom:20px">Санал хүсэлт илгээх</h3>
             <form id="contact-form" novalidate>
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="f-name">Овог нэр <span aria-hidden="true" style="color:var(--color-danger)">*</span></label>
-                  <input type="text" id="f-name" name="name" required autocomplete="name" placeholder="Таны овог нэр" />
-                </div>
-                <div class="form-group">
-                  <label for="f-phone">Утас <span aria-hidden="true" style="color:var(--color-danger)">*</span></label>
-                  <input type="tel" id="f-phone" name="phone" required autocomplete="tel" placeholder="+976 ХХХХ-ХХХХ" />
-                </div>
-              </div>
+              <h3 class="fc-title">Санал хүсэлтээ илгээнэ үү</h3>
               <div class="form-group">
                 <label for="f-subject">Төрөл</label>
                 <select id="f-subject" name="subject"><option value="gerel">Гэрэлтүүлэг</option><option value="zam">Зам, нүх, эвдрэл</option><option value="yavgan">Явган хүний зам</option><option value="hog">Хог, орчны бохирдол</option><option value="buudal">Автобусны буудал</option><option value="surguuli">Сургууль, цэцэрлэг</option><option value="emnelg">Эмнэлэг, өрхийн эмнэлэг</option><option value="soh">СӨХ, байрны орчин</option><option value="hurteemj">Ахмад, ХБИ-ийн хүртээмж</option><option value="huuli">Хууль, бодлогын санал</option><option value="urgudul">Хувийн өргөдөл, тусламж хүсэлт</option></select>
@@ -248,6 +239,14 @@
                 <div id="geo-map" style="display:none;margin-top:12px"></div>
                 <input type="hidden" name="lat" id="f-lat" />
                 <input type="hidden" name="lng" id="f-lng" />
+              </div>
+              <div class="form-group fc-contact">
+                <label class="fc-grouplabel">Холбоо барих мэдээлэл</label>
+                <div class="fc-contact-row">
+                  <input type="text" id="f-name" name="name" required autocomplete="name" placeholder="Овог нэр *" aria-label="Овог нэр" />
+                  <input type="tel" id="f-phone" name="phone" required autocomplete="tel" placeholder="Утасны дугаар *" aria-label="Утасны дугаар" />
+                  <input type="email" id="f-email" name="email" autocomplete="email" placeholder="Имэйл хаяг" aria-label="Имэйл хаяг" />
+                </div>
               </div>
               <div class="form-group">
                 <label class="consent-check">
@@ -322,9 +321,9 @@
 
   <button class="to-top" aria-label="Дээш гарах"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="m18 15-6-6-6 6"/></svg></button>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="/js/supabase-config.js?v=20260624z"></script>
+  <script src="/js/supabase-config.js?v=20260627a"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="/js/main.js?v=20260624z"></script>
+  <script src="/js/main.js?v=20260627a"></script>
 </body>
 </html>
