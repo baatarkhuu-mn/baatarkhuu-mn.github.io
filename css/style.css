@@ -1636,3 +1636,106 @@ a.news-card-clean { text-decoration: none; color: inherit; display: flex; flex-d
 .sl-prog { background: var(--color-primary); }
 .sl-done { background: #2bb673; }
 @media (max-width: 560px) { .status-legend { gap: 12px 18px; } }
+
+
+/* ===================== AURORA / BENTO — өнгө төрх (сэдэвт холбосон) ===================== */
+/* Хуудасны дэвсгэр: харанхуй = aurora gradient, гэрэлтэй = зөөлөн pastel mesh */
+body.fx-digital::after {
+  content: ""; position: fixed; inset: 0; z-index: -2; pointer-events: none;
+  background:
+    radial-gradient(70% 60% at 88% -6%, rgba(255,122,46,.12), transparent 55%),
+    radial-gradient(75% 65% at 3% 2%, rgba(86,108,228,.18), transparent 55%),
+    radial-gradient(80% 72% at 97% 100%, rgba(150,82,205,.16), transparent 58%),
+    radial-gradient(70% 60% at 28% 108%, rgba(47,150,200,.10), transparent 60%);
+}
+[data-theme="light"] body.fx-digital::after {
+  background:
+    radial-gradient(60% 55% at 7% 2%, rgba(205,214,255,.7), transparent 55%),
+    radial-gradient(55% 50% at 96% 0%, rgba(255,220,209,.62), transparent 52%),
+    radial-gradient(66% 58% at 92% 100%, rgba(205,242,232,.62), transparent 55%),
+    radial-gradient(55% 52% at 20% 107%, rgba(233,220,255,.58), transparent 58%);
+}
+
+/* Секцийн зөөлөн толбыг улбар шар + индиго аяс руу нийцүүлэв */
+body.fx-digital .section::before {
+  background:
+    radial-gradient(ellipse 55% 45% at 85% 4%, rgba(255,122,46,.06), transparent 62%),
+    radial-gradient(ellipse 50% 45% at 8% 100%, rgba(120,100,235,.07), transparent 62%);
+}
+[data-theme="light"] body.fx-digital .section::before {
+  background:
+    radial-gradient(ellipse 55% 45% at 85% 4%, rgba(255,122,46,.05), transparent 62%),
+    radial-gradient(ellipse 50% 45% at 8% 100%, rgba(120,100,235,.045), transparent 62%);
+}
+
+/* section-soft — aurora цухуйх шилэн аяс */
+body.fx-digital .section-soft { background: rgba(10,18,38,.34); }
+[data-theme="light"] body.fx-digital .section-soft { background: rgba(255,255,255,.4); border-block: 1px solid rgba(255,255,255,.65); }
+
+/* Навигац — цантсан шилэн */
+body.fx-digital .navbar-wrap {
+  background: rgba(8,15,32,.62);
+  backdrop-filter: blur(18px) saturate(135%); -webkit-backdrop-filter: blur(18px) saturate(135%);
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+[data-theme="light"] body.fx-digital .navbar-wrap {
+  background: rgba(255,255,255,.64);
+  backdrop-filter: blur(18px) saturate(135%); -webkit-backdrop-filter: blur(18px) saturate(135%);
+  border-bottom: 1px solid rgba(255,255,255,.7);
+}
+
+/* Hero банер дээрх aurora угаалга (видео хэвээр) */
+body.fx-digital .hb-overlay {
+  background:
+    radial-gradient(80% 95% at 86% 0%, rgba(255,122,46,.2), transparent 55%),
+    radial-gradient(85% 95% at 4% 100%, rgba(120,90,210,.32), transparent 55%),
+    linear-gradient(90deg, rgba(7,15,31,.82), rgba(7,15,31,.2) 50%, rgba(7,15,31,.82));
+}
+
+/* Картууд — frosted glass, том радиус, зөөлөн гүн */
+body.fx-digital .card,
+body.fx-digital .form-card,
+body.fx-digital .event-feature,
+body.fx-digital .info-card,
+body.fx-digital .video-card,
+body.fx-digital .report-card,
+body.fx-digital .law-item,
+body.fx-digital .news-card-clean {
+  background: rgba(16,26,52,.6);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 16px;
+  box-shadow: 0 18px 42px -24px rgba(0,0,0,.65);
+}
+[data-theme="light"] body.fx-digital .card,
+[data-theme="light"] body.fx-digital .form-card,
+[data-theme="light"] body.fx-digital .event-feature,
+[data-theme="light"] body.fx-digital .info-card,
+[data-theme="light"] body.fx-digital .video-card,
+[data-theme="light"] body.fx-digital .report-card,
+[data-theme="light"] body.fx-digital .law-item,
+[data-theme="light"] body.fx-digital .news-card-clean {
+  background: rgba(255,255,255,.66);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,.85);
+  border-radius: 16px;
+  box-shadow: 0 16px 38px -20px rgba(70,80,150,.26);
+}
+
+/* Картын hover — улбар шар туяа */
+body.fx-digital .card:hover,
+body.fx-digital .event-feature:hover,
+body.fx-digital .video-card:hover,
+body.fx-digital .law-item:hover,
+body.fx-digital .news-card-clean:hover {
+  border-color: rgba(255,122,46,.42);
+  box-shadow: 0 24px 54px -24px rgba(0,0,0,.72), 0 0 0 1px rgba(255,122,46,.16);
+}
+[data-theme="light"] body.fx-digital .card:hover,
+[data-theme="light"] body.fx-digital .event-feature:hover,
+[data-theme="light"] body.fx-digital .video-card:hover,
+[data-theme="light"] body.fx-digital .law-item:hover,
+[data-theme="light"] body.fx-digital .news-card-clean:hover {
+  border-color: rgba(232,89,12,.4);
+  box-shadow: 0 22px 48px -20px rgba(232,89,12,.22);
+}
