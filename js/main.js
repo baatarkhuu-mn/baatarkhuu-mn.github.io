@@ -1215,10 +1215,10 @@
     };
     const steps = [
       { c: 1, ic: IC.inbox, label: "Хүлээн авсан", desc: "Таны хүсэлт хүлээн авагдав.", done: true, date: created },
-      { c: 2, ic: IC.send, label: "Хариуцсан байгууллагад илгээсэн", desc: hasOrg ? esc(r.org) : "Холбогдох байгууллагад шилжүүлэв.", done: hasOrg || inProg, date: "" },
-      { c: 3, ic: IC.search, label: "Судалж байна", desc: "Хүсэлтийг судалж, шалгаж байна.", done: inProg, date: "" },
-      { c: 4, ic: IC.edit, label: "Хариу боловсруулж байна", desc: "Албаны хариу боловсруулж байна.", done: hasResp || isDone, date: "" },
-      { c: 5, ic: IC.check, label: "Шийдвэрлэсэн", desc: "Хүсэлт шийдвэрлэгдэв.", done: isDone, date: isDone ? updated : "" },
+      { c: 2, ic: IC.search, label: "Судалж байна", desc: "Хүсэлтийг судалж, шалгаж байна.", done: inProg || hasOrg || hasResp || isDone, date: "" },
+      { c: 3, ic: IC.send, label: "Хариуцсан байгууллагад илгээсэн", desc: hasOrg ? esc(r.org) : "Холбогдох байгууллагад шилжүүлэв.", done: hasOrg || hasResp || isDone, date: "" },
+      { c: 4, ic: IC.edit, label: "Илгээсэн байгууллага боловсруулж байна", desc: "Хүлээн авсан байгууллага хариу боловсруулж байна.", done: hasResp || isDone, date: "" },
+      { c: 5, ic: IC.check, label: "Хариу ирсэн", desc: "Байгууллагын хариу ирэв.", done: isDone, date: isDone ? updated : "" },
     ];
     const tl = '<ol class="fb-timeline">' + steps.map((s) =>
       '<li class="ft-step ft-c' + s.c + (s.done ? " done" : "") + '">' +
