@@ -1951,8 +1951,12 @@ body.hp .hh-topbar { top: 92px; }
 .hh-logo-img { border-radius: 0; background: none; box-shadow: none; max-width: min(380px, 84vw); }
 [data-theme="light"] .hh-logo-img { box-shadow: none; }
 [data-theme="dark"] .hh-logo-img { filter: brightness(0) invert(1); }
-/* Hero бүтэн дэлгэц дүүргэнэ (десктоп zoom 0.8-г тооцов) */
-@media (min-width: 1024px) { .home-hero { min-height: 125vh; } }
+/* Hero бүтэн дэлгэц дүүргэнэ (десктоп zoom 0.8-г тооцов).
+   Агуулга, брэндийг бага зэрэг доош нь буулгаж, доорх хоосон зайг багасгана. */
+@media (min-width: 1024px) {
+  .home-hero { min-height: 125vh; padding-top: 150px; }
+  body.hp .hh-topbar { top: 118px; }
+}
 
 /* Лого — гэрэлтэйд navy+алт, харанхуйд цайвар+алт (тусдаа зураг) */
 .hh-logo-dark { display: none; }
