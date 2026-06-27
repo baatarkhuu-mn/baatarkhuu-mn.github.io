@@ -332,8 +332,6 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .text-size .ts-btn:disabled { opacity: .3; cursor: default; }
 .text-size .ts-reset.active { color: var(--color-accent); background: var(--color-accent-soft); }
 @media (max-width: 560px) { .text-size .ts-btn { width: 34px; height: 34px; } }
-/* Гар утсанд хажуугийн A−/A/A+ хэрэгсэл агуулгыг халхалдаг тул нуудаг (браузер өөрөө zoom хийнэ) */
-@media (max-width: 768px) { .text-size { display: none; } }
 
 /* ---------- 7. Hero ---------- */
 .hero {
@@ -1975,6 +1973,13 @@ body.hp:not(.nav-on) .navbar-wrap,
   box-shadow: none;
 }
 body.hp.nav-on .navbar-wrap { box-shadow: 0 10px 34px -18px rgba(0,0,0,.55); }
+
+/* Гар утас: hero доторх брэнд (нэр) ба том логог давхцуулахгүй — брэндийг урсгал дотор аваачиж, агуулгыг дээрээс эхлүүлнэ */
+@media (max-width: 860px) {
+  body.hp .home-hero { justify-content: flex-start; padding-top: 84px; }
+  body.hp .hh-topbar { position: static; top: auto; margin: 0 0 18px; text-align: center; }
+  body.hp .hh-topbar .hb-brand { justify-content: center; }
+}
 
 /* ---------- Санал хүсэлтийн форм самбар (жишээ загвар) ---------- */
 .form-card .fc-title {
