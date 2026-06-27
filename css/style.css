@@ -13,8 +13,8 @@
   --color-primary: #4d8df0;          /* Гэрэлтсэн цэнхэр */
   --color-primary-dark: #2f6ad1;
   --color-primary-light: #74a8f7;
-  --color-accent: #3fd2e6;           /* Цахим цэнхэр (брэнд «90 секундэд») */
-  --color-accent-soft: rgba(63, 210, 230, .14);
+  --color-accent: #ff7a2e;           /* Тод улбар шар (брэнд акцент) */
+  --color-accent-soft: rgba(255, 122, 46, .16);
   --color-bg: #060b16;               /* Гүн хар хөх */
   --color-bg-soft: #0a1224;
   --color-bg-card: #0e1830;
@@ -28,7 +28,7 @@
 
   /* Цахим гэрэлтэлт — брэнд видеоны хэв */
   --glow-blue: 0 0 26px rgba(77, 141, 240, .28);
-  --glow-gold: 0 0 24px rgba(63, 210, 230, .38);
+  --glow-gold: 0 0 24px rgba(255, 122, 46, .42);
   --grid-line: rgba(77, 141, 240, .05);
 
   /* Хэмжээ ба зай */
@@ -52,8 +52,8 @@
   --color-primary: #0a3d8f;
   --color-primary-dark: #072a63;
   --color-primary-light: #1e63c9;
-  --color-accent: #b0892f;
-  --color-accent-soft: rgba(176, 137, 47, .10);
+  --color-accent: #e8590c;
+  --color-accent-soft: rgba(232, 89, 12, .10);
   --color-bg: #ffffff;
   --color-bg-soft: #f5f8fc;
   --color-bg-card: #ffffff;
@@ -63,7 +63,7 @@
   --color-text-invert: #ffffff;
   /* Trust-centered — neon биш, маш зөөлөн сүүдэр */
   --glow-blue: 0 8px 24px rgba(10, 61, 143, .08);
-  --glow-gold: 0 6px 16px rgba(176, 137, 47, .14);
+  --glow-gold: 0 6px 16px rgba(232, 89, 12, .16);
   --grid-line: rgba(10, 61, 143, .04);
   --shadow-sm: 0 1px 2px rgba(16, 42, 76, .06);
   --shadow: 0 4px 18px rgba(16, 42, 76, .08);
@@ -756,7 +756,7 @@ body.am-lock { overflow: hidden; }
   color: #fff; font-weight: 800; font-size: 1.35rem; box-shadow: var(--shadow); }
 .att-item .att-label { margin-top: 12px; font-size: .92rem; color: var(--color-text-soft); }
 .att-green { background: linear-gradient(135deg, #2aa86a, #34c97c); }
-.att-gold  { background: linear-gradient(135deg, #d9a72f, #f0c14a); color: #2a1c03; }
+.att-gold  { background: linear-gradient(135deg, #ef6316, #ff9248); color: #2a1303; }
 .att-red   { background: linear-gradient(135deg, #c53434, #e05656); }
 .att-navy  { background: linear-gradient(135deg, #13245a, #2a3f8f); }
 
