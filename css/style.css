@@ -542,7 +542,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 /* Гарчгийн доорх зураас — гэрэлтэх gradient */
 .fx-digital .section-head h2::after {
   width: 64px; height: 3px;
-  background: linear-gradient(90deg, transparent, var(--color-accent), var(--color-primary-light), transparent);
+  background: linear-gradient(90deg, transparent, var(--color-accent), #ffb27a, transparent);
   box-shadow: 0 0 14px rgba(99, 86, 240, .55);
 }
 [data-theme="light"] .fx-digital .section-head h2::after { box-shadow: none; }
@@ -815,7 +815,7 @@ body.am-lock { overflow: hidden; }
     linear-gradient(160deg, #0a1228, #080f20); }
 .site-footer::before {
   content: ""; position: absolute; top: -1px; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--color-primary), var(--color-accent), transparent);
+  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
 }
 /* Footer ч хоёр горимд ижил гүн дижитал өнгө */
 [data-theme="light"] .site-footer {
