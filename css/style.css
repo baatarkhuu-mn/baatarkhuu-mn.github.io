@@ -1967,6 +1967,16 @@ body.hp .hh-topbar { top: 92px; }
 body.hp:not(.nav-on) .main-nav { border-color: transparent; box-shadow: none; background: transparent; }
 body.hp:not(.nav-on) .main-nav.open { border-color: var(--color-border); box-shadow: var(--shadow); background: var(--color-bg-card); }
 
+/* Нүүр: гүйлгээгүй үед дээд цэс hero дэвсгэр дээр ил тод уусна, scroll хийхэд background эргэж ирнэ */
+body.hp:not(.nav-on) .navbar-wrap,
+[data-theme="light"] body.hp:not(.nav-on) .navbar-wrap {
+  background: transparent;
+  backdrop-filter: none; -webkit-backdrop-filter: none;
+  border-bottom-color: transparent;
+  box-shadow: none;
+}
+body.hp.nav-on .navbar-wrap { box-shadow: 0 10px 34px -18px rgba(0,0,0,.55); }
+
 /* ---------- Санал хүсэлтийн форм самбар (жишээ загвар) ---------- */
 .form-card .fc-title {
   font-size: 1.42rem; font-weight: 800; letter-spacing: -.01em; margin: 0 0 4px;
