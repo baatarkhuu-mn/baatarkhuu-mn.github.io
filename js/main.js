@@ -1197,22 +1197,37 @@
 
   /* ---------- Асуудлын явц/чиглүүлэлт (timeline + хариуцах газар + албан бичиг) ---------- */
   function feedbackRouteHtml(r, esc) {
-    // Иргэнд харагдах явц нь админы төлөвтэй монотон уялдана:
-    //   Шинэ → 1; Шийдвэрлэж байна → 1-2 (хариу/газар бөглөвөл цааш); Шийдвэрлэсэн → бүгд
+    // Иргэнд харагдах 5 шатлалт явц — админы төлөвтэй монотон уялдана
     const inProg = r.status === "in_progress" || r.status === "done";
     const isDone = r.status === "done";
+    const hasOrg = !!r.org, hasResp = !!r.response;
+    const fmtD = (s) => { try { return new Date(s).toLocaleString("mn-MN", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }); } catch (_) { return ""; } };
+    const created = r.created_at ? fmtD(r.created_at) : "";
+    const updated = (r.updated_at && r.updated_at !== r.created_at) ? fmtD(r.updated_at) : created;
+    const IC = {
+      inbox: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>',
+      send: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>',
+      search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>',
+      edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>',
+      check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+    };
     const steps = [
-      { label: "Хүлээн авсан", done: true },
-      { label: r.org ? ("Хариуцагчид уламжилсан: " + esc(r.org)) : "Хариуцах газарт уламжлах", done: !!r.org || inProg },
-      { label: "Албаны хариу өгсөн", done: !!r.response || isDone },
-      { label: "Шийдвэрлэсэн", done: isDone },
+      { c: 1, ic: IC.inbox, label: "Хүлээн авсан", desc: "Таны хүсэлт хүлээн авагдав.", done: true, date: created },
+      { c: 2, ic: IC.send, label: "Хариуцсан байгууллагад илгээсэн", desc: hasOrg ? esc(r.org) : "Холбогдох байгууллагад шилжүүлэв.", done: hasOrg || inProg, date: "" },
+      { c: 3, ic: IC.search, label: "Судалж байна", desc: "Хүсэлтийг судалж, шалгаж байна.", done: inProg, date: "" },
+      { c: 4, ic: IC.edit, label: "Хариу боловсруулж байна", desc: "Албаны хариу боловсруулж байна.", done: hasResp || isDone, date: "" },
+      { c: 5, ic: IC.check, label: "Шийдвэрлэсэн", desc: "Хүсэлт шийдвэрлэгдэв.", done: isDone, date: isDone ? updated : "" },
     ];
     const tl = '<ol class="fb-timeline">' + steps.map((s) =>
-      '<li class="ft-step' + (s.done ? " done" : "") + '"><span class="ft-dot"></span><span class="ft-l">' + s.label + '</span></li>').join("") + '</ol>';
+      '<li class="ft-step ft-c' + s.c + (s.done ? " done" : "") + '">' +
+        '<span class="ft-ic">' + s.ic + '</span>' +
+        '<span class="ft-txt"><span class="ft-l">' + s.label + '</span><span class="ft-d">' + s.desc + '</span>' +
+        (s.date ? '<span class="ft-date">' + s.date + '</span>' : '') + '</span>' +
+      '</li>').join("") + '</ol>';
     const letter = r.letter_no
       ? '<div class="fb-letter">📄 Албан бичиг: <b>' + esc(r.letter_no) + '</b>' + (r.letter_url ? ' · <a href="' + esc(r.letter_url) + '" target="_blank" rel="noopener">үзэх</a>' : '') + '</div>'
       : "";
-    return '<div class="fb-route">' + tl + letter + '</div>';
+    return '<div class="fb-route"><div class="fb-route-head">Хүсэлтийн явц</div>' + tl + letter + '</div>';
   }
 
   /* ---------- 12. Ил тод санал самбар (public feed) ---------- */

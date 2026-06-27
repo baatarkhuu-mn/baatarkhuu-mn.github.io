@@ -1434,17 +1434,38 @@ a.news-card-clean { text-decoration: none; color: inherit; display: flex; flex-d
 .fc-response p { margin: 0; font-size: .9rem; line-height: 1.55; }
 
 /* Асуудлын явц (timeline) + хариуцах газар + албан бичиг */
-.fb-route { margin: 12px 0; }
-.fb-timeline { list-style: none; margin: 0; padding: 4px 0; display: flex; flex-direction: row; gap: 0; }
-.fb-timeline .ft-step { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; position: relative; padding: 2px 4px; font-size: .72rem; line-height: 1.3; text-align: center; color: var(--color-text-soft); }
-.fb-timeline .ft-step::before { content: ""; position: absolute; left: -50%; right: 50%; top: 9px; height: 2px; background: var(--color-border); }
+.fb-route { margin: 18px 0; }
+.fb-route-head { font-weight: 700; font-size: 1.05rem; margin-bottom: 22px; color: var(--color-text); }
+.fb-timeline { list-style: none; margin: 0; padding: 4px 0; display: flex; flex-direction: row; gap: 8px; }
+.fb-timeline .ft-step { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 12px; position: relative; padding: 0 4px; text-align: center; }
+.fb-timeline .ft-step::before { content: ""; position: absolute; left: -50%; right: 50%; top: 23px; height: 3px; background: var(--color-border); z-index: 0; }
 .fb-timeline .ft-step:first-child::before { display: none; }
-.fb-timeline .ft-dot { width: 14px; height: 14px; border-radius: 50%; background: var(--color-bg-soft); border: 2px solid var(--color-border); flex-shrink: 0; z-index: 1; }
-.fb-timeline .ft-step.done { color: var(--color-text); font-weight: 600; }
-.fb-timeline .ft-step.done .ft-dot { background: var(--color-accent); border-color: var(--color-accent); }
-.fb-letter { margin-top: 10px; font-size: .85rem; color: var(--color-text-soft); }
+.fb-timeline .ft-ic { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: var(--color-bg-soft); border: 2px solid var(--color-border); color: var(--color-text-soft); position: relative; z-index: 1; flex-shrink: 0; transition: background .2s, border-color .2s, color .2s; }
+.fb-timeline .ft-ic svg { width: 23px; height: 23px; }
+.fb-timeline .ft-txt { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.fb-timeline .ft-l { font-size: .82rem; font-weight: 700; color: var(--color-text-soft); line-height: 1.3; }
+.fb-timeline .ft-d { font-size: .74rem; color: var(--color-text-soft); line-height: 1.35; opacity: .8; max-width: 155px; }
+.fb-timeline .ft-date { font-size: .72rem; color: var(--color-text-soft); opacity: .65; margin-top: 1px; }
+.fb-timeline .ft-c1 { --ftc: #f0a92a; }
+.fb-timeline .ft-c2 { --ftc: #21b574; }
+.fb-timeline .ft-c3 { --ftc: #3b82f6; }
+.fb-timeline .ft-c4 { --ftc: #8b5cf6; }
+.fb-timeline .ft-c5 { --ftc: #12b5a6; }
+.fb-timeline .ft-step.done .ft-ic { background: var(--ftc); border-color: var(--ftc); color: #fff; box-shadow: 0 8px 18px -7px var(--ftc); }
+.fb-timeline .ft-step.done .ft-l { color: var(--color-text); }
+.fb-timeline .ft-step.done::before { background: var(--ftc); }
+@media (max-width: 720px) {
+  .fb-timeline { flex-direction: column; gap: 0; }
+  .fb-timeline .ft-step { flex-direction: row; align-items: flex-start; text-align: left; gap: 16px; padding: 0 0 26px; }
+  .fb-timeline .ft-step::before { left: 23px; right: auto; top: 48px; height: calc(100% - 48px); width: 3px; }
+  .fb-timeline .ft-step:first-child::before { display: block; }
+  .fb-timeline .ft-step:last-child::before { display: none; }
+  .fb-timeline .ft-txt { align-items: flex-start; padding-top: 3px; }
+  .fb-timeline .ft-d { max-width: none; }
+}
+.fb-letter { margin-top: 14px; font-size: .85rem; color: var(--color-text-soft); }
 .fb-letter a { color: var(--color-primary-light); }
-.tr-resp + .fb-route, .fc-response + .fb-route { margin-top: 14px; }
+.tr-resp + .fb-route, .fc-response + .fb-route { margin-top: 16px; }
 
 /* Бидний тухай — платформын танилцуулга */
 .about-flow { display: flex; align-items: stretch; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 8px 0 40px; }
