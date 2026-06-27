@@ -542,7 +542,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 /* Гарчгийн доорх зураас — гэрэлтэх gradient */
 .fx-digital .section-head h2::after {
   width: 64px; height: 3px;
-  background: linear-gradient(90deg, transparent, var(--color-accent), #ffb27a, transparent);
+  background: linear-gradient(90deg, transparent, var(--color-accent), var(--color-primary-light), transparent);
   box-shadow: 0 0 14px rgba(99, 86, 240, .55);
 }
 [data-theme="light"] .fx-digital .section-head h2::after { box-shadow: none; }
@@ -815,7 +815,7 @@ body.am-lock { overflow: hidden; }
     linear-gradient(160deg, #0a1228, #080f20); }
 .site-footer::before {
   content: ""; position: absolute; top: -1px; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+  background: linear-gradient(90deg, transparent, var(--color-primary), var(--color-accent), transparent);
 }
 /* Footer ч хоёр горимд ижил гүн дижитал өнгө */
 [data-theme="light"] .site-footer {
@@ -1935,3 +1935,13 @@ body.hp .hh-topbar { top: 92px; }
 [data-theme="dark"] .hh-logo-img { filter: brightness(0) invert(1); }
 /* Hero бүтэн дэлгэц дүүргэнэ (десктоп zoom 0.8-г тооцов) */
 @media (min-width: 1024px) { .home-hero { min-height: 125vh; } }
+
+/* Лого — гэрэлтэйд navy+алт, харанхуйд цайвар+алт (тусдаа зураг) */
+.hh-logo-dark { display: none; }
+[data-theme="dark"] .hh-logo-light { display: none; }
+[data-theme="dark"] .hh-logo-dark { display: block; }
+[data-theme="dark"] .hh-logo-img { filter: none; }
+
+/* Хаалттай (хураангуй) dropdown — ирмэг/сүүдэр/дэвсгэр нуух (hamburger доорх цэнхэр зураас арилгана) */
+body.hp:not(.nav-on) .main-nav { border-color: transparent; box-shadow: none; background: transparent; }
+body.hp:not(.nav-on) .main-nav.open { border-color: var(--color-border); box-shadow: var(--shadow); background: var(--color-bg-card); }
