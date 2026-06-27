@@ -1985,6 +1985,22 @@ body.hp.nav-on .navbar-wrap { box-shadow: 0 10px 34px -18px rgba(0,0,0,.55); }
   body.hp .hh-topbar .hb-brand { justify-content: center; }
 }
 
+/* Header дотор «БҮТЭЭГЧ МОНГОЛ» текстийн оронд лого зураг (нүүртэй ижил, theme-аар солигдоно) */
+.hb-logo { display: inline-flex; align-items: center; flex-shrink: 0; line-height: 0; }
+.hb-logo-img { height: 60px; width: auto; display: block; }
+.hb-logo .hb-logo-dark { display: none; }
+[data-theme="dark"] .hb-logo .hb-logo-light { display: none; }
+[data-theme="dark"] .hb-logo .hb-logo-dark { display: block; }
+@media (max-width: 560px) { .hb-logo-img { height: 44px; } }
+
+/* Гар утас/touch: видео embed дээгүүр scroll хийхэд iframe булаацалдан FB рүү үсрэхээс сэргийлнэ —
+   ил тод "хамгаалалт" дээр нь тавьж, эхний даралтаар тоглуулахаар нээнэ */
+.embed-guard { position: absolute; inset: 0; z-index: 4; border: 0; padding: 0; margin: 0;
+  background: transparent; cursor: pointer; display: grid; place-items: center; -webkit-tap-highlight-color: transparent; }
+.embed-guard .eg-play { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center;
+  background: rgba(8,15,32,.55); color: #fff; -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); }
+.embed-guard .eg-play svg { width: 26px; height: 26px; margin-left: 2px; }
+
 /* ---------- Санал хүсэлтийн форм самбар (жишээ загвар) ---------- */
 .form-card .fc-title {
   font-size: 1.42rem; font-weight: 800; letter-spacing: -.01em; margin: 0 0 4px;

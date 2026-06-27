@@ -46,6 +46,24 @@
       <button type="button" class="sb-btn sb-copy js-copy-link" data-url="${attr}" aria-label="Холбоос хуулах" title="Холбоос хуулах"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg></button>
     </div>`;
   }
+  // Touch төхөөрөмж дээр видео embed дээгүүр scroll хийхэд iframe touch-ийг булаацалдан
+  // FB рүү үсэрч царцахаас сэргийлнэ: ил тод "хамгаалалт" тавьж, эхний даралтаар нээж тоглуулна.
+  function guardTouchEmbeds(root) {
+    try { if (!window.matchMedia || !matchMedia("(pointer: coarse), (max-width: 820px)").matches) return; } catch (_) { return; }
+    const sel = ".fb-wrap, .reel-embed, .video-embed, .vhs-main";
+    (root || document).querySelectorAll(sel).forEach((w) => {
+      if (w.dataset.guarded) return;
+      w.dataset.guarded = "1";
+      try { if (getComputedStyle(w).position === "static") w.style.position = "relative"; } catch (_) {}
+      const g = document.createElement("button");
+      g.type = "button";
+      g.className = "embed-guard";
+      g.setAttribute("aria-label", "Видео тоглуулах");
+      g.innerHTML = '<span class="eg-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>';
+      g.addEventListener("click", () => { w.dataset.guarded = "done"; g.remove(); });
+      w.appendChild(g);
+    });
+  }
   // Хуулах / native share — делегацлэсэн нэг handler (бүх карт дээр ажиллана)
   document.addEventListener("click", async (e) => {
     const btn = e.target.closest && e.target.closest(".js-copy-link");
@@ -1975,18 +1993,21 @@
               featuredEl.innerHTML = VideoCMS.card(feat, true);
               const rest = data.filter((v) => v !== feat);
               arr = rest.length ? rest : data;
+              guardTouchEmbeds(featuredEl);
             }
             const lim = parseInt(listEl.dataset.videoLimit || "0", 10);
             if (lim) arr = arr.slice(0, lim);
             listEl.innerHTML = arr.map((v) => VideoCMS.card(v)).join("");
             VideoCMS.parseFB();
+            guardTouchEmbeds(listEl);
             if (!lim) { // видео хуудас — 10-аар хуудаслана
               Pager.apply(listEl);
-              if (listEl._pagerNav) listEl._pagerNav.addEventListener("click", () => setTimeout(() => VideoCMS.parseFB(), 200));
+              if (listEl._pagerNav) listEl._pagerNav.addEventListener("click", () => setTimeout(() => { VideoCMS.parseFB(); guardTouchEmbeds(listEl); }, 200));
             }
           }
           if (reelsEl) { // Нүүрний карусель — reel плагин (тогтсон хэмжээ, гүйдэг)
             reelsEl.innerHTML = data.map((v) => VideoCMS.reelEmbed(v)).join("");
+            guardTouchEmbeds(reelsEl);
             window.dispatchEvent(new Event("resize")); // каруселийн цэгийг шинэчлэх
           }
         });
@@ -2083,6 +2104,7 @@
       w.querySelector(".vh-date").textContent = v.video_date || (v.created_at ? this.fmtDate(v.created_at) : "");
       const shareBox = w.querySelector("[data-vh-share]");
       if (shareBox) shareBox.innerHTML = shareBar(v.url || location.href, v.title || "Видео");
+      guardTouchEmbeds(main.parentNode || w);
       setTimeout(() => this.syncPeeks(), 400);
     },
   };
