@@ -2050,11 +2050,9 @@
              <span class="vh-count"></span>
              <button type="button" class="vhero-arrow vh-next" aria-label="Дараах">›</button>
            </div>
-           <div class="vhero-cap"><div class="vh-cap-txt"><h4 class="vh-title"></h4><span class="vh-date"></span></div><div class="vh-share" data-vh-share></div></div>
-           <div class="vhero-strip" data-vh-strip></div>`;
+           <div class="vhero-cap"><div class="vh-cap-txt"><h4 class="vh-title"></h4><span class="vh-date"></span></div><div class="vh-share" data-vh-share></div></div>`;
         wrap.querySelector(".vh-prev").addEventListener("click", () => this.go(-1));
         wrap.querySelector(".vh-next").addEventListener("click", () => this.go(1));
-        this.buildStrip();
         // Идэвхтэй player-ийн өндрийг хажуугийн картуудад тааруулна (жинхэнэ хэмжээ янз бүр)
         const main = wrap.querySelector("[data-vhs-main]");
         if (window.ResizeObserver) { this._ro = new ResizeObserver(() => this.syncPeeks()); this._ro.observe(main); }
@@ -2062,36 +2060,6 @@
       } catch (_) { wrap.innerHTML = '<p class="feed-state">Видео ачаалахад алдаа гарлаа.</p>'; }
     },
     go(d) { const n = this._vids.length; this._i = (this._i + d + n) % n; this.render(); },
-    buildStrip() {
-      const strip = this._wrap.querySelector("[data-vh-strip]");
-      if (!strip) return;
-      const esc = VideoHero.esc;
-      strip.innerHTML = this._vids.map((v, i) => {
-        const id = v.platform === "youtube" ? VideoCMS.ytId(v.url) : "";
-        const img = id ? `<img class="vt-img" src="https://i.ytimg.com/vi/${id}/mqdefault.jpg" alt="" loading="lazy" onerror="this.remove();this.parentNode.classList.add('vt-noimg')" />` : "";
-        const date = v.video_date || (v.created_at ? this.fmtDate(v.created_at) : "");
-        return `<button type="button" class="vh-thumb${i === this._i ? " is-active" : ""}" data-vh-idx="${i}" aria-label="${esc(v.title || "Видео")}">
-            <span class="vt-media${img ? "" : " vt-noimg"}">${img}<span class="vt-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></span>
-            <span class="vt-meta"><span class="vt-title">${esc(v.title || "Видео")}</span><span class="vt-date">${esc(date)}</span></span>
-          </button>`;
-      }).join("");
-      strip.addEventListener("click", (e) => {
-        const btn = e.target.closest(".vh-thumb"); if (!btn) return;
-        const idx = parseInt(btn.dataset.vhIdx, 10);
-        if (!isNaN(idx) && idx !== this._i) { this._i = idx; this.render(); }
-      });
-    },
-    syncStrip() {
-      const strip = this._wrap && this._wrap.querySelector("[data-vh-strip]");
-      if (!strip) return;
-      strip.querySelectorAll(".vh-thumb").forEach((b, idx) => b.classList.toggle("is-active", idx === this._i));
-      const active = strip.querySelector(".vh-thumb.is-active");
-      if (active) {
-        const sr = strip.getBoundingClientRect(), ar = active.getBoundingClientRect();
-        const delta = (ar.left - sr.left) - (strip.clientWidth - active.clientWidth) / 2;
-        strip.scrollBy({ left: delta, behavior: "smooth" });
-      }
-    },
     syncPeeks() {
       if (!this._wrap) return;
       const main = this._wrap.querySelector("[data-vhs-main]");
@@ -2115,7 +2083,6 @@
       w.querySelector(".vh-date").textContent = v.video_date || (v.created_at ? this.fmtDate(v.created_at) : "");
       const shareBox = w.querySelector("[data-vh-share]");
       if (shareBox) shareBox.innerHTML = shareBar(v.url || location.href, v.title || "Видео");
-      this.syncStrip();
       setTimeout(() => this.syncPeeks(), 400);
     },
   };

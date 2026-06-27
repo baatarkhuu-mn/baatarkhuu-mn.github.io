@@ -1977,49 +1977,8 @@ body.hp:not(.nav-on) .navbar-wrap,
 }
 body.hp.nav-on .navbar-wrap { box-shadow: 0 10px 34px -18px rgba(0,0,0,.55); }
 
-/* ---------- Видео мэдээ: thumbnail зурвас (олон видео харагдуулна) ---------- */
-.vhero-strip {
-  display: flex; gap: 12px; margin-top: 28px; padding: 4px 2px 12px;
-  overflow-x: auto; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin; scrollbar-color: var(--color-border) transparent;
-}
-.vhero-strip::-webkit-scrollbar { height: 7px; }
-.vhero-strip::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 4px; }
-.vh-thumb {
-  flex: 0 0 auto; width: 152px; display: flex; flex-direction: column; gap: 7px;
-  background: none; border: 0; padding: 0; cursor: pointer; text-align: left;
-  scroll-snap-align: center; font-family: inherit;
-}
-.vt-media {
-  position: relative; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden;
-  background: #000; border: 2px solid transparent;
-  transition: border-color .2s, transform .2s, box-shadow .2s;
-}
-.vt-img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.vt-media.vt-noimg { background: linear-gradient(150deg, #14213d, #0a1326 68%, #1d1130); }
-.vt-media.vt-noimg::after {
-  content: ""; position: absolute; inset: 0;
-  background: radial-gradient(62% 80% at 50% 28%, rgba(255,122,46,.24), transparent 70%);
-}
-.vt-play {
-  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-  width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
-  background: rgba(8,15,32,.5); color: #fff; -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px);
-  transition: background .2s, color .2s;
-}
-.vt-play svg { width: 15px; height: 15px; margin-left: 1px; }
-.vh-thumb:hover .vt-media { transform: translateY(-2px); box-shadow: var(--shadow); }
-.vh-thumb:hover .vt-play,
-.vh-thumb.is-active .vt-play { background: var(--color-accent); color: #2a1c03; }
-.vh-thumb.is-active .vt-media { border-color: var(--color-accent); box-shadow: 0 0 0 3px rgba(255,122,46,.22); }
-.vt-meta { display: flex; flex-direction: column; gap: 2px; }
-.vt-title {
-  font-size: .82rem; font-weight: 600; line-height: 1.3; color: var(--color-text);
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-}
-.vh-thumb.is-active .vt-title { color: var(--color-accent); }
-.vt-date { font-size: .72rem; color: var(--color-text-soft); }
-@media (max-width: 760px) { .vh-thumb { width: 134px; } }
+/* Нүүрний видео мэдээ — 3 жинхэнэ видеог дунд төвлөрүүлэн харуулна */
+body.hp .video-grid { max-width: 1040px; margin: 0 auto; }
 
 /* ---------- Санал хүсэлтийн форм самбар (жишээ загвар) ---------- */
 .form-card .fc-title {
