@@ -460,6 +460,14 @@
         });
       }
 
+      /* --- Үсгийн тоолуур (агуулга 0/1000) --- */
+      const msgEl = form.querySelector("#f-message");
+      const counterEl = form.querySelector('[data-char-count="f-message"]');
+      if (msgEl && counterEl) {
+        const updCount = () => { counterEl.textContent = msgEl.value.length; };
+        msgEl.addEventListener("input", updCount); updCount();
+      }
+
       /* --- Илгээх (Supabase руу хадгална) --- */
       const submitBtn = form.querySelector('button[type="submit"]');
       const honeypot = form.querySelector("#f-website"); // спам шүүлтүүр
@@ -537,7 +545,10 @@
           }
           // 2) Мөр оруулах — submit_feedback RPC дараалсан дугаар буцаана
           const fd = new FormData(form);
-          const message = (fd.get("message") || "").toString().trim();
+          // Гарчиг (заавал биш) — агуулгын эхэнд нэмж хадгална
+          const titleVal = (fd.get("title") || "").toString().trim();
+          const bodyVal = (fd.get("message") || "").toString().trim();
+          const message = titleVal ? (titleVal + "\n\n" + bodyVal) : bodyVal;
           const lat = latIn && latIn.value ? parseFloat(latIn.value) : null;
           const rating = ratingIn && ratingIn.value ? parseInt(ratingIn.value, 10) : null;
           const baseArgs = {
