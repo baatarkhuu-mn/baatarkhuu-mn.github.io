@@ -1906,3 +1906,21 @@ body.hp .hh-topbar { top: 70px; }
 /* Брэндийг navbar-аас доош (давхцахгүй) */
 body.hp .hh-topbar { top: 92px; }
 @media (max-width: 600px) { body.hp .hh-topbar { top: 80px; } }
+
+
+/* ============ Лого (таны зураг + SVG нөөц) ============ */
+.hh-logo { display: inline-flex; flex-direction: column; align-items: center; margin: 0 0 30px; }
+.hh-logo-img { max-width: min(360px, 82vw); height: auto; display: block; }
+.hh-logo-svg { display: none; flex-direction: column; align-items: center; gap: 12px; }
+.hh-wm2 { display: inline-flex; align-items: center; gap: 12px; color: #cba24f; }
+.wm-dash { width: 24px; height: 2px; background: currentColor; opacity: .85; }
+
+/* ============ Hero бүтэн дэлгэц дүүргэнэ ============ */
+.home-hero { min-height: 100vh; }
+
+/* ============ Нүүр navbar: scroll-доход (десктоп) хуучин бүтэн inline цэс ============ */
+@media (min-width: 961px) {
+  body.hp.nav-on .nav-toggle { display: none; }
+  body.hp.nav-on .main-nav { position: static; max-height: none; overflow: visible; width: auto; background: none; border: none; box-shadow: none; right: auto; }
+  body.hp.nav-on .main-nav ul { flex-direction: row; padding: 0; gap: 2px; }
+}
