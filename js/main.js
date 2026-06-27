@@ -30,6 +30,39 @@
     });
   }
 
+  /* ---------- Хуваалцах мөр (видео/мэдээний карт дээр — өөрийн хаягаар нийтлэх) ----------
+     Facebook/X/Telegram нь тухайн хэрэглэгчийн өөрийнх нь хаягийн share цонхыг нээж,
+     өөрийн ханан дээр нийтлэх боломж олгоно. Хуулах товч холбоосыг clipboard руу хуулна. */
+  function shareBar(shareUrl, shareTitle) {
+    const safe = String(shareUrl || location.href);
+    const u = encodeURIComponent(safe);
+    const t = encodeURIComponent(shareTitle || document.title);
+    const attr = safe.replace(/"/g, "&quot;");
+    return `<div class="share-bar" role="group" aria-label="Хуваалцах">
+      <span class="sb-label">Хуваалцах:</span>
+      <a class="sb-btn sb-fb" href="https://www.facebook.com/sharer/sharer.php?u=${u}" target="_blank" rel="noopener" aria-label="Facebook-д хуваалцах"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 22v-8h3l1-4h-4V7c0-1 .3-2 2-2h2V1.5C18.5 1.4 17.3 1 16 1c-3 0-5 2-5 5v3H7v4h4v8h2z"/></svg></a>
+      <a class="sb-btn sb-x" href="https://twitter.com/intent/tweet?url=${u}&text=${t}" target="_blank" rel="noopener" aria-label="X-д хуваалцах"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.657l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="sb-btn sb-tg" href="https://t.me/share/url?url=${u}&text=${t}" target="_blank" rel="noopener" aria-label="Telegram-д хуваалцах"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.94 4.5 18.6 20.2c-.25 1.1-.9 1.37-1.83.85l-5.05-3.72-2.44 2.35c-.27.27-.5.5-1.02.5l.36-5.16L16.9 7.7c.41-.36-.09-.56-.63-.2L6.4 13.78l-5.1-1.6c-1.1-.34-1.13-1.1.23-1.63l19.9-7.67c.92-.34 1.73.22 1.43 1.62z"/></svg></a>
+      <button type="button" class="sb-btn sb-copy js-copy-link" data-url="${attr}" aria-label="Холбоос хуулах" title="Холбоос хуулах"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg></button>
+    </div>`;
+  }
+  // Хуулах / native share — делегацлэсэн нэг handler (бүх карт дээр ажиллана)
+  document.addEventListener("click", async (e) => {
+    const btn = e.target.closest && e.target.closest(".js-copy-link");
+    if (!btn) return;
+    e.preventDefault();
+    const url = btn.dataset.url || location.href;
+    try {
+      if (navigator.share) { await navigator.share({ title: document.title, url }); }
+      else {
+        await navigator.clipboard.writeText(url);
+        const prev = btn.getAttribute("title");
+        btn.classList.add("copied"); btn.setAttribute("title", "Хуулагдлаа!");
+        setTimeout(() => { btn.classList.remove("copied"); btn.setAttribute("title", prev || ""); }, 1600);
+      }
+    } catch (_) {}
+  });
+
   /* ---------- 1. Dark / Light Theme ---------- */
   const Theme = {
     init() {
@@ -781,10 +814,10 @@
       "Буцаагдсан / татагдсан": "Returned / withdrawn",
 
       /* ---- Төслүүд ---- */
-      "Хэрэгжүүлсэн төслүүд": "Implemented projects", "Тойргийн ажил": "Constituency work",
-      "Сонгогчдынхоо төлөө хийсэн ажил": "Work done for constituents",
-      "Сонгуулийн 10-р тойрог — Чингэлтэй, Сүхбаатар дүүрэгт хэрэгжүүлсэн төслүүд. (Доорх жишээ мэдээллийг бодит төслүүдээр шинэчилнэ.)":
-        "Projects implemented in Electoral District 10 — Chingeltei and Sukhbaatar.",
+      "Хэрэгжүүлж буй төслүүд": "Ongoing projects", "Тойргийн ажил": "Constituency work",
+      "Тойрогт хийгдэж буй ажлууд": "Work underway in the constituency",
+      "Чингэлтэй, Сүхбаатар дүүрэгт хэрэгжүүлж буй дэд бүтэц, боловсрол, цахим үйлчилгээ, ногоон байгууламжийн төслүүд.":
+        "Infrastructure, education, digital-service and green-space projects underway in Chingeltei and Sukhbaatar districts.",
       "Нийт төсөл": "Total projects", "Хэрэгжиж дууссан": "Completed",
       "Хэрэгжиж буй": "In progress", "Ашиг хүртэгч иргэн": "Beneficiary citizens",
       "Хэрэгжсэн": "Completed", "Төлөвлөгдсөн": "Planned",
@@ -1409,7 +1442,7 @@
         const a = items[n]; a.classList.remove("nf-in"); void a.offsetWidth; a.classList.add("nf-in");
         Array.prototype.forEach.call(dots.children, (d, i) => d.classList.toggle("active", i === n));
       };
-      const start = () => { if (!timer) timer = setInterval(() => { cur = (cur + 1) % items.length; show(cur); }, 3000); };
+      const start = () => { if (!timer) timer = setInterval(() => { cur = (cur + 1) % items.length; show(cur); }, 5000); };
       const stop = () => { if (timer) { clearInterval(timer); timer = null; } };
       const restart = () => { stop(); start(); };
       dots.innerHTML = "";
@@ -1543,7 +1576,7 @@
       const statusCls = (LawsCMS.CLS && LawsCMS.CLS[status]) || "status-review";
       const role = (LawsCMS.ROLE && LawsCMS.ROLE[l.category]) || "Санаачлагч";
       const dateChip = l.date_label ? `<span class="np-role">${LawPost.CAL}${esc(l.date_label)}</span>` : "";
-      const badges = `<div class="np-badges"><span class="badge-status ${statusCls}">${esc(statusLabel)}</span><span class="np-role">Үүрэг: ${esc(role)}</span>${dateChip}</div>`;
+      const badges = `<div class="np-badges"><span class="badge-status ${statusCls}">${esc(statusLabel)}</span><span class="np-role">Оролцоо: ${esc(role)}</span>${dateChip}</div>`;
       const topic = l.topic ? `<p class="np-lead">${esc(l.topic)}</p>` : "";
       const body = articleBodyHtml(l.summary || "", esc);
       const pdf = l.pdf_url
@@ -1944,7 +1977,8 @@
         const ar = v.orientation === "landscape" ? "16 / 9" : (v.orientation === "square" ? "1 / 1" : "9 / 16");
         media = `<div class="fb-wrap" data-href="${esc(v.url)}" data-ar="${ar}"><div class="fb-video" data-href="${esc(v.url)}" data-show-text="false" data-width="auto"></div></div>`;
       }
-      return `<article class="video-card${featured ? " video-featured" : ""} reveal visible">${media}${body}</article>`;
+      const share = `<div class="vc-share">${shareBar(v.url || location.href, v.title || "Видео")}</div>`;
+      return `<article class="video-card${featured ? " video-featured" : ""} reveal visible">${media}${body}${share}</article>`;
     },
     parseFB() {
       let n = 0;
@@ -1980,7 +2014,7 @@
              <span class="vh-count"></span>
              <button type="button" class="vhero-arrow vh-next" aria-label="Дараах">›</button>
            </div>
-           <div class="vhero-cap"><h4 class="vh-title"></h4><span class="vh-date"></span></div>`;
+           <div class="vhero-cap"><div class="vh-cap-txt"><h4 class="vh-title"></h4><span class="vh-date"></span></div><div class="vh-share" data-vh-share></div></div>`;
         wrap.querySelector(".vh-prev").addEventListener("click", () => this.go(-1));
         wrap.querySelector(".vh-next").addEventListener("click", () => this.go(1));
         // Идэвхтэй player-ийн өндрийг хажуугийн картуудад тааруулна (жинхэнэ хэмжээ янз бүр)
@@ -2011,6 +2045,8 @@
       w.querySelector(".vh-count").textContent = (this._i + 1) + " / " + this._vids.length;
       w.querySelector(".vh-title").textContent = v.title || "";
       w.querySelector(".vh-date").textContent = v.video_date || (v.created_at ? this.fmtDate(v.created_at) : "");
+      const shareBox = w.querySelector("[data-vh-share]");
+      if (shareBox) shareBox.innerHTML = shareBar(v.url || location.href, v.title || "Видео");
       setTimeout(() => this.syncPeeks(), 400);
     },
   };
@@ -2282,7 +2318,7 @@
       el.innerHTML =
         `<div class="ef-img${ev.image_url ? "" : " ef-noimg"}">
            ${ev.image_url ? `<img src="${esc(ev.image_url)}" alt="${esc(ev.title)}" onerror="this.style.display='none';this.parentNode.classList.add('ef-noimg')" />` : ""}
-           <span class="ef-tag">${esc(ev.badge || "Зарлал")}</span>
+           ${ev.badge ? `<span class="ef-tag">${esc(ev.badge)}</span>` : ""}
            ${day ? `<span class="ef-date"><b>${day}</b>${esc(mon)}</span>` : ""}
          </div>
          <div class="ef-body">
@@ -2353,7 +2389,7 @@
       const date = ev.event_date ? Article.fmtDate(ev.event_date) : "";
       return {
         cover: ev.image_url || "",
-        tags: [ev.badge || "Зарлал"],
+        tags: ev.badge ? [ev.badge] : [],
         title: ev.title,
         meta: [date, ev.location, ev.time_label],
         lead: ev.body ? ev.description : "",

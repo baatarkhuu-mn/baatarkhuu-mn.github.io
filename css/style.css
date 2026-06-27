@@ -1556,6 +1556,17 @@ a.news-card-clean { text-decoration: none; color: inherit; display: flex; flex-d
 .vhero-cap { text-align: center; margin-top: 16px; }
 .vhero-cap h4 { font-size: 1.06rem; line-height: 1.45; max-width: 640px; margin: 0 auto 5px; }
 .vhero-cap .vh-date { font-size: .82rem; color: var(--color-text-soft); }
+
+/* ---- Хуваалцах мөр (видео карт / coverflow) — өөрийн хаягаар нийтлэх ---- */
+.share-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.sb-label { font-size: .8rem; color: var(--color-text-soft); }
+.sb-btn { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--color-border); background: var(--color-bg-soft); color: var(--color-text); cursor: pointer; padding: 0; text-decoration: none; transition: transform .18s, background .18s, color .18s, border-color .18s; }
+.sb-btn svg { width: 16px; height: 16px; }
+.sb-btn:hover { background: var(--color-primary); color: #fff; border-color: var(--color-primary); transform: translateY(-2px); }
+.sb-btn.copied { background: var(--color-accent); color: #2a1c03; border-color: var(--color-accent); }
+.vc-share { padding: 11px 15px; border-top: 1px solid var(--color-border); }
+.vh-share { margin-top: 12px; }
+.vh-share .share-bar { justify-content: center; }
 @media (max-width: 760px) {
   .vhs.peek { display: none; }
   .vhero-head { flex-direction: column; align-items: flex-start; gap: 8px; }
