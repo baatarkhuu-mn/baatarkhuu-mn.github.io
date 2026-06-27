@@ -1879,3 +1879,30 @@ body.hp.nav-on .navbar-wrap { transform: none; opacity: 1; pointer-events: auto;
 }
 .law-item .law-status-bar::before { width: 15px; height: 15px; }
 .law-item .law-actions { margin-top: auto; }
+
+
+/* ============ Hero лого (монограм + БҮТЭЭГЧ + МОНГОЛ) ============ */
+.hh-logo { display: inline-flex; flex-direction: column; align-items: center; gap: 12px; margin: 0 0 32px; }
+.hh-mono { color: var(--color-text); line-height: 0; }
+.hh-wm1 { font-size: clamp(2.3rem, 5.6vw, 3.9rem); font-weight: 800; letter-spacing: .03em; color: var(--color-text); line-height: 1; }
+.hh-wm2 { font-size: clamp(.95rem, 2.2vw, 1.45rem); font-weight: 700; letter-spacing: .52em; color: var(--color-accent); margin-top: 7px; padding-left: .52em; line-height: 1; }
+
+/* ============ Нүүрний navbar: байнга харагдана, цэс баруун hamburger dropdown ============ */
+body.hp .navbar-wrap { position: fixed; left: 0; right: 0; top: 0; transform: none; opacity: 1; pointer-events: auto; }
+body.hp .nav-toggle { display: grid; }
+body.hp .navbar { justify-content: space-between; }
+body.hp .main-nav {
+  position: absolute; top: calc(100% + 6px); right: 12px; left: auto; width: min(280px, 88vw);
+  background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: 14px;
+  box-shadow: var(--shadow); max-height: 0; overflow: hidden; transition: max-height .35s ease;
+}
+body.hp .main-nav.open { max-height: 80vh; overflow-y: auto; }
+body.hp .main-nav ul { flex-direction: column; padding: 12px; gap: 2px; }
+body.hp .main-nav a { padding: 12px 16px; border-radius: 10px; }
+/* Брэнд navbar-ийн доор */
+body.hp .hh-topbar { top: 70px; }
+@media (max-width: 600px) { body.hp .hh-topbar { top: 64px; } }
+
+/* Брэндийг navbar-аас доош (давхцахгүй) */
+body.hp .hh-topbar { top: 92px; }
+@media (max-width: 600px) { body.hp .hh-topbar { top: 80px; } }
