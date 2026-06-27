@@ -1815,3 +1815,23 @@ body.fx-digital .hb-overlay, .hb-overlay { display: none; }
 .hh-cta { justify-content: center; }
 .hh-tiles { max-width: 780px; margin-left: auto; margin-right: auto; }
 @media (max-width: 860px) { .hh-grid { grid-template-columns: 1fr; } }
+
+
+/* ============ Hero засвар: слоган ТОМ, нэр жижиг, голд төвлөрсөн, ТОД gradient ============ */
+.hh-name { font-size: clamp(1.3rem, 2.7vw, 1.95rem); font-weight: 600; letter-spacing: 0; margin: 0 0 8px; opacity: .94; }
+.hh-slogan { font-size: clamp(2.8rem, 7.2vw, 5.4rem); font-weight: 800; letter-spacing: .02em; line-height: 1.02; margin: 6px 0 34px; padding-left: 0; }
+.home-hero { display: flex; flex-direction: column; justify-content: center; min-height: 80vh; padding: 70px 0 56px;
+  background:
+    radial-gradient(58% 56% at 15% 4%, rgba(99,86,240,.6), transparent 60%),
+    radial-gradient(54% 50% at 88% 8%, rgba(255,108,38,.5), transparent 60%),
+    radial-gradient(74% 64% at 103% 103%, rgba(170,74,222,.56), transparent 60%),
+    radial-gradient(62% 56% at -4% 104%, rgba(38,168,214,.44), transparent 60%),
+    linear-gradient(160deg, #0c1842 0%, #111a42 52%, #0a1330 100%); }
+[data-theme="light"] .home-hero {
+  background:
+    radial-gradient(58% 56% at 13% 2%, #c3ccff, transparent 60%),
+    radial-gradient(54% 50% at 90% 5%, #ffccbd, transparent 58%),
+    radial-gradient(74% 66% at 99% 104%, #b6e6ee, transparent 60%),
+    radial-gradient(62% 56% at 1% 104%, #e0cbff, transparent 60%),
+    linear-gradient(160deg, #eef1fc 0%, #f3eefb 55%, #eaf2fb 100%); }
+.hh-grid { align-content: center; }
