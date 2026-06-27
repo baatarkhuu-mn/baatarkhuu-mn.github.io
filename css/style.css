@@ -1928,3 +1928,10 @@ body.hp .hh-topbar { top: 92px; }
 /* Таны лого зураг — цэвэр цагаан дугуй булантай карт */
 .hh-logo-img { max-width: min(340px, 80vw); height: auto; display: block; border-radius: 18px; background: #fff; box-shadow: 0 24px 58px -22px rgba(0,0,0,.5); }
 [data-theme="light"] .hh-logo-img { box-shadow: 0 18px 44px -20px rgba(70,80,150,.3); }
+
+/* Логог дангаар — цагаан хүрээгүй, тунгалаг */
+.hh-logo-img { border-radius: 0; background: none; box-shadow: none; max-width: min(380px, 84vw); }
+[data-theme="light"] .hh-logo-img { box-shadow: none; }
+[data-theme="dark"] .hh-logo-img { filter: brightness(0) invert(1); }
+/* Hero бүтэн дэлгэц дүүргэнэ (десктоп zoom 0.8-г тооцов) */
+@media (min-width: 1024px) { .home-hero { min-height: 125vh; } }
