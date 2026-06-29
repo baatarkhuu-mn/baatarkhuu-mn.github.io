@@ -1,10 +1,13 @@
 -- ============================================================
--- Явц шалгах RPC-г баяжуулах — зураг, байршил, агуулгыг буцаах
--- (Иргэн өөрийн тасалбараар шалгахад нийтэлсэн карт шиг харагдана)
--- Supabase → SQL Editor дээр бүхэлд нь Run. Дахин ажиллуулахад аюулгүй.
+-- Явц шалгах RPC — зураг, байршил, агуулгыг буцаах (НУУЦЛАЛТАЙ)
 --
--- АНХААР: Тасалбарын дугаар дараалсан (AT-2026-000001, 000002…) тул
--- агуулга/байршил/зураг шалгах боломжтой болж байгааг анхаарна уу.
+--  • Нийтэд нээлттэй (is_public = true) санал → зураг/байршил/агуулга
+--    бүрэн (нийтийн санал шиг харагдана).
+--  • Хувийн санал → зөвхөн төлөв, ангилал, огноо, албаны хариу,
+--    шийдвэрлэлтийн явц. Агуулга/байршил/зураг ГАДАГШАА ГАРАХГҮЙ —
+--    тасалбарын дугаар таамагласан ч хувийн мэдээлэл хамгаалагдсан.
+--
+--  Supabase → SQL Editor дээр бүхэлд нь Run. Дахин ажиллуулахад аюулгүй.
 -- ============================================================
 
 drop function if exists public.track_feedback(text);
@@ -28,13 +31,20 @@ begin
     select 'AT-' || to_char(f.created_at,'YYYY') || '-' || lpad(f.ticket_seq::text,6,'0'),
            f.subject, f.status, f.created_at, f.updated_at, f.response,
            f.org, f.letter_no, f.letter_url,
-           f.message, f.district, f.khoroo,
-           f.lat, f.lng,
-           f.photos, f.is_public
+           -- Зөвхөн нийтэд нээлттэй санал бол агуулга/байршил/зураг гаргана
+           case when f.is_public then f.message  else null end,
+           case when f.is_public then f.district else null end,
+           case when f.is_public then f.khoroo   else null end,
+           case when f.is_public then f.lat      else null end,
+           case when f.is_public then f.lng      else null end,
+           case when f.is_public then f.photos   else null end,
+           coalesce(f.is_public, false)
     from public.feedback f
     where f.ticket_seq = v_seq
     limit 1;
 end $$;
 grant execute on function public.track_feedback(text) to anon, authenticated;
 
--- "Success" гарвал бэлэн. Явц шалгахад зураг, байршил, агуулга нэмж харагдана.
+-- "Success" гарвал бэлэн.
+--   Нийтийн санал → зураг/байршил/агуулгатай бүрэн харагдана.
+--   Хувийн санал → зөвхөн төлөв/огноо/хариу (нууцлал хамгаалагдсан).
