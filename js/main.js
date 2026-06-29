@@ -2049,7 +2049,11 @@
   /* ---------- Нүүрний видео карусель (coverflow) ---------- */
   const VideoHero = {
     esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
-    fmtDate(s) { try { return new Date(s).toLocaleDateString("mn-MN", { year: "numeric", month: "2-digit", day: "2-digit" }).replace(/\//g, "-"); } catch (_) { return ""; } },
+    embedSrc(v) {
+      return v.platform === "youtube"
+        ? "https://www.youtube.com/embed/" + VideoCMS.ytId(v.url) + "?rel=0"
+        : "https://www.facebook.com/plugins/video.php?href=" + encodeURIComponent(v.url) + "&show_text=false&width=400";
+    },
     async init() {
       const wrap = document.querySelector("[data-vhero]");
       if (!wrap) return;
@@ -2059,68 +2063,39 @@
         const { data, error } = await sb.from("videos").select("*").eq("published", true)
           .order("created_at", { ascending: false }).limit(15);
         if (error || !data || !data.length) { wrap.innerHTML = '<p class="feed-state">Видео одоогоор алга.</p>'; return; }
-        this._vids = sortByContentDate(data); this._i = 0; this._wrap = wrap;
+        this._vids = sortByContentDate(data); this._wrap = wrap;
         wrap.innerHTML =
-          `<div class="vh3d-stage"><div class="vh3d-track" data-vh3d-track></div></div>
-           <div class="vhero-ctrl">
-             <button type="button" class="vhero-arrow vh-prev" aria-label="Өмнөх">‹</button>
-             <span class="vh-count"></span>
-             <button type="button" class="vhero-arrow vh-next" aria-label="Дараах">›</button>
-           </div>
-           <div class="vhero-cap"><div class="vh-cap-txt"><h4 class="vh-title"></h4><span class="vh-date"></span></div><div class="vh-share" data-vh-share></div></div>`;
-        const track = wrap.querySelector("[data-vh3d-track]");
-        track.innerHTML = this._vids.map((v, i) =>
-          `<div class="vh3d-card" data-idx="${i}"><div class="vh3d-inner" data-embed></div><button type="button" class="vh3d-hit" aria-label="${VideoHero.esc(v.title || "Видео")}"></button></div>`
-        ).join("");
-        wrap.querySelector(".vh-prev").addEventListener("click", () => this.go(-1));
-        wrap.querySelector(".vh-next").addEventListener("click", () => this.go(1));
-        track.addEventListener("click", (e) => {
-          const hit = e.target.closest(".vh3d-hit"); if (!hit) return;
-          const idx = parseInt(hit.parentNode.dataset.idx, 10);
-          if (isNaN(idx)) return;
-          if (idx === this._i) { hit.style.display = "none"; }   // голынхыг тайлж тоглуулна
-          else { this._i = idx; this.layout(); }
-        });
-        this.layout();
+          `<div class="vreel-wrap">
+             <button type="button" class="vreel-arr vreel-prev" aria-label="Зүүн гүйлгэх">‹</button>
+             <div class="vreel-row" data-vreel-row></div>
+             <button type="button" class="vreel-arr vreel-next" aria-label="Баруун гүйлгэх">›</button>
+           </div>`;
+        const row = wrap.querySelector("[data-vreel-row]");
+        // Видео бүр өөрийн жинхэнэ харьцаагаар (тогтсон өндөр, харьцаагаар өргөн)
+        row.innerHTML = this._vids.map((v) => {
+          const ar = v.orientation === "landscape" ? "16 / 9" : (v.orientation === "square" ? "1 / 1" : "9 / 16");
+          return `<figure class="vreel-card" style="aspect-ratio:${ar}"><div class="vreel-inner" data-src="${VideoHero.esc(VideoHero.embedSrc(v))}"></div><button type="button" class="vreel-hit" aria-label="${VideoHero.esc(v.title || "Видео")}"></button></figure>`;
+        }).join("");
+        const dx = () => Math.max(280, Math.round(row.clientWidth * 0.85));
+        wrap.querySelector(".vreel-prev").addEventListener("click", () => row.scrollBy({ left: -dx(), behavior: "smooth" }));
+        wrap.querySelector(".vreel-next").addEventListener("click", () => row.scrollBy({ left: dx(), behavior: "smooth" }));
+        const loadInner = (inner) => { if (inner.dataset.loaded) return; inner.dataset.loaded = "1"; inner.innerHTML = '<iframe src="' + inner.dataset.src + '" title="Видео" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy" scrolling="no"></iframe>'; };
+        // Зөвхөн харагдах/ойролцоо картыг ачаална (хэвтээ scroll дээр нэмж ачаална)
+        const loadVisible = () => {
+          const rr = row.getBoundingClientRect();
+          Array.from(row.children).forEach((card) => {
+            const inner = card.querySelector("[data-src]");
+            if (!inner || inner.dataset.loaded) return;
+            const cr = card.getBoundingClientRect();
+            if (cr.left < rr.right + 350 && cr.right > rr.left - 350) loadInner(inner);
+          });
+        };
+        row.addEventListener("scroll", loadVisible, { passive: true });
+        window.addEventListener("resize", loadVisible);
+        loadVisible();
+        // touch дээр hit-товч: гулсуулахад хуудас гүйнэ, дарахад тоглуулна (FB рүү үсрэхгүй)
+        row.addEventListener("click", (e) => { const hit = e.target.closest(".vreel-hit"); if (hit) hit.style.display = "none"; });
       } catch (_) { wrap.innerHTML = '<p class="feed-state">Видео ачаалахад алдаа гарлаа.</p>'; }
-    },
-    go(d) { const n = this._vids.length; this._i = Math.max(0, Math.min(n - 1, this._i + d)); this.layout(); },
-    embedHtml(v) {
-      const esc = VideoHero.esc;
-      if (v.platform === "youtube") {
-        return `<iframe src="https://www.youtube.com/embed/${VideoCMS.ytId(v.url)}?rel=0" title="${esc(v.title || "Видео")}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>`;
-      }
-      return `<iframe src="https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(v.url)}&show_text=false&width=320" title="${esc(v.title || "Видео")}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy" scrolling="no"></iframe>`;
-    },
-    layout() {
-      const w = this._wrap, track = w.querySelector("[data-vh3d-track]");
-      const touch = (function(){ try { return matchMedia("(pointer: coarse), (max-width: 820px)").matches; } catch (_) { return false; } })();
-      const narrow = window.innerWidth <= 600;
-      const TX = narrow ? 132 : 168, TZ = narrow ? -180 : -205, RY = narrow ? 44 : 46;
-      Array.from(track.children).forEach((card) => {
-        const idx = parseInt(card.dataset.idx, 10), off = idx - this._i, a = Math.abs(off);
-        // transform-ийг JS-ээс шууд (var(--off) + transition найдваргүйг тойрно)
-        card.style.transform = off === 0
-          ? "translateX(0) translateZ(0) rotateY(0)"
-          : "translateX(" + (off * TX) + "px) translateZ(" + TZ + "px) rotateY(" + (off * -RY) + "deg)";
-        card.classList.toggle("is-center", off === 0);
-        card.style.zIndex = String(30 - a);
-        card.style.opacity = a >= 2 ? "0" : "";
-        card.style.visibility = a >= 2 ? "hidden" : "visible";
-        card.style.pointerEvents = a >= 2 ? "none" : "";
-        const hit = card.querySelector(".vh3d-hit");
-        if (hit) hit.style.display = (off === 0 && !touch) ? "none" : "block";  // десктопт гол шууд тоглоно
-        const inner = card.querySelector("[data-embed]");
-        if (a <= 1 && !inner.dataset.loaded) { inner.dataset.loaded = "1"; inner.innerHTML = this.embedHtml(this._vids[idx]); }
-      });
-      const v = this._vids[this._i];
-      w.querySelector(".vh-count").textContent = (this._i + 1) + " / " + this._vids.length;
-      w.querySelector(".vh-title").textContent = v.title || "";
-      w.querySelector(".vh-date").textContent = v.video_date || (v.created_at ? this.fmtDate(v.created_at) : "");
-      const shareBox = w.querySelector("[data-vh-share]");
-      if (shareBox) shareBox.innerHTML = shareBar(v.url || location.href, v.title || "Видео");
-      w.querySelector(".vh-prev").disabled = this._i === 0;
-      w.querySelector(".vh-next").disabled = this._i === this._vids.length - 1;
     },
   };
 
