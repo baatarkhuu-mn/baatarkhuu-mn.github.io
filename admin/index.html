@@ -8,7 +8,7 @@
   <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");</script>
   <title>Админ — Санал хүсэлт | Ц.Баатархүү</title>
   <link rel="icon" type="image/svg+xml" href="/assets/img/logo.svg" />
-  <link rel="stylesheet" href="/css/style.css?v=20260629e" />
+  <link rel="stylesheet" href="/css/style.css?v=20260629f" />
   <style>
     /* ===== Админ: цайвар, албан ёсны ХӨХ сэдэв (зөвхөн энэ хуудсанд; сайтад нөлөөлөхгүй) ===== */
     [data-theme] {
@@ -470,7 +470,7 @@
         </div>
         <div class="toolbar-filters">
           <select id="f-sort"><option value="ticket">№ дугаараар (шинэ нь дээр)</option><option value="ticket_asc">№ дугаараар (эхнээс)</option><option value="new">Огноогоор</option></select>
-          <select id="f-status"><option value="all">Бүх төлөв</option><option value="new">Шинэ</option><option value="in_progress">Шийдвэрлэж байна</option><option value="done">Шийдвэрлэсэн</option><option value="cancelled">Цуцлагдсан</option></select>
+          <select id="f-status"><option value="all">Бүх төлөв</option><option value="new">Шинэ</option><option value="in_progress">Судалж байна</option><option value="routed">Хариуцсан байгууллагад илгээсэн</option><option value="processing">Боловсруулж байна</option><option value="responded">Хариу ирсэн</option><option value="done">Шийдвэрлэгдсэн</option><option value="cancelled">Цуцлагдсан</option></select>
           <select id="f-subject">
             <option value="all">Бүх төрөл</option>
             <option value="gerel">Гэрэлтүүлэг</option>
@@ -776,11 +776,11 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="/js/supabase-config.js?v=20260629e"></script>
+  <script src="/js/supabase-config.js?v=20260629f"></script>
   <script>
   (function () {
     const SUBJECT_LABEL = { gerel:"Гэрэлтүүлэг", zam:"Зам, нүх, эвдрэл", yavgan:"Явган хүний зам", hog:"Хог, орчны бохирдол", buudal:"Автобусны буудал", surguuli:"Сургууль, цэцэрлэг", emnelg:"Эмнэлэг, өрхийн эмнэлэг", soh:"СӨХ, байрны орчин", hurteemj:"Ахмад, ХБИ хүртээмж", huuli:"Хууль, бодлогын санал", urgudul:"Хувийн өргөдөл, тусламж", sanal:"Санал", gomdol:"Гомдол", asuudal:"Тулгамдсан асуудал", uulzalt:"Уулзалтын хүсэлт", busad:"Бусад" };
-    const STATUS_LABEL = { new:"Шинэ", in_progress:"Шийдвэрлэж байна", done:"Шийдвэрлэсэн", cancelled:"Цуцлагдсан" };
+    const STATUS_LABEL = { new:"Шинэ", in_progress:"Судалж байна", routed:"Хариуцсан байгууллагад илгээсэн", processing:"Боловсруулж байна", responded:"Хариу ирсэн", done:"Шийдвэрлэгдсэн", cancelled:"Цуцлагдсан" };
     const $ = (s) => document.querySelector(s);
     const loginView = $("#login-view"), dashView = $("#dash-view"), logoutBtn = $("#logout-btn");
     const listEl = $("#fb-list"), emptyEl = $("#fb-empty"), loadingEl = $("#fb-loading");
@@ -863,7 +863,7 @@
         const div = document.createElement("div");
         div.className = "recent-item";
         const st = STATUS_LABEL[r.status] || r.status;
-        const stCls = r.status === "done" ? "status-passed" : r.status === "in_progress" ? "status-review" : r.status === "cancelled" ? "status-cancel" : "status-draft";
+        const stCls = r.status === "done" ? "status-passed" : r.status === "cancelled" ? "status-cancel" : r.status === "new" ? "status-draft" : "status-review";
         const d = new Date(r.created_at).toLocaleDateString("mn-MN", { month: "2-digit", day: "2-digit" });
         div.innerHTML =
           `<div class="ri-main">
@@ -969,7 +969,7 @@
         card.innerHTML =
           `<div class="fb-sum">
              <div class="fb-tile-top">
-               <span class="badge-status ${r.status === "done" ? "status-passed" : r.status === "in_progress" ? "status-review" : r.status === "cancelled" ? "status-cancel" : "status-draft"}">${STATUS_LABEL[r.status] || r.status}</span>
+               <span class="badge-status ${r.status === "done" ? "status-passed" : r.status === "cancelled" ? "status-cancel" : r.status === "new" ? "status-draft" : "status-review"}">${STATUS_LABEL[r.status] || r.status}</span>
                ${r.is_public ? `<span class="fb-pub" title="Нийтэд ил">🌐</span>` : ""}
                ${r.rating != null ? `<span class="fb-rate">⭐ ${r.rating}</span>` : ""}
              </div>
@@ -1007,10 +1007,13 @@
              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
                <label style="font-size:.82rem;color:var(--color-text-soft)">Төлөв:
                  <select class="status-sel" data-id="${r.id}">
-                   <option value="new" ${r.status === "new" ? "selected" : ""}>Шинэ</option>
-                   <option value="in_progress" ${r.status === "in_progress" ? "selected" : ""}>Шийдвэрлэж байна</option>
-                   <option value="done" ${r.status === "done" ? "selected" : ""}>Шийдвэрлэсэн</option>
-                   <option value="cancelled" ${r.status === "cancelled" ? "selected" : ""}>Цуцлагдсан</option>
+                   <option value="new" ${r.status === "new" ? "selected" : ""}>1. Шинэ (хүлээн авсан)</option>
+                   <option value="in_progress" ${r.status === "in_progress" ? "selected" : ""}>2. Судалж байна</option>
+                   <option value="routed" ${r.status === "routed" ? "selected" : ""}>3. Хариуцсан байгууллагад илгээсэн</option>
+                   <option value="processing" ${r.status === "processing" ? "selected" : ""}>4. Боловсруулж байна</option>
+                   <option value="responded" ${r.status === "responded" ? "selected" : ""}>5. Хариу ирсэн</option>
+                   <option value="done" ${r.status === "done" ? "selected" : ""}>6. Шийдвэрлэгдсэн</option>
+                   <option value="cancelled" ${r.status === "cancelled" ? "selected" : ""}>✗ Цуцлагдсан</option>
                  </select>
                </label>
                <button class="btn btn-ghost btn-sm pub-btn" data-id="${r.id}">${r.is_public ? "🙈 Нийтээс нуух" : "🌐 Нийтэд ил болгох"}</button>

@@ -1231,10 +1231,12 @@
   function feedbackRouteHtml(r, esc) {
     // Иргэнд харагдах 6 шатлалт явц — админы төлөвтэй монотон уялдана.
     // Хариу ирсний дараа л эцсийн шат (Шийдвэрлэгдсэн / Цуцлагдсан) гарна.
+    // Админ status-аар шатыг шууд жолооддог; org/response мөн шатыг урагшлуулна
+    const ORDER = { new: 0, in_progress: 1, routed: 2, processing: 3, responded: 4, done: 5, cancelled: 5 };
+    const lvl = ORDER[r.status] != null ? ORDER[r.status] : 0;
     const isDone = r.status === "done";
     const isCancel = r.status === "cancelled" || r.status === "canceled" || r.status === "rejected";
     const finalReached = isDone || isCancel;
-    const inProg = r.status === "in_progress" || finalReached;
     const hasOrg = !!r.org, hasResp = !!r.response;
     const fmtD = (s) => { try { return new Date(s).toLocaleString("mn-MN", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }); } catch (_) { return ""; } };
     const created = r.created_at ? fmtD(r.created_at) : "";
@@ -1250,10 +1252,10 @@
     };
     const steps = [
       { c: 1, ic: IC.inbox, label: "Хүлээн авсан", desc: "Таны хүсэлт хүлээн авагдав.", done: true, date: created },
-      { c: 2, ic: IC.search, label: "Судалж байна", desc: "Хүсэлтийг судалж, шалгаж байна.", done: inProg || hasOrg || hasResp || finalReached, date: "" },
-      { c: 3, ic: IC.send, label: "Хариуцсан байгууллагад илгээсэн", desc: hasOrg ? esc(r.org) : "Холбогдох байгууллагад шилжүүлэв.", done: hasOrg || hasResp || finalReached, date: "" },
-      { c: 4, ic: IC.edit, label: "Илгээсэн байгууллага боловсруулж байна", desc: "Хүлээн авсан байгууллага хариу боловсруулж байна.", done: hasResp || finalReached, date: "" },
-      { c: 5, ic: IC.reply, label: "Хариу ирсэн", desc: "Байгууллагын хариу ирэв.", done: hasResp || finalReached, date: "" },
+      { c: 2, ic: IC.search, label: "Судалж байна", desc: "Хүсэлтийг судалж, шалгаж байна.", done: lvl >= 1 || hasOrg || hasResp || finalReached, date: "" },
+      { c: 3, ic: IC.send, label: "Хариуцсан байгууллагад илгээсэн", desc: hasOrg ? esc(r.org) : "Холбогдох байгууллагад шилжүүлэв.", done: lvl >= 2 || hasOrg || hasResp || finalReached, date: "" },
+      { c: 4, ic: IC.edit, label: "Илгээсэн байгууллага боловсруулж байна", desc: "Хүлээн авсан байгууллага хариу боловсруулж байна.", done: lvl >= 3 || hasResp || finalReached, date: "" },
+      { c: 5, ic: IC.reply, label: "Хариу ирсэн", desc: "Байгууллагын хариу ирэв.", done: lvl >= 4 || hasResp || finalReached, date: "" },
       { c: 6, ic: isCancel ? IC.cancel : IC.check, label: isCancel ? "Цуцлагдсан" : "Шийдвэрлэгдсэн", desc: isCancel ? "Хүсэлт цуцлагдсан / шийдэгдэх боломжгүй." : "Хүсэлт шийдвэрлэгдэв.", done: finalReached, date: finalReached ? updated : "", cls: isCancel ? "ft-cancel" : "" },
     ];
     const tl = '<ol class="fb-timeline">' + steps.map((s) =>
