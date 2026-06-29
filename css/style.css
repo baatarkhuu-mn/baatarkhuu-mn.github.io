@@ -2021,6 +2021,11 @@ body.hp.nav-on .navbar-wrap { box-shadow: 0 10px 34px -18px rgba(0,0,0,.55); }
   .about-banner .ab-content { max-width: none; }
 }
 
+/* Санал хүсэлтийн заавар — CSS утасны оронд бодит гар+утас зураг */
+.fb-phone { margin: 0 auto 20px; text-align: center; }
+.fb-phone img { width: 100%; max-width: 360px; height: auto; display: inline-block;
+  border-radius: 18px; box-shadow: 0 28px 56px -22px rgba(0,0,0,.55); }
+
 /* ---------- Нүүрний видео — 3D coverflow карусель ---------- */
 .vh3d-stage { position: relative; perspective: 1700px; height: 472px; max-width: 880px; margin: 0 auto; }
 .vh3d-track { position: absolute; inset: 0; transform-style: preserve-3d; }
