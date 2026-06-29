@@ -2061,51 +2061,66 @@
         if (error || !data || !data.length) { wrap.innerHTML = '<p class="feed-state">Видео одоогоор алга.</p>'; return; }
         this._vids = sortByContentDate(data); this._i = 0; this._wrap = wrap;
         wrap.innerHTML =
-          `<div class="vhero-stage">
-             <div class="vhs peek peek-left" aria-hidden="true"></div>
-             <div class="vhs vhs-main" data-vhs-main></div>
-             <div class="vhs peek peek-right" aria-hidden="true"></div>
-           </div>
+          `<div class="vh3d-stage"><div class="vh3d-track" data-vh3d-track></div></div>
            <div class="vhero-ctrl">
              <button type="button" class="vhero-arrow vh-prev" aria-label="Өмнөх">‹</button>
              <span class="vh-count"></span>
              <button type="button" class="vhero-arrow vh-next" aria-label="Дараах">›</button>
            </div>
            <div class="vhero-cap"><div class="vh-cap-txt"><h4 class="vh-title"></h4><span class="vh-date"></span></div><div class="vh-share" data-vh-share></div></div>`;
+        const track = wrap.querySelector("[data-vh3d-track]");
+        track.innerHTML = this._vids.map((v, i) =>
+          `<div class="vh3d-card" data-idx="${i}"><div class="vh3d-inner" data-embed></div><button type="button" class="vh3d-hit" aria-label="${VideoHero.esc(v.title || "Видео")}"></button></div>`
+        ).join("");
         wrap.querySelector(".vh-prev").addEventListener("click", () => this.go(-1));
         wrap.querySelector(".vh-next").addEventListener("click", () => this.go(1));
-        // Идэвхтэй player-ийн өндрийг хажуугийн картуудад тааруулна (жинхэнэ хэмжээ янз бүр)
-        const main = wrap.querySelector("[data-vhs-main]");
-        if (window.ResizeObserver) { this._ro = new ResizeObserver(() => this.syncPeeks()); this._ro.observe(main); }
-        this.render();
+        track.addEventListener("click", (e) => {
+          const hit = e.target.closest(".vh3d-hit"); if (!hit) return;
+          const idx = parseInt(hit.parentNode.dataset.idx, 10);
+          if (isNaN(idx)) return;
+          if (idx === this._i) { hit.style.display = "none"; }   // голынхыг тайлж тоглуулна
+          else { this._i = idx; this.layout(); }
+        });
+        this.layout();
       } catch (_) { wrap.innerHTML = '<p class="feed-state">Видео ачаалахад алдаа гарлаа.</p>'; }
     },
-    go(d) { const n = this._vids.length; this._i = (this._i + d + n) % n; this.render(); },
-    syncPeeks() {
-      if (!this._wrap) return;
-      const main = this._wrap.querySelector("[data-vhs-main]");
-      const h = main ? main.getBoundingClientRect().height : 0;
-      if (h > 60) this._wrap.querySelectorAll(".vhs.peek").forEach((p) => { p.style.height = Math.round(h * 0.88) + "px"; });
-    },
-    render() {
-      const v = this._vids[this._i], esc = VideoHero.esc, w = this._wrap;
-      const main = w.querySelector("[data-vhs-main]");
+    go(d) { const n = this._vids.length; this._i = Math.max(0, Math.min(n - 1, this._i + d)); this.layout(); },
+    embedHtml(v) {
+      const esc = VideoHero.esc;
       if (v.platform === "youtube") {
-        main.classList.add("is-wide");
-        main.innerHTML = `<iframe src="https://www.youtube.com/embed/${VideoCMS.ytId(v.url)}?rel=0" title="${esc(v.title || "Видео")}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>`;
-      } else {
-        // fb-video SDK — видеог жинхэнэ хэмжээгээр нь дүрсэлнэ (хар зайгүй)
-        main.classList.remove("is-wide");
-        main.innerHTML = `<div class="fb-wrap"><div class="fb-video" data-href="${esc(v.url)}" data-show-text="false" data-width="auto"></div></div>`;
-        VideoCMS.parseFB();
+        return `<iframe src="https://www.youtube.com/embed/${VideoCMS.ytId(v.url)}?rel=0" title="${esc(v.title || "Видео")}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>`;
       }
+      return `<iframe src="https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(v.url)}&show_text=false&width=320" title="${esc(v.title || "Видео")}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy" scrolling="no"></iframe>`;
+    },
+    layout() {
+      const w = this._wrap, track = w.querySelector("[data-vh3d-track]");
+      const touch = (function(){ try { return matchMedia("(pointer: coarse), (max-width: 820px)").matches; } catch (_) { return false; } })();
+      const narrow = window.innerWidth <= 600;
+      const TX = narrow ? 132 : 168, TZ = narrow ? -180 : -205, RY = narrow ? 44 : 46;
+      Array.from(track.children).forEach((card) => {
+        const idx = parseInt(card.dataset.idx, 10), off = idx - this._i, a = Math.abs(off);
+        // transform-ийг JS-ээс шууд (var(--off) + transition найдваргүйг тойрно)
+        card.style.transform = off === 0
+          ? "translateX(0) translateZ(0) rotateY(0)"
+          : "translateX(" + (off * TX) + "px) translateZ(" + TZ + "px) rotateY(" + (off * -RY) + "deg)";
+        card.classList.toggle("is-center", off === 0);
+        card.style.zIndex = String(30 - a);
+        card.style.opacity = a >= 2 ? "0" : "";
+        card.style.visibility = a >= 2 ? "hidden" : "visible";
+        card.style.pointerEvents = a >= 2 ? "none" : "";
+        const hit = card.querySelector(".vh3d-hit");
+        if (hit) hit.style.display = (off === 0 && !touch) ? "none" : "block";  // десктопт гол шууд тоглоно
+        const inner = card.querySelector("[data-embed]");
+        if (a <= 1 && !inner.dataset.loaded) { inner.dataset.loaded = "1"; inner.innerHTML = this.embedHtml(this._vids[idx]); }
+      });
+      const v = this._vids[this._i];
       w.querySelector(".vh-count").textContent = (this._i + 1) + " / " + this._vids.length;
       w.querySelector(".vh-title").textContent = v.title || "";
       w.querySelector(".vh-date").textContent = v.video_date || (v.created_at ? this.fmtDate(v.created_at) : "");
       const shareBox = w.querySelector("[data-vh-share]");
       if (shareBox) shareBox.innerHTML = shareBar(v.url || location.href, v.title || "Видео");
-      guardTouchEmbeds(main.parentNode || w);
-      setTimeout(() => this.syncPeeks(), 400);
+      w.querySelector(".vh-prev").disabled = this._i === 0;
+      w.querySelector(".vh-next").disabled = this._i === this._vids.length - 1;
     },
   };
 
