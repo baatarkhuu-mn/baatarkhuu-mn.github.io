@@ -2282,7 +2282,6 @@
       return `<article class="card reveal visible" data-item data-title="${esc(p.title)}">
         <div class="card-media"><span class="tag">${esc(p.category || "Төсөл")}</span><span class="tag status-tag badge-status ${st.cls}">${st.label}</span>${media}</div>
         <div class="card-body">
-          <div class="card-date">${esc(p.date_label || "")}</div>
           <h3>${esc(p.title)}</h3>
           <p>${esc(p.description || "")}</p>
           <span class="card-link">Дэлгэрэнгүй →</span>
