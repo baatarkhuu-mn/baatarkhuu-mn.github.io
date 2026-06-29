@@ -1268,6 +1268,8 @@ a.news-card-clean { text-decoration: none; color: inherit; display: flex; flex-d
 .pm-note b { color: var(--color-accent); }
 .pm-note::before { content: ""; position: absolute; left: -30px; top: 50%; width: 30px; border-top: 1.5px dashed var(--color-accent); }
 .pm-note::after { content: ""; position: absolute; left: -34px; top: 50%; transform: translateY(-50%); border: 5px solid transparent; border-right-color: var(--color-accent); }
+.pm-note.pn-type { top: 174px; }
+.pm-note.pn-loc { top: 240px; }
 .pm-note.pn-issue { top: 304px; }
 .pm-note.pn-attach { top: 421px; }
 .pm-note.pn-submit { top: 541px; }
