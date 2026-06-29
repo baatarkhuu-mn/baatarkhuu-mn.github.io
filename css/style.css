@@ -2129,34 +2129,24 @@ body.hp.nav-on .navbar-wrap { box-shadow: 0 10px 34px -18px rgba(0,0,0,.55); }
 .social-lead { color: var(--color-text-soft); font-size: .92rem; line-height: 1.6; margin-bottom: 20px; }
 .social-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 .social-card { background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: 16px;
-  padding: 20px 18px; text-align: center; display: flex; flex-direction: column; align-items: center;
+  padding: 28px 20px; text-align: center; display: flex; flex-direction: column; align-items: center;
   transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition); }
 .social-card:hover { border-color: var(--color-primary-dark); box-shadow: var(--shadow); transform: translateY(-3px); }
-.sc-ava { position: relative; width: 78px; height: 78px; margin-bottom: 12px; }
-.sc-ava img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--color-border); background: var(--color-bg-soft); }
-.sc-badge { position: absolute; right: -2px; bottom: -2px; width: 28px; height: 28px; border-radius: 50%;
-  display: grid; place-items: center; color: #fff; border: 2px solid var(--color-bg-card); }
-.sc-badge svg { width: 15px; height: 15px; }
+.sc-ava { position: relative; display: block; width: 116px; height: 116px; margin-bottom: 16px; }
+.sc-ava img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid var(--color-border); background: var(--color-bg-soft); transition: border-color var(--transition), transform var(--transition); }
+.sc-ava:hover img { border-color: var(--color-primary-light); transform: scale(1.03); }
+.sc-badge { position: absolute; right: 4px; bottom: 4px; width: 34px; height: 34px; border-radius: 50%;
+  display: grid; place-items: center; color: #fff; border: 3px solid var(--color-bg-card); }
+.sc-badge svg { width: 18px; height: 18px; }
 .sc-fb { background: #1877f2; }
 .sc-x { background: #000; }
 .sc-ig { background: linear-gradient(45deg, #f09433, #e6683c 30%, #dc2743 55%, #bc1888 90%); }
-.social-card h4 { font-size: .96rem; margin-bottom: 2px; line-height: 1.25; }
-.sc-handle { font-size: .76rem; color: var(--color-text-soft); margin-bottom: 10px; word-break: break-all; }
-.social-card p { font-size: .82rem; color: var(--color-text-soft); line-height: 1.5; margin-bottom: 16px; flex: 1; }
-.sc-follow { display: inline-flex; align-items: center; gap: 5px; background: var(--color-bg-soft);
-  border: 1px solid var(--color-border); color: var(--color-primary-light); font-weight: 700; font-size: .85rem;
-  padding: 8px 18px; border-radius: 9px; text-decoration: none; transition: background var(--transition), color var(--transition), border-color var(--transition); }
+.social-card h4 { font-size: 1.05rem; margin-bottom: 3px; line-height: 1.25; }
+.sc-handle { font-size: .82rem; color: var(--color-text-soft); margin-bottom: 18px; word-break: break-all; }
+.sc-follow { margin-top: auto; display: inline-flex; align-items: center; gap: 5px; background: var(--color-bg-soft);
+  border: 1px solid var(--color-border); color: var(--color-primary-light); font-weight: 700; font-size: .88rem;
+  padding: 9px 22px; border-radius: 9px; text-decoration: none; transition: background var(--transition), color var(--transition), border-color var(--transition); }
 .sc-follow:hover { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
 
-.contact2-band { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;
-  margin-top: 36px; padding: 22px 28px; border-radius: 16px; background: var(--color-bg-soft); border: 1px solid var(--color-border); }
-.cb-text { display: flex; align-items: center; gap: 16px; }
-.cb-ic { flex: none; width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center;
-  background: var(--color-bg-card); border: 1px solid var(--color-border); color: var(--color-primary-light); }
-.cb-ic svg { width: 22px; height: 22px; }
-.cb-text strong { display: block; font-size: 1.08rem; }
-.cb-text > div > span { color: var(--color-text-soft); font-size: .9rem; }
-.cb-btn { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
-
 @media (max-width: 920px) { .contact2-grid { grid-template-columns: 1fr; gap: 34px; } .contact2-info { max-width: none; } }
-@media (max-width: 520px) { .social-cards { grid-template-columns: 1fr; } .contact2-band { flex-direction: column; align-items: stretch; } .cb-btn { justify-content: center; } }
+@media (max-width: 520px) { .social-cards { grid-template-columns: 1fr; } }
