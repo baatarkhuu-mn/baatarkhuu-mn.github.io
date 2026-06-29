@@ -1862,6 +1862,11 @@
           it.style.display = vis ? "" : "none";
           if (vis) shown++;
         });
+        // Kanban — хайлтын дараа хоосон үлдсэн баганыг нуух
+        document.querySelectorAll(".law-col").forEach((col) => {
+          const anyVisible = Array.prototype.some.call(col.querySelectorAll(".law-item"), (it) => it.style.display !== "none");
+          col.style.display = anyVisible ? "" : "none";
+        });
         if (empty) empty.style.display = shown ? "none" : "block";
       };
       const buildPills = () => {
@@ -2530,9 +2535,47 @@
         .then(({ data, error }) => {
           if (error || !data || !data.length) return; // хоосон/алдаа → жишээ хэвээр
           data = sortByContentDate(data); // контентийн огноогоор (date_label-аас)
-          list.innerHTML = data.map((l) => LawsCMS.item(l)).join("");
-          Laws.init(); // чипс / пилл / хайлтыг шинэ өгөгдлөөр дахин үүсгэх
+          // Төлөв бүрээр доош цуваа баганад (kanban) ангилж харуулна
+          list.classList.remove("law-list");
+          list.classList.add("law-board");
+          list.innerHTML = LawsCMS.board(data);
+          Laws.init(); // чипс / хайлт / дарах үйлдлийг шинэ өгөгдлөөр дахин үүсгэх
         });
+    },
+    ORDER: ["drafting", "submitted", "discussion", "passed", "returned"],
+    COLOR: { drafting: "#7c8aa0", submitted: "#3b82f6", discussion: "#f59e0b", passed: "#22c55e", returned: "#e0556e" },
+    board(data) {
+      const esc = LawsCMS.esc;
+      const groups = {};
+      data.forEach((l) => { const s = l.status || "submitted"; (groups[s] = groups[s] || []).push(l); });
+      let cols = "";
+      LawsCMS.ORDER.forEach((s) => {
+        const arr = groups[s];
+        if (!arr || !arr.length) return;
+        const label = LawsCMS.LABEL[s] || s;
+        const color = LawsCMS.COLOR[s] || "#7c8aa0";
+        cols += '<section class="law-col" data-col-status="' + esc(s) + '" style="--lc:' + color + '">' +
+          '<header class="law-col-head"><span class="lc-dot"></span><span class="lc-name">' + esc(label) + '</span><span class="lc-n">' + arr.length + '</span></header>' +
+          '<div class="law-col-body">' + arr.map((l) => LawsCMS.boardCard(l)).join("") + '</div>' +
+          '</section>';
+      });
+      return cols;
+    },
+    boardCard(l) {
+      const esc = LawsCMS.esc;
+      const status = l.status || "submitted";
+      const role = LawsCMS.ROLE[l.category] || "Санаачлагч";
+      const meta = [l.date_label, role].filter(Boolean).join(" · ");
+      const src = l.pdf_url
+        ? '<span class="lc-src">Эх сурвалж ↗</span>'
+        : '<span class="lc-src lc-src-muted">Дэлгэрэнгүй →</span>';
+      return '<article class="law-card law-item is-clickable" data-item data-id="' + esc(l.id) +
+        '" data-title="' + esc(l.title) + '" data-category="' + esc(l.category || "own") +
+        '" data-status="' + esc(status) + '" data-summary="' + esc(l.summary || "") +
+        '" data-source="' + esc(l.pdf_url || "") + '">' +
+        '<h4 class="lc-title">' + esc(l.title) + '</h4>' +
+        '<div class="lc-meta">' + esc(meta) + '</div>' + src +
+        '</article>';
     },
     item(l) {
       const esc = LawsCMS.esc;

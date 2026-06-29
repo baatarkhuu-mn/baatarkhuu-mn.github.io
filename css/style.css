@@ -607,6 +607,21 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .law-item .law-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: auto; }
 .law-item .law-more { margin-top: 2px; font-size: .84rem; color: var(--color-accent); font-weight: 600; }
 
+/* Хууль — төлөв бүрээр доош цуваа багана (kanban) */
+.law-board { display: grid; grid-template-columns: repeat(auto-fit, minmax(232px, 1fr)); gap: 14px; align-items: start; }
+.law-col { background: var(--color-bg-soft); border: 1px solid var(--color-border); border-radius: 14px; padding: 12px; }
+.law-col-head { display: flex; align-items: center; gap: 8px; padding: 4px 4px 12px; }
+.law-col-head .lc-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--lc, var(--color-accent)); flex: none; }
+.law-col-head .lc-name { font-size: .86rem; font-weight: 700; color: var(--color-text); }
+.law-col-head .lc-n { margin-left: auto; font-size: .78rem; color: var(--color-text-soft); font-weight: 700; }
+.law-col-body { display: flex; flex-direction: column; gap: 10px; }
+.law-card.law-item { padding: 13px 14px; gap: 7px; border-left: 3px solid var(--lc, var(--color-border)); }
+.law-card .lc-title { margin: 0; font-size: .92rem; line-height: 1.4; font-weight: 700; color: var(--color-text); }
+.law-card .lc-meta { font-size: .76rem; color: var(--color-text-soft); }
+.law-card .lc-src { font-size: .78rem; color: var(--color-accent); font-weight: 600; margin-top: 2px; }
+.law-card .lc-src.lc-src-muted { color: var(--color-text-soft); }
+@media (max-width: 600px) { .law-board { grid-template-columns: 1fr; } }
+
 /* Хуулийн дэлгэрэнгүй цонх */
 .law-modal { position: fixed; inset: 0; z-index: 2000; background: rgba(2,8,18,.9); display: none; align-items: center; justify-content: center; padding: 20px; }
 .law-modal.open { display: flex; animation: fadeIn .2s ease; }
