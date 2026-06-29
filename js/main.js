@@ -1901,12 +1901,18 @@
         };
         items.forEach((it) => {
           it.setAttribute("tabindex", "0");
+          // Карт дээр дарангуут эх сурвалж (хуулийн эх бичиг) руу шинэ цонхонд үсэрнэ
+          const openSource = () => {
+            const a = it.querySelector(".law-actions a[href]");
+            const src = (a && a.getAttribute("href")) || it.dataset.source || "";
+            if (src) { window.open(src, "_blank", "noopener"); return true; }
+            return false;
+          };
           it.addEventListener("click", (e) => {
             if (e.target.closest("a")) return;
-            if (it.dataset.id) { location.href = "/huuli-delgerengui/?id=" + encodeURIComponent(it.dataset.id); return; }
-            openModal(it);
+            if (!openSource()) openModal(it); // эх сурвалж алга бол товч тайлбар
           });
-          it.addEventListener("keydown", (e) => { if (e.key === "Enter") openModal(it); });
+          it.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); if (!openSource()) openModal(it); } });
         });
         if (!modal._wired) {
           modal._wired = true;
@@ -2535,12 +2541,13 @@
       const role = LawsCMS.ROLE[l.category] || "Санаачлагч";
       const meta = [l.date_label, role, l.topic].filter(Boolean).map((m) => `<span>${esc(m)}</span>`).join("");
       const pdf = l.pdf_url ? `<a class="btn btn-ghost btn-sm" href="${esc(l.pdf_url)}" target="_blank" rel="noopener">PDF</a>` : "";
+      const more = l.pdf_url ? `<span class="law-more">Эх сурвалж ↗</span>` : `<span class="law-more">Дэлгэрэнгүй →</span>`;
       const cls = LawsCMS.CLS[status] || "status-review";
       return `<article class="law-item is-clickable" data-id="${esc(l.id)}" data-item data-title="${esc(l.title)}" data-category="${esc(l.category || "own")}" data-status="${esc(status)}" data-summary="${esc(l.summary || "")}">
         <div class="law-status-bar badge-status ${cls}">${esc(LawsCMS.LABEL[status] || status)}</div>
         <div class="law-icon">${LawsCMS.ICON}</div>
         <div><h4>${esc(l.title)}</h4><div class="meta">${meta}</div></div>
-        <div class="law-actions">${pdf}<span class="law-more">Дэлгэрэнгүй →</span></div>
+        <div class="law-actions">${pdf}${more}</div>
       </article>`;
     },
   };
