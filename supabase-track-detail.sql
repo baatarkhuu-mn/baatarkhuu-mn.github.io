@@ -10,6 +10,14 @@
 --  Supabase → SQL Editor дээр бүхэлд нь Run. Дахин ажиллуулахад аюулгүй.
 -- ============================================================
 
+-- Дутуу баганууд байвал нэмнэ (өмнөх migration ажиллаагүй байсан ч аюулгүй)
+alter table public.feedback
+  add column if not exists org        text,
+  add column if not exists letter_no  text,
+  add column if not exists letter_url text,
+  add column if not exists district   text,
+  add column if not exists khoroo     text;
+
 drop function if exists public.track_feedback(text);
 create function public.track_feedback(p_ticket text)
 returns table(ticket text, subject text, status text,
