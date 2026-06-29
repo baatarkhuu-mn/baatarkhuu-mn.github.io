@@ -1988,7 +1988,7 @@
             chips.appendChild(b);
           });
           wrap.appendChild(chips);
-          box.appendChild(wrap);
+          (box.querySelector("[data-track-left]") || box).appendChild(wrap);
         }
       });
     },
