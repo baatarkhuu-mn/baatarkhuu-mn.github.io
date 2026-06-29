@@ -2581,8 +2581,9 @@
         if (!arr || !arr.length) return;
         const label = LawsCMS.LABEL[s] || s;
         const color = LawsCMS.COLOR[s] || "#7c8aa0";
+        const cls = LawsCMS.CLS[s] || "status-review";
         cols += '<section class="law-col" data-col-status="' + esc(s) + '" style="--lc:' + color + '">' +
-          '<header class="law-col-head"><span class="lc-dot"></span><span class="lc-name">' + esc(label) + '</span><span class="lc-n">' + arr.length + '</span></header>' +
+          '<header class="law-col-head"><span class="badge-status ' + cls + '">' + esc(label) + '</span><span class="lc-n">' + arr.length + '</span></header>' +
           '<div class="law-col-body">' + arr.map((l) => LawsCMS.boardCard(l)).join("") + '</div>' +
           '</section>';
       });
