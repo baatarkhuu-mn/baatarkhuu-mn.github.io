@@ -1036,6 +1036,8 @@ a.news-card-clean { text-decoration: none; color: inherit; display: flex; flex-d
 .fr-title { font-size: 1.12rem; line-height: 1.42; font-weight: 700; color: var(--color-text); margin: 0 0 9px;
   display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; white-space: normal; }
 .fr-meta { display: flex; gap: 14px; flex-wrap: wrap; font-size: .8rem; color: var(--color-text-soft); margin-bottom: 12px; }
+.fr-meta .fr-loc { color: var(--color-accent); font-weight: 600; text-decoration: none; }
+.fr-meta .fr-loc:hover { text-decoration: underline; }
 @media (max-width: 600px) { .feed-row { flex-direction: column; gap: 12px; } .fr-thumb { width: 100%; flex-basis: auto; height: 190px; } }
 
 .fc-actions { display: flex; align-items: center; gap: 12px; padding-top: 12px; border-top: 1px solid var(--color-border); flex-wrap: wrap; }

@@ -64,6 +64,15 @@
       w.appendChild(g);
     });
   }
+  // Сайтаар зочилсон давхардаагүй хүний тоог бүртгэх (браузер бүрт visitor_id)
+  function trackVisit() {
+    try {
+      const sb = window.getSB && window.getSB(); if (!sb) return;
+      let vid = localStorage.getItem("at_vid");
+      if (!vid) { vid = Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 11); localStorage.setItem("at_vid", vid); }
+      sb.rpc("track_visit", { p_visitor: vid }).then(function () {}, function () {});
+    } catch (_) {}
+  }
   // Хуулах / native share — делегацлэсэн нэг handler (бүх карт дээр ажиллана)
   document.addEventListener("click", async (e) => {
     const btn = e.target.closest && e.target.closest(".js-copy-link");
@@ -575,8 +584,7 @@
           const titleVal = (fd.get("title") || "").toString().trim();
           const bodyVal = (fd.get("message") || "").toString().trim();
           const emailVal = (fd.get("email") || "").toString().trim();
-          let message = titleVal ? (titleVal + "\n\n" + bodyVal) : bodyVal;
-          if (emailVal) message += "\n\nИмэйл: " + emailVal;
+          const message = titleVal ? (titleVal + "\n\n" + bodyVal) : bodyVal; // имэйлийг message-д НЭМэхгүй — тусдаа email баганад
           const lat = latIn && latIn.value ? parseFloat(latIn.value) : null;
           const rating = ratingIn && ratingIn.value ? parseInt(ratingIn.value, 10) : null;
           const baseArgs = {
@@ -595,8 +603,12 @@
             p_district: district && district.value ? district.value : null,
             p_khoroo: khoroo && khoroo.value ? khoroo.value : null,
           };
-          let { data: ticketNo, error: insErr } = await sb.rpc("submit_feedback", locArgs);
-          // supabase-feedback-location.sql ажиллуулаагүй бол (хуучин 9-параметрт функц) байршилгүйгээр дахин оролдоно
+          const emailArgs = { ...locArgs, p_email: emailVal || null };
+          // Прогрессив fallback: 12-параметр (имэйл) → 11 (байршил) → 9 (хуучин)
+          let { data: ticketNo, error: insErr } = await sb.rpc("submit_feedback", emailArgs);
+          if (insErr && /email|function|PGRST202|schema cache|argument|does not exist/i.test(insErr.message || "")) {
+            ({ data: ticketNo, error: insErr } = await sb.rpc("submit_feedback", locArgs));
+          }
           if (insErr && /district|khoroo|function|PGRST202|schema cache|argument/i.test(insErr.message || "")) {
             ({ data: ticketNo, error: insErr } = await sb.rpc("submit_feedback", baseArgs));
           }
@@ -1336,6 +1348,9 @@
       const el = document.createElement("article");
       el.className = "feed-row reveal visible";
       const loc = [r.district ? r.district + " дүүрэг" : "", r.khoroo ? r.khoroo + "-р хороо" : ""].filter(Boolean).join(", ");
+      // Нийтэд хувийн мэдээлэл (нэр, утас, имэйл) харуулахгүй — хуучин бичлэгийн message-д орсон имэйлийг ч хасна
+      const pubMsg = String(r.message || "").replace(/\s*\n+\s*Имэйл\s*:[\s\S]*$/i, "").trim();
+      const geo = (r.lat && r.lng) ? '<a class="fr-loc" href="https://www.google.com/maps?q=' + r.lat + ',' + r.lng + '" target="_blank" rel="noopener">📍 Байршил</a>' : "";
       const isLiked = liked.has(r.id);
       const statusBadge = r.status === "done"
         ? '<span class="fc-status fc-done">Шийдвэрлэсэн</span>'
@@ -1354,11 +1369,11 @@
              <span class="fr-subject">${this.esc(this.SUBJ[r.subject] || r.subject || "Санал")}</span>
              ${statusBadge}
            </div>
-           <h3 class="fr-title">${this.esc(r.message)}</h3>
+           <h3 class="fr-title">${this.esc(pubMsg)}</h3>
            <div class="fr-meta">
              <span>${this.fmt(r.created_at)}</span>
              ${loc ? `<span>${this.esc(loc)}</span>` : ""}
-             ${r.rating != null ? `<span>Үнэлгээ ${r.rating}/10</span>` : ""}
+             ${geo}
            </div>
            ${r.response ? `<div class="fc-response"><span class="fcr-label">Албаны хариу</span><p>${this.esc(r.response)}</p></div>` : ""}
            ${feedbackRouteHtml(r, this.esc.bind(this))}
@@ -2711,6 +2726,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     Theme.init(); Nav.init(); Search.init(); TextSize.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
-    Share.init(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); NewsPost.init(); LawPost.init(); EventPost.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); VideoHero.init(); ReportsCMS.init(); ReportPost.init(); ProjectsCMS.init(); ProjectPost.init(); LawsCMS.init(); FeedbackStats.init(); EventsCMS.init(); Settings.init(); ReportStats.init();
+    Share.init(); trackVisit(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); NewsPost.init(); LawPost.init(); EventPost.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); VideoHero.init(); ReportsCMS.init(); ReportPost.init(); ProjectsCMS.init(); ProjectPost.init(); LawsCMS.init(); FeedbackStats.init(); EventsCMS.init(); Settings.init(); ReportStats.init();
   });
 })();
