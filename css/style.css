@@ -1257,7 +1257,7 @@ a.news-card-clean { text-decoration: none; color: inherit; display: flex; flex-d
 .pm-group { font-size: .56rem; letter-spacing: .06em; text-transform: uppercase; color: var(--color-accent);
   font-weight: 700; margin: 10px 2px 6px; padding-top: 7px; border-top: 1px solid rgba(255,255,255,.1); }
 .pm-submit { background: var(--color-accent); color: #06121f; text-align: center; font-weight: 700; font-size: .78rem; padding: 9px; border-radius: 9px; box-shadow: var(--glow-gold); margin-top: 4px; }
-.phone-cap { text-align: center; font-size: .82rem; color: var(--color-text-soft); margin-bottom: 4px; }
+.phone-cap { text-align: center; font-size: .82rem; color: var(--color-text-soft); margin-top: 24px; margin-bottom: 4px; }
 
 /* Тайлбартай (annotated) утас — зураасан сум + тайлбар */
 .phone-mock.annotated { width: 100%; max-width: 540px; margin: 0 auto; position: relative; min-height: 200px; }
