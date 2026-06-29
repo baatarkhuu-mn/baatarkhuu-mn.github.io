@@ -1949,21 +1949,34 @@
               return;
             }
             const r = data[0];
-            const st = Tracker.STATUS[r.status] || { label: r.status, cls: "tr-new" };
-            const subj = (PublicFeed.SUBJ && PublicFeed.SUBJ[r.subject]) || r.subject || "—";
-            const upd = r.updated_at && r.updated_at !== r.created_at ? Tracker.fmtDate(r.updated_at) : null;
+            // Public feed карттай ижил харагдац — зураг, агуулга, байршил, явц
+            const STL = { new: "Шинэ", in_progress: "Судалж байна", routed: "Холбогдох газарт шилжүүлсэн", processing: "Боловсруулж байна", responded: "Хариу ирсэн", done: "Шийдвэрлэгдсэн", cancelled: "Цуцлагдсан" };
+            const stLabel = STL[r.status] || r.status || "Хүлээн авсан";
+            const stCls = r.status === "done" ? "tr-done" : (r.status === "cancelled" ? "tr-cancel" : (r.status === "new" ? "tr-new" : "tr-prog"));
+            const subj = (PublicFeed.SUBJ && PublicFeed.SUBJ[r.subject]) || r.subject || "Санал";
+            const loc = [r.district ? r.district + " дүүрэг" : "", r.khoroo ? r.khoroo + "-р хороо" : ""].filter(Boolean).join(", ");
+            const content = String(r.message || "").replace(/\s*\n+\s*Имэйл\s*:[\s\S]*$/i, "").trim();
+            const geo = (r.lat && r.lng)
+              ? '<a class="fr-loc" href="https://www.google.com/maps?q=' + r.lat + ',' + r.lng + '" target="_blank" rel="noopener">📍 Байршил</a>' : "";
+            let photoUrl = "";
+            const photos = r.photos || [];
+            if (r.is_public && photos.length) { try { photoUrl = sb.storage.from("feedback-public").getPublicUrl(photos[0]).data.publicUrl; } catch (_) {} }
+            const thumb = photoUrl
+              ? '<a class="fr-thumb" href="' + photoUrl + '" target="_blank" rel="noopener" aria-label="Хавсаргасан зураг"><img src="' + photoUrl + '" alt="Хавсаргасан зураг" loading="lazy"></a>'
+              : '<div class="fr-thumb fr-thumb-ph"><img src="/assets/img/logo.svg" alt=""></div>';
             out.innerHTML =
-              '<div class="tr-card">' +
-                '<div class="tr-top"><span class="tr-no">#' + Tracker.esc(r.ticket) + '</span>' +
-                  '<span class="tr-badge ' + st.cls + '">' + st.label + '</span></div>' +
-                '<div class="tr-rows">' +
-                  '<div><span>Ангилал</span><b>' + Tracker.esc(subj) + '</b></div>' +
-                  '<div><span>Хүлээн авсан</span><b>' + Tracker.fmtDate(r.created_at) + '</b></div>' +
-                  (upd ? '<div><span>Сүүлд шинэчилсэн</span><b>' + upd + '</b></div>' : '') +
+              '<article class="feed-row tr-feedrow visible">' +
+                thumb +
+                '<div class="fr-main">' +
+                  '<div class="fr-head"><span class="fr-subject">' + Tracker.esc(subj) + '</span>' +
+                    '<span class="tr-badge ' + stCls + '">' + Tracker.esc(stLabel) + '</span></div>' +
+                  (content ? '<h3 class="fr-title">' + Tracker.esc(content) + '</h3>' : '') +
+                  '<div class="fr-meta"><span>#' + Tracker.esc(r.ticket) + '</span><span>' + Tracker.fmtDate(r.created_at) + '</span>' +
+                    (loc ? '<span>' + Tracker.esc(loc) + '</span>' : '') + geo + '</div>' +
+                  (r.response ? '<div class="fc-response"><span class="fcr-label">Албаны хариу</span><p>' + Tracker.esc(r.response) + '</p></div>' : '') +
+                  feedbackRouteHtml(r, Tracker.esc) +
                 '</div>' +
-                (r.response ? '<div class="tr-resp"><span>Албаны хариу:</span><p>' + Tracker.esc(r.response) + '</p></div>' : '') +
-                feedbackRouteHtml(r, Tracker.esc) +
-              '</div>';
+              '</article>';
           } catch (e) {
             out.innerHTML = '<p class="tr-bad">Шалгахад алдаа гарлаа: ' + Tracker.esc(e.message || "сүлжээ") + '</p>';
           }

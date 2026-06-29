@@ -1520,7 +1520,15 @@ a.news-card-clean { text-decoration: none; color: inherit; display: flex; flex-d
 .tr-placeholder svg { width: 42px; height: 42px; opacity: .45; }
 .tr-placeholder p { font-size: .92rem; line-height: 1.55; max-width: 320px; }
 .tr-placeholder b { color: var(--color-text); }
+/* Track үр дүн — public-feed карттай ижил харагдац (зураг/агуулга/байршил) */
+.tr-feedrow.feed-row { background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 18px; margin: 0; }
+.tr-feedrow .fr-thumb { flex: 0 0 150px; width: 150px; height: 112px; }
+.tr-feedrow .fr-title { font-size: 1.02rem; }
+.tr-feedrow .fr-meta .tr-badge,
+.tr-feedrow .fr-head .tr-badge { font-size: .76rem; padding: 4px 11px; }
+.tr-badge.tr-cancel { background: rgba(225, 29, 72, .16); color: #e11d48; }
 @media (max-width: 760px) { .track-2col { grid-template-columns: 1fr; gap: 22px; } }
+@media (max-width: 520px) { .tr-feedrow .fr-thumb { flex-basis: 104px; width: 104px; height: 80px; } }
 
 /* Арга хэмжээний бүртгэл (нүүр) */
 .ef-count { font-size: .84rem; color: var(--color-accent); font-weight: 600; margin: 0 0 10px; }
