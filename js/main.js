@@ -2276,7 +2276,34 @@
             el.classList.add("is-clickable");
             el.addEventListener("click", (e) => { if (e.target.closest("a,button")) return; location.href = url; });
           });
+          ProjectsCMS.buildFilter(grid); // чиглэлээр шүүх толгой
         });
+    },
+    buildFilter(grid) {
+      const pillsBox = document.querySelector("[data-proj-pills]");
+      if (!pillsBox) return;
+      const cards = Array.prototype.filter.call(grid.children, (c) => c.nodeType === 1 && c.classList.contains("card"));
+      const counts = {};
+      cards.forEach((c) => { const cat = (c.dataset.category || "").trim(); if (cat) counts[cat] = (counts[cat] || 0) + 1; });
+      const cats = Object.keys(counts);
+      if (!cats.length) { pillsBox.style.display = "none"; return; }
+      pillsBox.style.display = "";
+      let active = "all";
+      const esc = ProjectsCMS.esc;
+      const apply = () => {
+        cards.forEach((c) => {
+          const ok = active === "all" || (c.dataset.category || "").trim() === active;
+          c.style.display = ok ? "" : "none";
+        });
+      };
+      const render = () => {
+        const mk = (key, label, n) => '<button class="law-pill' + (active === key ? " active" : "") + '" type="button" data-pill="' + esc(key) + '">' + esc(label) + '<span class="lp-n">' + n + '</span></button>';
+        let html = mk("all", "Бүгд", cards.length);
+        cats.forEach((cat) => { html += mk(cat, cat, counts[cat]); });
+        pillsBox.innerHTML = html;
+        pillsBox.querySelectorAll(".law-pill").forEach((b) => b.addEventListener("click", () => { active = b.dataset.pill; render(); apply(); }));
+      };
+      render(); apply();
     },
     card(p) {
       const esc = ProjectsCMS.esc;
@@ -2284,7 +2311,7 @@
       const media = (p.image_url
         ? `<img src="${esc(p.image_url)}" alt="${esc(p.title)}" loading="lazy" onerror="this.remove()" />`
         : "") + `<span class="placeholder"><img src="/assets/img/logo.svg" alt="" style="width:46%;opacity:.4" /></span>`;
-      return `<article class="card reveal visible" data-item data-title="${esc(p.title)}">
+      return `<article class="card reveal visible" data-item data-category="${esc(p.category || "")}" data-title="${esc(p.title)}">
         <div class="card-media"><span class="tag">${esc(p.category || "Төсөл")}</span><span class="tag status-tag badge-status ${st.cls}">${st.label}</span>${media}</div>
         <div class="card-body">
           <h3>${esc(p.title)}</h3>
