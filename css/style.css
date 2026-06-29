@@ -2004,7 +2004,7 @@ body.hp.nav-on .navbar-wrap { box-shadow: 0 10px 34px -18px rgba(0,0,0,.55); }
 /* ---------- «Иргэдээ сонсох нэгдсэн систем» — текст | Төрийн ордны зураг (2 багана) ---------- */
 .about-banner .ab-grid { display: grid; grid-template-columns: 1fr 1.12fr; gap: 46px; align-items: center; }
 .about-banner .ab-content { max-width: 540px; }
-.about-banner .ab-content h2 { font-size: clamp(1.6rem, 3vw, 2.35rem); margin-bottom: 14px; }
+.about-banner .ab-content h2 { font-size: clamp(1.85rem, 3.6vw, 2.9rem); line-height: 1.16; letter-spacing: .004em; text-transform: uppercase; margin-bottom: 16px; }
 .about-banner .ab-content p { color: var(--color-text-soft); font-size: clamp(.96rem, 1.4vw, 1.06rem); line-height: 1.78; margin: 0; }
 .about-banner .ab-content h2 strong, .about-banner .ab-content p strong { color: var(--color-accent); font-weight: 700; }
 .about-banner .ab-figure { margin: 0; }
