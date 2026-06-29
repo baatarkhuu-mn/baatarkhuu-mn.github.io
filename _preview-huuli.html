@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="mn"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Хуулийн kanban — урьдчилсан загвар</title>
+<style>
+  body { margin:0; background:#070d1a; color:#e8eef8; font-family:system-ui,-apple-system,"Segoe UI",sans-serif; padding:34px 28px; }
+  .wrap { max-width:1180px; margin:0 auto; }
+  .head { display:flex; align-items:flex-end; justify-content:space-between; gap:14px; margin-bottom:22px; }
+  .head h1 { font-size:24px; margin:0; }
+  .head .sub { color:#8a98b0; font-size:13px; margin-top:5px; }
+  .pill-total { color:#cbd5e1; font-size:13px; border:1px solid rgba(255,255,255,.13); padding:7px 13px; border-radius:22px; white-space:nowrap; }
+  .board { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; align-items:start; }
+  .col { background:rgba(255,255,255,.025); border:1px solid rgba(255,255,255,.07); border-radius:14px; padding:12px; }
+  .col-head { display:flex; align-items:center; gap:8px; padding:4px 4px 13px; }
+  .dot { width:9px; height:9px; border-radius:50%; }
+  .col-name { font-size:12.5px; font-weight:600; color:#d6deea; }
+  .col-n { margin-left:auto; color:#8a98b0; font-size:12px; }
+  .law { background:#101a2e; border:1px solid rgba(255,255,255,.08); border-radius:10px; padding:11px 12px; margin-bottom:10px; }
+  .law:last-child { margin-bottom:0; }
+  .law-t { font-size:12px; line-height:1.45; font-weight:600; color:#eef3fb; }
+  .law-m { color:#7e8ba3; font-size:10.5px; margin-top:8px; }
+  .c-draft{background:#7c8aa0} .c-sub{background:#3b82f6} .c-disc{background:#f59e0b} .c-pass{background:#22c55e}
+  .bl-draft{border-left:3px solid #7c8aa0} .bl-sub{border-left:3px solid #3b82f6} .bl-disc{border-left:3px solid #f59e0b} .bl-pass{border-left:3px solid #22c55e}
+</style></head>
+<body><div class="wrap">
+  <div class="head">
+    <div><h1>Хууль санаачилга</h1><div class="sub">Төлөв бүрээр доош цуваа баганад ангилсан — урьдчилсан загвар</div></div>
+    <span class="pill-total">Нийт 6 хууль</span>
+  </div>
+  <div class="board">
+
+    <div class="col">
+      <div class="col-head"><span class="dot c-draft"></span><span class="col-name">Боловсруулж буй</span><span class="col-n">2</span></div>
+      <div class="law bl-draft"><div class="law-t">ШИЛЭН ДАНСНЫ ТУХАЙ ХУУЛЬД НЭМЭЛТ, ӨӨРЧЛӨЛТ ОРУУЛАХ ТУХАЙ</div><div class="law-m">2026.06.12 · Санаачлагч</div></div>
+      <div class="law bl-draft"><div class="law-t">МОНГОЛ УЛСЫН ЗАСАГ ЗАХИРГАА, НУТАГ ДЭВСГЭРИЙН НЭГЖ, ТҮҮНИЙ УДИРДЛАГЫН ТУХАЙ ХУУЛЬД НЭМЭЛТ, ӨӨРЧЛӨЛТ ОРУУЛАХ ТУХАЙ</div><div class="law-m">2026.06.02 · Санаачлагч</div></div>
+    </div>
+
+    <div class="col">
+      <div class="col-head"><span class="dot c-sub"></span><span class="col-name">Өргөн барьсан</span><span class="col-n">2</span></div>
+      <div class="law bl-sub"><div class="law-t">ХЯНАН ШАЛГАХ ТҮР ХОРОО БАЙГУУЛАХ ТУХАЙ</div><div class="law-m">2025.11.13 · Хамтран санаачлагч</div></div>
+      <div class="law bl-sub"><div class="law-t">ҮНДЭСНИЙ ИХ БАЯР НААДМЫН ТУХАЙ ХУУЛЬД НЭМЭЛТ, ӨӨРЧЛӨЛТ ОРУУЛАХ ТУХАЙ</div><div class="law-m">2025.11.27 · Хамтран санаачлагч</div></div>
+    </div>
+
+    <div class="col">
+      <div class="col-head"><span class="dot c-disc"></span><span class="col-name">Хэлэлцүүлгийн шатанд</span><span class="col-n">1</span></div>
+      <div class="law bl-disc"><div class="law-t">ТӨРИЙН НУУЦЫН ТУХАЙ (ШИНЭЧИЛСЭН НАЙРУУЛГА)</div><div class="law-m">2026.04.14 · Хамтран санаачлагч</div></div>
+    </div>
+
+    <div class="col">
+      <div class="col-head"><span class="dot c-pass"></span><span class="col-name">Батлагдсан</span><span class="col-n">1</span></div>
+      <div class="law bl-pass"><div class="law-t">ХУВЬ ХҮНИЙ ОРЛОГЫН АЛБАН ТАТВАРЫН ТУХАЙ ХУУЛЬД НЭМЭЛТ ОРУУЛАХ ТУХАЙ</div><div class="law-m">2026.04.01 · Хамтран санаачлагч</div></div>
+    </div>
+
+  </div>
+</div></body></html>
