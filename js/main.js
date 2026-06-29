@@ -2049,11 +2049,6 @@
   /* ---------- Нүүрний видео карусель (coverflow) ---------- */
   const VideoHero = {
     esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
-    embedSrc(v) {
-      return v.platform === "youtube"
-        ? "https://www.youtube.com/embed/" + VideoCMS.ytId(v.url) + "?rel=0"
-        : "https://www.facebook.com/plugins/video.php?href=" + encodeURIComponent(v.url) + "&show_text=false&width=400";
-    },
     async init() {
       const wrap = document.querySelector("[data-vhero]");
       if (!wrap) return;
@@ -2071,20 +2066,30 @@
              <button type="button" class="vreel-arr vreel-next" aria-label="Баруун гүйлгэх">›</button>
            </div>`;
         const row = wrap.querySelector("[data-vreel-row]");
-        // Видео бүр өөрийн жинхэнэ харьцаагаар (тогтсон өндөр, харьцаагаар өргөн)
+        // Видео бүр өөрийн ЖИНХЭНЭ харьцаагаар (FB SDK автоматаар, хар зайгүй). Тогтсон өргөн, өндөр нь автомат.
         row.innerHTML = this._vids.map((v) => {
-          const ar = v.orientation === "landscape" ? "16 / 9" : (v.orientation === "square" ? "1 / 1" : "9 / 16");
-          return `<figure class="vreel-card" style="aspect-ratio:${ar}"><div class="vreel-inner" data-src="${VideoHero.esc(VideoHero.embedSrc(v))}"></div><button type="button" class="vreel-hit" aria-label="${VideoHero.esc(v.title || "Видео")}"></button></figure>`;
+          const data = v.platform === "youtube"
+            ? `data-yt="${VideoHero.esc(VideoCMS.ytId(v.url))}"`
+            : `data-href="${VideoHero.esc(v.url)}"`;
+          return `<figure class="vreel-card"><div class="vreel-inner" ${data}></div><button type="button" class="vreel-hit" aria-label="${VideoHero.esc(v.title || "Видео")}"></button></figure>`;
         }).join("");
         const dx = () => Math.max(280, Math.round(row.clientWidth * 0.85));
         wrap.querySelector(".vreel-prev").addEventListener("click", () => row.scrollBy({ left: -dx(), behavior: "smooth" }));
         wrap.querySelector(".vreel-next").addEventListener("click", () => row.scrollBy({ left: dx(), behavior: "smooth" }));
-        const loadInner = (inner) => { if (inner.dataset.loaded) return; inner.dataset.loaded = "1"; inner.innerHTML = '<iframe src="' + inner.dataset.src + '" title="Видео" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy" scrolling="no"></iframe>'; };
+        const loadInner = (inner) => {
+          if (inner.dataset.loaded) return; inner.dataset.loaded = "1";
+          if (inner.dataset.yt) {
+            inner.innerHTML = '<div class="vreel-yt"><iframe src="https://www.youtube.com/embed/' + inner.dataset.yt + '?rel=0" title="Видео" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>';
+          } else {
+            inner.innerHTML = '<div class="fb-video" data-href="' + inner.dataset.href + '" data-show-text="false" data-width="auto"></div>';
+            VideoCMS.parseFB();
+          }
+        };
         // Зөвхөн харагдах/ойролцоо картыг ачаална (хэвтээ scroll дээр нэмж ачаална)
         const loadVisible = () => {
           const rr = row.getBoundingClientRect();
           Array.from(row.children).forEach((card) => {
-            const inner = card.querySelector("[data-src]");
+            const inner = card.querySelector(".vreel-inner");
             if (!inner || inner.dataset.loaded) return;
             const cr = card.getBoundingClientRect();
             if (cr.left < rr.right + 350 && cr.right > rr.left - 350) loadInner(inner);

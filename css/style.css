@@ -2053,16 +2053,19 @@ body.hp.nav-on .navbar-wrap { box-shadow: 0 10px 34px -18px rgba(0,0,0,.55); }
 
 /* ---------- Нүүрний видео — хажуу гүйдэг эгнээ (видео бүр жинхэнэ харьцаагаар) ---------- */
 .vreel-wrap { position: relative; }
-.vreel-row { display: flex; gap: 18px; overflow-x: auto; scroll-snap-type: x proximity;
+.vreel-row { display: flex; align-items: center; gap: 18px; overflow-x: auto; scroll-snap-type: x proximity;
   padding: 6px 2px 18px; -webkit-overflow-scrolling: touch;
   scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
 .vreel-row::-webkit-scrollbar { height: 8px; }
 .vreel-row::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 4px; }
-.vreel-card { flex: 0 0 auto; height: 460px; width: auto; margin: 0; position: relative;
+.vreel-card { flex: 0 0 auto; width: 320px; margin: 0; position: relative;
   border-radius: 16px; overflow: hidden; background: #000; scroll-snap-align: center;
   border: 1px solid var(--color-border); box-shadow: 0 24px 50px -22px rgba(0,0,0,.6); }
-.vreel-inner { position: absolute; inset: 0; background: #000; }
-.vreel-inner iframe { width: 100%; height: 100%; border: 0; display: block; }
+.vreel-inner { width: 100%; min-height: 180px; background: #000; line-height: 0; }
+.vreel-inner .fb-video { width: 100%; }
+.vreel-inner iframe { width: 100%; border: 0; display: block; }
+.vreel-yt { aspect-ratio: 16 / 9; }
+.vreel-yt iframe { height: 100%; }
 .vreel-hit { position: absolute; inset: 0; z-index: 3; display: none; background: transparent;
   border: 0; padding: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 @media (hover: none), (max-width: 820px) { .vreel-hit { display: block; } }
@@ -2074,7 +2077,7 @@ body.hp.nav-on .navbar-wrap { box-shadow: 0 10px 34px -18px rgba(0,0,0,.55); }
 .vreel-arr:hover { background: var(--color-accent); color: #2a1c03; border-color: var(--color-accent); }
 .vreel-prev { left: -10px; }
 .vreel-next { right: -10px; }
-@media (max-width: 600px) { .vreel-card { height: 384px; } .vreel-arr { display: none; } }
+@media (max-width: 600px) { .vreel-card { width: 270px; } .vreel-arr { display: none; } }
 
 /* ---------- Санал хүсэлтийн форм самбар (жишээ загвар) ---------- */
 .form-card .fc-title {
