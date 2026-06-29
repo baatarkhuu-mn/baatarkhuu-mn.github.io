@@ -2001,6 +2001,20 @@ body.hp.nav-on .navbar-wrap { box-shadow: 0 10px 34px -18px rgba(0,0,0,.55); }
   background: rgba(8,15,32,.55); color: #fff; -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); }
 .embed-guard .eg-play svg { width: 26px; height: 26px; margin-left: 2px; }
 
+/* ---------- «Иргэдээ сонсох нэгдсэн систем» — Төрийн ордны зурган банер ---------- */
+.about-banner { position: relative; overflow: hidden; isolation: isolate; padding-top: 84px; padding-bottom: 84px; border: none; }
+.about-banner .ab-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 28%; z-index: -2; }
+.about-banner .ab-overlay { position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(90deg, rgba(5,10,20,.93) 0%, rgba(5,10,20,.78) 42%, rgba(5,10,20,.45) 78%, rgba(5,10,20,.32) 100%); }
+.about-banner .ab-content { max-width: 660px; }
+.about-banner h2 { color: #fff; font-size: clamp(1.7rem, 3.6vw, 2.7rem); margin-bottom: 14px; letter-spacing: .01em; }
+.about-banner p { color: rgba(238,244,255,.92); font-size: clamp(.96rem, 1.4vw, 1.08rem); line-height: 1.75; margin: 0; }
+.about-banner h2 strong, .about-banner p strong { color: var(--color-accent); font-weight: 700; }
+@media (max-width: 640px) {
+  .about-banner { padding-top: 60px; padding-bottom: 60px; }
+  .about-banner .ab-overlay { background: linear-gradient(180deg, rgba(5,10,20,.82) 0%, rgba(5,10,20,.9) 100%); }
+}
+
 /* ---------- Санал хүсэлтийн форм самбар (жишээ загвар) ---------- */
 .form-card .fc-title {
   font-size: 1.42rem; font-weight: 800; letter-spacing: -.01em; margin: 0 0 4px;
