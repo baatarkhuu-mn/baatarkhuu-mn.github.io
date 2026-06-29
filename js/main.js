@@ -1217,9 +1217,12 @@
 
   /* ---------- Асуудлын явц/чиглүүлэлт (timeline + хариуцах газар + албан бичиг) ---------- */
   function feedbackRouteHtml(r, esc) {
-    // Иргэнд харагдах 5 шатлалт явц — админы төлөвтэй монотон уялдана
-    const inProg = r.status === "in_progress" || r.status === "done";
+    // Иргэнд харагдах 6 шатлалт явц — админы төлөвтэй монотон уялдана.
+    // Хариу ирсний дараа л эцсийн шат (Шийдвэрлэгдсэн / Цуцлагдсан) гарна.
     const isDone = r.status === "done";
+    const isCancel = r.status === "cancelled" || r.status === "canceled" || r.status === "rejected";
+    const finalReached = isDone || isCancel;
+    const inProg = r.status === "in_progress" || finalReached;
     const hasOrg = !!r.org, hasResp = !!r.response;
     const fmtD = (s) => { try { return new Date(s).toLocaleString("mn-MN", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }); } catch (_) { return ""; } };
     const created = r.created_at ? fmtD(r.created_at) : "";
@@ -1229,17 +1232,20 @@
       send: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>',
       search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>',
       edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>',
+      reply: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5z"/></svg>',
       check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+      cancel: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>',
     };
     const steps = [
       { c: 1, ic: IC.inbox, label: "Хүлээн авсан", desc: "Таны хүсэлт хүлээн авагдав.", done: true, date: created },
-      { c: 2, ic: IC.search, label: "Судалж байна", desc: "Хүсэлтийг судалж, шалгаж байна.", done: inProg || hasOrg || hasResp || isDone, date: "" },
-      { c: 3, ic: IC.send, label: "Хариуцсан байгууллагад илгээсэн", desc: hasOrg ? esc(r.org) : "Холбогдох байгууллагад шилжүүлэв.", done: hasOrg || hasResp || isDone, date: "" },
-      { c: 4, ic: IC.edit, label: "Илгээсэн байгууллага боловсруулж байна", desc: "Хүлээн авсан байгууллага хариу боловсруулж байна.", done: hasResp || isDone, date: "" },
-      { c: 5, ic: IC.check, label: "Хариу ирсэн", desc: "Байгууллагын хариу ирэв.", done: isDone, date: isDone ? updated : "" },
+      { c: 2, ic: IC.search, label: "Судалж байна", desc: "Хүсэлтийг судалж, шалгаж байна.", done: inProg || hasOrg || hasResp || finalReached, date: "" },
+      { c: 3, ic: IC.send, label: "Хариуцсан байгууллагад илгээсэн", desc: hasOrg ? esc(r.org) : "Холбогдох байгууллагад шилжүүлэв.", done: hasOrg || hasResp || finalReached, date: "" },
+      { c: 4, ic: IC.edit, label: "Илгээсэн байгууллага боловсруулж байна", desc: "Хүлээн авсан байгууллага хариу боловсруулж байна.", done: hasResp || finalReached, date: "" },
+      { c: 5, ic: IC.reply, label: "Хариу ирсэн", desc: "Байгууллагын хариу ирэв.", done: hasResp || finalReached, date: "" },
+      { c: 6, ic: isCancel ? IC.cancel : IC.check, label: isCancel ? "Цуцлагдсан" : "Шийдвэрлэгдсэн", desc: isCancel ? "Хүсэлт цуцлагдсан / шийдэгдэх боломжгүй." : "Хүсэлт шийдвэрлэгдэв.", done: finalReached, date: finalReached ? updated : "", cls: isCancel ? "ft-cancel" : "" },
     ];
     const tl = '<ol class="fb-timeline">' + steps.map((s) =>
-      '<li class="ft-step ft-c' + s.c + (s.done ? " done" : "") + '">' +
+      '<li class="ft-step ft-c' + s.c + (s.done ? " done" : "") + (s.cls ? " " + s.cls : "") + '">' +
         '<span class="ft-ic">' + s.ic + '</span>' +
         '<span class="ft-txt"><span class="ft-l">' + s.label + '</span><span class="ft-d">' + s.desc + '</span>' +
         (s.date ? '<span class="ft-date">' + s.date + '</span>' : '') + '</span>' +

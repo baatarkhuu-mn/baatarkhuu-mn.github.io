@@ -660,6 +660,8 @@ body.am-lock { overflow: hidden; }
 .status-passed { background: rgba(52,201,124,.12); color: var(--color-success); border-color: rgba(52,201,124,.4); }
 .status-review { background: rgba(240,164,55,.12); color: var(--color-warning); border-color: rgba(240,164,55,.4); }
 .status-draft  { background: rgba(147,165,192,.12); color: var(--color-text-soft); border-color: rgba(147,165,192,.35); }
+.status-cancel { background: rgba(225,29,72,.12); color: #e11d48; border-color: rgba(225,29,72,.38);
+  --ic: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272.6%27%20stroke-linecap%3D%27round%27%3E%3Cpath%20d%3D%27M18%206%206%2018M6%206l12%2012%27%2F%3E%3C%2Fsvg%3E"); }
 
 /* ---------- 13. Холбоо барих ---------- */
 .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
@@ -1457,10 +1459,12 @@ a.news-card-clean { text-decoration: none; color: inherit; display: flex; flex-d
 .fb-timeline .ft-c3 { --ftc: #3b82f6; }
 .fb-timeline .ft-c4 { --ftc: #8b5cf6; }
 .fb-timeline .ft-c5 { --ftc: #12b5a6; }
+.fb-timeline .ft-c6 { --ftc: #16a34a; }
+.fb-timeline .ft-step.ft-cancel { --ftc: #e11d48; }
 .fb-timeline .ft-step.done .ft-ic { background: var(--ftc); border-color: var(--ftc); color: #fff; box-shadow: 0 8px 18px -7px var(--ftc); }
 .fb-timeline .ft-step.done .ft-l { color: var(--color-text); }
 .fb-timeline .ft-step.done::before { background: var(--ftc); }
-@media (max-width: 720px) {
+@media (max-width: 820px) {
   .fb-timeline { flex-direction: column; gap: 0; }
   .fb-timeline .ft-step { flex-direction: row; align-items: flex-start; text-align: left; gap: 16px; padding: 0 0 26px; }
   .fb-timeline .ft-step::before { left: 23px; right: auto; top: 48px; height: calc(100% - 48px); width: 3px; }
