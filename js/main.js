@@ -2433,7 +2433,6 @@
       el.className = "event-feature reveal visible";
       let day = "", mon = "";
       if (ev.event_date) { const d = new Date(ev.event_date); day = d.getDate(); mon = (d.getMonth() + 1) + "-р сар"; }
-      const meta = [ev.location, ev.time_label].filter(Boolean).map(esc).join(" · ");
       el.innerHTML =
         `<div class="ef-img${ev.image_url ? "" : " ef-noimg"}">
            ${ev.image_url ? `<img src="${esc(ev.image_url)}" alt="${esc(ev.title)}" onerror="this.style.display='none';this.parentNode.classList.add('ef-noimg')" />` : ""}
@@ -2455,11 +2454,6 @@
         const a = document.createElement("a");
         a.className = "btn btn-gold"; a.href = url; a.textContent = "Бүртгүүлэх";
         cta.appendChild(a);
-      }
-      if (ev.location || ev.time_label) {
-        const m = document.createElement("span"); m.className = "ef-meta";
-        m.textContent = [ev.location, ev.time_label].filter(Boolean).join(" · ");
-        cta.appendChild(m);
       }
       const more = document.createElement("a"); more.className = "ef-more"; more.href = url; more.textContent = "Дэлгэрэнгүй →";
       cta.appendChild(more);
