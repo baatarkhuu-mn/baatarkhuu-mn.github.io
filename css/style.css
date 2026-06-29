@@ -1994,11 +1994,11 @@ body.hp.nav-on .navbar-wrap { box-shadow: 0 10px 34px -18px rgba(0,0,0,.55); }
 
 /* Header дотор «БҮТЭЭГЧ МОНГОЛ» текстийн оронд лого зураг (нүүртэй ижил, theme-аар солигдоно) */
 .hb-logo { display: inline-flex; align-items: center; flex-shrink: 0; line-height: 0; }
-.hb-logo-img { height: 60px; width: auto; display: block; }
+.hb-logo-img { height: 80px; width: auto; display: block; }
 .hb-logo .hb-logo-dark { display: none; }
 [data-theme="dark"] .hb-logo .hb-logo-light { display: none; }
 [data-theme="dark"] .hb-logo .hb-logo-dark { display: block; }
-@media (max-width: 560px) { .hb-logo-img { height: 44px; } }
+@media (max-width: 560px) { .hb-logo-img { height: 58px; } }
 
 /* Гар утас/touch: видео embed дээгүүр scroll хийхэд iframe булаацалдан FB рүү үсрэхээс сэргийлнэ —
    ил тод "хамгаалалт" дээр нь тавьж, эхний даралтаар тоглуулахаар нээнэ */
