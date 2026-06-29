@@ -2276,44 +2276,37 @@
             el.classList.add("is-clickable");
             el.addEventListener("click", (e) => { if (e.target.closest("a,button")) return; location.href = url; });
           });
-          ProjectsCMS.buildFilter(grid); // чиглэлээр шүүх толгой
         });
     },
-    buildFilter(grid) {
-      const pillsBox = document.querySelector("[data-proj-pills]");
-      if (!pillsBox) return;
-      const cards = Array.prototype.filter.call(grid.children, (c) => c.nodeType === 1 && c.classList.contains("card"));
-      const counts = {};
-      cards.forEach((c) => { const cat = (c.dataset.category || "").trim(); if (cat) counts[cat] = (counts[cat] || 0) + 1; });
-      const cats = Object.keys(counts);
-      if (!cats.length) { pillsBox.style.display = "none"; return; }
-      pillsBox.style.display = "";
-      let active = "all";
-      const esc = ProjectsCMS.esc;
-      const apply = () => {
-        cards.forEach((c) => {
-          const ok = active === "all" || (c.dataset.category || "").trim() === active;
-          c.style.display = ok ? "" : "none";
-        });
-      };
-      const render = () => {
-        const mk = (key, label, n) => '<button class="law-pill' + (active === key ? " active" : "") + '" type="button" data-pill="' + esc(key) + '">' + esc(label) + '<span class="lp-n">' + n + '</span></button>';
-        let html = mk("all", "Бүгд", cards.length);
-        cats.forEach((cat) => { html += mk(cat, cat, counts[cat]); });
-        pillsBox.innerHTML = html;
-        pillsBox.querySelectorAll(".law-pill").forEach((b) => b.addEventListener("click", () => { active = b.dataset.pill; render(); apply(); }));
-      };
-      render(); apply();
+    CAT_ICON: {
+      sport: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>',
+      green: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6"/></svg>',
+      edu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+      health: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7z"/></svg>',
+      infra: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/><path d="M9 7h6M9 11h6M9 15h6"/></svg>',
+      tech: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/></svg>',
+      def: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 13.42 20.6a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><path d="M7 7h.01"/></svg>',
+    },
+    catBadge(cat) {
+      const c = (cat || "").toLowerCase();
+      if (/спорт|тамир/.test(c)) return { cls: "cat-sport", icon: ProjectsCMS.CAT_ICON.sport };
+      if (/ногоон|мод|байгал|эко/.test(c)) return { cls: "cat-green", icon: ProjectsCMS.CAT_ICON.green };
+      if (/боловсрол|сургууль|цэцэрлэг|сурга|програм/.test(c)) return { cls: "cat-edu", icon: ProjectsCMS.CAT_ICON.edu };
+      if (/эрүүл|эмнэл|эмч|анагаах/.test(c)) return { cls: "cat-health", icon: ProjectsCMS.CAT_ICON.health };
+      if (/цахим|технолог|дижитал/.test(c)) return { cls: "cat-tech", icon: ProjectsCMS.CAT_ICON.tech };
+      if (/зам|дэд бүтэц|барил|инженер|гэрэлт|ус|нийтийн/.test(c)) return { cls: "cat-infra", icon: ProjectsCMS.CAT_ICON.infra };
+      return { cls: "cat-default", icon: ProjectsCMS.CAT_ICON.def };
     },
     card(p) {
       const esc = ProjectsCMS.esc;
-      const st = ProjectsCMS.STATUS[p.status] || ProjectsCMS.STATUS.ongoing;
+      const cat = ProjectsCMS.catBadge(p.category || "");
       const media = (p.image_url
         ? `<img src="${esc(p.image_url)}" alt="${esc(p.title)}" loading="lazy" onerror="this.remove()" />`
         : "") + `<span class="placeholder"><img src="/assets/img/logo.svg" alt="" style="width:46%;opacity:.4" /></span>`;
       return `<article class="card reveal visible" data-item data-category="${esc(p.category || "")}" data-title="${esc(p.title)}">
-        <div class="card-media"><span class="tag">${esc(p.category || "Төсөл")}</span><span class="tag status-tag badge-status ${st.cls}">${st.label}</span>${media}</div>
+        <div class="card-media">${media}</div>
         <div class="card-body">
+          ${p.category ? `<span class="proj-cat ${cat.cls}">${cat.icon}${esc(p.category)}</span>` : ""}
           <h3>${esc(p.title)}</h3>
           <p>${esc(p.description || "")}</p>
           <span class="card-link">Дэлгэрэнгүй →</span>

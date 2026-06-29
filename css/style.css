@@ -621,6 +621,18 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .law-card .lc-src.lc-src-muted { color: var(--color-text-soft); }
 @media (max-width: 600px) { .law-board { grid-template-columns: 1fr; } }
 
+/* Төслийн карт — чиглэлийн өнгөт + дүрст badge */
+.proj-cat { display: inline-flex; align-items: center; gap: 6px; align-self: flex-start; font-size: .8rem; font-weight: 700;
+  padding: 5px 13px; border-radius: 30px; border: 1px solid transparent; margin-bottom: 11px; }
+.proj-cat svg { width: 14px; height: 14px; flex-shrink: 0; }
+.cat-sport   { color: #d8612f; background: rgba(216,97,47,.13);  border-color: rgba(216,97,47,.32); }
+.cat-green   { color: #1d9e75; background: rgba(29,158,117,.13); border-color: rgba(29,158,117,.32); }
+.cat-edu     { color: #4d8df0; background: rgba(77,141,240,.14); border-color: rgba(77,141,240,.32); }
+.cat-health  { color: #e0556e; background: rgba(224,85,110,.13); border-color: rgba(224,85,110,.32); }
+.cat-tech    { color: #8b7ff0; background: rgba(139,127,240,.14); border-color: rgba(139,127,240,.32); }
+.cat-infra   { color: #8a98b0; background: rgba(138,152,176,.13); border-color: rgba(138,152,176,.3); }
+.cat-default { color: var(--color-accent); background: var(--color-accent-soft); border-color: var(--color-border); }
+
 /* Хуулийн дэлгэрэнгүй цонх */
 .law-modal { position: fixed; inset: 0; z-index: 2000; background: rgba(2,8,18,.9); display: none; align-items: center; justify-content: center; padding: 20px; }
 .law-modal.open { display: flex; animation: fadeIn .2s ease; }
