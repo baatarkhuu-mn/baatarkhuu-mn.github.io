@@ -1298,6 +1298,9 @@
           wrap.innerHTML = '<p class="feed-state">Одоогоор нийтэлсэн санал алга. Та формоор санал илгээж, «олон нийтэд харуулах»-ыг сонгож болно.</p>';
           return;
         }
+        this._rows = rows;
+        // Нүүр хуудас — зөвхөн илгээсэн зургийн галерей (лайк/коммент/шүүлтүүргүй)
+        if (wrap.hasAttribute("data-feed-gallery")) { this.renderGallery(); return; }
         // Дэмжлэгийн тоо + коммент (нэг дор)
         const likeMap = {};
         try { const { data: lc } = await sb.rpc("like_counts"); (lc || []).forEach((r) => { likeMap[r.feedback_id] = r.cnt; }); } catch (_) {}
@@ -1344,6 +1347,41 @@
       if (!list.length) { this._wrap.innerHTML = '<p class="feed-state">Илэрц алга.</p>'; return; }
       list.forEach((r) => this._wrap.appendChild(this.card(this._sb, r, this._likeMap[r.id] || 0, this._cmtMap[r.id] || [], this._liked)));
       this._wrap.scrollTop = 0;
+    },
+
+    // Нүүр хуудасны зургийн галерей — зөвхөн зурагтай саналууд, дарвал том зураг нээнэ
+    renderGallery() {
+      const wrap = this._wrap, sb = this._sb;
+      const items = this._rows.filter((r) => Array.isArray(r.photos) && r.photos.length);
+      wrap.className = "feed-gallery";
+      wrap.innerHTML = "";
+      items.forEach((r) => {
+        let url = "";
+        try { url = sb.storage.from("feedback-public").getPublicUrl(r.photos[0]).data.publicUrl; } catch (_) {}
+        if (!url) return;
+        const subj = this.SUBJ[r.subject] || r.subject || "Санал";
+        const b = document.createElement("button");
+        b.type = "button"; b.className = "fg-item"; b.setAttribute("aria-label", subj + " — зургийг томоор үзэх");
+        b.innerHTML = '<img src="' + url + '" alt="' + this.esc(subj) + '" loading="lazy" />';
+        b.addEventListener("click", () => this.openLightbox(url, subj));
+        wrap.appendChild(b);
+      });
+      if (!wrap.children.length) wrap.innerHTML = '<p class="feed-state">Одоогоор зурагтай нийтэлсэн санал алга.</p>';
+    },
+    openLightbox(url, caption) {
+      let lb = document.querySelector(".fg-lightbox");
+      if (!lb) {
+        lb = document.createElement("div");
+        lb.className = "fg-lightbox";
+        lb.innerHTML = '<button class="fg-lb-close" type="button" aria-label="Хаах">&times;</button><img class="fg-lb-img" alt="" /><div class="fg-lb-cap"></div>';
+        document.body.appendChild(lb);
+        const close = () => { lb.classList.remove("open"); document.body.style.overflow = ""; };
+        lb.addEventListener("click", (e) => { if (e.target === lb || e.target.closest(".fg-lb-close")) close(); });
+        document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
+      }
+      lb.querySelector(".fg-lb-img").src = url;
+      lb.querySelector(".fg-lb-cap").textContent = caption || "";
+      lb.classList.add("open"); document.body.style.overflow = "hidden";
     },
 
     card(sb, r, likeCount, comments, liked) {

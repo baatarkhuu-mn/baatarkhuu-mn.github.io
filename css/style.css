@@ -2196,3 +2196,24 @@ body.hp.nav-on .navbar-wrap { box-shadow: 0 10px 34px -18px rgba(0,0,0,.55); }
 
 @media (max-width: 920px) { .contact2-grid { grid-template-columns: 1fr; gap: 34px; } .contact2-info { max-width: none; } }
 @media (max-width: 520px) { .social-cards { grid-template-columns: 1fr; } }
+
+
+/* ============ Нүүр — лого авсны дараа hero-г нягтруулсан, эгнэсэн цэс томруулсан ============ */
+body.hp .home-hero { min-height: 0; padding-top: 96px; padding-bottom: 46px; }
+body.hp .home-hero .hh-grid { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+body.hp .home-hero .hh-cta { justify-content: center; }
+.hh-tile { padding: 30px 14px; font-size: 1.05rem; gap: 14px; border-radius: 18px; }
+.hh-tile svg { width: 34px; height: 34px; }
+@media (max-width: 560px) { body.hp .home-hero { padding-top: 84px; } .hh-tile { padding: 22px 10px; font-size: .95rem; } .hh-tile svg { width: 28px; height: 28px; } }
+
+/* ============ Иргэдийн нийтэлсэн санал — зургийн галерей + том зураг (lightbox) ============ */
+.feed-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.fg-item { padding: 0; border: 1px solid var(--color-border); border-radius: 12px; overflow: hidden; cursor: pointer; background: var(--color-bg-soft); aspect-ratio: 1 / 1; transition: transform var(--transition), box-shadow var(--transition); }
+.fg-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.fg-item:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: var(--color-primary-dark); }
+.feed-cta { text-align: center; margin-top: 30px; }
+.fg-lightbox { position: fixed; inset: 0; z-index: 9999; background: rgba(4,8,16,.9); display: none; align-items: center; justify-content: center; padding: 28px; }
+.fg-lightbox.open { display: flex; }
+.fg-lb-img { max-width: 94vw; max-height: 84vh; border-radius: 8px; box-shadow: 0 20px 60px rgba(0,0,0,.6); }
+.fg-lb-close { position: absolute; top: 14px; right: 22px; background: none; border: none; color: #fff; font-size: 2.6rem; line-height: 1; cursor: pointer; padding: 4px 12px; }
+.fg-lb-cap { position: absolute; bottom: 20px; left: 0; right: 0; text-align: center; color: #e8eef8; font-size: .9rem; padding: 0 20px; }
