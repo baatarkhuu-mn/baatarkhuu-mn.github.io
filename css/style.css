@@ -1835,11 +1835,8 @@ body.hp .navbar-wrap { border-bottom: 1px solid rgba(255,255,255,.06); }
     linear-gradient(158deg, #0b1430 0%, #0c1838 58%, #0a1126 100%); }
 [data-theme="light"] .home-hero {
   background:
-    radial-gradient(70% 85% at 6% -8%, #e2e7ff, transparent 55%),
-    radial-gradient(60% 75% at 97% -6%, #ffe6e0, transparent 52%),
-    radial-gradient(72% 85% at 96% 106%, #d7f2ea, transparent 55%),
-    radial-gradient(55% 60% at 18% 112%, #eee2ff, transparent 58%),
-    #f5f7fc; }
+    radial-gradient(92% 66% at 50% -14%, rgba(16, 48, 104, .11), transparent 62%),
+    linear-gradient(180deg, #eef2f9 0%, #f5f8fc 58%); }
 
 .hh-grid { display: grid; grid-template-columns: 1.12fr .88fr; gap: 36px; align-items: center; position: relative; z-index: 2; }
 .hh-eyebrow { display: inline-flex; align-items: center; gap: 9px; font-size: .74rem; letter-spacing: .2em; text-transform: uppercase; color: #aab8d6; padding: 7px 15px; border-radius: 30px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.13); }
@@ -1911,11 +1908,8 @@ body.fx-digital .hb-overlay, .hb-overlay { display: none; }
     linear-gradient(160deg, #0c1842 0%, #111a42 52%, #0a1330 100%); }
 [data-theme="light"] .home-hero {
   background:
-    radial-gradient(58% 56% at 13% 2%, #c3ccff, transparent 60%),
-    radial-gradient(54% 50% at 90% 5%, #ffccbd, transparent 58%),
-    radial-gradient(74% 66% at 99% 104%, #b6e6ee, transparent 60%),
-    radial-gradient(62% 56% at 1% 104%, #e0cbff, transparent 60%),
-    linear-gradient(160deg, #eef1fc 0%, #f3eefb 55%, #eaf2fb 100%); }
+    radial-gradient(92% 66% at 50% -14%, rgba(16, 48, 104, .11), transparent 62%),
+    linear-gradient(180deg, #eef2f9 0%, #f5f8fc 58%); }
 .hh-grid { align-content: center; }
 
 /* ============ Төлөвийн badge — өнгөт icon-той pill (бүх хэсэгт) ============ */
