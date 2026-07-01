@@ -1994,12 +1994,8 @@ body.hp .hh-topbar { top: 92px; }
 /* ============ Hero бүтэн дэлгэц дүүргэнэ ============ */
 .home-hero { min-height: 100vh; }
 
-/* ============ Нүүр navbar: scroll-доход (десктоп) хуучин бүтэн inline цэс ============ */
-@media (min-width: 961px) {
-  body.hp.nav-on .nav-toggle { display: none; }
-  body.hp.nav-on .main-nav { position: static; max-height: none; overflow: visible; width: auto; background: none; border: none; box-shadow: none; right: auto; }
-  body.hp.nav-on .main-nav ul { flex-direction: row; padding: 0; gap: 2px; }
-}
+/* ============ Нүүр navbar: scroll хийсэн ч Хувилбар 1 хэвээр (гамбургер + брэнд төвд) ============ */
+/* (Өмнө scroll-доход десктопт бүтэн inline цэс болдог байсныг авав) */
 
 /* Таны лого зураг — цэвэр цагаан дугуй булантай карт */
 .hh-logo-img { max-width: min(340px, 80vw); height: auto; display: block; border-radius: 18px; background: #fff; box-shadow: 0 24px 58px -22px rgba(0,0,0,.5); }
