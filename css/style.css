@@ -2256,18 +2256,22 @@ body.hp .main-nav { transition: none; }
 @media (max-width: 430px) { .feed-dashboard { grid-template-columns: 1fr; } }
 
 
-/* ============ Нүүр hero — CTA зүүн | гишүүний зураг баруун ============ */
-body.hp .home-hero .hh-grid { grid-template-columns: 1fr 1.08fr; justify-items: stretch; text-align: left; align-items: center; gap: 44px; }
-body.hp .home-hero .hh-text { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
-body.hp .home-hero .hh-cta { justify-content: flex-start; }
-.hh-photo { margin: 0; position: relative; z-index: 2; }
-.hh-photo img { width: 100%; height: auto; display: block; border-radius: 18px; border: 1px solid rgba(255,255,255,.14); box-shadow: 0 30px 66px -26px rgba(0,0,0,.6); }
-[data-theme="light"] .hh-photo img { border-color: #dbe3ef; box-shadow: 0 26px 56px -24px rgba(40,55,90,.35); }
+/* ============ Нүүр hero — контент төвд, гишүүний зураг арын дэвсгэрт уусгасан ============ */
+body.hp .home-hero .hh-grid { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+body.hp .home-hero .hh-text { display: flex; flex-direction: column; align-items: center; }
+body.hp .home-hero .hh-cta { justify-content: center; }
+.hh-bg { position: absolute; top: 0; right: 0; bottom: 0; width: min(60%, 840px); z-index: 0; pointer-events: none;
+  background: url("/assets/img/member-hero.jpg") center right / cover no-repeat;
+  opacity: .40;
+  -webkit-mask-image: linear-gradient(to left, #000 4%, rgba(0,0,0,.5) 42%, transparent 86%);
+  mask-image: linear-gradient(to left, #000 4%, rgba(0,0,0,.5) 42%, transparent 86%);
+}
+[data-theme="light"] .hh-bg { opacity: .24; }
 @media (max-width: 860px) {
-  body.hp .home-hero .hh-grid { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 26px; }
-  body.hp .home-hero .hh-text { align-items: center; order: 2; }
-  body.hp .home-hero .hh-cta { justify-content: center; }
-  .hh-photo { order: 1; max-width: 540px; }
+  .hh-bg { width: 100%; opacity: .14;
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 78%);
+    mask-image: linear-gradient(to bottom, #000 0%, transparent 78%); }
+  [data-theme="light"] .hh-bg { opacity: .1; }
 }
 
 
