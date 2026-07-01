@@ -118,16 +118,16 @@
       const nav = document.querySelector(".main-nav");
       if (!toggle || !nav) return;
 
-      toggle.addEventListener("click", () => {
-        const open = nav.classList.toggle("open");
+      const setOpen = (open) => {
         toggle.setAttribute("aria-expanded", open);
-      });
+        // Inline !important max-height — CSS cascade-аас үл хамаарч найдвартай нээх/хаах
+        if (open) nav.style.setProperty("max-height", "80vh", "important");
+        else nav.style.removeProperty("max-height");
+      };
+      toggle.addEventListener("click", () => { setOpen(nav.classList.toggle("open")); });
       // Цэс дээр дарахад хаах
       nav.querySelectorAll("a").forEach((a) =>
-        a.addEventListener("click", () => {
-          nav.classList.remove("open");
-          toggle.setAttribute("aria-expanded", "false");
-        })
+        a.addEventListener("click", () => { nav.classList.remove("open"); setOpen(false); })
       );
 
       // Header scroll shadow + нүүрэнд navbar-ыг hero өнгөрсний дараа гаргах

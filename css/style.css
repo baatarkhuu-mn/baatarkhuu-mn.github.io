@@ -2217,3 +2217,29 @@ body.hp .home-hero .hh-cta { justify-content: center; }
 .fg-lb-img { max-width: 94vw; max-height: 84vh; border-radius: 8px; box-shadow: 0 20px 60px rgba(0,0,0,.6); }
 .fg-lb-close { position: absolute; top: 14px; right: 22px; background: none; border: none; color: #fff; font-size: 2.6rem; line-height: 1; cursor: pointer; padding: 4px 12px; }
 .fg-lb-cap { position: absolute; bottom: 20px; left: 0; right: 0; text-align: center; color: #e8eef8; font-size: .9rem; padding: 0 20px; }
+
+
+/* ============ Нүүр — Хувилбар 1: navbar [tools зүүн | брэнд төвд | hamburger баруун] ============ */
+body.hp .navbar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; }
+body.hp .navbar .nav-tools { justify-self: start; }
+body.hp .navbar .nav-toggle { justify-self: end; }
+body.hp .nav-brand { justify-self: center; display: inline-flex; align-items: center; gap: 12px; text-decoration: none; min-width: 0; }
+body.hp .nav-brand .emblem { width: 42px; height: 42px; flex-shrink: 0; }
+body.hp .nav-brand .emblem img { filter: none; }
+body.hp .nav-brand .hb-titles { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+body.hp .nav-brand .hb-role { color: var(--color-text-soft); text-shadow: none; font-size: .74rem; font-weight: 600; white-space: nowrap; }
+body.hp .nav-brand .hb-name { color: var(--color-text); text-shadow: none; font-size: 1.16rem; font-weight: 800; letter-spacing: .03em; white-space: nowrap; line-height: 1.12; }
+body.hp .home-hero { padding-top: 90px; }
+@media (max-width: 760px) {
+  body.hp .nav-brand .emblem { width: 34px; height: 34px; }
+  body.hp .nav-brand .hb-name { font-size: .98rem; }
+  body.hp .nav-brand .hb-role { display: none; }
+}
+@media (max-width: 440px) { body.hp .nav-brand .hb-titles { display: none; } }
+
+
+/* Нүүр гамбургер dropdown — нээгдэхэд өргөрнө (JS inline max-height-аар баталгаажна) */
+body.hp:not(.nav-on) .main-nav.open { overflow-y: auto; }
+
+/* Нүүр гамбургер dropdown — max-height transition-гүй (найдвартай нээгдэнэ; JS inline 80vh) */
+body.hp .main-nav { transition: none; }
