@@ -2238,3 +2238,19 @@ body.hp:not(.nav-on) .main-nav.open { overflow-y: auto; }
 
 /* Нүүр гамбургер dropdown — max-height transition-гүй (найдвартай нээгдэнэ; JS inline 80vh) */
 body.hp .main-nav { transition: none; }
+
+
+/* ============ Санал хүсэлтийн статус дашбоард (иргэдийн нийтэлсэн саналын дээр) ============ */
+.feed-dashboard { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 30px; }
+.fbd-card { display: flex; align-items: center; gap: 14px; background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: 16px; padding: 18px; box-shadow: var(--shadow-sm); }
+.fbd-ic { flex: none; width: 50px; height: 50px; border-radius: 13px; display: grid; place-items: center; }
+.fbd-ic svg { width: 25px; height: 25px; }
+.fbd-txt { min-width: 0; }
+.fbd-n { font-size: 1.95rem; font-weight: 800; line-height: 1; color: var(--color-text); font-variant-numeric: tabular-nums; }
+.fbd-l { font-size: .82rem; color: var(--color-text-soft); margin-top: 6px; line-height: 1.32; }
+.fbd-blue   .fbd-ic { color: #4d8df0; background: rgba(77,141,240,.14); }
+.fbd-amber  .fbd-ic { color: #e0902f; background: rgba(224,144,47,.15); }
+.fbd-indigo .fbd-ic { color: #8b7ff0; background: rgba(139,127,240,.15); }
+.fbd-green  .fbd-ic { color: #1d9e75; background: rgba(29,158,117,.14); }
+@media (max-width: 860px) { .feed-dashboard { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 430px) { .feed-dashboard { grid-template-columns: 1fr; } }

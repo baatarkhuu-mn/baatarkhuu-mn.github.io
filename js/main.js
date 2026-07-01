@@ -2552,20 +2552,51 @@
 
   /* ---------- Санал хүсэлтийн тойм (dashboard) ---------- */
   const FeedbackStats = {
+    IC: {
+      total: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>',
+      routed: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>',
+      responded: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 10 4 15 9 20"/><path d="M20 4v7a4 4 0 0 1-4 4H4"/></svg>',
+      resolved: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+    },
+    count(el, target) {
+      target = target || 0;
+      const dur = 1100, t0 = performance.now();
+      const step = (now) => {
+        const p = Math.min((now - t0) / dur, 1);
+        const e = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(target * e).toLocaleString("en-US");
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    },
     async init() {
-      const box = document.querySelector("[data-fb-stats]");
+      const box = document.querySelector("[data-feed-dashboard]");
       if (!box) return;
       const sb = window.getSB && window.getSB();
       if (!sb) return;
       try {
-        const { data, error } = await sb.rpc("feedback_stats");
-        if (error || !data) return;
-        const s = data;
+        const { data: s, error } = await sb.rpc("feedback_stats");
+        if (error || !s) return;
         const cards = [
-          ["Нийт санал", s.total], ["Энэ сард ирсэн", s.month],
-          ["Шийдвэрлэсэн", s.resolved], ["Иргэдийн дэмжлэг", s.supports],
+          { k: "total",     c: "fbd-blue",   n: s.total,     l: "Нийт хүсэлт" },
+          { k: "routed",    c: "fbd-amber",  n: s.routed,    l: "Хариуцсан байгууллагад илгээсэн" },
+          { k: "responded", c: "fbd-indigo", n: s.responded, l: "Хариу ирсэн" },
+          { k: "resolved",  c: "fbd-green",  n: s.resolved,  l: "Шийдвэрлэгдсэн" },
         ];
-        box.innerHTML = cards.map(([l, n]) => `<div class="fbs-card"><div class="fbs-n">${n == null ? 0 : n}</div><div class="fbs-l">${l}</div></div>`).join("");
+        box.innerHTML = cards.map((c) => {
+          const val = (c.n == null ? 0 : c.n);
+          return '<div class="fbd-card ' + c.c + '"><span class="fbd-ic">' + this.IC[c.k] + '</span>' +
+            '<div class="fbd-txt"><div class="fbd-n" data-target="' + val + '">' + val.toLocaleString("en-US") + '</div>' +
+            '<div class="fbd-l">' + c.l + '</div></div></div>';
+        }).join("");
+        // Эцсийн тоо аль хэдийн харагдаж байгаа; дэлгэцэд орж ирэхэд 0-оос count-up хийнэ
+        const nums = box.querySelectorAll(".fbd-n");
+        let started = false;
+        const run = () => { if (started) return; started = true; nums.forEach((el) => this.count(el, parseInt(el.dataset.target, 10) || 0)); };
+        if ("IntersectionObserver" in window) {
+          const io = new IntersectionObserver((ents, obs) => { ents.forEach((e) => { if (e.isIntersecting) { run(); obs.disconnect(); } }); }, { threshold: 0.2 });
+          io.observe(box);
+        }
       } catch (_) {}
     },
   };
