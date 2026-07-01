@@ -2246,12 +2246,12 @@ body.hp .main-nav { transition: none; }
 body.hp .home-hero .hh-grid { grid-template-columns: 1.05fr 1fr; justify-items: start; text-align: left; align-items: center; gap: 30px; }
 body.hp .home-hero .hh-text { display: flex; flex-direction: column; align-items: flex-start; position: relative; z-index: 2; }
 body.hp .home-hero .hh-cta { justify-content: flex-start; }
-.hh-brand { display: inline-flex; align-items: center; gap: 14px; text-decoration: none; margin-bottom: 22px; }
-.hh-brand .emblem { width: 58px; height: 58px; flex: none; }
+.hh-brand { display: inline-flex; align-items: center; gap: 16px; text-decoration: none; margin-bottom: 18px; }
+body.hp .home-hero .hh-brand .emblem { width: 76px; height: 76px; flex: none; }
 .hh-brand .emblem img { width: 100%; height: 100%; object-fit: contain; }
-.hh-brand .hb-titles { display: flex; flex-direction: column; gap: 2px; }
-.hh-brand .hb-role { color: var(--color-text-soft); text-shadow: none; font-size: .92rem; font-weight: 600; }
-.hh-brand .hb-name { color: var(--color-text); text-shadow: none; font-size: 1.62rem; font-weight: 800; letter-spacing: .03em; line-height: 1.1; }
+.hh-brand .hb-titles { display: flex; flex-direction: column; gap: 3px; }
+.hh-brand .hb-role { color: var(--color-text-soft); text-shadow: none; font-size: 1.02rem; font-weight: 600; }
+.hh-brand .hb-name { color: var(--color-text); text-shadow: none; font-size: clamp(1.9rem, 3.4vw, 2.5rem); font-weight: 800; letter-spacing: .02em; line-height: 1.06; }
 .hh-bg { position: absolute; top: 0; right: 0; bottom: 0; width: min(52%, 760px); z-index: 0; pointer-events: none;
   background: url("/assets/img/member-hero.jpg") center right / cover no-repeat; opacity: 1;
   -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,.5) 16%, #000 42%);
@@ -2268,7 +2268,11 @@ body.hp .home-hero .hh-cta { justify-content: flex-start; }
 }
 
 
-/* Нүүр hero — нэрний доорх уриа */
-.hh-tagline { font-size: clamp(1.18rem, 2.3vw, 1.7rem); font-weight: 700; line-height: 1.4; color: var(--color-text); margin: 0 0 22px; max-width: 26ch; }
-[data-theme="light"] .hh-tagline { color: #14233f; }
-@media (max-width: 860px) { .hh-tagline { max-width: 32ch; margin-bottom: 16px; } }
+/* Нүүр hero — нэрний доорх уриа (жижиг, бүдэг) */
+.hh-tagline { font-size: clamp(.92rem, 1.4vw, 1.08rem); font-weight: 500; line-height: 1.55; color: var(--color-text-soft); margin: 0 0 26px; max-width: 34ch; }
+[data-theme="light"] .hh-tagline { color: #5a6b86; }
+@media (max-width: 860px) { .hh-tagline { max-width: 36ch; margin-bottom: 20px; } }
+
+/* Нүүр hero — CTA товч том, тод */
+body.hp .hh-btn { font-size: clamp(1rem, 1.4vw, 1.14rem); padding: 18px 34px; font-weight: 700; border-radius: 14px; }
+@media (max-width: 480px) { body.hp .hh-btn { font-size: .96rem; padding: 15px 22px; } }
