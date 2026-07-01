@@ -2252,7 +2252,7 @@ body.hp .home-hero .hh-brand .emblem { width: 76px; height: 76px; flex: none; }
 .hh-brand .hb-titles { display: flex; flex-direction: column; gap: 3px; }
 .hh-brand .hb-role { color: var(--color-text-soft); text-shadow: none; font-size: 1.02rem; font-weight: 600; }
 .hh-brand .hb-name { color: var(--color-text); text-shadow: none; font-size: clamp(1.9rem, 3.4vw, 2.5rem); font-weight: 800; letter-spacing: .02em; line-height: 1.06; }
-.hh-bg { position: absolute; top: 0; right: 0; bottom: 0; width: min(52%, 760px); z-index: 0; pointer-events: none;
+.hh-bg { position: absolute; top: 0; right: -4%; bottom: 0; width: min(52%, 760px); z-index: 0; pointer-events: none;
   background: url("/assets/img/member-hero.jpg") center right / cover no-repeat; opacity: 1;
   -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,.5) 16%, #000 42%);
   mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,.5) 16%, #000 42%);
