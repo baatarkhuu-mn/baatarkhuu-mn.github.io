@@ -2254,3 +2254,18 @@ body.hp .main-nav { transition: none; }
 .fbd-green  .fbd-ic { color: #1d9e75; background: rgba(29,158,117,.14); }
 @media (max-width: 860px) { .feed-dashboard { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 430px) { .feed-dashboard { grid-template-columns: 1fr; } }
+
+
+/* ============ Нүүр hero — CTA зүүн | гишүүний зураг баруун ============ */
+body.hp .home-hero .hh-grid { grid-template-columns: 1fr 1.08fr; justify-items: stretch; text-align: left; align-items: center; gap: 44px; }
+body.hp .home-hero .hh-text { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+body.hp .home-hero .hh-cta { justify-content: flex-start; }
+.hh-photo { margin: 0; position: relative; z-index: 2; }
+.hh-photo img { width: 100%; height: auto; display: block; border-radius: 18px; border: 1px solid rgba(255,255,255,.14); box-shadow: 0 30px 66px -26px rgba(0,0,0,.6); }
+[data-theme="light"] .hh-photo img { border-color: #dbe3ef; box-shadow: 0 26px 56px -24px rgba(40,55,90,.35); }
+@media (max-width: 860px) {
+  body.hp .home-hero .hh-grid { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 26px; }
+  body.hp .home-hero .hh-text { align-items: center; order: 2; }
+  body.hp .home-hero .hh-cta { justify-content: center; }
+  .hh-photo { order: 1; max-width: 540px; }
+}
