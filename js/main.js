@@ -2144,48 +2144,39 @@
         const { data, error } = await sb.from("videos").select("*").eq("published", true)
           .order("created_at", { ascending: false }).limit(15);
         if (error || !data || !data.length) { wrap.innerHTML = '<p class="feed-state">Видео одоогоор алга.</p>'; return; }
-        // Онцлох (том тоглуулагч) + баруун талд дарж болох жагсаалт (playlist).
-        const vids = sortByContentDate(data).slice(0, 8);
-        let fi = vids.findIndex((v) => v.featured); if (fi < 0) fi = 0;
-        const PLAY = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
-        wrap.innerHTML =
-          '<div class="vhh-grid">' +
-            '<div class="vhh-feat">' +
-              '<div class="vhh-feat-media" data-vhh-media></div>' +
-              '<div class="vhh-feat-cap"><h3 data-vhh-title></h3><span class="vhh-date" data-vhh-date></span></div>' +
-            '</div>' +
-            '<div class="vhh-list" data-vhh-list>' +
-              vids.map((v, i) =>
-                '<button type="button" class="vhh-item" data-i="' + i + '">' +
-                  '<span class="vhh-thumb">' + PLAY + '</span>' +
-                  '<span class="vhh-it-txt">' +
-                    '<span class="vhh-it-title">' + esc(v.title || "Видео") + '</span>' +
-                    (v.excerpt ? '<span class="vhh-it-exc">' + esc(v.excerpt) + '</span>' : '') +
-                    '<span class="vhh-it-date">' + (v.video_date ? '📅 ' + esc(v.video_date) : '') + '</span>' +
-                  '</span>' +
-                '</button>'
-              ).join("") +
-            '</div>' +
-          '</div>';
-        const media = wrap.querySelector("[data-vhh-media]");
-        const titleEl = wrap.querySelector("[data-vhh-title]");
-        const dateEl = wrap.querySelector("[data-vhh-date]");
-        const items = Array.from(wrap.querySelectorAll(".vhh-item"));
-        const embed = (v) => v.platform === "youtube"
-          ? '<div class="vhh-yt"><iframe src="https://www.youtube.com/embed/' + esc(VideoCMS.ytId(v.url)) + '?rel=0" title="Видео" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>'
-          : '<div class="fb-video" data-href="' + esc(v.url) + '" data-show-text="false" data-width="auto"></div>';
-        const load = (i, scroll) => {
-          const v = vids[i]; if (!v) return;
-          const badge = i === fi ? '<span class="vhh-badge">★ Онцлох</span>' : '';
-          media.innerHTML = badge + embed(v);
-          titleEl.textContent = v.title || "Видео";
-          dateEl.textContent = v.video_date || "";
-          items.forEach((b, j) => b.classList.toggle("on", j === i));
-          VideoCMS.parseFB();
-          if (scroll && window.innerWidth < 860) wrap.querySelector(".vhh-feat").scrollIntoView({ behavior: "smooth", block: "start" });
+        // Grid+row — бодит embed картууд (постероо харуулна), эхнийх нь онцлох.
+        const vids = sortByContentDate(data).slice(0, 6);
+        const fi = vids.findIndex((v) => v.featured);
+        if (fi > 0) vids.unshift(vids.splice(fi, 1)[0]);
+        wrap.innerHTML = '<div class="vhh-grid">' + vids.map((v, i) => {
+          const attr = v.platform === "youtube" ? 'data-yt="' + esc(VideoCMS.ytId(v.url)) + '"' : 'data-href="' + esc(v.url) + '"';
+          const badge = i === 0 ? '<span class="vhh-badge">★ Онцлох</span>' : '';
+          return '<article class="vhh-card' + (i === 0 ? ' vhh-card--feat' : '') + '">' +
+            '<div class="vhh-media"><div class="vhh-inner" ' + attr + '></div>' + badge + '</div>' +
+            '<div class="vhh-cap"><h3 class="vhh-t">' + esc(v.title || "Видео") + '</h3>' +
+            (v.video_date ? '<span class="vhh-d">📅 ' + esc(v.video_date) + '</span>' : '') +
+            '</div></article>';
+        }).join("") + '</div>';
+        const loadInner = (inner) => {
+          if (inner.dataset.loaded) return; inner.dataset.loaded = "1";
+          if (inner.dataset.yt) {
+            inner.innerHTML = '<div class="vhh-yt"><iframe src="https://www.youtube.com/embed/' + inner.dataset.yt + '?rel=0" title="Видео" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>';
+          } else {
+            inner.innerHTML = '<div class="fb-video" data-href="' + inner.dataset.href + '" data-show-text="false" data-width="auto"></div>';
+            VideoCMS.parseFB();
+          }
         };
-        items.forEach((b) => b.addEventListener("click", () => load(+b.dataset.i, true)));
-        load(fi);
+        const inners = Array.from(wrap.querySelectorAll(".vhh-inner"));
+        const loadVisible = () => {
+          inners.forEach((inner) => {
+            if (inner.dataset.loaded) return;
+            const r = inner.getBoundingClientRect();
+            if (r.top < window.innerHeight + 600 && r.bottom > -600) loadInner(inner);
+          });
+        };
+        window.addEventListener("scroll", loadVisible, { passive: true });
+        window.addEventListener("resize", loadVisible);
+        loadVisible();
       } catch (_) { wrap.innerHTML = '<p class="feed-state">Видео ачаалахад алдаа гарлаа.</p>'; }
     },
   };
