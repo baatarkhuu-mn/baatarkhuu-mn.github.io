@@ -2272,6 +2272,11 @@ body.hp .main-nav { transition: none; }
 .fbd-amber  .fbd-ic { color: #e0902f; background: rgba(224,144,47,.15); }
 .fbd-indigo .fbd-ic { color: #17a2a2; background: rgba(23,162,162,.15); }
 .fbd-green  .fbd-ic { color: #1d9e75; background: rgba(29,158,117,.14); }
+/* Карт бүрийн суурь өнгийг тус тусын өнгөөр бага зэрэг ялгаруулна */
+.fbd-blue   { background: color-mix(in srgb, #3071E7 9%,  var(--color-bg-card)); border-color: color-mix(in srgb, #3071E7 30%, var(--color-border)); }
+.fbd-amber  { background: color-mix(in srgb, #e0902f 10%, var(--color-bg-card)); border-color: color-mix(in srgb, #e0902f 30%, var(--color-border)); }
+.fbd-indigo { background: color-mix(in srgb, #17a2a2 10%, var(--color-bg-card)); border-color: color-mix(in srgb, #17a2a2 30%, var(--color-border)); }
+.fbd-green  { background: color-mix(in srgb, #1d9e75 10%, var(--color-bg-card)); border-color: color-mix(in srgb, #1d9e75 30%, var(--color-border)); }
 @media (max-width: 860px) { .feed-dashboard { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 430px) { .feed-dashboard { grid-template-columns: 1fr; } }
 
