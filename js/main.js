@@ -2139,52 +2139,53 @@
       if (!wrap) return;
       const sb = window.getSB && window.getSB();
       if (!sb) return;
+      const esc = VideoHero.esc;
       try {
         const { data, error } = await sb.from("videos").select("*").eq("published", true)
           .order("created_at", { ascending: false }).limit(15);
         if (error || !data || !data.length) { wrap.innerHTML = '<p class="feed-state">Видео одоогоор алга.</p>'; return; }
-        this._vids = sortByContentDate(data); this._wrap = wrap;
+        // Онцлох (том тоглуулагч) + баруун талд дарж болох жагсаалт (playlist).
+        const vids = sortByContentDate(data).slice(0, 8);
+        let fi = vids.findIndex((v) => v.featured); if (fi < 0) fi = 0;
+        const PLAY = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
         wrap.innerHTML =
-          `<div class="vreel-wrap">
-             <button type="button" class="vreel-arr vreel-prev" aria-label="Зүүн гүйлгэх">‹</button>
-             <div class="vreel-row" data-vreel-row></div>
-             <button type="button" class="vreel-arr vreel-next" aria-label="Баруун гүйлгэх">›</button>
-           </div>`;
-        const row = wrap.querySelector("[data-vreel-row]");
-        // Видео бүр өөрийн ЖИНХЭНЭ харьцаагаар (FB SDK автоматаар, хар зайгүй). Тогтсон өргөн, өндөр нь автомат.
-        row.innerHTML = this._vids.map((v) => {
-          const data = v.platform === "youtube"
-            ? `data-yt="${VideoHero.esc(VideoCMS.ytId(v.url))}"`
-            : `data-href="${VideoHero.esc(v.url)}"`;
-          return `<figure class="vreel-card"><div class="vreel-inner" ${data}></div><button type="button" class="vreel-hit" aria-label="${VideoHero.esc(v.title || "Видео")}"></button></figure>`;
-        }).join("");
-        const dx = () => Math.max(280, Math.round(row.clientWidth * 0.85));
-        wrap.querySelector(".vreel-prev").addEventListener("click", () => row.scrollBy({ left: -dx(), behavior: "smooth" }));
-        wrap.querySelector(".vreel-next").addEventListener("click", () => row.scrollBy({ left: dx(), behavior: "smooth" }));
-        const loadInner = (inner) => {
-          if (inner.dataset.loaded) return; inner.dataset.loaded = "1";
-          if (inner.dataset.yt) {
-            inner.innerHTML = '<div class="vreel-yt"><iframe src="https://www.youtube.com/embed/' + inner.dataset.yt + '?rel=0" title="Видео" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>';
-          } else {
-            inner.innerHTML = '<div class="fb-video" data-href="' + inner.dataset.href + '" data-show-text="false" data-width="auto"></div>';
-            VideoCMS.parseFB();
-          }
+          '<div class="vhh-grid">' +
+            '<div class="vhh-feat">' +
+              '<div class="vhh-feat-media" data-vhh-media></div>' +
+              '<div class="vhh-feat-cap"><h3 data-vhh-title></h3><span class="vhh-date" data-vhh-date></span></div>' +
+            '</div>' +
+            '<div class="vhh-list" data-vhh-list>' +
+              vids.map((v, i) =>
+                '<button type="button" class="vhh-item" data-i="' + i + '">' +
+                  '<span class="vhh-thumb">' + PLAY + '</span>' +
+                  '<span class="vhh-it-txt">' +
+                    '<span class="vhh-it-title">' + esc(v.title || "Видео") + '</span>' +
+                    (v.excerpt ? '<span class="vhh-it-exc">' + esc(v.excerpt) + '</span>' : '') +
+                    '<span class="vhh-it-date">' + (v.video_date ? '📅 ' + esc(v.video_date) : '') + '</span>' +
+                  '</span>' +
+                '</button>'
+              ).join("") +
+            '</div>' +
+          '</div>';
+        const media = wrap.querySelector("[data-vhh-media]");
+        const titleEl = wrap.querySelector("[data-vhh-title]");
+        const dateEl = wrap.querySelector("[data-vhh-date]");
+        const items = Array.from(wrap.querySelectorAll(".vhh-item"));
+        const embed = (v) => v.platform === "youtube"
+          ? '<div class="vhh-yt"><iframe src="https://www.youtube.com/embed/' + esc(VideoCMS.ytId(v.url)) + '?rel=0" title="Видео" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>'
+          : '<div class="fb-video" data-href="' + esc(v.url) + '" data-show-text="false" data-width="auto"></div>';
+        const load = (i, scroll) => {
+          const v = vids[i]; if (!v) return;
+          const badge = i === fi ? '<span class="vhh-badge">★ Онцлох</span>' : '';
+          media.innerHTML = badge + embed(v);
+          titleEl.textContent = v.title || "Видео";
+          dateEl.textContent = v.video_date || "";
+          items.forEach((b, j) => b.classList.toggle("on", j === i));
+          VideoCMS.parseFB();
+          if (scroll && window.innerWidth < 860) wrap.querySelector(".vhh-feat").scrollIntoView({ behavior: "smooth", block: "start" });
         };
-        // Зөвхөн харагдах/ойролцоо картыг ачаална (хэвтээ scroll дээр нэмж ачаална)
-        const loadVisible = () => {
-          const rr = row.getBoundingClientRect();
-          Array.from(row.children).forEach((card) => {
-            const inner = card.querySelector(".vreel-inner");
-            if (!inner || inner.dataset.loaded) return;
-            const cr = card.getBoundingClientRect();
-            if (cr.left < rr.right + 350 && cr.right > rr.left - 350) loadInner(inner);
-          });
-        };
-        row.addEventListener("scroll", loadVisible, { passive: true });
-        window.addEventListener("resize", loadVisible);
-        loadVisible();
-        // touch дээр hit-товч: гулсуулахад хуудас гүйнэ, дарахад тоглуулна (FB рүү үсрэхгүй)
-        row.addEventListener("click", (e) => { const hit = e.target.closest(".vreel-hit"); if (hit) hit.style.display = "none"; });
+        items.forEach((b) => b.addEventListener("click", () => load(+b.dataset.i, true)));
+        load(fi);
       } catch (_) { wrap.innerHTML = '<p class="feed-state">Видео ачаалахад алдаа гарлаа.</p>'; }
     },
   };

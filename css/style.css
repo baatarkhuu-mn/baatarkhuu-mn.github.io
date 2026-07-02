@@ -2131,6 +2131,42 @@ body.hp.nav-on .navbar-wrap { box-shadow: 0 10px 34px -18px rgba(0,0,0,.55); }
 .vreel-next { right: -10px; }
 @media (max-width: 600px) { .vreel-card { width: 270px; } .vreel-arr { display: none; } }
 
+/* ---------- Нүүр видео — Онцлох тоглуулагч + жагсаалт (playlist) ---------- */
+.vhh-grid { display: grid; grid-template-columns: minmax(300px, 400px) minmax(0, 1fr); gap: 26px; align-items: start; max-width: 1160px; margin-inline: auto; }
+.vhh-feat { min-width: 0; }
+.vhh-feat-media { position: relative; border-radius: var(--radius-lg); overflow: hidden; background: #000;
+  min-height: 380px; display: grid; place-items: center; box-shadow: var(--shadow); border: 1px solid var(--color-border); }
+.vhh-feat-media .fb-video { width: 100%; }
+.vhh-feat-media iframe { width: 100%; border: 0; display: block; }
+.vhh-yt { width: 100%; aspect-ratio: 16 / 9; }
+.vhh-yt iframe { height: 100%; }
+.vhh-badge { position: absolute; top: 12px; left: 12px; z-index: 4; background: var(--color-accent); color: #fff;
+  font-size: .74rem; font-weight: 700; padding: 5px 13px; border-radius: 30px; box-shadow: var(--glow-gold);
+  display: inline-flex; align-items: center; gap: 5px; letter-spacing: .01em; }
+.vhh-feat-cap { margin-top: 14px; }
+.vhh-feat-cap h3 { font-size: 1.1rem; line-height: 1.4; margin: 0 0 5px; }
+.vhh-date { font-size: .82rem; color: var(--color-text-soft); }
+.vhh-list { display: flex; flex-direction: column; gap: 10px; max-height: 640px; overflow-y: auto; padding: 2px 6px 2px 2px; }
+.vhh-list::-webkit-scrollbar { width: 7px; }
+.vhh-list::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 4px; }
+.vhh-item { display: flex; gap: 13px; align-items: center; text-align: left; width: 100%; cursor: pointer;
+  background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: 12px; padding: 10px;
+  transition: transform var(--transition), border-color var(--transition), background var(--transition); font: inherit; color: inherit; }
+.vhh-item:hover { border-color: var(--color-accent); transform: translateX(3px); }
+.vhh-item.on { border-color: var(--color-accent); background: var(--color-accent-soft); }
+.vhh-thumb { flex: 0 0 auto; width: 86px; height: 114px; border-radius: 9px; position: relative; overflow: hidden;
+  background: linear-gradient(155deg, #17233f 0%, #0c1730 100%); display: grid; place-items: center; color: var(--color-accent); }
+.vhh-thumb::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 50% 42%, rgba(48,113,231,.28), transparent 62%); }
+.vhh-thumb svg { width: 28px; height: 28px; position: relative; z-index: 1; }
+.vhh-item.on .vhh-thumb { box-shadow: inset 0 0 0 2px var(--color-accent); }
+.vhh-it-txt { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.vhh-it-title { font-size: .95rem; font-weight: 700; line-height: 1.35; color: var(--color-text);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.vhh-it-exc { font-size: .82rem; color: var(--color-text-soft); line-height: 1.4;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.vhh-it-date { font-size: .76rem; color: var(--color-text-soft); font-weight: 500; }
+@media (max-width: 860px) { .vhh-grid { grid-template-columns: 1fr; gap: 18px; } .vhh-list { max-height: none; } .vhh-feat-media { min-height: 300px; } }
+
 /* ---------- Санал хүсэлтийн форм самбар (жишээ загвар) ---------- */
 .form-card .fc-title {
   font-size: 1.42rem; font-weight: 800; letter-spacing: -.01em; margin: 0 0 4px;
