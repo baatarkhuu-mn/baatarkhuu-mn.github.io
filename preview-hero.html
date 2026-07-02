@@ -52,6 +52,27 @@
   .bd { font-size:.68rem; font-weight:700; padding:5px 11px; border-radius:20px; }
   .bd.g { background:#e2f3ec; color:#0f6e56; } .bd.b { background:#e3ecfc; color:#1f52c0; } .bd.a { background:#faeeda; color:#854f0b; }
   .foot { color:#8a98b0; font-size:12.5px; margin-top:26px; line-height:1.6; }
+  .h2sec { font-size:18px; margin:8px 0 22px; padding-top:10px; border-top:1px solid rgba(255,255,255,.12); }
+  .chat { display:flex; flex-direction:column; gap:8px; padding:4px 0; }
+  .bub { max-width:86%; font-size:.78rem; line-height:1.45; padding:9px 13px; border-radius:13px; }
+  .bub.cit { background:#fff; border:1px solid #dde5f0; color:#14213d; border-bottom-left-radius:4px; align-self:flex-start; }
+  .bub.sys { background:#3071e7; color:#fff; border-bottom-right-radius:4px; align-self:flex-end; }
+  .bub.sys.ok { background:#1d9e75; }
+  .map { position:relative; height:210px; border-radius:14px; overflow:hidden; border:1px solid #dde5f0;
+    background:linear-gradient(#e9eef6,#dfe8f3); }
+  .map::before { content:""; position:absolute; inset:0;
+    background:linear-gradient(90deg, transparent 24%, #cdd9e9 24.5%, transparent 25%, transparent 55%, #cdd9e9 55.5%, transparent 56%),
+               linear-gradient(0deg, transparent 38%, #cdd9e9 38.5%, transparent 39%, transparent 72%, #cdd9e9 72.5%, transparent 73%); }
+  .map .pin { position:absolute; font-size:19px; transform:translate(-50%,-100%); }
+  .map .mstat { position:absolute; left:10px; bottom:10px; background:#fff; border:1px solid #dde5f0; border-radius:9px; font-size:.68rem; font-weight:700; color:#14316f; padding:6px 10px; }
+  .center-hero { text-align:center; padding:6px 60px 8px; }
+  .bigsearch { display:flex; gap:8px; max-width:560px; margin:14px auto 0; }
+  .bigsearch .bi { flex:1; background:#fff; border:1.5px solid #c9d6ec; border-radius:12px; padding:13px 16px; font-size:.84rem; color:#7a8aa5; text-align:left; }
+  .case { background:#fff; border:1px solid #dde5f0; border-radius:14px; overflow:hidden; box-shadow:0 12px 26px -18px rgba(20,49,111,.45); }
+  .case .cimg { height:96px; background:url('/assets/img/parliament-bg.jpg') center/cover; }
+  .case .cbody { padding:12px 14px; }
+  .case .ct { font-size:.82rem; font-weight:700; color:#14213d; line-height:1.35; }
+  .case .cline { display:flex; gap:6px; margin-top:9px; flex-wrap:wrap; }
 </style></head>
 <body><div class="wrap">
   <h1>Нүүрний layout — «санал илгээж, шийдвэрлэх систем» өнцгөөс сайжруулах 4 хувилбар</h1>
@@ -144,5 +165,88 @@
     </div>
   </div>
 
-  <p class="foot">💡 Тоонууд жишээ. Аль ч хувилбарт таны одоогийн брэнд, цэс хавтангууд, өнгөний палитр хэвээр үлдэнэ. Хувилбаруудыг хооронд нь хослуулж ч болно (ж: 1 + 4).</p>
+  <h2 class="h2sec">Нэмэлт саналууд (5–8)</h2>
+
+  <div class="opt">
+    <div class="label"><span class="num">5</span> Чат урсгал — системийн ажиллагааг «яриагаар» үзүүлэх</div>
+    <p class="why">Баруун талд иргэн ба системийн жинхэнэ харилцан яриа шиг урсгал — «илгээсэн → дугаар авсан → уламжилсан → шийдвэрлэгдсэн» гэдгийг хамгийн амьдаар ойлгуулна. Мессенжерт дассан хэрэглэгчдэд ойр.</p>
+    <div class="hero">
+      <div class="cbar"><div style="display:flex;gap:6px"><span class="tb">🇲🇳</span><span class="tb">⌕</span><span class="tb">☾</span></div><span class="tb">≡</span></div>
+      <div class="hb">
+        <div>
+          <div class="brand"><img src="/assets/img/logo.svg" alt=""/><div class="bt"><span class="role">Монгол Улсын Их Хурлын гишүүн</span><span class="name">Цэндийн БААТАРХҮҮ</span></div></div>
+          <span class="cta">📣 ИРГЭДИЙН САНАЛ ХҮСЭЛТИЙГ ШИЙДВЭРЛЭХ СИСТЕМ</span>
+        </div>
+        <div class="chat">
+          <span class="bub cit">💬 Манай гудамжны гэрэлтүүлэг ажиллахгүй байна…</span>
+          <span class="bub sys">Хүлээн авлаа — таны дугаар <b>#AT-2026-000128</b> 📩</span>
+          <span class="bub sys">Нийслэлийн ЗАА-д албан бичгээр уламжиллаа 📤</span>
+          <span class="bub sys ok">✅ Шийдвэрлэгдлээ — гэрэлтүүлэг сэргээгдсэн</span>
+        </div>
+      </div>
+      <div class="tiles"><span class="tile">👤 Намтар</span><span class="tile">⚖ Хууль</span><span class="tile">💡 Төслүүд</span><span class="tile">📰 Мэдээ</span><span class="tile">▶ Видео</span><span class="tile">📊 Тайлан</span></div>
+    </div>
+  </div>
+
+  <div class="opt">
+    <div class="label"><span class="num">6</span> Газрын зураг төвтэй — «Танай хороонд юу шийдвэрлэгдэж байна»</div>
+    <p class="why">Баруун талд тойргийн газрын зураг, шийдвэрлэгдсэн/явцын саналууд пин болж харагдана. Иргэн өөрийн орчны асуудлыг шууд харна — оролцоог өдөөнө. (Одоо байгаа Google Maps дэд бүтцээ ашиглана.)</p>
+    <div class="hero">
+      <div class="cbar"><div style="display:flex;gap:6px"><span class="tb">🇲🇳</span><span class="tb">⌕</span><span class="tb">☾</span></div><span class="tb">≡</span></div>
+      <div class="hb">
+        <div>
+          <div class="brand"><img src="/assets/img/logo.svg" alt=""/><div class="bt"><span class="role">Монгол Улсын Их Хурлын гишүүн</span><span class="name">Цэндийн БААТАРХҮҮ</span></div></div>
+          <span class="cta">📣 ИРГЭДИЙН САНАЛ ХҮСЭЛТИЙГ ШИЙДВЭРЛЭХ СИСТЕМ</span>
+          <div class="badgeline"><span class="bd g">✅ 64 шийдвэрлэгдсэн</span><span class="bd a">⏳ 32 явцад</span></div>
+        </div>
+        <div class="map">
+          <span class="pin" style="left:22%;top:38%">📍</span>
+          <span class="pin" style="left:48%;top:60%">📍</span>
+          <span class="pin" style="left:64%;top:30%">✅</span>
+          <span class="pin" style="left:78%;top:66%">✅</span>
+          <span class="pin" style="left:35%;top:76%">✅</span>
+          <span class="mstat">Чингэлтэй дүүрэг — 128 санал</span>
+        </div>
+      </div>
+      <div class="tiles"><span class="tile">👤 Намтар</span><span class="tile">⚖ Хууль</span><span class="tile">💡 Төслүүд</span><span class="tile">📰 Мэдээ</span><span class="tile">▶ Видео</span><span class="tile">📊 Тайлан</span></div>
+    </div>
+  </div>
+
+  <div class="opt">
+    <div class="label"><span class="num">7</span> Төв хайлт — үйлчилгээний портал маягийн минимал нүүр</div>
+    <p class="why">Бүх зүйл голдоо: нэг том талбар (санал бичих эсвэл дугаар шалгах) + 2 товч. Google/e-Mongolia шиг «нэг үйлдэлд төвлөрсөн» цэвэр мэдрэмж. Зураг байхгүй тул хамгийн хурдан ачаалагдана.</p>
+    <div class="hero">
+      <div class="cbar"><div style="display:flex;gap:6px"><span class="tb">🇲🇳</span><span class="tb">⌕</span><span class="tb">☾</span></div><span class="tb">≡</span></div>
+      <div class="center-hero">
+        <div class="brand" style="justify-content:center"><img src="/assets/img/logo.svg" alt=""/><div class="bt" style="text-align:left"><span class="role">Монгол Улсын Их Хурлын гишүүн</span><span class="name">Цэндийн БААТАРХҮҮ</span></div></div>
+        <div class="bigsearch"><span class="bi">🔍 Саналаа бичих эсвэл AT-2026-000001 дугаараа шалгах…</span><span class="tbn" style="background:#3071e7;color:#fff;font-weight:700;font-size:.8rem;padding:13px 22px;border-radius:12px;">Эхлэх</span></div>
+        <div class="badgeline" style="justify-content:center"><span class="bd b">📨 Санал илгээх</span><span class="bd g">🔍 Явц шалгах</span><span class="bd a">📊 128 хүсэлт · 64 шийдвэрлэгдсэн</span></div>
+      </div>
+      <div class="tiles"><span class="tile">👤 Намтар</span><span class="tile">⚖ Хууль</span><span class="tile">💡 Төслүүд</span><span class="tile">📰 Мэдээ</span><span class="tile">▶ Видео</span><span class="tile">📊 Тайлан</span></div>
+    </div>
+  </div>
+
+  <div class="opt">
+    <div class="label"><span class="num">8</span> Амжилтын кейс — «Ингэж шийдвэрлэгдсэн» бодит түүх</div>
+    <p class="why">Баруун талд сүүлд шийдвэрлэгдсэн бодит саналын карт (зураг + үе шат) эргэлдэнэ. «Систем үнэхээр ажилладаг» гэдгийг нотолгоогоор харуулах — нийгмийн итгэлийг хамгийн хүчтэй өдөөнө.</p>
+    <div class="hero">
+      <div class="cbar"><div style="display:flex;gap:6px"><span class="tb">🇲🇳</span><span class="tb">⌕</span><span class="tb">☾</span></div><span class="tb">≡</span></div>
+      <div class="hb">
+        <div>
+          <div class="brand"><img src="/assets/img/logo.svg" alt=""/><div class="bt"><span class="role">Монгол Улсын Их Хурлын гишүүн</span><span class="name">Цэндийн БААТАРХҮҮ</span></div></div>
+          <span class="cta">📣 ИРГЭДИЙН САНАЛ ХҮСЭЛТИЙГ ШИЙДВЭРЛЭХ СИСТЕМ</span>
+        </div>
+        <div class="case">
+          <div class="cimg"></div>
+          <div class="cbody">
+            <span class="ct">✅ #AT-2026-000097 — Хорооллын доторх зам засварлагдлаа</span>
+            <div class="cline"><span class="bd b">Илгээсэн 05.12</span><span class="bd a">Уламжилсан 05.14</span><span class="bd g">Шийдвэрлэсэн 06.02</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="tiles"><span class="tile">👤 Намтар</span><span class="tile">⚖ Хууль</span><span class="tile">💡 Төслүүд</span><span class="tile">📰 Мэдээ</span><span class="tile">▶ Видео</span><span class="tile">📊 Тайлан</span></div>
+    </div>
+  </div>
+
+  <p class="foot">💡 Тоонууд жишээ. Аль ч хувилбарт таны одоогийн брэнд, цэс хавтангууд, өнгөний палитр хэвээр үлдэнэ. Хувилбаруудыг хооронд нь хослуулж ч болно (ж: 1 + 4, эсвэл 4 + 8).</p>
 </div></body></html>
