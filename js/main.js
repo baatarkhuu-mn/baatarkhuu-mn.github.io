@@ -1352,7 +1352,7 @@
     // Нүүр хуудасны зургийн галерей — зөвхөн зурагтай саналууд, дарвал том зураг нээнэ
     renderGallery() {
       const wrap = this._wrap, sb = this._sb;
-      const items = this._rows.filter((r) => Array.isArray(r.photos) && r.photos.length);
+      const items = this._rows.filter((r) => Array.isArray(r.photos) && r.photos.length).slice(0, 8);
       wrap.className = "feed-gallery";
       wrap.innerHTML = "";
       items.forEach((r) => {
