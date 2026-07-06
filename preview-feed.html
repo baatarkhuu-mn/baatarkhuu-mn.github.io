@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="mn"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>«Иргэдийн нийтэлсэн санал» хэсгийн хувилбарууд</title>
+<style>
+  body { margin:0; background:#070d1a; color:#e8eef8; font-family:system-ui,-apple-system,"Segoe UI",sans-serif; padding:30px 20px 60px; }
+  .wrap { max-width:1080px; margin:0 auto; }
+  h1 { font-size:23px; margin:0 0 6px; }
+  .sub { color:#8a98b0; font-size:13.5px; margin:0 0 30px; line-height:1.55; }
+  .opt { margin-bottom:46px; }
+  .label { display:flex; align-items:center; gap:10px; font-size:15px; font-weight:700; margin-bottom:4px; }
+  .label .num { flex:none; width:26px; height:26px; border-radius:50%; background:#3071e7; color:#fff; display:grid; place-items:center; font-size:14px; }
+  .why { color:#8a98b0; font-size:12.5px; margin:0 0 10px 36px; line-height:1.5; }
+  .sec { border-radius:16px; border:1px solid rgba(255,255,255,.1); background:#f5f8fc; color:#14213d; padding:22px 24px 26px; }
+  .shead { text-align:center; margin-bottom:18px; }
+  .shead h3 { margin:0; font-size:1.3rem; color:#14213d; }
+  .shead .ul { width:56px; height:4px; border-radius:3px; background:#3071e7; margin:8px auto 0; }
+  .bd { font-size:.66rem; font-weight:700; padding:4px 10px; border-radius:20px; display:inline-flex; align-items:center; gap:4px; }
+  .bd.g { background:#e2f3ec; color:#0f6e56; } .bd.b { background:#e3ecfc; color:#1f52c0; } .bd.a { background:#faeeda; color:#854f0b; } .bd.t { background:#dff3f3; color:#0c6b6b; }
+  .cta { display:inline-flex; align-items:center; gap:8px; background:#3071e7; color:#fff; font-weight:700; font-size:.84rem; padding:12px 24px; border-radius:11px; box-shadow:0 12px 26px -12px rgba(48,113,231,.6); }
+  .ctarow { text-align:center; margin-top:18px; }
+
+  .g3 { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .fcard { background:#fff; border:1px solid #dde5f0; border-radius:13px; overflow:hidden; display:flex; flex-direction:column; }
+  .fimg { height:105px; display:grid; place-items:center; font-size:34px; }
+  .fimg.real { background:url('/assets/img/parliament-bg.jpg') center/cover; }
+  .fbody { padding:11px 13px 13px; display:flex; flex-direction:column; gap:7px; }
+  .ftxt { font-size:.78rem; line-height:1.45; color:#2a3okay850; color:#2a3850; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .fmeta { display:flex; justify-content:space-between; align-items:center; font-size:.68rem; color:#7a8aa5; }
+  .freact { font-size:.7rem; color:#7a8aa5; }
+  .addcard { border:2px dashed #b9c8e2; border-radius:13px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; color:#3071e7; font-weight:700; font-size:.82rem; background:#eef3fb; min-height:180px; }
+  .addcard .plus { width:40px; height:40px; border-radius:50%; background:#3071e7; color:#fff; display:grid; place-items:center; font-size:20px; }
+
+  .t2 { position:relative; height:150px; border-radius:13px; overflow:hidden; }
+  .t2 .bgc { position:absolute; inset:0; display:grid; place-items:center; font-size:40px; }
+  .t2 .bgr { position:absolute; inset:0; background:url('/assets/img/parliament-bg.jpg') center/cover; }
+  .t2 .cap { position:absolute; left:0; right:0; bottom:0; padding:22px 12px 10px; background:linear-gradient(transparent, rgba(8,14,35,.85)); color:#fff; }
+  .t2 .cap b { font-size:.76rem; display:block; margin-bottom:5px; line-height:1.3; }
+
+  .tabs { display:flex; gap:8px; justify-content:center; margin-bottom:14px; }
+  .tab { font-size:.74rem; font-weight:700; padding:7px 16px; border-radius:20px; background:#fff; border:1px solid #dde5f0; color:#5a6b86; }
+  .tab.on { background:#14316f; color:#fff; border-color:#14316f; }
+  .rows { display:flex; flex-direction:column; gap:9px; }
+  .rrow { display:flex; align-items:center; gap:12px; background:#fff; border:1px solid #dde5f0; border-radius:12px; padding:11px 14px; }
+  .ric { flex:none; width:38px; height:38px; border-radius:10px; display:grid; place-items:center; font-size:17px; }
+  .rmid { flex:1; min-width:0; }
+  .rt { font-size:.8rem; font-weight:600; color:#14213d; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .dots { display:flex; align-items:center; gap:0; margin-top:6px; max-width:210px; }
+  .dt { width:9px; height:9px; border-radius:50%; background:#3071e7; flex:none; }
+  .dt.off { background:#c9d6ec; }
+  .dl { flex:1; height:2px; background:#3071e7; } .dl.off { background:#c9d6ec; }
+  .rdate { font-size:.68rem; color:#7a8aa5; flex:none; }
+
+  .v4g { display:grid; grid-template-columns:1.15fr 1fr; gap:14px; align-items:stretch; }
+  .big { background:#fff; border:1px solid #dde5f0; border-radius:13px; overflow:hidden; }
+  .big .bimg { height:150px; background:url('/assets/img/parliament-bg.jpg') center/cover; position:relative; }
+  .big .bimg .bd { position:absolute; top:10px; left:10px; }
+  .big .bbody { padding:13px 15px; }
+  .big .bt2 { font-size:.88rem; font-weight:700; color:#14213d; line-height:1.4; }
+  .chips { display:flex; gap:6px; margin-top:9px; flex-wrap:wrap; }
+  .minis { display:flex; flex-direction:column; gap:9px; }
+  .foot { color:#8a98b0; font-size:12.5px; margin-top:24px; line-height:1.6; }
+</style></head>
+<body><div class="wrap">
+  <h1>«Иргэдийн нийтэлсэн санал» хэсгийг ойлгомжтой болгох 4 хувилбар</h1>
+  <p class="sub">Одоогийн асуудал: зөвхөн <b style="color:#e8eef8">зурагтай</b> саналыг тайлбаргүй зураг хэлбэрээр харуулдаг тул цөөхөн байхад хоосон, «энэ юу вэ?» гэдэг нь ойлгомжгүй. Доорх хувилбарууд агуулга, статусыг хамт харуулна.</p>
+
+  <div class="opt">
+    <div class="label"><span class="num">1</span> Мэдээллийн картууд — зураг + текст + статус хамт</div>
+    <p class="why">Санал бүр нийгмийн сүлжээний пост шиг: зураг (байхгүй бол ангиллын дүрс), товч агуулга, байршил, статус, реакц. Зураггүй санал ч харагдана — хэсэг хэзээ ч хоосрохгүй. Сүүлийн хоосон нүд нь «Таны санал энд харагдана» урилга.</p>
+    <div class="sec">
+      <div class="shead"><h3>Иргэдийн нийтэлсэн санал</h3><div class="ul"></div></div>
+      <div class="g3">
+        <div class="fcard"><div class="fimg real"></div><div class="fbody">
+          <div><span class="bd b">🚧 Авто зам</span> <span class="bd g">✅ Шийдвэрлэгдсэн</span></div>
+          <div class="ftxt">Энхтайваны өргөн чөлөөний авто замын тэмдэг, тэмдэглэгээг шинэчлүүлэх…</div>
+          <div class="fmeta"><span>📍 Сүхбаатар, 1-р хороо</span><span>06.29</span></div>
+          <div class="freact">👍 12 · ❤️ 4 · 💬 3</div>
+        </div></div>
+        <div class="fcard"><div class="fimg" style="background:#e3ecfc">💡</div><div class="fbody">
+          <div><span class="bd b">💡 Гэрэлтүүлэг</span> <span class="bd a">⏳ Явцад</span></div>
+          <div class="ftxt">Манай гудамжны гэрэлтүүлэг ажиллахгүй болоод удаж байна, засуулж өгнө үү…</div>
+          <div class="fmeta"><span>📍 Чингэлтэй, 4-р хороо</span><span>06.25</span></div>
+          <div class="freact">👍 8 · ❤️ 2 · 💬 1</div>
+        </div></div>
+        <div class="addcard"><span class="plus">＋</span>Таны санал энд харагдана<span style="font-weight:500;font-size:.72rem;color:#5a6b86">Эхнийх нь болоорой</span></div>
+      </div>
+      <div class="ctarow"><span class="cta">📣 Санал илгээх</span></div>
+    </div>
+  </div>
+
+  <div class="opt">
+    <div class="label"><span class="num">2</span> Тайлбартай галерей — зураг дээр давхарласан мэдээлэл</div>
+    <p class="why">Одоогийн зургийн галерейгаа хадгалаад зураг бүрийн доод хэсэгт юуны тухай, хаана, ямар статустайг давхарлаж бичнэ. Хамгийн бага өөрчлөлт — «зураг юу вэ?» асуулт арилна.</p>
+    <div class="sec">
+      <div class="shead"><h3>Иргэдийн нийтэлсэн санал</h3><div class="ul"></div></div>
+      <div class="g3">
+        <div class="t2"><div class="bgr"></div><div class="cap"><b>Авто замын тэмдэг шинэчлүүлэх</b><span class="bd g">✅ Шийдвэрлэгдсэн</span> <span class="bd b" style="background:rgba(255,255,255,.2);color:#fff">📍 Сүхбаатар</span></div></div>
+        <div class="t2"><div class="bgc" style="background:#dfe8f6">💡</div><div class="cap"><b>Гудамжны гэрэлтүүлэг засуулах</b><span class="bd a">⏳ Явцад</span> <span class="bd b" style="background:rgba(255,255,255,.2);color:#fff">📍 Чингэлтэй</span></div></div>
+        <div class="t2"><div class="bgc" style="background:#e6f0e9">🗑️</div><div class="cap"><b>Хогийн цэг нэмүүлэх</b><span class="bd b">📩 Хүлээн авсан</span> <span class="bd b" style="background:rgba(255,255,255,.2);color:#fff">📍 Баянзүрх</span></div></div>
+      </div>
+      <div class="ctarow"><span class="cta">📣 Санал илгээх</span></div>
+    </div>
+  </div>
+
+  <div class="opt">
+    <div class="label"><span class="num">3</span> Статус шүүлтүүр + явцын жагсаалт</div>
+    <p class="why">Зургаас огт хамаарахгүй — мөр бүр: ангиллын дүрс, гарчиг, шийдвэрлэлтийн 4 цэгэн зам, огноо. Таб-аар (Бүгд / Явцад / Шийдвэрлэгдсэн) шүүнэ. Хамгийн «системлэг», албан ёсны мэдрэмж.</p>
+    <div class="sec">
+      <div class="shead"><h3>Иргэдийн нийтэлсэн санал</h3><div class="ul"></div></div>
+      <div class="tabs"><span class="tab on">Бүгд (128)</span><span class="tab">⏳ Явцад (32)</span><span class="tab">✅ Шийдвэрлэгдсэн (64)</span></div>
+      <div class="rows">
+        <div class="rrow"><span class="ric" style="background:#e3ecfc">🚧</span><span class="rmid"><span class="rt">Авто замын тэмдэг, тэмдэглэгээ шинэчлүүлэх — Сүхбаатар</span><span class="dots"><span class="dt"></span><span class="dl"></span><span class="dt"></span><span class="dl"></span><span class="dt"></span><span class="dl"></span><span class="dt"></span></span></span><span class="rdate">✅ 06.29</span></div>
+        <div class="rrow"><span class="ric" style="background:#faeeda">💡</span><span class="rmid"><span class="rt">Гудамжны гэрэлтүүлэг ажиллахгүй байна — Чингэлтэй</span><span class="dots"><span class="dt"></span><span class="dl"></span><span class="dt"></span><span class="dl off"></span><span class="dt off"></span><span class="dl off"></span><span class="dt off"></span></span></span><span class="rdate">⏳ 06.25</span></div>
+        <div class="rrow"><span class="ric" style="background:#e2f3ec">🗑️</span><span class="rmid"><span class="rt">Хороолол дотор хогийн цэг нэмүүлэх — Баянзүрх</span><span class="dots"><span class="dt"></span><span class="dl off"></span><span class="dt off"></span><span class="dl off"></span><span class="dt off"></span><span class="dl off"></span><span class="dt off"></span></span></span><span class="rdate">📩 06.21</span></div>
+      </div>
+      <div class="ctarow"><span class="cta">📣 Санал илгээх</span></div>
+    </div>
+  </div>
+
+  <div class="opt">
+    <div class="label"><span class="num">4</span> Онцлох кейс + сүүлийн саналууд (хосолсон)</div>
+    <p class="why">Зүүн талд шийдвэрлэгдсэн онцлох санал том зурагтай (амжилтын түүх), баруун талд сүүлийн саналууд жижиг жагсаалтаар. Видео хэсгийн шинэ загвартай ижил хэв маяг — сайт даяар нэг дүрэмтэй харагдана.</p>
+    <div class="sec">
+      <div class="shead"><h3>Иргэдийн нийтэлсэн санал</h3><div class="ul"></div></div>
+      <div class="v4g">
+        <div class="big">
+          <div class="bimg"><span class="bd g">✅ Шийдвэрлэгдсэн</span></div>
+          <div class="bbody">
+            <div class="bt2">Авто замын тэмдэг, тэмдэглэгээ шинэчлүүлэх — Сүхбаатар, 1-р хороо</div>
+            <div class="chips"><span class="bd b">Илгээсэн 05.12</span><span class="bd a">Уламжилсан 05.14</span><span class="bd g">Шийдвэрлэсэн 06.02</span></div>
+          </div>
+        </div>
+        <div class="minis">
+          <div class="rrow"><span class="ric" style="background:#faeeda">💡</span><span class="rmid"><span class="rt">Гэрэлтүүлэг засуулах</span></span><span class="bd a">⏳</span></div>
+          <div class="rrow"><span class="ric" style="background:#e2f3ec">🗑️</span><span class="rmid"><span class="rt">Хогийн цэг нэмүүлэх</span></span><span class="bd b">📩</span></div>
+          <div class="rrow"><span class="ric" style="background:#e3ecfc">🚌</span><span class="rmid"><span class="rt">Автобусны буудал засварлах</span></span><span class="bd a">⏳</span></div>
+          <div class="rrow"><span class="ric" style="background:#dff3f3">🏞️</span><span class="rmid"><span class="rt">Тоглоомын талбай тохижуулах</span></span><span class="bd g">✅</span></div>
+        </div>
+      </div>
+      <div class="ctarow"><span class="cta">📣 Санал илгээх</span></div>
+    </div>
+  </div>
+
+  <p class="foot">💡 Агуулга жишээ — бодит хувилбарт Supabase-ийн жинхэнэ саналууд (нууцлалтайг нь хасаад) автоматаар харагдана. Аль ч хувилбар одоогийн дашбоард (Нийт хүсэлт / Илгээсэн / Хариу / Шийдвэрлэгдсэн)-тай хамт зохицно.</p>
+</div></body></html>
