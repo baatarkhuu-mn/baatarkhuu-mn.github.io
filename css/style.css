@@ -2331,6 +2331,9 @@ body.hp .hh-btn { font-size: clamp(1rem, 1.4vw, 1.14rem); padding: 18px 34px; fo
 @media (max-width: 720px) { .ab-band { padding: 40px 24px; } .ab-band::before { opacity: .22; -webkit-mask-image: none; mask-image: none; } }
 
 /* ---------- Дашбоард хэсэг (процесс + тоон мэдээ + нийтэлсэн саналууд) — горимоо дагана ---------- */
+/* Бидний тухай баннер ↔ процессын картуудын хоорондын зайг нягтруулна */
+.about-banner { padding-bottom: 30px; }
+.dashx { padding-top: 30px; }
 .dashx .dx-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin: 40px 0 18px; }
 .dashx .dx-head:first-child { margin-top: 0; }
 .dashx .dx-head h2 { margin: 0; font-size: clamp(1.05rem, 1.8vw, 1.3rem); color: var(--color-text); text-transform: uppercase; letter-spacing: .05em;
