@@ -2343,9 +2343,10 @@ body.hp .hh-btn { font-size: clamp(1rem, 1.4vw, 1.14rem); padding: 18px 34px; fo
   text-align: center; display: flex; flex-direction: column; align-items: center;
   box-shadow: 0 14px 30px -18px rgba(20,49,111,.6); transition: transform var(--transition), border-color var(--transition); }
 .dx-step:hover { transform: translateY(-3px); border-color: rgba(255,255,255,.4); }
-.dx-ic { width: 50px; height: 50px; border-radius: 13px; background: rgba(255,255,255,.16); color: #ffffff;
-  display: grid; place-items: center; margin: 0 auto 14px; }
-.dx-step h3 { font-size: .98rem; color: #ffffff; margin: 0 0 8px; line-height: 1.35; }
+.dx-ic { width: 64px; height: 64px; border-radius: 16px; background: rgba(255,255,255,.16); color: #ffffff;
+  display: grid; place-items: center; margin: 0 auto 16px; }
+.dx-ic svg { width: 32px; height: 32px; }
+.dx-step h3 { font-size: 1.15rem; color: #ffffff; margin: 0 0 8px; line-height: 1.35; }
 .dx-step p { font-size: .8rem; color: #c9d8f2; line-height: 1.55; margin: 0; }
 .dashx .feed-dashboard { margin-bottom: 6px; }
 @media (max-width: 900px) { .dx-steps { grid-template-columns: repeat(2, 1fr); } }

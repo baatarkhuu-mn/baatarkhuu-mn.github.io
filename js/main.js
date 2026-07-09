@@ -754,7 +754,7 @@
       "Явц шалгах →": "Track progress →",
       "Бүгдийг харах →": "View all →",
       "Санал хүсэлт илгээх": "Submit a request",
-      "Асуудлаа зураг, байршлын мэдээлэлтэй нь илгээнэ": "Send your issue with photos and location",
+      "Асуудлаа зураг, бичлэг, байршлын мэдээлэлтэй нь илгээнэ": "Send your issue with photos, videos and location",
       "Бүртгэж дугаар олгох": "Register and get a number",
       "Таны хүсэлтэд хяналтын дугаар шууд олгогдоно": "Your request instantly receives a tracking number",
       "Байгууллагад уламжлах": "Forward to the responsible body",
