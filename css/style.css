@@ -2385,6 +2385,20 @@ body.hp .hh-btn { font-size: clamp(1rem, 1.4vw, 1.14rem); padding: 18px 34px; fo
 .fc3-like:hover span, .fc3-cmt:hover span { color: var(--color-accent); }
 .fc3-like.on span { color: var(--color-accent); font-weight: 700; }
 .fc3-like.on b { color: var(--color-accent); }
+.fc3-cpanel { display: none; flex-direction: column; gap: 10px; border-top: 1px dashed var(--color-border); padding-top: 12px; }
+.fc3-cpanel.open { display: flex; }
+.fc3-c { background: var(--color-bg-soft); border-radius: 10px; padding: 9px 12px; font-size: .8rem; }
+.fc3-c b { font-size: .76rem; color: var(--color-text); }
+.fc3-c small { color: var(--color-text-soft); margin-left: 8px; font-size: .68rem; }
+.fc3-c p { margin: 4px 0 0; line-height: 1.5; color: var(--color-text); }
+.fc3-cempty { font-size: .78rem; color: var(--color-text-soft); margin: 0; }
+.fc3-cform { display: flex; gap: 8px; align-items: stretch; }
+.fc3-cform textarea { flex: 1; background: var(--color-bg-soft); border: 1px solid var(--color-border); border-radius: 10px; padding: 9px 12px;
+  font-family: inherit; font-size: .8rem; color: var(--color-text); resize: vertical; min-height: 42px; }
+.fc3-cform textarea:focus { outline: none; border-color: var(--color-accent); }
+.fc3-csend { background: var(--color-accent); color: #fff; border: 0; border-radius: 9px; font-family: inherit; font-size: .8rem; font-weight: 700; padding: 0 18px; cursor: pointer; }
+.fc3-csend:hover { background: var(--color-primary-dark); }
+.fc3-csend:disabled { opacity: .6; cursor: default; }
 .fc3-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; border-top: 1px solid var(--color-border); padding-top: 12px; }
 .fc3-send { font-size: .85rem; font-weight: 700; color: #fff; background: var(--color-accent); border: 1.5px solid var(--color-accent); border-radius: 10px; padding: 9px 22px;
   box-shadow: 0 10px 22px -10px rgba(48,113,231,.7); transition: background var(--transition), transform var(--transition); }

@@ -1327,11 +1327,11 @@
         this._rows = rows;
         // Нүүр хуудас — карт хэлбэр (лайк/сэтгэгдлийн тоотой, шүүлтүүргүй)
         if (wrap.hasAttribute("data-feed-gallery")) {
-          this._likeMap = {}; this._cmtCount = {};
+          this._likeMap = {}; this._cmtMap = {};
           try { const { data: lc } = await sb.rpc("like_counts"); (lc || []).forEach((r) => { this._likeMap[r.feedback_id] = r.cnt; }); } catch (_) {}
           try {
-            const { data: cm } = await sb.from("feedback_comments").select("feedback_id").in("feedback_id", rows.map((r) => r.id));
-            (cm || []).forEach((c) => { this._cmtCount[c.feedback_id] = (this._cmtCount[c.feedback_id] || 0) + 1; });
+            const { data: cm } = await sb.from("feedback_comments").select("*").in("feedback_id", rows.map((r) => r.id)).order("created_at", { ascending: true });
+            (cm || []).forEach((c) => { (this._cmtMap[c.feedback_id] = this._cmtMap[c.feedback_id] || []).push(c); });
           } catch (_) {}
           this.renderGallery(); return;
         }
@@ -1418,7 +1418,8 @@
         const txt = (r.message || "").split("\n")[0] || subj;
         const author = r.name ? String(r.name) : "Иргэн";
         const likes = (this._likeMap && this._likeMap[r.id]) || 0;
-        const cmts = (this._cmtCount && this._cmtCount[r.id]) || 0;
+        const cmtList = (this._cmtMap && this._cmtMap[r.id]) ? this._cmtMap[r.id].slice() : [];
+        const cmts = cmtList.length;
         const liked = this.likedSet().has(r.id);
         const shareTxt = encodeURIComponent(txt.slice(0, 100));
         const card = document.createElement("article");
@@ -1438,7 +1439,11 @@
             '</span>' +
           '</div>' +
           '<button type="button" class="fc3-row fc3-like' + (liked ? ' on' : '') + '" aria-pressed="' + liked + '"><span>' + (liked ? '👍 Дэмжсэн' : '👍 Лайк дарах') + '</span><b class="cnt">' + likes + '</b></button>' +
-          '<a class="fc3-row fc3-cmt" href="/holboo/#public-feed" title="Сэтгэгдэл бичихийн тулд дарна уу"><span>💬 Сэтгэгдэл бичих</span><b>' + cmts + '</b></a>' +
+          '<button type="button" class="fc3-row fc3-cmt" aria-expanded="false"><span>💬 Сэтгэгдэл бичих</span><b class="ccnt">' + cmts + '</b></button>' +
+          '<div class="fc3-cpanel">' +
+            '<div class="fc3-clist"></div>' +
+            '<form class="fc3-cform"><textarea rows="2" placeholder="Сэтгэгдлээ бичээрэй…" maxlength="500" required></textarea><button type="submit" class="fc3-csend">Илгээх</button></form>' +
+          '</div>' +
           '<div class="fc3-foot">' +
             '<a href="/holboo/#feedback" class="fc3-send">Санал илгээх</a>' +
             '<span class="fc3-share">' +
@@ -1464,6 +1469,38 @@
             likeBtn.querySelector("span").textContent = nowLiked ? "👍 Дэмжсэн" : "👍 Лайк дарах";
             if (typeof data === "number") likeBtn.querySelector(".cnt").textContent = data;
           } catch (_) {} finally { likeBtn.disabled = false; }
+        });
+        // Сэтгэгдэл — мөр дарахад задарч, жагсаалт + бичих form гарна
+        const cmtBtn = card.querySelector(".fc3-cmt");
+        const panel = card.querySelector(".fc3-cpanel");
+        const clist = card.querySelector(".fc3-clist");
+        const renderC = () => {
+          clist.innerHTML = cmtList.length
+            ? cmtList.map((c) => '<div class="fc3-c"><b>Зочин</b><small>' + this.esc(this.ago(c.created_at)) + '</small><p>' + this.esc(c.body) + '</p></div>').join("")
+            : '<p class="fc3-cempty">Хараахан сэтгэгдэл алга. Эхэлж бичээрэй.</p>';
+        };
+        renderC();
+        cmtBtn.addEventListener("click", () => {
+          const open = panel.classList.toggle("open");
+          cmtBtn.setAttribute("aria-expanded", String(open));
+          if (open) { const ta = panel.querySelector("textarea"); if (ta) ta.focus(); }
+        });
+        const cform = card.querySelector(".fc3-cform");
+        cform.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const ta = cform.querySelector("textarea");
+          const body = ta.value.trim();
+          if (!body) return;
+          const sbtn = cform.querySelector(".fc3-csend");
+          sbtn.disabled = true;
+          try {
+            const { data, error } = await sb.from("feedback_comments").insert({ feedback_id: r.id, body }).select().single();
+            if (error) throw error;
+            cmtList.push(data);
+            renderC();
+            card.querySelector(".ccnt").textContent = cmtList.length;
+            ta.value = "";
+          } catch (_) { alert("Сэтгэгдэл илгээхэд алдаа гарлаа. Дахин оролдоно уу."); } finally { sbtn.disabled = false; }
         });
         wrap.appendChild(card);
       });
