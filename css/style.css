@@ -1312,7 +1312,7 @@ a.news-card-clean { text-decoration: none; color: inherit; display: flex; flex-d
   .phone-mock.annotated { display: none; }
   .pm-note { display: none; }
   .fb-guide:has(.phone-mock.annotated) .guide-steps { display: flex; }
-  #d6e6ffck .fb-guide { position: static; top: auto; }
+  #feedback .fb-guide { position: static; top: auto; }
 }
 
 /* Байршлын газрын зураг (Leaflet) */
@@ -1322,7 +1322,7 @@ a.news-card-clean { text-decoration: none; color: inherit; display: flex; flex-d
 /* ---------- Санал авах: заавар | форм (2 багана) ---------- */
 .fb-split { display: grid; grid-template-columns: 1.05fr 1fr; gap: 40px; align-items: start; }
 .fb-guide { display: flex; flex-direction: column; }
-#d6e6ffck .fb-guide { position: sticky; top: 90px; align-self: start; }
+#feedback .fb-guide { position: sticky; top: 90px; align-self: start; }
 .fb-guide h3 { font-size: 1.25rem; margin-bottom: 18px; }
 .guide-steps { counter-reset: step; list-style: none; display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
 .guide-steps li { position: relative; padding-left: 44px; color: var(--color-text-soft); line-height: 1.5; }
@@ -1332,7 +1332,7 @@ a.news-card-clean { text-decoration: none; color: inherit; display: flex; flex-d
 .guide-steps li b { color: var(--color-text); font-weight: 700; }
 @media (max-width: 820px) {
   .fb-split { grid-template-columns: 1fr; gap: 30px; }
-  #d6e6ffck .fb-guide { position: static; top: auto; }
+  #feedback .fb-guide { position: static; top: auto; }
 }
 
 /* ---------- Хууль: статистик chip + pill шүүлтүүр ---------- */
@@ -2334,11 +2334,11 @@ body.hp .hh-btn { font-size: clamp(1rem, 1.4vw, 1.14rem); padding: 18px 34px; fo
 /* Бидний тухай баннер ↔ процессын картуудын хоорондын зайг нягтруулна */
 .about-banner { padding-bottom: 30px; }
 .dashx { padding-top: 30px; }
-.dashx .dx-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin: 40px 0 18px; }
-.dashx .dx-head:first-child { margin-top: 0; }
-.dashx .dx-head h2 { margin: 0; font-size: clamp(1.05rem, 1.8vw, 1.3rem); color: var(--color-text); text-transform: uppercase; letter-spacing: .05em;
+.dx-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin: 40px 0 18px; }
+.dx-head:first-child { margin-top: 0; }
+.dx-head h2 { margin: 0; font-size: clamp(1.05rem, 1.8vw, 1.3rem); color: var(--color-text); text-transform: uppercase; letter-spacing: .05em;
   display: flex; align-items: center; gap: 12px; }
-.dashx .dx-head h2::before { content: ""; width: 5px; height: 22px; border-radius: 3px; background: var(--color-accent); flex: none; }
+.dx-head h2::before { content: ""; width: 5px; height: 22px; border-radius: 3px; background: var(--color-accent); flex: none; }
 .dx-all { white-space: nowrap; font-size: .85rem; font-weight: 600; color: var(--color-accent); }
 .dx-all:hover { text-decoration: underline; }
 .dx-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
@@ -2374,6 +2374,14 @@ body.hp .hh-btn { font-size: clamp(1rem, 1.4vw, 1.14rem); padding: 18px 34px; fo
 .dxs-likes { color: var(--color-accent); font-weight: 700; }
 .fc3.flash { border-color: var(--color-accent); box-shadow: 0 0 0 3px var(--color-accent-soft); }
 @media (max-width: 900px) { .dx-cols { grid-template-columns: 1fr; } .dx-side { position: static; } .dxs-list { max-height: 320px; } }
+
+/* Санал илгээх форм — ялгарч тодрох (акцент хүрээ, дээд зурвас, туяа) */
+#feedback .form-card { position: relative; overflow: hidden; border: 1.5px solid rgba(48,113,231,.45);
+  box-shadow: 0 20px 46px -22px rgba(48,113,231,.5); background: color-mix(in srgb, var(--color-accent) 3%, var(--color-bg-card)); }
+#feedback .form-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px;
+  background: linear-gradient(90deg, var(--color-accent), #14316f); }
+#feedback .form-card .fc-title { display: flex; align-items: center; gap: 10px; }
+#feedback .form-card .fc-title::before { content: "✍️"; font-size: 1.15rem; }
 
 /* Нийтэлсэн саналын картууд — гарчиг / зураг / зохиогч / лайк+сэтгэгдэл / илгээх+share */
 .fc3-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: start; }
