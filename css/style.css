@@ -2320,9 +2320,9 @@ body.hp .hh-btn { font-size: clamp(1rem, 1.4vw, 1.14rem); padding: 18px 34px; fo
 .ab-band { position: relative; border-radius: 24px; overflow: hidden; padding: 62px 56px;
   background: linear-gradient(105deg, #0b1f4e 0%, #14316f 48%, #1c48b0 100%); box-shadow: var(--shadow-lg); }
 .ab-band::before { content: ""; position: absolute; inset: 0;
-  background: url("/assets/img/city-blue.jpg") center right / cover no-repeat; opacity: .5;
-  -webkit-mask-image: linear-gradient(to right, transparent 4%, rgba(0,0,0,.45) 38%, #000 75%);
-  mask-image: linear-gradient(to right, transparent 4%, rgba(0,0,0,.45) 38%, #000 75%); }
+  background: url("/assets/img/city-blue.jpg") center right / cover no-repeat; opacity: .62;
+  -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,.28) 0%, rgba(0,0,0,.55) 34%, #000 70%);
+  mask-image: linear-gradient(to right, rgba(0,0,0,.28) 0%, rgba(0,0,0,.55) 34%, #000 70%); }
 .ab-band-text { position: relative; z-index: 2; max-width: 620px; }
 .ab-band-text h2 { color: #ffffff; font-size: clamp(1.5rem, 2.6vw, 2.1rem); line-height: 1.28; margin-bottom: 16px; }
 .ab-band-text p { color: #c9d8f2; font-size: .98rem; line-height: 1.75; margin-bottom: 28px; }
