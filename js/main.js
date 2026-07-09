@@ -765,6 +765,7 @@
       "⏳ Явцад": "⏳ In progress",
       "📩 Хүлээн авсан": "📩 Received",
       "Одоогоор нийтэлсэн санал алга.": "No published feedback yet.",
+      "Шийдвэрлэлтийн хувь": "Resolution rate",
       "Иргэд өөрсдөө зөвшөөрсний дагуу нийтэлсэн асуудлууд. Саналыг дэмжиж, коммент хэлбэрээр үлдээгээрэй.":
         "Issues published with citizens' own consent. Show your support and leave your thoughts as a comment.",
       "Цэндийн Баатархүү": "Tsendiin Baatarkhuu",
@@ -2614,11 +2615,12 @@
     },
     count(el, target) {
       target = target || 0;
+      const suf = el.dataset.suffix || "";
       const dur = 1100, t0 = performance.now();
       const step = (now) => {
         const p = Math.min((now - t0) / dur, 1);
         const e = 1 - Math.pow(1 - p, 3);
-        el.textContent = Math.round(target * e).toLocaleString("en-US");
+        el.textContent = Math.round(target * e).toLocaleString("en-US") + suf;
         if (p < 1) requestAnimationFrame(step);
       };
       requestAnimationFrame(step);
@@ -2631,16 +2633,18 @@
       try {
         const { data: s, error } = await sb.rpc("feedback_stats");
         if (error || !s) return;
+        const pct = s.total ? Math.round(((s.resolved || 0) / s.total) * 100) : 0;
         const cards = [
           { k: "total",     c: "fbd-blue",   n: s.total,     l: "Нийт хүсэлт" },
           { k: "routed",    c: "fbd-amber",  n: s.routed,    l: "Хариуцсан байгууллагад илгээсэн" },
           { k: "responded", c: "fbd-indigo", n: s.responded, l: "Хариу ирсэн" },
-          { k: "resolved",  c: "fbd-green",  n: s.resolved,  l: "Шийдвэрлэгдсэн" },
+          { k: "resolved",  c: "fbd-green",  n: pct, suffix: "%", l: "Шийдвэрлэлтийн хувь" },
         ];
         box.innerHTML = cards.map((c) => {
           const val = (c.n == null ? 0 : c.n);
+          const suf = c.suffix || "";
           return '<div class="fbd-card ' + c.c + '"><span class="fbd-ic">' + this.IC[c.k] + '</span>' +
-            '<div class="fbd-txt"><div class="fbd-n" data-target="' + val + '">' + val.toLocaleString("en-US") + '</div>' +
+            '<div class="fbd-txt"><div class="fbd-n" data-target="' + val + '"' + (suf ? ' data-suffix="' + suf + '"' : '') + '>' + val.toLocaleString("en-US") + suf + '</div>' +
             '<div class="fbd-l">' + c.l + '</div></div></div>';
         }).join("");
         // Эцсийн тоо аль хэдийн харагдаж байгаа; дэлгэцэд орж ирэхэд 0-оос count-up хийнэ
