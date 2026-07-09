@@ -2281,10 +2281,10 @@ body.hp .main-nav { transition: none; }
 @media (max-width: 430px) { .feed-dashboard { grid-template-columns: 1fr; } }
 
 
-/* ============ Нүүр hero — зүүн: брэнд+уриа+CTA | баруун: гишүүний зураг (тод, ирмэг уусгасан) ============ */
-body.hp .home-hero .hh-grid { grid-template-columns: 1.05fr 1fr; justify-items: start; text-align: left; align-items: center; gap: 30px; }
-body.hp .home-hero .hh-text { display: flex; flex-direction: column; align-items: flex-start; position: relative; z-index: 2; }
-body.hp .home-hero .hh-cta { justify-content: flex-start; }
+/* ============ Нүүр hero — брэнд + CTA голлосон (зураггүй) ============ */
+body.hp .home-hero .hh-grid { grid-template-columns: 1fr; justify-items: center; text-align: center; align-items: center; gap: 30px; }
+body.hp .home-hero .hh-text { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 2; }
+body.hp .home-hero .hh-cta { justify-content: center; }
 .hh-brand { display: inline-flex; align-items: center; gap: 16px; text-decoration: none; margin-bottom: 20px; }
 body.hp .home-hero .hh-brand .emblem { width: 76px; height: 76px; flex: none; }
 .hh-brand .emblem img { width: 100%; height: 100%; object-fit: contain; }
