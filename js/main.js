@@ -771,6 +771,8 @@
       "👍 Лайк дарах": "👍 Like",
       "👍 Дэмжсэн": "👍 Liked",
       "💬 Сэтгэгдэл бичих": "💬 Write a comment",
+      "🔥 Хамгийн их дэмжигдсэн": "🔥 Most supported",
+      "Одоогоор санал алга.": "No feedback yet.",
       "Иргэн": "Citizen",
       "Өнөөдөр": "Today",
       "Иргэд өөрсдөө зөвшөөрсний дагуу нийтэлсэн асуудлууд. Саналыг дэмжиж, коммент хэлбэрээр үлдээгээрэй.":
@@ -1424,6 +1426,7 @@
         const shareTxt = encodeURIComponent(txt.slice(0, 100));
         const card = document.createElement("article");
         card.className = "fc3";
+        card.dataset.id = r.id;
         card.innerHTML =
           '<h4 class="fc3-t">' + this.esc(txt) + '</h4>' +
           '<button type="button" class="fc3-media" aria-label="' + this.esc(subj) + '">' +
@@ -1505,6 +1508,39 @@
         wrap.appendChild(card);
       });
       if (!wrap.children.length) wrap.innerHTML = '<p class="feed-state">Одоогоор нийтэлсэн санал алга.</p>';
+      this.renderTopFeed();
+    },
+    // Хажуугийн самбар — хамгийн их дэмжигдсэн саналууд (лайк, дараа нь сэтгэгдэл, дараа нь шинэ)
+    renderTopFeed() {
+      const box = document.querySelector("[data-top-feed]");
+      if (!box) return;
+      const likeOf = (r) => (this._likeMap && this._likeMap[r.id]) || 0;
+      const cmtOf = (r) => ((this._cmtMap && this._cmtMap[r.id]) || []).length;
+      const rows = this._rows.slice().sort((a, b) =>
+        (likeOf(b) - likeOf(a)) || (cmtOf(b) - cmtOf(a)) || (new Date(b.created_at) - new Date(a.created_at))
+      ).slice(0, 10);
+      box.innerHTML = "";
+      rows.forEach((r) => {
+        const subj = this.SUBJ[r.subject] || r.subject || "Санал";
+        const txt = (r.message || "").split("\n")[0] || subj;
+        const el = document.createElement("button");
+        el.type = "button"; el.className = "dxs-item";
+        el.innerHTML =
+          '<span class="dxs-t">' + this.esc(txt) + '</span>' +
+          '<span class="dxs-meta"><span>' + this.esc(this.ago(r.created_at)) + '</span>' +
+          '<span class="dxs-badge">' + this.esc(subj) + '</span>' +
+          '<span class="dxs-likes">👍 ' + likeOf(r) + '</span></span>';
+        el.addEventListener("click", () => {
+          const card = document.querySelector('.fc3[data-id="' + r.id + '"]');
+          if (card) {
+            card.scrollIntoView({ behavior: "smooth", block: "center" });
+            card.classList.add("flash");
+            setTimeout(() => card.classList.remove("flash"), 1800);
+          }
+        });
+        box.appendChild(el);
+      });
+      if (!box.children.length) box.innerHTML = '<p class="feed-state">Одоогоор санал алга.</p>';
     },
     openLightbox(url, caption) {
       let lb = document.querySelector(".fg-lightbox");
