@@ -761,6 +761,10 @@
       "Хариуцсан газарт нь албан бичгээр хүргүүлнэ": "Officially forwarded to the responsible organization",
       "Шийдвэрлэлтийн хяналт": "Resolution oversight",
       "Явц, үр дүнг нээлттэй, ил тод харуулна": "Progress and results are shown openly and transparently",
+      "✅ Шийдвэрлэгдсэн": "✅ Resolved",
+      "⏳ Явцад": "⏳ In progress",
+      "📩 Хүлээн авсан": "📩 Received",
+      "Одоогоор нийтэлсэн санал алга.": "No published feedback yet.",
       "Иргэд өөрсдөө зөвшөөрсний дагуу нийтэлсэн асуудлууд. Саналыг дэмжиж, коммент хэлбэрээр үлдээгээрэй.":
         "Issues published with citizens' own consent. Show your support and leave your thoughts as a comment.",
       "Цэндийн Баатархүү": "Tsendiin Baatarkhuu",
@@ -1364,23 +1368,47 @@
     },
 
     // Нүүр хуудасны зургийн галерей — зөвхөн зурагтай саналууд, дарвал том зураг нээнэ
+    SUBJ_ICON: { gerel: "💡", zam: "🚧", yavgan: "🚶", hog: "🗑️", buudal: "🚌", surguuli: "🏫", emnelg: "🏥", soh: "🏢", hurteemj: "♿", huuli: "⚖️", urgudul: "📄", sanal: "💬", gomdol: "📣", asuudal: "❗", uulzalt: "🤝", busad: "📌" },
+    statusChip(r) {
+      const done = r.status === "done" || r.status === "resolved" || !!r.response;
+      const routed = r.status === "routed" || r.status === "processing" || r.status === "responded" || !!r.org;
+      if (done) return '<span class="fc2-status fc2-st-done">✅ Шийдвэрлэгдсэн</span>';
+      if (routed) return '<span class="fc2-status fc2-st-prog">⏳ Явцад</span>';
+      return '<span class="fc2-status fc2-st-new">📩 Хүлээн авсан</span>';
+    },
     renderGallery() {
       const wrap = this._wrap, sb = this._sb;
-      const items = this._rows.filter((r) => Array.isArray(r.photos) && r.photos.length).slice(0, 8);
-      wrap.className = "feed-gallery";
+      // Зурагтайг эхэнд нь, дараа нь бусдыг — 6 карт хүртэл
+      const rows = this._rows.slice().sort((a, b) => ((Array.isArray(b.photos) && b.photos.length) ? 1 : 0) - ((Array.isArray(a.photos) && a.photos.length) ? 1 : 0)).slice(0, 6);
+      wrap.className = "fc2-grid";
       wrap.innerHTML = "";
-      items.forEach((r) => {
+      rows.forEach((r) => {
         let url = "";
-        try { url = sb.storage.from("feedback-public").getPublicUrl(r.photos[0]).data.publicUrl; } catch (_) {}
-        if (!url) return;
+        if (Array.isArray(r.photos) && r.photos.length) {
+          try { url = sb.storage.from("feedback-public").getPublicUrl(r.photos[0]).data.publicUrl; } catch (_) {}
+        }
         const subj = this.SUBJ[r.subject] || r.subject || "Санал";
-        const b = document.createElement("button");
-        b.type = "button"; b.className = "fg-item"; b.setAttribute("aria-label", subj + " — зургийг томоор үзэх");
-        b.innerHTML = '<img src="' + url + '" alt="' + this.esc(subj) + '" loading="lazy" />';
-        b.addEventListener("click", () => this.openLightbox(url, subj));
-        wrap.appendChild(b);
+        const icon = this.SUBJ_ICON[r.subject] || "📌";
+        const txt = (r.message || "").split("\n")[0];
+        const loc = [r.district, r.khoroo].filter(Boolean).join(", ");
+        const date = (() => { try { return new Date(r.created_at).toLocaleDateString("mn-MN", { month: "2-digit", day: "2-digit" }); } catch (_) { return ""; } })();
+        const card = document.createElement("article");
+        card.className = "fc2";
+        card.innerHTML =
+          '<button type="button" class="fc2-media" aria-label="' + this.esc(subj) + '">' +
+            (url ? '<img src="' + url + '" alt="' + this.esc(subj) + '" loading="lazy" />' : '<span class="fc2-emoji" aria-hidden="true">' + icon + '</span>') +
+            this.statusChip(r) +
+          '</button>' +
+          '<div class="fc2-body">' +
+            '<span class="fc2-subj">' + icon + ' ' + this.esc(subj) + '</span>' +
+            '<div class="fc2-txt">' + this.esc(txt || subj) + '</div>' +
+            '<div class="fc2-meta"><span>' + (loc ? '📍 ' + this.esc(loc) : '') + '</span><span>' + this.esc(date) + '</span></div>' +
+          '</div>';
+        const media = card.querySelector(".fc2-media");
+        if (url) media.addEventListener("click", () => this.openLightbox(url, subj));
+        wrap.appendChild(card);
       });
-      if (!wrap.children.length) wrap.innerHTML = '<p class="feed-state">Одоогоор зурагтай нийтэлсэн санал алга.</p>';
+      if (!wrap.children.length) wrap.innerHTML = '<p class="feed-state">Одоогоор нийтэлсэн санал алга.</p>';
     },
     openLightbox(url, caption) {
       let lb = document.querySelector(".fg-lightbox");
