@@ -766,6 +766,10 @@
       "📩 Хүлээн авсан": "📩 Received",
       "Одоогоор нийтэлсэн санал алга.": "No published feedback yet.",
       "Шийдвэрлэлтийн хувь": "Resolution rate",
+      "👍 Лайк": "👍 Likes",
+      "💬 Сэтгэгдэл": "💬 Comments",
+      "Иргэн": "Citizen",
+      "Өнөөдөр": "Today",
       "Иргэд өөрсдөө зөвшөөрсний дагуу нийтэлсэн асуудлууд. Саналыг дэмжиж, коммент хэлбэрээр үлдээгээрэй.":
         "Issues published with citizens' own consent. Show your support and leave your thoughts as a comment.",
       "Цэндийн Баатархүү": "Tsendiin Baatarkhuu",
@@ -1318,8 +1322,16 @@
           return;
         }
         this._rows = rows;
-        // Нүүр хуудас — зөвхөн илгээсэн зургийн галерей (лайк/коммент/шүүлтүүргүй)
-        if (wrap.hasAttribute("data-feed-gallery")) { this.renderGallery(); return; }
+        // Нүүр хуудас — карт хэлбэр (лайк/сэтгэгдлийн тоотой, шүүлтүүргүй)
+        if (wrap.hasAttribute("data-feed-gallery")) {
+          this._likeMap = {}; this._cmtCount = {};
+          try { const { data: lc } = await sb.rpc("like_counts"); (lc || []).forEach((r) => { this._likeMap[r.feedback_id] = r.cnt; }); } catch (_) {}
+          try {
+            const { data: cm } = await sb.from("feedback_comments").select("feedback_id").in("feedback_id", rows.map((r) => r.id));
+            (cm || []).forEach((c) => { this._cmtCount[c.feedback_id] = (this._cmtCount[c.feedback_id] || 0) + 1; });
+          } catch (_) {}
+          this.renderGallery(); return;
+        }
         // Дэмжлэгийн тоо + коммент (нэг дор)
         const likeMap = {};
         try { const { data: lc } = await sb.rpc("like_counts"); (lc || []).forEach((r) => { likeMap[r.feedback_id] = r.cnt; }); } catch (_) {}
@@ -1377,12 +1389,22 @@
       if (routed) return '<span class="fc2-status fc2-st-prog">⏳ Явцад</span>';
       return '<span class="fc2-status fc2-st-new">📩 Хүлээн авсан</span>';
     },
+    ago(iso) {
+      try {
+        const d = (Date.now() - new Date(iso).getTime()) / 864e5;
+        if (d < 1) return "Өнөөдөр";
+        if (d < 30) return Math.floor(d) + " хоногийн өмнө";
+        if (d < 365) return Math.floor(d / 30) + " сарын өмнө";
+        return Math.floor(d / 365) + " жилийн өмнө";
+      } catch (_) { return ""; }
+    },
     renderGallery() {
       const wrap = this._wrap, sb = this._sb;
       // Зурагтайг эхэнд нь, дараа нь бусдыг — 6 карт хүртэл
       const rows = this._rows.slice().sort((a, b) => ((Array.isArray(b.photos) && b.photos.length) ? 1 : 0) - ((Array.isArray(a.photos) && a.photos.length) ? 1 : 0)).slice(0, 6);
-      wrap.className = "fc2-grid";
+      wrap.className = "fc3-grid";
       wrap.innerHTML = "";
+      const shareUrl = encodeURIComponent("https://baatarkhuu.mn/holboo/#public-feed");
       rows.forEach((r) => {
         let url = "";
         if (Array.isArray(r.photos) && r.photos.length) {
@@ -1390,22 +1412,37 @@
         }
         const subj = this.SUBJ[r.subject] || r.subject || "Санал";
         const icon = this.SUBJ_ICON[r.subject] || "📌";
-        const txt = (r.message || "").split("\n")[0];
-        const loc = [r.district, r.khoroo].filter(Boolean).join(", ");
-        const date = (() => { try { return new Date(r.created_at).toLocaleDateString("mn-MN", { month: "2-digit", day: "2-digit" }); } catch (_) { return ""; } })();
+        const txt = (r.message || "").split("\n")[0] || subj;
+        const author = r.name ? String(r.name) : "Иргэн";
+        const likes = (this._likeMap && this._likeMap[r.id]) || 0;
+        const cmts = (this._cmtCount && this._cmtCount[r.id]) || 0;
+        const shareTxt = encodeURIComponent(txt.slice(0, 100));
         const card = document.createElement("article");
-        card.className = "fc2";
+        card.className = "fc3";
         card.innerHTML =
-          '<button type="button" class="fc2-media" aria-label="' + this.esc(subj) + '">' +
-            (url ? '<img src="' + url + '" alt="' + this.esc(subj) + '" loading="lazy" />' : '<span class="fc2-emoji" aria-hidden="true">' + icon + '</span>') +
+          '<h4 class="fc3-t">' + this.esc(txt) + '</h4>' +
+          '<button type="button" class="fc3-media" aria-label="' + this.esc(subj) + '">' +
+            (url ? '<img src="' + url + '" alt="' + this.esc(subj) + '" loading="lazy" />' : '<span class="fc3-emoji" aria-hidden="true">' + icon + '</span>') +
             this.statusChip(r) +
           '</button>' +
-          '<div class="fc2-body">' +
-            '<span class="fc2-subj">' + icon + ' ' + this.esc(subj) + '</span>' +
-            '<div class="fc2-txt">' + this.esc(txt || subj) + '</div>' +
-            '<div class="fc2-meta"><span>' + (loc ? '📍 ' + this.esc(loc) : '') + '</span><span>' + this.esc(date) + '</span></div>' +
+          '<div class="fc3-author">' +
+            '<span class="fc3-ava"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="22" height="22"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span>' +
+            '<span class="fc3-awrap">' +
+              '<span class="fc3-aname">' + this.esc(author) + '</span>' +
+              '<span class="fc3-atime">' + this.esc(this.ago(r.created_at)) + '</span>' +
+              '<span class="fc3-badge">' + icon + ' ' + this.esc(subj) + '</span>' +
+            '</span>' +
+          '</div>' +
+          '<div class="fc3-row"><span>👍 Лайк</span><b>' + likes + '</b></div>' +
+          '<div class="fc3-row"><span>💬 Сэтгэгдэл</span><b>' + cmts + '</b></div>' +
+          '<div class="fc3-foot">' +
+            '<a href="/holboo/#feedback" class="fc3-send">Санал илгээх</a>' +
+            '<span class="fc3-share">' +
+              '<a class="fc3-sbtn fb" href="https://www.facebook.com/sharer/sharer.php?u=' + shareUrl + '" target="_blank" rel="noopener" aria-label="Facebook-т хуваалцах"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 22v-8h3l1-4h-4V7c0-1 .3-2 2-2h2V1.5C18.5 1.4 17.3 1 16 1c-3 0-5 2-5 5v3H7v4h4v8h2z"/></svg></a>' +
+              '<a class="fc3-sbtn x" href="https://twitter.com/intent/tweet?url=' + shareUrl + '&text=' + shareTxt + '" target="_blank" rel="noopener" aria-label="X-д хуваалцах"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.657l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>' +
+            '</span>' +
           '</div>';
-        const media = card.querySelector(".fc2-media");
+        const media = card.querySelector(".fc3-media");
         if (url) media.addEventListener("click", () => this.openLightbox(url, subj));
         wrap.appendChild(card);
       });

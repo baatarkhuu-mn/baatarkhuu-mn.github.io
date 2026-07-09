@@ -2355,23 +2355,41 @@ body.hp .hh-btn { font-size: clamp(1rem, 1.4vw, 1.14rem); padding: 18px 34px; fo
 @media (max-width: 900px) { .dx-steps { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 480px) { .dx-steps { grid-template-columns: 1fr; } .dashx .dx-head { flex-direction: column; align-items: flex-start; gap: 6px; } }
 
-/* Нийтэлсэн саналын мэдээллийн картууд (зураг + гарчиг + статус) */
-.fc2-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-.fc2 { background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: 15px; overflow: hidden;
-  display: flex; flex-direction: column; box-shadow: var(--shadow-sm); transition: transform var(--transition), box-shadow var(--transition); }
-.fc2:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
-.fc2-media { position: relative; height: 165px; background: var(--color-bg-soft); cursor: pointer; border: 0; padding: 0; display: block; width: 100%; }
-.fc2-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.fc2-media .fc2-emoji { width: 100%; height: 100%; display: grid; place-items: center; font-size: 44px;
+/* Нийтэлсэн саналын картууд — гарчиг / зураг / зохиогч / лайк+сэтгэгдэл / илгээх+share */
+.fc3-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: start; }
+.fc3 { background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: 15px; padding: 16px 16px 14px;
+  display: flex; flex-direction: column; gap: 12px; box-shadow: var(--shadow-sm); transition: transform var(--transition), box-shadow var(--transition); }
+.fc3:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.fc3-t { margin: 0; font-size: .93rem; font-weight: 800; line-height: 1.45; text-transform: uppercase; color: var(--color-text);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.7em; }
+.fc3-media { position: relative; height: 168px; border-radius: 10px; overflow: hidden; background: var(--color-bg-soft);
+  cursor: pointer; border: 0; padding: 0; display: block; width: 100%; }
+.fc3-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.fc3-emoji { width: 100%; height: 100%; display: grid; place-items: center; font-size: 46px;
   background: linear-gradient(150deg, var(--color-accent-soft), transparent 70%); }
 .fc2-status { position: absolute; top: 10px; left: 10px; font-size: .68rem; font-weight: 700; padding: 4px 11px; border-radius: 20px; }
 .fc2-st-new  { background: #e3ecfc; color: #1f52c0; }
 .fc2-st-prog { background: #faeeda; color: #854f0b; }
 .fc2-st-done { background: #e2f3ec; color: #0f6e56; }
-.fc2-body { padding: 13px 15px 15px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
-.fc2-subj { font-size: .72rem; font-weight: 700; color: var(--color-accent); }
-.fc2-txt { font-size: .88rem; font-weight: 600; line-height: 1.45; color: var(--color-text);
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.fc2-meta { margin-top: auto; display: flex; justify-content: space-between; gap: 10px; font-size: .74rem; color: var(--color-text-soft); }
-@media (max-width: 860px) { .fc2-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 520px) { .fc2-grid { grid-template-columns: 1fr; } }
+.fc3-author { display: flex; align-items: flex-start; gap: 11px; }
+.fc3-ava { flex: none; width: 44px; height: 44px; border-radius: 50%; background: var(--color-bg-soft); border: 1px solid var(--color-border);
+  display: grid; place-items: center; color: var(--color-text-soft); }
+.fc3-awrap { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.fc3-aname { font-size: .87rem; font-weight: 700; color: var(--color-text); }
+.fc3-atime { font-size: .74rem; color: var(--color-text-soft); }
+.fc3-badge { align-self: flex-start; font-size: .68rem; font-weight: 700; padding: 3px 10px; border-radius: 6px; background: var(--color-accent); color: #fff; }
+.fc3-row { display: flex; justify-content: space-between; align-items: center; font-size: .84rem; color: var(--color-text-soft);
+  border-top: 1px solid var(--color-border); padding-top: 10px; }
+.fc3-row b { color: var(--color-text); font-size: .95rem; }
+.fc3-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; border-top: 1px solid var(--color-border); padding-top: 12px; }
+.fc3-send { font-size: .85rem; font-weight: 700; color: var(--color-text); border: 1.5px solid var(--color-border); border-radius: 10px; padding: 9px 22px;
+  transition: border-color var(--transition), color var(--transition), background var(--transition); }
+.fc3-send:hover { border-color: var(--color-accent); color: #fff; background: var(--color-accent); }
+.fc3-share { display: flex; gap: 8px; }
+.fc3-sbtn { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; color: #fff; transition: transform var(--transition); }
+.fc3-sbtn:hover { transform: translateY(-2px); }
+.fc3-sbtn.fb { background: #1877f2; }
+.fc3-sbtn.x { background: #000; }
+.fc3-sbtn svg { width: 16px; height: 16px; }
+@media (max-width: 860px) { .fc3-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .fc3-grid { grid-template-columns: 1fr; } }
