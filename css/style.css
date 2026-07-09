@@ -2315,3 +2315,17 @@ body.hp .home-hero .hh-brand .emblem { width: 76px; height: 76px; flex: none; }
 /* Нүүр hero — CTA товч том, тод */
 body.hp .hh-btn { font-size: clamp(1rem, 1.4vw, 1.14rem); padding: 18px 34px; font-weight: 700; border-radius: 14px; }
 @media (max-width: 480px) { body.hp .hh-btn { font-size: .96rem; padding: 15px 22px; } }
+
+/* ---------- Бидний тухай — хөх суурьтай баннер, шөнийн хотын зураг уусгасан ---------- */
+.ab-band { position: relative; border-radius: 24px; overflow: hidden; padding: 62px 56px;
+  background: linear-gradient(105deg, #0b1f4e 0%, #14316f 48%, #1c48b0 100%); box-shadow: var(--shadow-lg); }
+.ab-band::before { content: ""; position: absolute; inset: 0;
+  background: url("/assets/img/city-blue.jpg") center right / cover no-repeat; opacity: .5;
+  -webkit-mask-image: linear-gradient(to right, transparent 4%, rgba(0,0,0,.45) 38%, #000 75%);
+  mask-image: linear-gradient(to right, transparent 4%, rgba(0,0,0,.45) 38%, #000 75%); }
+.ab-band-text { position: relative; z-index: 2; max-width: 620px; }
+.ab-band-text h2 { color: #ffffff; font-size: clamp(1.5rem, 2.6vw, 2.1rem); line-height: 1.28; margin-bottom: 16px; }
+.ab-band-text p { color: #c9d8f2; font-size: .98rem; line-height: 1.75; margin-bottom: 28px; }
+.ab-band-text strong { color: #9cc0ff; }
+.ab-band-btn { display: inline-flex; align-items: center; gap: 9px; font-size: 1rem; font-weight: 700; padding: 15px 32px; border-radius: 12px; }
+@media (max-width: 720px) { .ab-band { padding: 40px 24px; } .ab-band::before { opacity: .22; -webkit-mask-image: none; mask-image: none; } }
