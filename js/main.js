@@ -768,6 +768,9 @@
       "Шийдвэрлэлтийн хувь": "Resolution rate",
       "👍 Лайк": "👍 Likes",
       "💬 Сэтгэгдэл": "💬 Comments",
+      "👍 Лайк дарах": "👍 Like",
+      "👍 Дэмжсэн": "👍 Liked",
+      "💬 Сэтгэгдэл бичих": "💬 Write a comment",
       "Иргэн": "Citizen",
       "Өнөөдөр": "Today",
       "Иргэд өөрсдөө зөвшөөрсний дагуу нийтэлсэн асуудлууд. Саналыг дэмжиж, коммент хэлбэрээр үлдээгээрэй.":
@@ -1416,6 +1419,7 @@
         const author = r.name ? String(r.name) : "Иргэн";
         const likes = (this._likeMap && this._likeMap[r.id]) || 0;
         const cmts = (this._cmtCount && this._cmtCount[r.id]) || 0;
+        const liked = this.likedSet().has(r.id);
         const shareTxt = encodeURIComponent(txt.slice(0, 100));
         const card = document.createElement("article");
         card.className = "fc3";
@@ -1433,8 +1437,8 @@
               '<span class="fc3-badge">' + icon + ' ' + this.esc(subj) + '</span>' +
             '</span>' +
           '</div>' +
-          '<div class="fc3-row"><span>👍 Лайк</span><b>' + likes + '</b></div>' +
-          '<div class="fc3-row"><span>💬 Сэтгэгдэл</span><b>' + cmts + '</b></div>' +
+          '<button type="button" class="fc3-row fc3-like' + (liked ? ' on' : '') + '" aria-pressed="' + liked + '"><span>' + (liked ? '👍 Дэмжсэн' : '👍 Лайк дарах') + '</span><b class="cnt">' + likes + '</b></button>' +
+          '<a class="fc3-row fc3-cmt" href="/holboo/#public-feed" title="Сэтгэгдэл бичихийн тулд дарна уу"><span>💬 Сэтгэгдэл бичих</span><b>' + cmts + '</b></a>' +
           '<div class="fc3-foot">' +
             '<a href="/holboo/#feedback" class="fc3-send">Санал илгээх</a>' +
             '<span class="fc3-share">' +
@@ -1444,6 +1448,23 @@
           '</div>';
         const media = card.querySelector(".fc3-media");
         if (url) media.addEventListener("click", () => this.openLightbox(url, subj));
+        // Лайк дарах — toggle_like RPC (нэг төхөөрөмжөөс нэг удаа, дахин дарвал буцаана)
+        const likeBtn = card.querySelector(".fc3-like");
+        likeBtn.addEventListener("click", async () => {
+          likeBtn.disabled = true;
+          try {
+            const { data, error } = await sb.rpc("toggle_like", { p_feedback: r.id, p_client: this.clientId() });
+            if (error) throw error;
+            const set = this.likedSet();
+            const nowLiked = !set.has(r.id);
+            if (nowLiked) set.add(r.id); else set.delete(r.id);
+            this.saveLiked(set);
+            likeBtn.classList.toggle("on", nowLiked);
+            likeBtn.setAttribute("aria-pressed", String(nowLiked));
+            likeBtn.querySelector("span").textContent = nowLiked ? "👍 Дэмжсэн" : "👍 Лайк дарах";
+            if (typeof data === "number") likeBtn.querySelector(".cnt").textContent = data;
+          } catch (_) {} finally { likeBtn.disabled = false; }
+        });
         wrap.appendChild(card);
       });
       if (!wrap.children.length) wrap.innerHTML = '<p class="feed-state">Одоогоор нийтэлсэн санал алга.</p>';
