@@ -773,6 +773,12 @@
       "💬 Сэтгэгдэл бичих": "💬 Write a comment",
       "🔥 Хамгийн их дэмжигдсэн": "🔥 Most supported",
       "Одоогоор санал алга.": "No feedback yet.",
+      "Нийтийн санал асуулга": "Public polls",
+      "📊 Санал асуулга": "📊 Poll",
+      "Явагдаж буй": "Ongoing",
+      "Дууссан": "Closed",
+      "✓ Таны сонголт": "✓ Your choice",
+      "Нийт санал:": "Total votes:",
       "Иргэн": "Citizen",
       "Өнөөдөр": "Today",
       "Иргэд өөрсдөө зөвшөөрсний дагуу нийтэлсэн асуудлууд. Саналыг дэмжиж, коммент хэлбэрээр үлдээгээрэй.":
@@ -2737,6 +2743,85 @@
   };
 
   /* ---------- Санал хүсэлтийн тойм (dashboard) ---------- */
+  /* ---------- Нийтийн санал асуулга (админ асуулга үүсгэнэ, иргэд санал өгнө) ---------- */
+  const PollsCMS = {
+    esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
+    clientId() {
+      let id = localStorage.getItem("fb_client");
+      if (!id) { id = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.round(performance.now())); localStorage.setItem("fb_client", id); }
+      return id;
+    },
+    voted() { try { return JSON.parse(localStorage.getItem("poll_voted") || "{}"); } catch (_) { return {}; } },
+    saveVoted(m) { localStorage.setItem("poll_voted", JSON.stringify(m)); },
+    fmtDate(s) { try { return new Date(s).toLocaleDateString("mn-MN", { year: "numeric", month: "2-digit", day: "2-digit" }); } catch (_) { return ""; } },
+    async init() {
+      const wrap = document.querySelector("[data-polls]");
+      if (!wrap) return;
+      const sb = window.getSB && window.getSB();
+      if (!sb) return;
+      try {
+        const { data: polls, error } = await sb.from("polls").select("*").eq("published", true)
+          .order("sort", { ascending: true }).order("created_at", { ascending: false }).limit(6);
+        if (error || !polls || !polls.length) return;
+        this._counts = {};
+        try {
+          const { data: res } = await sb.rpc("poll_results");
+          (res || []).forEach((r) => { (this._counts[r.poll_id] = this._counts[r.poll_id] || {})[r.option_idx] = Number(r.cnt); });
+        } catch (_) {}
+        const sec = document.getElementById("polls");
+        if (sec) sec.style.display = "";
+        wrap.innerHTML = "";
+        polls.forEach((p) => {
+          const el = document.createElement("article");
+          el.className = "poll-card";
+          this.fill(el, p, sb);
+          wrap.appendChild(el);
+        });
+      } catch (_) {}
+    },
+    fill(el, p, sb) {
+      const opts = Array.isArray(p.options) ? p.options : [];
+      const cmap = this._counts[p.id] || {};
+      const counts = opts.map((_, i) => cmap[i] || 0);
+      const total = counts.reduce((a, b) => a + b, 0);
+      const closed = p.closes_at && new Date(p.closes_at) < new Date();
+      const my = this.voted()[p.id];
+      const showRes = closed || my != null;
+      const status = closed
+        ? '<span class="pc-st pc-closed">Дууссан</span>'
+        : '<span class="pc-st pc-open">Явагдаж буй</span>' + (p.closes_at ? '<span class="pc-until">' + this.esc(this.fmtDate(p.closes_at)) + ' хүртэл</span>' : '');
+      let body = "";
+      if (showRes) {
+        body = opts.map((o, i) => {
+          const pct = total ? Math.round((counts[i] / total) * 100) : 0;
+          return '<div class="pc-res' + (my === i ? " my" : "") + '">' +
+            '<div class="pc-res-top"><span>' + this.esc(o) + (my === i ? ' <b class="pc-mine">✓ Таны сонголт</b>' : '') + '</span><b>' + pct + '%</b></div>' +
+            '<div class="pc-track"><span class="pc-fill" style="width:' + pct + '%"></span></div>' +
+            '<span class="pc-cnt">' + counts[i] + ' санал</span></div>';
+        }).join("");
+      } else {
+        body = opts.map((o, i) => '<button type="button" class="pc-opt" data-i="' + i + '">' + this.esc(o) + '</button>').join("");
+      }
+      el.innerHTML =
+        '<div class="pc-badges"><span class="pc-badge">📊 Санал асуулга</span>' + status + '</div>' +
+        '<h4 class="pc-q">' + this.esc(p.question) + '</h4>' +
+        '<div class="pc-body">' + body + '</div>' +
+        '<div class="pc-total">Нийт санал: <b>' + total + '</b></div>';
+      if (!showRes) {
+        el.querySelectorAll(".pc-opt").forEach((b) => b.addEventListener("click", async () => {
+          b.disabled = true;
+          try {
+            const { data, error } = await sb.rpc("poll_vote", { p_poll: p.id, p_option: +b.dataset.i, p_client: this.clientId() });
+            if (error) throw error;
+            if (Array.isArray(data)) { const m = {}; data.forEach((c, i) => { m[i] = Number(c); }); this._counts[p.id] = m; }
+            const v = this.voted(); v[p.id] = +b.dataset.i; this.saveVoted(v);
+            this.fill(el, p, sb);
+          } catch (_) { alert("Санал өгөхөд алдаа гарлаа. Дахин оролдоно уу."); b.disabled = false; }
+        }));
+      }
+    },
+  };
+
   const FeedbackStats = {
     IC: {
       total: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>',
@@ -3063,6 +3148,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     Theme.init(); Nav.init(); Search.init(); TextSize.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
-    Share.init(); trackVisit(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); NewsPost.init(); LawPost.init(); EventPost.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); VideoHero.init(); ReportsCMS.init(); ReportPost.init(); ProjectsCMS.init(); ProjectPost.init(); LawsCMS.init(); FeedbackStats.init(); EventsCMS.init(); Settings.init(); ReportStats.init();
+    Share.init(); trackVisit(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); NewsPost.init(); LawPost.init(); EventPost.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); VideoHero.init(); ReportsCMS.init(); ReportPost.init(); ProjectsCMS.init(); ProjectPost.init(); LawsCMS.init(); FeedbackStats.init(); PollsCMS.init(); EventsCMS.init(); Settings.init(); ReportStats.init();
   });
 })();

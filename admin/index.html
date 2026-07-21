@@ -8,7 +8,7 @@
   <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");</script>
   <title>Админ — Санал хүсэлт | Ц.Баатархүү</title>
   <link rel="icon" type="image/svg+xml" href="/assets/img/logo.svg" />
-  <link rel="stylesheet" href="/css/style.css?v=20260710c" />
+  <link rel="stylesheet" href="/css/style.css?v=20260710d" />
   <style>
     /* ===== Админ: цайвар, албан ёсны ХӨХ сэдэв (зөвхөн энэ хуудсанд; сайтад нөлөөлөхгүй) ===== */
     [data-theme] {
@@ -331,6 +331,10 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           Санал хүсэлт <span class="nav-count" id="nav-fb-count"></span>
         </button>
+        <button type="button" class="nav-link" data-view="poll">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+          Санал асуулга
+        </button>
         <button type="button" class="nav-link" data-view="event">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>
           Арга хэмжээ
@@ -593,6 +597,32 @@
           <div id="video-empty" class="search-empty" style="display:none">Одоогоор видео алга. Дээрх формоор нэмнэ үү.</div>
         </section><!-- /video-view -->
 
+        <!-- ============ САНАЛ АСУУЛГА УДИРДАХ ============ -->
+        <section id="poll-view" class="view" style="display:none">
+          <div class="cms-bar"><button type="button" class="btn btn-gold btn-sm" data-newbtn="poll">+ Шинэ санал асуулга үүсгэх</button></div>
+          <div class="form-card cms-form" hidden style="margin-bottom:26px">
+            <h3 id="poll-form-title" style="margin-bottom:6px">Шинэ санал асуулга үүсгэх</h3>
+            <p class="form-note" style="margin-bottom:16px">Асуултаа бичээд, <strong>сонголт бүрийг шинэ мөрөнд</strong> оруулна (доод тал нь 2). Иргэд нэвтрэлтгүйгээр санал өгнө — нэг төхөөрөмж нэг санал.</p>
+            <form id="poll-form">
+              <input type="hidden" id="pl-id" />
+              <div class="form-group"><label for="pl-question">Асуулт <span style="color:var(--color-danger)">*</span></label><textarea id="pl-question" rows="2" required placeholder="Жишээ: Танай хороонд аль асуудал хамгийн тулгамдсан бэ?"></textarea></div>
+              <div class="form-group"><label for="pl-options">Сонголтууд (мөр бүрд нэг) <span style="color:var(--color-danger)">*</span></label><textarea id="pl-options" rows="4" required placeholder="Зам, тээвэр&#10;Гэрэлтүүлэг&#10;Хог хаягдал&#10;Ногоон байгууламж"></textarea></div>
+              <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                <div class="form-group"><label for="pl-closes">Дуусах огноо (заавал биш — хоосон бол хугацаагүй)</label><input type="date" id="pl-closes" /></div>
+                <div class="form-group"><label for="pl-sort">Эрэмбэ</label><input type="number" id="pl-sort" value="0" /></div>
+              </div>
+              <div class="form-group"><label style="display:flex;gap:9px;align-items:center;cursor:pointer"><input type="checkbox" id="pl-published" checked style="width:18px;height:18px;accent-color:var(--color-accent)" /> Нийтлэх (сайтад харагдана)</label></div>
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                <button type="submit" class="btn btn-gold btn-sm">Хадгалах</button>
+                <button type="button" id="poll-cancel" class="btn btn-ghost btn-sm" style="display:none">Цуцлах</button>
+                <span id="poll-msg" class="form-note"></span>
+              </div>
+            </form>
+          </div>
+          <div id="poll-list"></div>
+          <div id="poll-empty" class="search-empty" style="display:none">Одоогоор санал асуулга алга. Дээрх товчоор үүсгэнэ үү.</div>
+        </section><!-- /poll-view -->
+
         <!-- ============ ТАЙЛАН УДИРДАХ ============ -->
         <section id="report-view" class="view" style="display:none">
           <div class="cms-bar"><button type="button" class="btn btn-gold btn-sm" data-newbtn="report">+ Шинэ тайлан нэмэх</button></div>
@@ -776,7 +806,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="/js/supabase-config.js?v=20260710c"></script>
+  <script src="/js/supabase-config.js?v=20260710d"></script>
   <script>
   (function () {
     const SUBJECT_LABEL = { gerel:"Гэрэлтүүлэг", zam:"Зам, нүх, эвдрэл", yavgan:"Явган хүний зам", hog:"Хог, орчны бохирдол", buudal:"Автобусны буудал", surguuli:"Сургууль, цэцэрлэг", emnelg:"Эмнэлэг, өрхийн эмнэлэг", soh:"СӨХ, байрны орчин", hurteemj:"Ахмад, ХБИ хүртээмж", huuli:"Хууль, бодлогын санал", urgudul:"Хувийн өргөдөл, тусламж", sanal:"Санал", gomdol:"Гомдол", asuudal:"Тулгамдсан асуудал", uulzalt:"Уулзалтын хүсэлт", busad:"Бусад" };
@@ -1548,6 +1578,115 @@
 
     $("#video-cancel").addEventListener("click", resetVideoForm);
 
+    // ===== САНАЛ АСУУЛГА УДИРДАХ =====
+    let pollRows = [], pollLoaded = false, pollCounts = {};
+    const pollForm = $("#poll-form"), pollList = $("#poll-list"), pollEmpty = $("#poll-empty"), pollMsg = $("#poll-msg");
+
+    function resetPollForm() {
+      pollForm.reset(); $("#pl-id").value = ""; $("#pl-published").checked = true; $("#pl-sort").value = 0;
+      $("#poll-form-title").textContent = "Шинэ санал асуулга үүсгэх"; $("#poll-cancel").style.display = "none";
+    }
+
+    async function loadPolls() {
+      pollList.innerHTML = ""; pollEmpty.style.display = "none";
+      const { data, error } = await sb.from("polls").select("*").order("sort").order("created_at", { ascending: false });
+      if (error) { pollEmpty.textContent = "Ачаалахад алдаа: " + error.message + " (supabase-polls.sql ажилласан эсэхээ шалгана уу)"; pollEmpty.style.display = "block"; return; }
+      pollRows = data || [];
+      pollCounts = {};
+      try {
+        const { data: res } = await sb.rpc("poll_results");
+        (res || []).forEach((r) => { (pollCounts[r.poll_id] = pollCounts[r.poll_id] || {})[r.option_idx] = Number(r.cnt); });
+      } catch (_) {}
+      renderPolls();
+    }
+
+    function renderPolls() {
+      pollList.innerHTML = "";
+      pollEmpty.style.display = pollRows.length ? "none" : "block";
+      pollRows.forEach((p) => {
+        const opts = Array.isArray(p.options) ? p.options : [];
+        const cmap = pollCounts[p.id] || {};
+        const counts = opts.map((_, i) => cmap[i] || 0);
+        const total = counts.reduce((a, b) => a + b, 0);
+        const closed = p.closes_at && new Date(p.closes_at) < new Date();
+        const resHtml = opts.map((o, i) => {
+          const pct = total ? Math.round((counts[i] / total) * 100) : 0;
+          return `<div style="font-size:.8rem;color:var(--color-text-soft);display:flex;gap:8px;align-items:center;margin-top:3px">
+            <span style="min-width:160px">${esc(o)}</span>
+            <span style="flex:1;height:7px;border-radius:4px;background:var(--color-bg-soft);overflow:hidden"><span style="display:block;height:100%;width:${pct}%;background:var(--color-accent)"></span></span>
+            <b style="color:var(--color-text)">${counts[i]}</b> (${pct}%)</div>`;
+        }).join("");
+        const row = document.createElement("div");
+        row.className = "news-row";
+        row.innerHTML =
+          `<div class="nr-body">
+             <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:4px">
+               ${closed ? `<span class="badge-status status-notstarted">Дууссан</span>` : `<span class="badge-status status-passed">Явагдаж буй</span>`}
+               ${p.published ? "" : `<span class="badge-status status-draft">Ноорог</span>`}
+               ${p.closes_at ? `<span style="font-size:.8rem;color:var(--color-text-soft)">дуусах: ${esc(String(p.closes_at).slice(0, 10))}</span>` : ""}
+               <span style="font-size:.8rem;color:var(--color-text-soft)">эрэмбэ: ${p.sort}</span>
+               <span style="font-size:.8rem;color:var(--color-text-soft)">нийт санал: <b style="color:var(--color-text)">${total}</b></span>
+             </div>
+             <div class="nr-title" style="font-weight:600">${esc(p.question)}</div>
+             ${resHtml}
+           </div>
+           <div class="nr-actions">
+             <button class="btn btn-ghost btn-sm plr-edit">Засах</button>
+             <button class="btn btn-ghost btn-sm plr-del" style="color:var(--color-danger)">Устгах</button>
+           </div>`;
+        row.querySelector(".plr-edit").addEventListener("click", () => editPoll(p));
+        row.querySelector(".plr-del").addEventListener("click", () => deletePoll(p));
+        pollList.appendChild(row);
+      });
+    }
+
+    function editPoll(p) {
+      $("#pl-id").value = p.id; $("#pl-question").value = p.question || "";
+      $("#pl-options").value = (Array.isArray(p.options) ? p.options : []).join("\n");
+      $("#pl-closes").value = p.closes_at ? String(p.closes_at).slice(0, 10) : "";
+      $("#pl-sort").value = p.sort != null ? p.sort : 0;
+      $("#pl-published").checked = !!p.published;
+      $("#poll-form-title").textContent = "Санал асуулга засах"; $("#poll-cancel").style.display = "inline-flex";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    async function deletePoll(p) {
+      if (!confirm("Энэ санал асуулгыг (өгсөн саналуудын хамт) устгах уу?")) return;
+      const { error } = await sb.from("polls").delete().eq("id", p.id);
+      if (error) { alert("Алдаа: " + error.message); return; }
+      pollRows = pollRows.filter((x) => x.id !== p.id); renderPolls();
+    }
+
+    pollForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      pollMsg.textContent = ""; pollMsg.style.color = "";
+      const opts = $("#pl-options").value.split("\n").map((s) => s.trim()).filter(Boolean);
+      if (opts.length < 2) { pollMsg.style.color = "var(--color-danger)"; pollMsg.textContent = "Доод тал нь 2 сонголт оруулна уу."; return; }
+      const btn = pollForm.querySelector('button[type="submit"]'); btn.disabled = true; btn.textContent = "Хадгалж байна…";
+      try {
+        const id = $("#pl-id").value;
+        const closes = $("#pl-closes").value;
+        const rec = {
+          question: $("#pl-question").value.trim(),
+          options: opts,
+          closes_at: closes ? closes + "T23:59:59+08:00" : null,
+          published: $("#pl-published").checked,
+          sort: parseInt($("#pl-sort").value, 10) || 0,
+        };
+        let error;
+        if (id) ({ error } = await sb.from("polls").update(rec).eq("id", id));
+        else ({ error } = await sb.from("polls").insert(rec));
+        if (error) throw error;
+        pollMsg.style.color = "var(--color-success)"; pollMsg.textContent = "✓ Хадгаллаа.";
+        resetPollForm(); await loadPolls();
+        setTimeout(() => { pollMsg.textContent = ""; }, 4000);
+      } catch (err) {
+        pollMsg.style.color = "var(--color-danger)"; pollMsg.textContent = "Алдаа: " + (err.message || "хадгалж чадсангүй");
+      } finally { btn.disabled = false; btn.textContent = "Хадгалах"; }
+    });
+
+    $("#poll-cancel").addEventListener("click", resetPollForm);
+
     // ===== ТАЙЛАН УДИРДАХ =====
     const REPORT_KIND = { month: "Сарын тайлан", year: "Жилийн тайлан" };
     let reportRows = [], reportLoaded = false;
@@ -2002,7 +2141,7 @@
     });
 
     // Цонх (view) солих — sidebar навигац
-    const PAGE_TITLE = { dashboard: "Хяналтын самбар", fb: "Санал хүсэлт", news: "Мэдээ", video: "Видео", report: "Тайлан", project: "Төслүүд", law: "Хууль", event: "Арга хэмжээ", settings: "Тохиргоо" };
+    const PAGE_TITLE = { dashboard: "Хяналтын самбар", fb: "Санал хүсэлт", poll: "Санал асуулга", news: "Мэдээ", video: "Видео", report: "Тайлан", project: "Төслүүд", law: "Хууль", event: "Арга хэмжээ", settings: "Тохиргоо" };
     let currentView = "dashboard";
     const viewHistory = [];
     function updateBackBtn() { const b = $("#back-btn"); if (b) b.hidden = viewHistory.length === 0; }
@@ -2015,6 +2154,7 @@
       const t = $("#page-title"); if (t) t.textContent = PAGE_TITLE[name] || "";
       if (name === "news" && !newsLoaded) { newsLoaded = true; loadNews(); }
       if (name === "video" && !videoLoaded) { videoLoaded = true; loadVideos(); }
+      if (name === "poll" && !pollLoaded) { pollLoaded = true; loadPolls(); }
       if (name === "report" && !reportLoaded) { reportLoaded = true; loadReports(); }
       if (name === "project" && !projectLoaded) { projectLoaded = true; loadProjects(); }
       if (name === "law" && !lawLoaded) { lawLoaded = true; loadLaws(); }
@@ -2037,15 +2177,15 @@
     });
 
     // ===== Жагсаалт + "Шинэ нэмэх" (форм нуух/харуулах) =====
-    const RESET_FORM = { news: resetNewsForm, video: resetVideoForm, report: resetReportForm, project: resetProjectForm, law: resetLawForm, event: resetEventForm };
+    const RESET_FORM = { news: resetNewsForm, video: resetVideoForm, poll: resetPollForm, report: resetReportForm, project: resetProjectForm, law: resetLawForm, event: resetEventForm };
     const showCmsForm = (k) => { const f = document.querySelector("#" + k + "-view .cms-form"); if (f) { f.hidden = false; f.scrollIntoView({ behavior: "smooth", block: "start" }); } };
     document.querySelectorAll("[data-newbtn]").forEach((b) => b.addEventListener("click", () => {
       const k = b.dataset.newbtn; if (RESET_FORM[k]) RESET_FORM[k](); showCmsForm(k);
     }));
     document.addEventListener("click", (e) => {
-      const ed = e.target.closest(".nr-edit,.vr-edit,.rr-edit,.pr-edit,.lr-edit,.er-edit");
+      const ed = e.target.closest(".nr-edit,.vr-edit,.rr-edit,.pr-edit,.lr-edit,.er-edit,.plr-edit");
       if (ed) { const v = ed.closest(".view"), f = v && v.querySelector(".cms-form"); if (f) { f.hidden = false; f.scrollIntoView({ behavior: "smooth", block: "start" }); } }
-      const cb = e.target.closest("#news-cancel,#video-cancel,#report-cancel,#project-cancel,#law-cancel,#event-cancel");
+      const cb = e.target.closest("#news-cancel,#video-cancel,#report-cancel,#project-cancel,#law-cancel,#event-cancel,#poll-cancel");
       if (cb) { const v = cb.closest(".view"), f = v && v.querySelector(".cms-form"); if (f) f.hidden = true; }
     });
 

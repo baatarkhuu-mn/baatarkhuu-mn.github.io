@@ -2375,6 +2375,35 @@ body.hp .hh-btn { font-size: clamp(1rem, 1.4vw, 1.14rem); padding: 18px 34px; fo
 .fc3.flash { border-color: var(--color-accent); box-shadow: 0 0 0 3px var(--color-accent-soft); }
 @media (max-width: 900px) { .dx-cols { grid-template-columns: 1fr; } .dx-side { position: static; } .dxs-list { max-height: 320px; } }
 
+/* ---------- Нийтийн санал асуулга ---------- */
+.polls-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: start; }
+.poll-card { background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: 15px; padding: 18px;
+  display: flex; flex-direction: column; gap: 12px; box-shadow: var(--shadow-sm); transition: transform var(--transition), box-shadow var(--transition); }
+.poll-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.pc-badges { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.pc-badge { background: var(--color-accent); color: #fff; font-size: .68rem; font-weight: 700; padding: 3px 10px; border-radius: 6px; }
+.pc-st { font-size: .68rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+.pc-open { background: #e2f3ec; color: #0f6e56; }
+.pc-closed { background: #fce9e9; color: #a32d2d; }
+.pc-until { font-size: .7rem; color: var(--color-text-soft); }
+.pc-q { margin: 0; font-size: .98rem; font-weight: 800; line-height: 1.45; color: var(--color-text); }
+.pc-body { display: flex; flex-direction: column; gap: 9px; }
+.pc-opt { text-align: left; font-family: inherit; font-size: .85rem; font-weight: 600; color: var(--color-text);
+  background: var(--color-bg-soft); border: 1.5px solid var(--color-border); border-radius: 10px; padding: 11px 14px; cursor: pointer;
+  transition: border-color var(--transition), color var(--transition), transform var(--transition); }
+.pc-opt:hover { border-color: var(--color-accent); color: var(--color-accent); transform: translateX(3px); }
+.pc-opt:disabled { opacity: .6; cursor: default; }
+.pc-res { display: flex; flex-direction: column; gap: 5px; }
+.pc-res-top { display: flex; justify-content: space-between; gap: 10px; font-size: .82rem; color: var(--color-text); }
+.pc-mine { color: var(--color-accent); font-size: .7rem; font-weight: 700; }
+.pc-track { height: 8px; border-radius: 5px; background: var(--color-bg-soft); overflow: hidden; }
+.pc-fill { display: block; height: 100%; border-radius: 5px; background: linear-gradient(90deg, var(--color-accent), #14316f); transition: width .6s ease; }
+.pc-res.my .pc-fill { background: linear-gradient(90deg, #1d9e75, #0f6e56); }
+.pc-cnt { font-size: .68rem; color: var(--color-text-soft); }
+.pc-total { border-top: 1px solid var(--color-border); padding-top: 10px; font-size: .8rem; color: var(--color-text-soft); }
+.pc-total b { color: var(--color-text); }
+@media (max-width: 860px) { .polls-grid { grid-template-columns: 1fr; } }
+
 /* Санал илгээх форм — ялгарч тодрох (акцент хүрээ, дээд зурвас, туяа) */
 #feedback .form-card { position: relative; overflow: hidden; border: 1.5px solid rgba(48,113,231,.45);
   box-shadow: 0 20px 46px -22px rgba(48,113,231,.5); background: color-mix(in srgb, var(--color-accent) 3%, var(--color-bg-card)); }
