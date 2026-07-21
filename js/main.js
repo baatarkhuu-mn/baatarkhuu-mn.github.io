@@ -779,6 +779,12 @@
       "Дууссан": "Closed",
       "✓ Таны сонголт": "✓ Your choice",
       "Нийт санал:": "Total votes:",
+      "Нийт санал": "Total votes",
+      "Хугацаа": "Duration",
+      "Хугацаагүй": "No deadline",
+      "Оролцох": "Participate",
+      "Дүн харах": "View results",
+      "Ц.Баатархүү": "Ts.Baatarkhuu",
       "Иргэн": "Citizen",
       "Өнөөдөр": "Today",
       "Иргэд өөрсдөө зөвшөөрсний дагуу нийтэлсэн асуудлууд. Саналыг дэмжиж, коммент хэлбэрээр үлдээгээрэй.":
@@ -2754,6 +2760,15 @@
     voted() { try { return JSON.parse(localStorage.getItem("poll_voted") || "{}"); } catch (_) { return {}; } },
     saveVoted(m) { localStorage.setItem("poll_voted", JSON.stringify(m)); },
     fmtDate(s) { try { return new Date(s).toLocaleDateString("mn-MN", { year: "numeric", month: "2-digit", day: "2-digit" }); } catch (_) { return ""; } },
+    ago(iso) {
+      try {
+        const d = (Date.now() - new Date(iso).getTime()) / 864e5;
+        if (d < 1) return "Өнөөдөр";
+        if (d < 30) return Math.floor(d) + " хоногийн өмнө";
+        if (d < 365) return Math.floor(d / 30) + " сарын өмнө";
+        return Math.floor(d / 365) + " жилийн өмнө";
+      } catch (_) { return ""; }
+    },
     async init() {
       const wrap = document.querySelector("[data-polls]");
       if (!wrap) return;
@@ -2779,7 +2794,7 @@
         });
       } catch (_) {}
     },
-    fill(el, p, sb) {
+    fill(el, p, sb, open) {
       const opts = Array.isArray(p.options) ? p.options : [];
       const cmap = this._counts[p.id] || {};
       const counts = opts.map((_, i) => cmap[i] || 0);
@@ -2787,12 +2802,13 @@
       const closed = p.closes_at && new Date(p.closes_at) < new Date();
       const my = this.voted()[p.id];
       const showRes = closed || my != null;
-      const status = closed
+      const chip = closed
         ? '<span class="pc-st pc-closed">Дууссан</span>'
-        : '<span class="pc-st pc-open">Явагдаж буй</span>' + (p.closes_at ? '<span class="pc-until">' + this.esc(this.fmtDate(p.closes_at)) + ' хүртэл</span>' : '');
-      let body = "";
+        : '<span class="pc-st pc-open">Явагдаж буй</span>';
+      const durVal = closed ? "Дууссан" : (p.closes_at ? this.fmtDate(p.closes_at) + " хүртэл" : "Хугацаагүй");
+      let panel = "";
       if (showRes) {
-        body = opts.map((o, i) => {
+        panel = opts.map((o, i) => {
           const pct = total ? Math.round((counts[i] / total) * 100) : 0;
           return '<div class="pc-res' + (my === i ? " my" : "") + '">' +
             '<div class="pc-res-top"><span>' + this.esc(o) + (my === i ? ' <b class="pc-mine">✓ Таны сонголт</b>' : '') + '</span><b>' + pct + '%</b></div>' +
@@ -2800,13 +2816,41 @@
             '<span class="pc-cnt">' + counts[i] + ' санал</span></div>';
         }).join("");
       } else {
-        body = opts.map((o, i) => '<button type="button" class="pc-opt" data-i="' + i + '">' + this.esc(o) + '</button>').join("");
+        panel = opts.map((o, i) => '<button type="button" class="pc-opt" data-i="' + i + '">' + this.esc(o) + '</button>').join("");
       }
+      const shareU = encodeURIComponent("https://baatarkhuu.mn/#polls");
+      const shareT = encodeURIComponent((p.question || "").slice(0, 100));
+      el.className = "fc3 pc";
       el.innerHTML =
-        '<div class="pc-badges"><span class="pc-badge">📊 Санал асуулга</span>' + status + '</div>' +
-        '<h4 class="pc-q">' + this.esc(p.question) + '</h4>' +
-        '<div class="pc-body">' + body + '</div>' +
-        '<div class="pc-total">Нийт санал: <b>' + total + '</b></div>';
+        '<h4 class="fc3-t">' + this.esc(p.question) + '</h4>' +
+        '<div class="fc3-media pc-media">' +
+          (p.image ? '<img src="' + this.esc(p.image) + '" alt="" loading="lazy" />' : '<span class="fc3-emoji" aria-hidden="true">📊</span>') +
+          chip +
+        '</div>' +
+        '<div class="fc3-author">' +
+          '<span class="fc3-ava"><img src="/assets/img/ig-member.jpg" alt="Ц.Баатархүү" loading="lazy" /></span>' +
+          '<span class="fc3-awrap">' +
+            '<span class="fc3-aname">Ц.Баатархүү</span>' +
+            '<span class="fc3-atime">' + this.esc(this.ago(p.created_at)) + '</span>' +
+            '<span class="fc3-badge">📊 Санал асуулга</span>' +
+          '</span>' +
+        '</div>' +
+        '<div class="fc3-row"><span>Хугацаа</span><b>' + this.esc(durVal) + '</b></div>' +
+        '<div class="fc3-row"><span>Нийт санал</span><b>' + total + '</b></div>' +
+        '<div class="pc-panel' + (open ? " open" : "") + '">' + panel + '</div>' +
+        '<div class="fc3-foot">' +
+          '<button type="button" class="fc3-send pc-join" aria-expanded="' + !!open + '">' + (showRes ? "Дүн харах" : "Оролцох") + '</button>' +
+          '<span class="fc3-share">' +
+            '<a class="fc3-sbtn fb" href="https://www.facebook.com/sharer/sharer.php?u=' + shareU + '" target="_blank" rel="noopener" aria-label="Facebook-т хуваалцах"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 22v-8h3l1-4h-4V7c0-1 .3-2 2-2h2V1.5C18.5 1.4 17.3 1 16 1c-3 0-5 2-5 5v3H7v4h4v8h2z"/></svg></a>' +
+            '<a class="fc3-sbtn x" href="https://twitter.com/intent/tweet?url=' + shareU + '&text=' + shareT + '" target="_blank" rel="noopener" aria-label="X-д хуваалцах"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.657l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>' +
+          '</span>' +
+        '</div>';
+      const joinBtn = el.querySelector(".pc-join");
+      const pn = el.querySelector(".pc-panel");
+      joinBtn.addEventListener("click", () => {
+        const isOpen = pn.classList.toggle("open");
+        joinBtn.setAttribute("aria-expanded", String(isOpen));
+      });
       if (!showRes) {
         el.querySelectorAll(".pc-opt").forEach((b) => b.addEventListener("click", async () => {
           b.disabled = true;
@@ -2815,7 +2859,7 @@
             if (error) throw error;
             if (Array.isArray(data)) { const m = {}; data.forEach((c, i) => { m[i] = Number(c); }); this._counts[p.id] = m; }
             const v = this.voted(); v[p.id] = +b.dataset.i; this.saveVoted(v);
-            this.fill(el, p, sb);
+            this.fill(el, p, sb, true);
           } catch (_) { alert("Санал өгөхөд алдаа гарлаа. Дахин оролдоно уу."); b.disabled = false; }
         }));
       }

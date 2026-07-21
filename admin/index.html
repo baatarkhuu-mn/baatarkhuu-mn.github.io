@@ -8,7 +8,7 @@
   <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");</script>
   <title>Админ — Санал хүсэлт | Ц.Баатархүү</title>
   <link rel="icon" type="image/svg+xml" href="/assets/img/logo.svg" />
-  <link rel="stylesheet" href="/css/style.css?v=20260710e" />
+  <link rel="stylesheet" href="/css/style.css?v=20260710f" />
   <style>
     /* ===== Админ: цайвар, албан ёсны ХӨХ сэдэв (зөвхөн энэ хуудсанд; сайтад нөлөөлөхгүй) ===== */
     [data-theme] {
@@ -607,6 +607,7 @@
               <input type="hidden" id="pl-id" />
               <div class="form-group"><label for="pl-question">Асуулт <span style="color:var(--color-danger)">*</span></label><textarea id="pl-question" rows="2" required placeholder="Жишээ: Танай хороонд аль асуудал хамгийн тулгамдсан бэ?"></textarea></div>
               <div class="form-group"><label for="pl-options">Сонголтууд (мөр бүрд нэг) <span style="color:var(--color-danger)">*</span></label><textarea id="pl-options" rows="4" required placeholder="Зам, тээвэр&#10;Гэрэлтүүлэг&#10;Хог хаягдал&#10;Ногоон байгууламж"></textarea></div>
+              <div class="form-group"><label for="pl-image">Зураг (заавал биш — картын нүүр зураг)</label><input type="file" id="pl-image" accept="image/*" /><div id="pl-image-cur" class="form-note" style="margin-top:6px"></div></div>
               <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
                 <div class="form-group"><label for="pl-closes">Дуусах огноо (заавал биш — хоосон бол хугацаагүй)</label><input type="date" id="pl-closes" /></div>
                 <div class="form-group"><label for="pl-sort">Эрэмбэ</label><input type="number" id="pl-sort" value="0" /></div>
@@ -806,7 +807,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="/js/supabase-config.js?v=20260710e"></script>
+  <script src="/js/supabase-config.js?v=20260710f"></script>
   <script>
   (function () {
     const SUBJECT_LABEL = { gerel:"Гэрэлтүүлэг", zam:"Зам, нүх, эвдрэл", yavgan:"Явган хүний зам", hog:"Хог, орчны бохирдол", buudal:"Автобусны буудал", surguuli:"Сургууль, цэцэрлэг", emnelg:"Эмнэлэг, өрхийн эмнэлэг", soh:"СӨХ, байрны орчин", hurteemj:"Ахмад, ХБИ хүртээмж", huuli:"Хууль, бодлогын санал", urgudul:"Хувийн өргөдөл, тусламж", sanal:"Санал", gomdol:"Гомдол", asuudal:"Тулгамдсан асуудал", uulzalt:"Уулзалтын хүсэлт", busad:"Бусад" };
@@ -1587,6 +1588,7 @@
 
     function resetPollForm() {
       pollForm.reset(); $("#pl-id").value = ""; $("#pl-published").checked = true; $("#pl-sort").value = 0;
+      $("#pl-image-cur").textContent = "";
       $("#poll-form-title").textContent = "Шинэ санал асуулга үүсгэх"; $("#poll-cancel").style.display = "none";
     }
 
@@ -1646,6 +1648,7 @@
     function editPoll(p) {
       $("#pl-id").value = p.id; $("#pl-question").value = p.question || "";
       $("#pl-options").value = (Array.isArray(p.options) ? p.options : []).join("\n");
+      $("#pl-image-cur").textContent = p.image ? "Одоогийн зураг хадгалагдана. Шинээр сонгвол солигдоно." : "";
       $("#pl-closes").value = p.closes_at ? String(p.closes_at).slice(0, 10) : "";
       $("#pl-sort").value = p.sort != null ? p.sort : 0;
       $("#pl-published").checked = !!p.published;
@@ -1676,6 +1679,14 @@
           published: $("#pl-published").checked,
           sort: parseInt($("#pl-sort").value, 10) || 0,
         };
+        const file = $("#pl-image").files[0];
+        if (file) {
+          const ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "");
+          const path = `poll-${Date.now()}-${Math.round(Math.random() * 1e6)}.${ext}`;
+          const { error: upErr } = await sb.storage.from("news-photos").upload(path, file, { contentType: file.type });
+          if (upErr) throw upErr;
+          rec.image = sb.storage.from("news-photos").getPublicUrl(path).data.publicUrl;
+        }
         let error;
         if (id) ({ error } = await sb.from("polls").update(rec).eq("id", id));
         else ({ error } = await sb.from("polls").insert(rec));
