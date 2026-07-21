@@ -2402,6 +2402,18 @@ body.hp .hh-btn { font-size: clamp(1rem, 1.4vw, 1.14rem); padding: 18px 34px; fo
 .pc-cnt { font-size: .68rem; color: var(--color-text-soft); }
 .pc-total { border-top: 1px solid var(--color-border); padding-top: 10px; font-size: .8rem; color: var(--color-text-soft); }
 .pc-total b { color: var(--color-text); }
+/* Эможигүй дүрсний хэл: чипийн цэг + шугаман SVG дүрсүүд */
+.st-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: currentColor; margin-right: 6px; vertical-align: 1px; }
+.ri { width: 16px; height: 16px; vertical-align: -3px; margin-right: 7px; }
+.mi { width: 13px; height: 13px; vertical-align: -2px; margin-right: 5px; }
+.fc3-icoph { width: 100%; height: 100%; display: grid; place-items: center; color: var(--color-accent);
+  background: linear-gradient(150deg, var(--color-accent-soft), transparent 70%); }
+.pc-bdg { display: inline-flex; align-items: center; gap: 6px; }
+.pc-bdg svg { width: 12px; height: 12px; }
+.dxs-head { display: flex; align-items: center; gap: 9px; }
+.dxs-head svg { color: var(--color-accent); flex: none; }
+.dxs-likes .mi { margin-right: 4px; }
+
 /* fc3 хэв маягийн асуулгын карт — нэмэлтүүд */
 .pc-media .pc-st { position: absolute; top: 10px; left: 10px; z-index: 2; }
 .fc3-ava img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; }
@@ -2415,7 +2427,6 @@ body.hp .hh-btn { font-size: clamp(1rem, 1.4vw, 1.14rem); padding: 18px 34px; fo
 #feedback .form-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px;
   background: linear-gradient(90deg, var(--color-accent), #14316f); }
 #feedback .form-card .fc-title { display: flex; align-items: center; gap: 10px; }
-#feedback .form-card .fc-title::before { content: "✍️"; font-size: 1.15rem; }
 
 /* Нийтэлсэн саналын картууд — гарчиг / зураг / зохиогч / лайк+сэтгэгдэл / илгээх+share */
 .fc3-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: start; }

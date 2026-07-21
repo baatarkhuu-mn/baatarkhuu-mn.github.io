@@ -786,6 +786,15 @@
       "Дүн харах": "View results",
       "Ц.Баатархүү": "Ts.Baatarkhuu",
       "Иргэн": "Citizen",
+      "Лайк дарах": "Like",
+      "Дэмжсэн": "Liked",
+      "Сэтгэгдэл бичих": "Write a comment",
+      "Хамгийн их дэмжигдсэн": "Most supported",
+      "Санал асуулга": "Poll",
+      "Хүлээн авсан": "Received",
+      "Шийдвэрлэгдсэн": "Resolved",
+      "Явцад": "In progress",
+      "Байршил": "Location",
       "Өнөөдөр": "Today",
       "Иргэд өөрсдөө зөвшөөрсний дагуу нийтэлсэн асуудлууд. Саналыг дэмжиж, коммент хэлбэрээр үлдээгээрэй.":
         "Issues published with citizens' own consent. Show your support and leave your thoughts as a comment.",
@@ -1398,13 +1407,33 @@
     },
 
     // Нүүр хуудасны зургийн галерей — зөвхөн зурагтай саналууд, дарвал том зураг нээнэ
-    SUBJ_ICON: { gerel: "💡", zam: "🚧", yavgan: "🚶", hog: "🗑️", buudal: "🚌", surguuli: "🏫", emnelg: "🏥", soh: "🏢", hurteemj: "♿", huuli: "⚖️", urgudul: "📄", sanal: "💬", gomdol: "📣", asuudal: "❗", uulzalt: "🤝", busad: "📌" },
+    // Ангиллын шугаман SVG дүрс (эможигүй, сайтын дүрсний хэлээр)
+    SUBJ_SVG: {
+      gerel: '<path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1h6c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/>',
+      zam: '<path d="M4 21 10 3M20 21 14 3M12 8v2M12 14v2M12 20v1"/>',
+      yavgan: '<circle cx="12" cy="5" r="2"/><path d="M12 7v5l-3 8M12 12l3 8M9 10l3-2 3 2"/>',
+      hog: '<path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M10 11v6M14 11v6"/>',
+      buudal: '<rect x="4" y="3" width="16" height="13" rx="2"/><path d="M4 9h16M8 21v-2M16 21v-2"/><circle cx="8" cy="13" r="1"/><circle cx="16" cy="13" r="1"/>',
+      surguuli: '<path d="M22 10 12 5 2 10l10 5 10-5zM6 12.5V17c3 2.5 9 2.5 12 0v-4.5"/>',
+      emnelg: '<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>',
+      soh: '<path d="M3 21V8l9-5 9 5v13M9 21v-6h6v6M3 21h18"/>',
+      hurteemj: '<circle cx="12" cy="5" r="2"/><path d="M12 7v6m0 0H8m4 0h4M9 21a4 4 0 1 1 6-3.5"/>',
+      huuli: '<path d="M12 3v18M5 7h14M7 7l-3 6a3 3 0 0 0 6 0zm10 0-3 6a3 3 0 0 0 6 0z"/>',
+      urgudul: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M16 13H8M16 17H8"/>',
+    },
+    subjSvg(key, size) {
+      const p = this.SUBJ_SVG[key] || '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>';
+      return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="' + size + '" height="' + size + '">' + p + '</svg>';
+    },
+    IC_LIKE: '<svg class="ri" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>',
+    IC_CMT: '<svg class="ri" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+    IC_PIN: '<svg class="mi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>',
     statusChip(r) {
       const done = r.status === "done" || r.status === "resolved" || !!r.response;
       const routed = r.status === "routed" || r.status === "processing" || r.status === "responded" || !!r.org;
-      if (done) return '<span class="fc2-status fc2-st-done">✅ Шийдвэрлэгдсэн</span>';
-      if (routed) return '<span class="fc2-status fc2-st-prog">⏳ Явцад</span>';
-      return '<span class="fc2-status fc2-st-new">📩 Хүлээн авсан</span>';
+      if (done) return '<span class="fc2-status fc2-st-done"><i class="st-dot"></i>Шийдвэрлэгдсэн</span>';
+      if (routed) return '<span class="fc2-status fc2-st-prog"><i class="st-dot"></i>Явцад</span>';
+      return '<span class="fc2-status fc2-st-new"><i class="st-dot"></i>Хүлээн авсан</span>';
     },
     ago(iso) {
       try {
@@ -1428,7 +1457,6 @@
           try { url = sb.storage.from("feedback-public").getPublicUrl(r.photos[0]).data.publicUrl; } catch (_) {}
         }
         const subj = this.SUBJ[r.subject] || r.subject || "Санал";
-        const icon = this.SUBJ_ICON[r.subject] || "📌";
         const txt = (r.message || "").split("\n")[0] || subj;
         const author = r.name ? String(r.name) : "Иргэн";
         const likes = (this._likeMap && this._likeMap[r.id]) || 0;
@@ -1442,7 +1470,7 @@
         card.innerHTML =
           '<h4 class="fc3-t">' + this.esc(txt) + '</h4>' +
           '<button type="button" class="fc3-media" aria-label="' + this.esc(subj) + '">' +
-            (url ? '<img src="' + url + '" alt="' + this.esc(subj) + '" loading="lazy" />' : '<span class="fc3-emoji" aria-hidden="true">' + icon + '</span>') +
+            (url ? '<img src="' + url + '" alt="' + this.esc(subj) + '" loading="lazy" />' : '<span class="fc3-icoph" aria-hidden="true">' + this.subjSvg(r.subject, 44) + '</span>') +
             this.statusChip(r) +
           '</button>' +
           '<div class="fc3-author">' +
@@ -1450,11 +1478,11 @@
             '<span class="fc3-awrap">' +
               '<span class="fc3-aname">' + this.esc(author) + '</span>' +
               '<span class="fc3-atime">' + this.esc(this.ago(r.created_at)) + '</span>' +
-              '<span class="fc3-badge">' + icon + ' ' + this.esc(subj) + '</span>' +
+              '<span class="fc3-badge">' + this.esc(subj) + '</span>' +
             '</span>' +
           '</div>' +
-          '<button type="button" class="fc3-row fc3-like' + (liked ? ' on' : '') + '" aria-pressed="' + liked + '"><span>' + (liked ? '👍 Дэмжсэн' : '👍 Лайк дарах') + '</span><b class="cnt">' + likes + '</b></button>' +
-          '<button type="button" class="fc3-row fc3-cmt" aria-expanded="false"><span>💬 Сэтгэгдэл бичих</span><b class="ccnt">' + cmts + '</b></button>' +
+          '<button type="button" class="fc3-row fc3-like' + (liked ? ' on' : '') + '" aria-pressed="' + liked + '"><span>' + this.IC_LIKE + (liked ? 'Дэмжсэн' : 'Лайк дарах') + '</span><b class="cnt">' + likes + '</b></button>' +
+          '<button type="button" class="fc3-row fc3-cmt" aria-expanded="false"><span>' + this.IC_CMT + 'Сэтгэгдэл бичих</span><b class="ccnt">' + cmts + '</b></button>' +
           '<div class="fc3-cpanel">' +
             '<div class="fc3-clist"></div>' +
             '<form class="fc3-cform"><textarea rows="2" placeholder="Сэтгэгдлээ бичээрэй…" maxlength="500" required></textarea><button type="submit" class="fc3-csend">Илгээх</button></form>' +
@@ -1481,7 +1509,7 @@
             this.saveLiked(set);
             likeBtn.classList.toggle("on", nowLiked);
             likeBtn.setAttribute("aria-pressed", String(nowLiked));
-            likeBtn.querySelector("span").textContent = nowLiked ? "👍 Дэмжсэн" : "👍 Лайк дарах";
+            likeBtn.querySelector("span").innerHTML = this.IC_LIKE + (nowLiked ? "Дэмжсэн" : "Лайк дарах");
             if (typeof data === "number") likeBtn.querySelector(".cnt").textContent = data;
           } catch (_) {} finally { likeBtn.disabled = false; }
         });
@@ -1541,7 +1569,7 @@
           '<span class="dxs-t">' + this.esc(txt) + '</span>' +
           '<span class="dxs-meta"><span>' + this.esc(this.ago(r.created_at)) + '</span>' +
           '<span class="dxs-badge">' + this.esc(subj) + '</span>' +
-          '<span class="dxs-likes">👍 ' + likeOf(r) + '</span></span>';
+          '<span class="dxs-likes">' + this.IC_LIKE.replace('class="ri"', 'class="mi"') + likeOf(r) + '</span></span>';
         el.addEventListener("click", () => {
           const card = document.querySelector('.fc3[data-id="' + r.id + '"]');
           if (card) {
@@ -1576,7 +1604,7 @@
       const loc = [r.district ? r.district + " дүүрэг" : "", r.khoroo ? r.khoroo + "-р хороо" : ""].filter(Boolean).join(", ");
       // Нийтэд хувийн мэдээлэл (нэр, утас, имэйл) харуулахгүй — хуучин бичлэгийн message-д орсон имэйлийг ч хасна
       const pubMsg = String(r.message || "").replace(/\s*\n+\s*Имэйл\s*:[\s\S]*$/i, "").trim();
-      const geo = (r.lat && r.lng) ? '<a class="fr-loc" href="https://www.google.com/maps?q=' + r.lat + ',' + r.lng + '" target="_blank" rel="noopener">📍 Байршил</a>' : "";
+      const geo = (r.lat && r.lng) ? '<a class="fr-loc" href="https://www.google.com/maps?q=' + r.lat + ',' + r.lng + '" target="_blank" rel="noopener"><svg class="mi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>Байршил</a>' : "";
       const isLiked = liked.has(r.id);
       const statusBadge = r.status === "done"
         ? '<span class="fc-status fc-done">Шийдвэрлэсэн</span>'
@@ -2192,7 +2220,7 @@
             const loc = [r.district ? r.district + " дүүрэг" : "", r.khoroo ? r.khoroo + "-р хороо" : ""].filter(Boolean).join(", ");
             const content = String(r.message || "").replace(/\s*\n+\s*Имэйл\s*:[\s\S]*$/i, "").trim();
             const geo = (r.lat && r.lng)
-              ? '<a class="fr-loc" href="https://www.google.com/maps?q=' + r.lat + ',' + r.lng + '" target="_blank" rel="noopener">📍 Байршил</a>' : "";
+              ? '<a class="fr-loc" href="https://www.google.com/maps?q=' + r.lat + ',' + r.lng + '" target="_blank" rel="noopener"><svg class="mi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>Байршил</a>' : "";
             let photoUrl = "";
             const photos = r.photos || [];
             if (r.is_public && photos.length) { try { photoUrl = sb.storage.from("feedback-public").getPublicUrl(photos[0]).data.publicUrl; } catch (_) {} }
@@ -2345,7 +2373,7 @@
                 '<button type="button" class="vhh-litem" data-i="' + i + '">' +
                   '<span class="vhh-lmedia"><span class="vhh-inner" data-href="' + esc(v.url) + '"></span></span>' +
                   '<span class="vhh-ltext"><span class="vhh-lt">' + esc(v.title || "Видео") + '</span>' +
-                    (v.video_date ? '<span class="vhh-d">📅 ' + esc(v.video_date) + '</span>' : '') +
+                    (v.video_date ? '<span class="vhh-d">' + esc(v.video_date) + '</span>' : '') +
                   '</span>' +
                 '</button>'
               ).join("") +
@@ -2360,7 +2388,7 @@
           const badge = i === fi ? '<span class="vhh-badge">★ Онцлох</span>' : '';
           media.innerHTML = badge + '<div class="fb-video" data-href="' + esc(v.url) + '" data-show-text="false" data-width="auto"></div>';
           ttl.textContent = v.title || "Видео";
-          dt.textContent = v.video_date ? ("📅 " + v.video_date) : "";
+          dt.textContent = v.video_date || "";
           items.forEach((b, j) => b.classList.toggle("on", j === i));
           VideoCMS.parseFB();
         };
@@ -2803,8 +2831,8 @@
       const my = this.voted()[p.id];
       const showRes = closed || my != null;
       const chip = closed
-        ? '<span class="pc-st pc-closed">Дууссан</span>'
-        : '<span class="pc-st pc-open">Явагдаж буй</span>';
+        ? '<span class="pc-st pc-closed"><i class="st-dot"></i>Дууссан</span>'
+        : '<span class="pc-st pc-open"><i class="st-dot"></i>Явагдаж буй</span>';
       const durVal = closed ? "Дууссан" : (p.closes_at ? this.fmtDate(p.closes_at) + " хүртэл" : "Хугацаагүй");
       let panel = "";
       if (showRes) {
@@ -2824,7 +2852,7 @@
       el.innerHTML =
         '<h4 class="fc3-t">' + this.esc(p.question) + '</h4>' +
         '<div class="fc3-media pc-media">' +
-          (p.image ? '<img src="' + this.esc(p.image) + '" alt="" loading="lazy" />' : '<span class="fc3-emoji" aria-hidden="true">📊</span>') +
+          (p.image ? '<img src="' + this.esc(p.image) + '" alt="" loading="lazy" />' : '<span class="fc3-icoph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" width="44" height="44"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></span>') +
           chip +
         '</div>' +
         '<div class="fc3-author">' +
@@ -2832,7 +2860,7 @@
           '<span class="fc3-awrap">' +
             '<span class="fc3-aname">Ц.Баатархүү</span>' +
             '<span class="fc3-atime">' + this.esc(this.ago(p.created_at)) + '</span>' +
-            '<span class="fc3-badge">📊 Санал асуулга</span>' +
+            '<span class="fc3-badge pc-bdg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>Санал асуулга</span>' +
           '</span>' +
         '</div>' +
         '<div class="fc3-row"><span>Хугацаа</span><b>' + this.esc(durVal) + '</b></div>' +
