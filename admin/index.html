@@ -8,7 +8,7 @@
   <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");</script>
   <title>Админ — Санал хүсэлт | Ц.Баатархүү</title>
   <link rel="icon" type="image/svg+xml" href="/assets/img/logo.svg" />
-  <link rel="stylesheet" href="/css/style.css?v=20260710d" />
+  <link rel="stylesheet" href="/css/style.css?v=20260710e" />
   <style>
     /* ===== Админ: цайвар, албан ёсны ХӨХ сэдэв (зөвхөн энэ хуудсанд; сайтад нөлөөлөхгүй) ===== */
     [data-theme] {
@@ -413,7 +413,7 @@
           <div class="stat-row">
             <div class="mini-stat"><div class="n" id="st-total">—</div><div class="l">Нийт санал</div></div>
             <div class="mini-stat"><div class="n" id="st-new">—</div><div class="l">Шинэ (хариугүй)</div></div>
-            <div class="mini-stat"><div class="n" id="st-visitors">—</div><div class="l">Зочид (давхардаагүй)</div></div>
+            <div class="mini-stat"><div class="n" id="st-visitors">—</div><div class="l" id="st-visitors-l">Зочид (давхардаагүй)</div></div>
             <div class="mini-stat"><div class="n" id="st-photos">—</div><div class="l">Зурагтай санал</div></div>
           </div>
           <div class="dash-grid">
@@ -806,7 +806,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="/js/supabase-config.js?v=20260710d"></script>
+  <script src="/js/supabase-config.js?v=20260710e"></script>
   <script>
   (function () {
     const SUBJECT_LABEL = { gerel:"Гэрэлтүүлэг", zam:"Зам, нүх, эвдрэл", yavgan:"Явган хүний зам", hog:"Хог, орчны бохирдол", buudal:"Автобусны буудал", surguuli:"Сургууль, цэцэрлэг", emnelg:"Эмнэлэг, өрхийн эмнэлэг", soh:"СӨХ, байрны орчин", hurteemj:"Ахмад, ХБИ хүртээмж", huuli:"Хууль, бодлогын санал", urgudul:"Хувийн өргөдөл, тусламж", sanal:"Санал", gomdol:"Гомдол", asuudal:"Тулгамдсан асуудал", uulzalt:"Уулзалтын хүсэлт", busad:"Бусад" };
@@ -862,8 +862,11 @@
       try {
         const { data, error } = await sb.rpc("visitor_stats");
         const row = Array.isArray(data) ? data[0] : data;
-        if (!error && row) $("#st-visitors").textContent = (row.unique_visitors != null ? row.unique_visitors : "—");
-        else $("#st-visitors").textContent = "—";
+        if (!error && row) {
+          $("#st-visitors").textContent = (row.unique_visitors != null ? row.unique_visitors : "—");
+          const lbl = $("#st-visitors-l");
+          if (lbl) lbl.textContent = "Зочид (давхардаагүй) · нийт " + (row.total_visits != null ? row.total_visits : "—") + " хандалт · өнөөдөр " + (row.today_unique != null ? row.today_unique : "—");
+        } else $("#st-visitors").textContent = "—";
       } catch (_) { $("#st-visitors").textContent = "—"; }
     }
 
