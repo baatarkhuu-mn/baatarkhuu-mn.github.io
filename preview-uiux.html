@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="mn"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>UI/UX сайжруулалтын саналууд</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&display=swap" rel="stylesheet"/>
+<style>
+  body { margin:0; background:#070d1a; color:#e8eef8; font-family:system-ui,-apple-system,"Segoe UI",sans-serif; padding:30px 20px 70px; }
+  .wrap { max-width:1080px; margin:0 auto; }
+  h1 { font-size:23px; margin:0 0 6px; }
+  .sub { color:#8a98b0; font-size:13.5px; margin:0 0 30px; line-height:1.6; }
+  .opt { margin-bottom:52px; }
+  .label { display:flex; align-items:center; gap:10px; font-size:16px; font-weight:800; margin-bottom:4px; }
+  .label .num { flex:none; width:27px; height:27px; border-radius:50%; background:#3071e7; color:#fff; display:grid; place-items:center; font-size:14px; }
+  .why { color:#8a98b0; font-size:12.5px; margin:0 0 12px 37px; line-height:1.55; max-width:860px; }
+  .mock { border-radius:16px; border:1px solid rgba(255,255,255,.1); overflow:hidden; }
+  .mock.light { background:linear-gradient(180deg,#eef2f9,#f6f9fd); color:#14213d; }
+  .tag-old { display:inline-block; font-size:.66rem; font-weight:700; background:#3a2530; color:#f0a0a0; padding:3px 10px; border-radius:5px; margin:0 0 8px; }
+  .tag-new { display:inline-block; font-size:.66rem; font-weight:700; background:#173a2b; color:#7fe0b0; padding:3px 10px; border-radius:5px; margin:0 0 8px; }
+  .split { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:760px){ .split { grid-template-columns:1fr; } }
+
+  /* 1 — типографи */
+  .typo { padding:26px 30px; }
+  .t-eyebrow { font-size:.7rem; font-weight:800; letter-spacing:.22em; color:#3071e7; text-transform:uppercase; display:flex; align-items:center; gap:10px; }
+  .t-eyebrow::before { content:"01"; color:#93a5c0; font-weight:700; letter-spacing:0; }
+  .t-eyebrow::after { content:""; width:44px; height:1.5px; background:#3071e7; }
+  .t-h { font-family:"Manrope",sans-serif; font-weight:800; font-size:2rem; letter-spacing:-.01em; margin:10px 0 6px; color:#14213d; }
+  .t-lead { font-size:.92rem; color:#5a6b86; max-width:56ch; line-height:1.7; margin:0; }
+  .typo-old h3 { font-size:1.25rem; margin:8px 0 6px; color:#14213d; }
+
+  /* 2 — hero */
+  .hero2 { position:relative; padding:44px 34px 36px; overflow:hidden; background:linear-gradient(120deg,#0b1f4e,#14316f 45%,#1c48b0 90%); }
+  .hero2::before { content:""; position:absolute; inset:-40%;
+    background:radial-gradient(38% 30% at 30% 40%, rgba(90,160,255,.35), transparent 60%),
+               radial-gradient(30% 26% at 72% 60%, rgba(23,162,162,.3), transparent 60%);
+    animation:drift 9s ease-in-out infinite alternate; }
+  @keyframes drift { from { transform:translate(-3%,-2%) } to { transform:translate(3%,3%) } }
+  .hero2 > * { position:relative; }
+  .h2-brand { display:flex; align-items:center; gap:13px; justify-content:center; }
+  .h2-brand img { width:54px; height:54px; }
+  .h2-role { color:#a9bbdb; font-size:.8rem; font-weight:600; display:block; }
+  .h2-name { color:#fff; font-family:"Manrope",sans-serif; font-size:1.8rem; font-weight:800; letter-spacing:.01em; }
+  .h2-cta { text-align:center; margin:20px 0 16px; }
+  .h2-btn { display:inline-flex; align-items:center; gap:9px; background:#fff; color:#14316f; font-weight:800; font-size:.9rem; padding:14px 28px; border-radius:13px; box-shadow:0 16px 34px -14px rgba(0,0,0,.5); }
+  .h2-stats { display:flex; gap:9px; justify-content:center; flex-wrap:wrap; margin-bottom:20px; }
+  .h2-chip { font-size:.72rem; font-weight:700; color:#dbe7fb; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.2); padding:6px 13px; border-radius:20px; }
+  .h2-chip b { color:#fff; }
+  .h2-tiles { display:grid; grid-template-columns:repeat(6,1fr); gap:12px; }
+  .h2-tile { background:rgba(255,255,255,.95); border-radius:13px; padding:14px 6px; text-align:center; font-size:.74rem; font-weight:700; color:#14316f; transition:transform .2s; }
+  .h2-tile:hover { transform:translateY(-4px); }
+  .h2-tile i { display:block; font-size:19px; font-style:normal; margin-bottom:6px; }
+  .h2-tile:nth-child(1) i{color:#3071e7}.h2-tile:nth-child(2) i{color:#8b5cf6}.h2-tile:nth-child(3) i{color:#e0902f}.h2-tile:nth-child(4) i{color:#17a2a2}.h2-tile:nth-child(5) i{color:#e0556e}.h2-tile:nth-child(6) i{color:#1d9e75}
+  @media (max-width:700px){ .h2-tiles{grid-template-columns:repeat(3,1fr);} }
+
+  /* 3 — карт + skeleton */
+  .cards3 { padding:24px; display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  @media (max-width:700px){ .cards3{grid-template-columns:1fr;} }
+  .c3 { background:#fff; border:1px solid #e3eaf4; border-radius:16px; overflow:hidden; box-shadow:0 1px 2px rgba(20,40,80,.05); transition:transform .2s, box-shadow .2s; }
+  .c3:hover { transform:translateY(-4px); box-shadow:0 22px 40px -22px rgba(20,49,111,.35); }
+  .c3 .im { height:92px; background:linear-gradient(140deg,#dfe8f6,#eef3fb); display:grid; place-items:center; font-size:30px; }
+  .c3 .bd { padding:12px 14px; }
+  .c3 .tt { font-size:.85rem; font-weight:700; color:#14213d; line-height:1.4; }
+  .c3 .mt { font-size:.72rem; color:#7a8aa5; margin-top:7px; }
+  .skel .im, .skel .tt, .skel .mt { position:relative; overflow:hidden; color:transparent; background:#e8eef6; border-radius:6px; }
+  .skel .tt { height:14px; } .skel .mt { height:10px; width:60%; }
+  .skel .im::after, .skel .tt::after, .skel .mt::after { content:""; position:absolute; inset:0;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent); animation:shine 1.3s infinite; }
+  @keyframes shine { from { transform:translateX(-100%) } to { transform:translateX(100%) } }
+
+  /* 4 — хоёрдогч акцент */
+  .accent { padding:24px; display:flex; flex-direction:column; gap:12px; }
+  .acc-row { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .acc-name { min-width:170px; font-size:.82rem; font-weight:700; color:#14213d; }
+  .btn-a { display:inline-flex; align-items:center; gap:7px; font-size:.8rem; font-weight:700; color:#fff; padding:10px 20px; border-radius:10px; }
+  .chip-a { font-size:.68rem; font-weight:700; padding:4px 11px; border-radius:20px; }
+  .bar-a { flex:1; min-width:120px; height:9px; border-radius:5px; background:#e6ecf5; overflow:hidden; }
+  .bar-a span { display:block; height:100%; width:64%; border-radius:5px; }
+
+  /* 5 — мобайл */
+  .mob { padding:24px; display:flex; gap:22px; justify-content:center; flex-wrap:wrap; }
+  .phone5 { width:210px; border-radius:26px; border:8px solid #0d1830; background:#f5f8fc; overflow:hidden; position:relative; height:380px; }
+  .p5-head { background:#14316f; color:#fff; font-size:.66rem; font-weight:700; text-align:center; padding:10px 6px; }
+  .p5-body { padding:10px; display:flex; flex-direction:column; gap:8px; }
+  .p5-card { background:#fff; border:1px solid #e3eaf4; border-radius:10px; height:52px; }
+  .p5-fab { position:absolute; right:12px; bottom:64px; width:46px; height:46px; border-radius:50%; background:#3071e7; color:#fff; display:grid; place-items:center; font-size:19px; box-shadow:0 12px 24px -10px rgba(48,113,231,.7); }
+  .p5-nav { position:absolute; left:0; right:0; bottom:0; background:#fff; border-top:1px solid #e3eaf4; display:grid; grid-template-columns:repeat(4,1fr); padding:7px 0 9px; }
+  .p5-nav span { text-align:center; font-size:.58rem; font-weight:700; color:#7a8aa5; }
+  .p5-nav span i { display:block; font-style:normal; font-size:15px; margin-bottom:2px; }
+  .p5-nav .on { color:#3071e7; }
+  .mob-note { max-width:300px; font-size:.8rem; color:#5a6b86; align-self:center; line-height:1.6; }
+  .mock.light .mob-note b { color:#14213d; }
+
+  /* 6 — CTA band + footer */
+  .band6 { background:linear-gradient(100deg,#14316f,#1c48b0); color:#fff; padding:26px 30px; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+  .band6 h4 { margin:0 0 4px; font-size:1.05rem; }
+  .band6 p { margin:0; font-size:.8rem; color:#c9d8f2; }
+  .band6 .h2-btn { font-size:.82rem; padding:12px 22px; }
+  .foot6 { background:#0d1830; color:#c8d3e8; padding:24px 30px; display:grid; grid-template-columns:1.2fr 1fr 1fr; gap:20px; font-size:.78rem; }
+  @media (max-width:700px){ .foot6{grid-template-columns:1fr;} }
+  .foot6 b { color:#fff; display:block; margin-bottom:8px; font-size:.85rem; }
+  .foot6 .soc { display:flex; gap:8px; margin-top:10px; }
+  .foot6 .soc span { width:30px; height:30px; border-radius:8px; background:rgba(255,255,255,.1); display:grid; place-items:center; font-size:13px; }
+  .foot { color:#8a98b0; font-size:12.5px; margin-top:8px; line-height:1.6; }
+</style></head>
+<body><div class="wrap">
+  <h1>UI/UX-ийг дараагийн шатанд гаргах 6 санал</h1>
+  <p class="sub">Одоогийн navy+хөх суурь, картын систем чинь сайн суурьтай болсон. Доорх санал бүр түүн дээр <b style="color:#e8eef8">нэмэх</b> сайжруулалт — бүгдийг биш, таалагдсанаа сонгоход л болно. Жишээ бүр таны бодит өнгө, бүтцээр хийгдсэн.</p>
+
+  <div class="opt">
+    <div class="label"><span class="num">1</span> Типографийн шатлал + дугаарлагдсан гарчиг</div>
+    <p class="why">Одоо бүх текст системийн үсгээр ижилхэн жинтэй. Гарчигт тусгай үсэг (Manrope г.м.), хэсэг бүрд 01/02/03 дугаар + eyebrow шошго өгвөл «албан ёсны тайлан» мэт эмх цэгцтэй, брэндлэг харагдана.</p>
+    <div class="mock light"><div class="split" style="padding:22px">
+      <div class="typo typo-old" style="padding:0"><span class="tag-old">ОДОО</span>
+        <h3>ШИЙДВЭРЛЭЛТИЙН ТООН МЭДЭЭ</h3>
+        <p class="t-lead">Ижил жинтэй систем үсэг, шошгогүй.</p>
+      </div>
+      <div class="typo" style="padding:0"><span class="tag-new">САНАЛ</span>
+        <div class="t-eyebrow">Ил тод байдал</div>
+        <div class="t-h">Шийдвэрлэлтийн тоон мэдээ</div>
+        <p class="t-lead">Manrope display үсэг + дугаар + eyebrow — контентын шатлал нэг харцаар ойлгогдоно.</p>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="opt">
+    <div class="label"><span class="num">2</span> Hero-г «амьд» болгох — хөдөлгөөнт туяа, тоон чипүүд, өнгөт дүрс</div>
+    <p class="why">Гишүүний зургийг авсны дараа hero жаахан хоосон болсон. Аажим хөдөлдөг туяа + бодит статистикийн чипүүд (итгэл төрүүлнэ) + хавтан бүрийн дүрсэнд өөр өнгө (олоход хялбар) нэмбэл хоосролгүй, амьд болно.</p>
+    <div class="mock"><div class="hero2">
+      <div class="h2-brand"><img src="/assets/img/logo.svg" alt=""/><span><span class="h2-role">Монгол Улсын Их Хурлын гишүүн</span><span class="h2-name">Цэндийн БААТАРХҮҮ</span></span></div>
+      <div class="h2-cta"><span class="h2-btn">📣 ИРГЭДИЙН САНАЛ ХҮСЭЛТИЙГ ШИЙДВЭРЛЭХ СИСТЕМ</span></div>
+      <div class="h2-stats"><span class="h2-chip">👥 <b>205</b> иргэн хандсан</span><span class="h2-chip">📨 <b>1</b> хүсэлт бүртгэсэн</span><span class="h2-chip">📊 <b>1</b> санал асуулга</span></div>
+      <div class="h2-tiles">
+        <div class="h2-tile"><i>👤</i>Намтар</div><div class="h2-tile"><i>⚖️</i>Хууль</div><div class="h2-tile"><i>💡</i>Төслүүд</div>
+        <div class="h2-tile"><i>📰</i>Мэдээ</div><div class="h2-tile"><i>▶️</i>Видео</div><div class="h2-tile"><i>📊</i>Тайлан</div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="opt">
+    <div class="label"><span class="num">3</span> Ачааллын skeleton + картын нэгдсэн hover</div>
+    <p class="why">Одоо CMS ачаалах үед «Ачаалж байна…» гэсэн текст л гарна — хоосон үсрэлт мэдрэгдэнэ. Гялалзсан skeleton карт + бүх картад ижил hover (дээш 4px + зөөлөн сүүдэр) өгвөл сайт «нэг гар»-аар хийгдсэн мэт болно.</p>
+    <div class="mock light"><div class="cards3">
+      <div class="c3 skel"><div class="im"></div><div class="bd"><div class="tt"></div><div class="mt"></div></div></div>
+      <div class="c3 skel" style="animation-delay:.2s"><div class="im"></div><div class="bd"><div class="tt"></div><div class="mt"></div></div></div>
+      <div class="c3"><div class="im">🚧</div><div class="bd"><div class="tt">Ачаалж дууссаны дараа — hover хийгээд үзээрэй</div><div class="mt">📍 Сүхбаатар · 07/10</div></div></div>
+    </div></div>
+  </div>
+
+  <div class="opt">
+    <div class="label"><span class="num">4</span> Хоёрдогч акцент өнгө — зөвхөн «амжилт/онцлох»-д</div>
+    <p class="why">Одоо ганц хөхөөр бүхнийг илэрхийлж байгаа нь цэвэрхэн ч, шийдвэрлэгдсэн/амжилттай зүйлс тодрохгүй. Хоёр хувилбар: <b style="color:#e8eef8">А) Алт</b> — төрийн тансаг мэдрэмж; <b style="color:#e8eef8">Б) Изумруд</b> — орчин үеийн иргэний-техийн мэдрэмж. Зөвхөн шийдвэрлэгдсэн, онцлох, амжилтын элементэд хэрэглэнэ.</p>
+    <div class="mock light"><div class="accent">
+      <div class="acc-row"><span class="acc-name">А. Алтан акцент #E8A33D</span>
+        <span class="btn-a" style="background:#E8A33D;color:#3d2a05">★ Онцлох асуулга</span>
+        <span class="chip-a" style="background:#faeeda;color:#8a5c10">✅ Шийдвэрлэгдсэн</span>
+        <span class="bar-a"><span style="background:linear-gradient(90deg,#E8A33D,#c9820f)"></span></span>
+      </div>
+      <div class="acc-row"><span class="acc-name">Б. Изумруд акцент #12B37D</span>
+        <span class="btn-a" style="background:#12B37D">★ Онцлох асуулга</span>
+        <span class="chip-a" style="background:#e2f3ec;color:#0f6e56">✅ Шийдвэрлэгдсэн</span>
+        <span class="bar-a"><span style="background:linear-gradient(90deg,#12B37D,#0a8a5e)"></span></span>
+      </div>
+      <div class="acc-row"><span class="acc-name">Одоо (ганц хөх)</span>
+        <span class="btn-a" style="background:#3071e7">★ Онцлох асуулга</span>
+        <span class="chip-a" style="background:#e3ecfc;color:#1f52c0">✅ Шийдвэрлэгдсэн</span>
+        <span class="bar-a"><span style="background:linear-gradient(90deg,#3071e7,#14316f)"></span></span>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="opt">
+    <div class="label"><span class="num">5</span> Мобайл UX — доод navigation + «Санал илгээх» FAB</div>
+    <p class="why">Иргэдийн дийлэнх нь утаснаас орно. Доод талд байнгын 4 товчтой цэс (Нүүр · Санал · Шалгах · Цэс) + баруун доор үргэлж харагдах «Санал илгээх» дугуй товч — гол үйлдэл нэг дарилтад байна.</p>
+    <div class="mock light"><div class="mob">
+      <div class="phone5">
+        <div class="p5-head">ИРГЭДИЙН САНАЛ ХҮСЭЛТИЙГ ШИЙДВЭРЛЭХ СИСТЕМ</div>
+        <div class="p5-body"><div class="p5-card"></div><div class="p5-card"></div><div class="p5-card"></div><div class="p5-card"></div></div>
+        <div class="p5-fab">📣</div>
+        <div class="p5-nav">
+          <span class="on"><i>🏠</i>Нүүр</span><span><i>📨</i>Санал</span><span><i>🔍</i>Шалгах</span><span><i>☰</i>Цэс</span>
+        </div>
+      </div>
+      <div class="mob-note"><b>Яагаад:</b> одоогийн мобайл дээр санал илгээхийн тулд гүйлгэж хайх хэрэгтэй. FAB + доод цэс нь иргэнийг <b>ямар ч үед 1 дарилтаар</b> гол үйлдэл рүү хүргэнэ. (Танд FAB аль хэдийн байгаа — доод цэсийг нэмээд утасны апп шиг мэдрэмж өгнө.)</div>
+    </div></div>
+  </div>
+
+  <div class="opt">
+    <div class="label"><span class="num">6</span> Хөл хэсгийн шинэчлэл — CTA зурвас + баялаг footer</div>
+    <p class="why">Хуудасны төгсгөл нь «дуусчихлаа» гэхээсээ «одоо юу хийх вэ?» гэж хэлэх ёстой. Footer-ийн өмнө нэг CTA зурвас + footer дотор холбоо барих, шуурхай холбоос, сошиалыг цэгцтэй байрлуулна.</p>
+    <div class="mock">
+      <div class="band6">
+        <div><h4>Санал, хүсэлтээ илгээхэд бэлэн үү?</h4><p>Бүртгээд 24 цагийн дотор хяналтын дугаар очно. Явцыг нь та өөрөө хянана.</p></div>
+        <span class="h2-btn">📣 Санал илгээх</span>
+      </div>
+      <div class="foot6">
+        <div><b>Ц.БААТАРХҮҮ</b>Монгол Улсын Их Хурлын гишүүн.<br/>Иргэдийн оролцоо, ил тод байдлыг дээдэлнэ.
+          <div class="soc"><span>f</span><span>𝕏</span><span>▶</span><span>◎</span></div></div>
+        <div><b>Шуурхай</b>Санал илгээх<br/>Явц шалгах<br/>Санал асуулга<br/>Тайлан</div>
+        <div><b>Холбоо барих</b>☎ 51-261467<br/>✉ baatarkhuu@parliament.mn<br/>📍 Төрийн ордон, Улаанбаатар</div>
+      </div>
+    </div>
+  </div>
+
+  <p class="foot">💡 Миний санал болгох дараалал: <b style="color:#e8eef8">3 → 1 → 2 → 6 → 5 → 4</b> (жижигээсээ том руу). Дугаараа хэлбэл тухайн чиглэлийг бүрэн хэрэгжүүлье — жишээ нь «3-ыг хий» гэхэд skeleton + hover-ийг сайт даяар нэвтрүүлнэ. Хослуулж ч болно.</p>
+</div></body></html>
