@@ -2828,7 +2828,7 @@
           chip +
         '</div>' +
         '<div class="fc3-author">' +
-          '<span class="fc3-ava"><img src="/assets/img/ig-member.jpg" alt="Ц.Баатархүү" loading="lazy" /></span>' +
+          '<span class="fc3-ava"><img src="/assets/img/social/ig-member.jpg" alt="Ц.Баатархүү" loading="lazy" /></span>' +
           '<span class="fc3-awrap">' +
             '<span class="fc3-aname">Ц.Баатархүү</span>' +
             '<span class="fc3-atime">' + this.esc(this.ago(p.created_at)) + '</span>' +
