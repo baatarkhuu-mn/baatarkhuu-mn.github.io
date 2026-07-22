@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="mn"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Нүүр — Цайвар дижитал хэв (прототип 3)</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  * { box-sizing:border-box; margin:0; }
+  html { scroll-behavior:smooth; }
+  body { background:#f3f6fc; color:#101b33; font-family:"Manrope","Segoe UI",system-ui,sans-serif; font-size:16px; line-height:1.6; overflow-x:hidden; }
+  .ct { max-width:1180px; margin:0 auto; padding:0 22px; }
+  a { text-decoration:none; color:inherit; }
+  svg.i { width:1em; height:1em; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; vertical-align:-.12em; }
+  .dot { display:inline-block; width:7px; height:7px; border-radius:50%; background:currentColor; margin-right:6px; vertical-align:1px; }
+  @keyframes kb { from { transform:scale(1) } to { transform:scale(1.07) translate(-1%,1%) } }
+  @keyframes orb { from { transform:translate(-3%,-2%) scale(1) } to { transform:translate(3%,4%) scale(1.1) } }
+  @keyframes mq { to { transform:translateX(-50%) } }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+  @keyframes shimmer { to { background-position:200% center } }
+  @keyframes growW { from { width:0 } }
+  @keyframes ripple { from { transform:scale(.5); opacity:.9 } to { transform:scale(2); opacity:0 } }
+  @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(37,99,235,.4)} 60%{box-shadow:0 0 0 14px rgba(37,99,235,0)} }
+  .rv { opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease; }
+  .rv.in { opacity:1; transform:none; }
+
+  .bgfx { position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:linear-gradient(rgba(16,40,90,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(16,40,90,.05) 1px, transparent 1px);
+    background-size:54px 54px; mask-image:radial-gradient(75% 60% at 50% 24%, #000 25%, transparent 100%); }
+  .orb { position:fixed; border-radius:50%; filter:blur(76px); z-index:0; pointer-events:none; animation:orb 12s ease-in-out infinite alternate; }
+  .o1 { width:460px; height:460px; background:rgba(96,165,250,.4); top:-150px; left:-110px; }
+  .o2 { width:420px; height:420px; background:rgba(45,212,191,.28); top:180px; right:-150px; animation-delay:3s; }
+  .o3 { width:340px; height:340px; background:rgba(196,181,253,.3); bottom:-120px; left:34%; animation-delay:6s; }
+  main { position:relative; z-index:1; }
+  .prog { position:fixed; top:0; left:0; height:3px; width:0; background:linear-gradient(90deg,#2563eb,#38bdf8,#14b8a6); z-index:99; }
+
+  .nav { position:fixed; top:14px; left:50%; transform:translateX(-50%); z-index:60; width:min(1120px, calc(100% - 28px));
+    display:flex; align-items:center; gap:14px; background:rgba(255,255,255,.8); border:1px solid rgba(16,40,90,.1);
+    backdrop-filter:blur(14px); border-radius:18px; padding:10px 14px; box-shadow:0 20px 50px -26px rgba(16,40,90,.4); }
+  .brand { display:flex; align-items:center; gap:10px; }
+  .brand img { width:34px; height:34px; }
+  .brand b { font-size:14.5px; display:block; line-height:1.15; }
+  .brand small { font-size:8.5px; font-weight:700; color:#5b6b8c; letter-spacing:.1em; display:block; }
+  .nlinks { display:flex; gap:2px; margin-left:auto; font-size:13px; font-weight:700; color:#44547a; }
+  .nlinks a { padding:8px 12px; border-radius:10px; }
+  .nlinks a:hover { color:#2563eb; background:#eaf1fe; }
+  .ncta { background:linear-gradient(110deg,#2563eb 20%,#38bdf8 40%,#2563eb 60%); background-size:200% auto; animation:shimmer 3.5s linear infinite;
+    color:#fff; font-weight:800; font-size:13px; padding:10px 18px; border-radius:12px; display:inline-flex; gap:8px; align-items:center; box-shadow:0 12px 26px -12px rgba(37,99,235,.7); }
+  @media (max-width:980px){ .nlinks { display:none; } }
+
+  .hero { padding:128px 0 26px; }
+  .hgrid { display:grid; grid-template-columns:1.15fr 1fr; gap:44px; align-items:center; }
+  @media (max-width:940px){ .hgrid { grid-template-columns:1fr; } }
+  .live { display:inline-flex; align-items:center; gap:9px; background:#e6faf5; border:1px solid #b0ead9; color:#0d9d74; font-size:12.5px; font-weight:800; padding:7px 15px; border-radius:20px; margin-bottom:20px; }
+  .live i { width:8px; height:8px; border-radius:50%; background:#10b981; animation:blink 1.6s infinite; font-style:normal; }
+  .hero h1 { font-size:clamp(38px,5.6vw,62px); line-height:1.06; letter-spacing:-.025em; margin-bottom:18px; font-weight:800; }
+  .hero h1 .gr { background:linear-gradient(100deg,#2563eb,#38bdf8 55%,#14b8a6); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .hero p { font-size:16.5px; color:#51618a; max-width:46ch; margin-bottom:26px; }
+  .hbtns { display:flex; gap:12px; flex-wrap:wrap; }
+  .btn { display:inline-flex; align-items:center; gap:9px; font-weight:800; font-size:14.5px; padding:14px 26px; border-radius:13px; transition:transform .2s; }
+  .btn:hover { transform:translateY(-2px); }
+  .b-main { background:linear-gradient(110deg,#2563eb 20%,#38bdf8 40%,#2563eb 60%); background-size:200% auto; animation:shimmer 3.5s linear infinite; color:#fff; box-shadow:0 18px 40px -14px rgba(37,99,235,.5); }
+  .b-line { border:1.5px solid #c8d6ef; color:#22375e; background:#fff; }
+  .htrust { display:flex; gap:24px; margin-top:26px; font-size:12.5px; color:#5b6b8c; font-weight:700; flex-wrap:wrap; }
+  .htrust b { color:#101b33; font-size:17px; display:block; line-height:1.1; }
+  .pcard { position:relative; border-radius:26px; padding:3px; background:conic-gradient(from 180deg, rgba(37,99,235,.65), rgba(20,184,166,.45), rgba(37,99,235,.06), rgba(37,99,235,.65)); box-shadow:0 30px 60px -30px rgba(16,40,90,.5); }
+  .pcard .in2 { border-radius:24px; overflow:hidden; position:relative; min-height:330px; }
+  .pcard .im { position:absolute; inset:0; background:url('/assets/img/ub-square.jpg') center 36%/cover; animation:kb 22s ease-in-out infinite alternate; }
+  .pcard .in2::after { content:""; position:absolute; inset:0; background:linear-gradient(180deg, transparent 45%, rgba(8,16,38,.85)); }
+  .pcard .cap { position:absolute; left:18px; right:18px; bottom:16px; z-index:2; display:flex; align-items:center; justify-content:space-between; gap:10px; color:#fff; }
+  .pcard .cap b { font-size:14px; }
+  .pcard .cap span { display:block; font-size:11px; color:#c3d2ee; font-weight:700; }
+  .pcard .badge { background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); backdrop-filter:blur(6px); border-radius:12px; padding:9px 13px; font-size:11.5px; font-weight:800; color:#5eead4; white-space:nowrap; }
+
+  .mq { margin:32px 0 4px; overflow:hidden; border-block:1px solid #dfe7f4; padding:12px 0; background:rgba(255,255,255,.5); }
+  .mq .in3 { display:inline-flex; gap:52px; white-space:nowrap; animation:mq 26s linear infinite; font-size:14px; font-weight:800; letter-spacing:.05em; }
+  .mq .ok { color:#0d9d74; } .mq .pr { color:#c07908; } .mq .nw { color:#2563eb; } .mq .no { color:#8b9ab8; font-weight:700; }
+
+  .sec { position:relative; padding:56px 0 10px; }
+  .gn { position:absolute; top:4px; right:0; font-size:120px; font-weight:800; color:transparent; -webkit-text-stroke:1.5px rgba(16,40,90,.08); line-height:1; user-select:none; }
+  .shead { display:flex; align-items:baseline; gap:16px; margin-bottom:22px; }
+  .shead h2 { font-size:clamp(21px,2.6vw,28px); letter-spacing:-.01em; }
+  .shead .lk { margin-left:auto; font-size:13.5px; font-weight:800; color:#2563eb; }
+
+  .bento { display:grid; grid-template-columns:repeat(12,1fr); gap:14px; grid-auto-flow:dense; }
+  .bt { position:relative; grid-column:span 4; background:#fff; border:1px solid #e2e9f5; border-radius:20px; padding:22px; overflow:hidden; transition:transform .25s, box-shadow .25s, border-color .25s; }
+  .bt::before { content:""; position:absolute; inset:0; border-radius:20px; opacity:0; transition:opacity .3s;
+    background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%), rgba(59,130,246,.1), transparent 45%); }
+  .bt:hover { transform:translateY(-4px); border-color:#a9c4f2; box-shadow:0 26px 50px -30px rgba(16,40,90,.45); }
+  .bt:hover::before { opacity:1; }
+  .bt > * { position:relative; }
+  .bth { font-size:11.5px; font-weight:800; letter-spacing:.16em; color:#5b6b8c; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+  .bth::before { content:""; width:4px; height:13px; border-radius:2px; background:linear-gradient(#2563eb,#14b8a6); }
+  .sp5 { grid-column:span 5; } .sp7 { grid-column:span 7; } .sp6 { grid-column:span 6; } .rw2 { grid-row:span 2; }
+  @media (max-width:900px){ .bt, .sp5, .sp7, .sp6 { grid-column:span 12; } .rw2 { grid-row:auto; } }
+
+  /* ---------- БОДИТ САНАЛ АСУУЛГЫН КАРТ (сайтын одоогийн загвараар) ---------- */
+  .pollc { display:flex; flex-direction:column; gap:13px; }
+  .pollc .pt { font-size:14.5px; font-weight:800; line-height:1.45; text-transform:uppercase; }
+  .pollc .pm { position:relative; border-radius:14px; overflow:hidden; height:150px; background:url('/assets/img/parliament-bg.jpg') center 22%/cover; }
+  .pollc .pst { position:absolute; top:10px; left:10px; font-size:11px; font-weight:800; padding:4px 12px; border-radius:16px; background:#e2f5ec; color:#0d7a56; }
+  .pollc .pa { display:flex; gap:11px; align-items:flex-start; }
+  .pollc .pa img { width:42px; height:42px; border-radius:50%; object-fit:cover; }
+  .pollc .pa b { font-size:13.5px; display:block; }
+  .pollc .pa .tm { font-size:11px; color:#7a8aa9; font-weight:700; display:block; margin:1px 0 5px; }
+  .pollc .pbdg { display:inline-flex; align-items:center; gap:6px; background:#2563eb; color:#fff; font-size:10.5px; font-weight:800; padding:4px 11px; border-radius:7px; }
+  .pollc .pbdg svg { font-size:11px; }
+  .pollc .prw { display:flex; justify-content:space-between; align-items:center; font-size:13px; color:#5b6b8c; font-weight:700; border-top:1px solid #ecf1f8; padding-top:10px; }
+  .pollc .prw b { color:#101b33; font-size:14.5px; }
+  .pollc .ppanel { border-top:1px dashed #dfe7f4; padding-top:12px; display:flex; flex-direction:column; gap:8px; }
+  .pollc .res .rt { display:flex; justify-content:space-between; font-size:13px; font-weight:700; margin-bottom:4px; }
+  .pollc .res .rt b { font-weight:800; }
+  .pollc .res .tr { height:8px; border-radius:5px; background:#edf2fa; overflow:hidden; }
+  .pollc .res .tr i { display:block; height:100%; border-radius:5px; background:linear-gradient(90deg,#2563eb,#38bdf8); animation:growW 1.1s ease both; }
+  .pollc .res.my .tr i { background:linear-gradient(90deg,#10b981,#0d9d74); }
+  .pollc .mych { color:#0d9d74; font-size:11px; font-weight:800; }
+  .pollc .cnt2 { font-size:11px; color:#8b9ab8; font-weight:700; margin-top:3px; }
+  .pollc .pf { display:flex; justify-content:space-between; align-items:center; border-top:1px solid #ecf1f8; padding-top:13px; margin-top:2px; }
+  .pollc .join { background:#2563eb; color:#fff; font-weight:800; font-size:13px; padding:10px 24px; border-radius:11px; box-shadow:0 10px 22px -10px rgba(37,99,235,.6); }
+  .pollc .shr { display:flex; gap:8px; }
+  .pollc .sb { width:37px; height:37px; border-radius:50%; display:grid; place-items:center; color:#fff; font-size:14px; font-weight:800; }
+  .pollc .sb.f { background:#1877f2; } .pollc .sb.x { background:#0f1419; }
+
+  .snum { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .snum b { font-size:clamp(28px,3.4vw,40px); letter-spacing:-.03em; line-height:1; display:block;
+    background:linear-gradient(100deg,#101b33,#2563eb); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .snum span { font-size:11.5px; color:#5b6b8c; font-weight:700; }
+  .steps { display:flex; flex-direction:column; gap:12px; }
+  .stp { display:flex; gap:12px; align-items:center; font-size:13.5px; font-weight:700; color:#22375e; }
+  .stp i { flex:none; width:30px; height:30px; border-radius:10px; background:#eaf1fe; color:#2563eb; display:grid; place-items:center; font-size:13px; font-style:normal; }
+  .stp small { display:block; font-size:10.5px; color:#7a8aa9; font-weight:600; }
+  .au { display:flex; gap:11px; align-items:center; margin-bottom:11px; }
+  .au img { width:38px; height:38px; border-radius:50%; object-fit:cover; }
+  .au b { font-size:13.5px; display:block; }
+  .au span { font-size:10.5px; color:#7a8aa9; font-weight:700; }
+  .ptx2 { font-size:13.5px; color:#33456b; margin-bottom:11px; }
+  .pim2 { border-radius:14px; height:110px; background:url('/assets/img/orh-bur-5-mod.jpg') center/cover; margin-bottom:11px; }
+  .prw2 { display:flex; gap:18px; font-size:12.5px; font-weight:800; color:#5b6b8c; align-items:center; }
+  .prw2 svg { color:#2563eb; }
+  .chip { font-size:10.5px; font-weight:800; padding:4px 11px; border-radius:14px; }
+  .ch-g { background:#e2f5ec; color:#0d7a56; }
+  .mapd { position:relative; border-radius:14px; overflow:hidden; height:180px;
+    background:
+      repeating-linear-gradient(90deg, transparent 0 58px, #ffffff 58px 62px),
+      repeating-linear-gradient(0deg, transparent 0 48px, #ffffff 48px 52px),
+      linear-gradient(120deg,#e1e9f4,#ebf1f8); }
+  .pin { position:absolute; width:32px; height:32px; border-radius:50%; color:#fff; font-weight:800; font-size:12px; display:grid; place-items:center; border:2.5px solid #fff; box-shadow:0 5px 14px rgba(16,40,90,.3); }
+  .pin em { position:absolute; inset:-9px; border-radius:50%; border:2px solid currentColor; opacity:.5; animation:ripple 2.4s ease-out infinite; font-style:normal; }
+  .p-b { background:#2563eb; } .p-a { background:#d97706; } .p-g { background:#0d9d74; }
+  .lgd { display:flex; gap:14px; margin-top:12px; font-size:11px; font-weight:800; flex-wrap:wrap; }
+  .vim { position:relative; border-radius:14px; overflow:hidden; height:150px; background:url('/assets/img/member-hero.jpg') center 20%/cover; }
+  .vim::after { content:""; position:absolute; inset:0; background:linear-gradient(180deg,transparent 40%,rgba(8,16,38,.8)); }
+  .vim .pl { position:absolute; left:50%; top:44%; transform:translate(-50%,-50%); width:44px; height:44px; border-radius:50%; background:rgba(37,99,235,.95); color:#fff; display:grid; place-items:center; font-size:16px; animation:pulse 2.6s infinite; z-index:2; }
+  .vim b { position:absolute; left:12px; bottom:10px; right:12px; z-index:2; font-size:12.5px; line-height:1.4; color:#fff; }
+
+  .cta2 { position:relative; margin:60px 0 0; border-radius:24px; overflow:hidden; background:linear-gradient(100deg,#14316f,#1c48b0); color:#fff; }
+  .cta2 .im { position:absolute; inset:0; background:url('/assets/img/city-blue.jpg') center 70%/cover; opacity:.3; }
+  .cta2 .in4 { position:relative; padding:44px 40px; text-align:center; }
+  .cta2 h2 { font-size:clamp(24px,3.4vw,34px); letter-spacing:-.02em; margin-bottom:10px; }
+  .cta2 p { color:#c3d2ee; font-size:15px; margin-bottom:22px; }
+  .foot { margin-top:64px; border-top:1px solid #dfe7f4; padding:26px 0 34px; color:#5b6b8c; font-size:13px; background:#fff; }
+  .foot .in5 { display:flex; gap:20px; align-items:center; flex-wrap:wrap; }
+  .foot .brand img { width:30px; height:30px; }
+  .foot .sp { flex:1; }
+  .foot a { color:#44547a; margin-left:18px; font-weight:700; }
+  .cred { margin-top:10px; font-size:11px; color:#8b9ab8; }
+</style></head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+  <g id="sn"><path d="M3 11l16-6v14L3 15v-4z"/><path d="M11 17.6a3 3 0 0 1-5.7-1.3"/></g>
+  <g id="sr"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></g>
+  <g id="ch"><path d="M18 20V10M12 20V4M6 20v-6"/></g>
+  <g id="ck"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></g>
+  <g id="in"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5.1 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.5-6.9A2 2 0 0 0 16.8 4H7.2a2 2 0 0 0-1.7 1.1z"/></g>
+  <g id="dc"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6"/></g>
+  <g id="lk"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></g>
+  <g id="cm"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></g>
+  <g id="pl"><path d="M8 5v14l11-7z"/></g>
+  <g id="fb"><path d="M13 22v-8h3l1-4h-4V7c0-1 .3-2 2-2h2V1.5C18.5 1.4 17.3 1 16 1c-3 0-5 2-5 5v3H7v4h4v8h2z"/></g>
+</defs></svg>
+<span class="prog" id="prog"></span>
+<span class="bgfx"></span><span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span>
+
+<nav class="nav">
+  <a class="brand" href="#"><img src="/assets/img/logo.svg" alt=""/><span><b>ЦЭНДИЙН БААТАРХҮҮ</b><small>ИРГЭДИЙН САНАЛ ХҮСЭЛТИЙН СИСТЕМ</small></span></a>
+  <span class="nlinks"><a href="#">Нүүр</a><a href="#">Намтар</a><a href="#">Хууль</a><a href="#">Төслүүд</a><a href="#">Мэдээ</a><a href="#">Видео</a><a href="#">Тайлан</a></span>
+  <a class="ncta" href="#"><svg class="i"><use href="#sn"/></svg>Санал илгээх</a>
+</nav>
+
+<main>
+  <header class="hero"><div class="ct">
+    <div class="hgrid">
+      <div>
+        <span class="live"><i></i>Систем ажиллаж байна · өнөөдөр 3 иргэн хандлаа</span>
+        <h1>Иргэдийн санал —<br/><span class="gr">ирээдүйн өөрчлөлт</span></h1>
+        <p>Асуудлаа илгээ. Дугаараа ав. Шийдвэрлэлтийг нь алхам бүрээр хяна. Бүгд ил тод.</p>
+        <div class="hbtns">
+          <a class="btn b-main" href="#"><svg class="i"><use href="#sn"/></svg>Санал өгөх</a>
+          <a class="btn b-line" href="#"><svg class="i"><use href="#sr"/></svg>Явц шалгах</a>
+        </div>
+        <div class="htrust">
+          <span><b data-count="1248">0</b>Нийт санал</span>
+          <span><b data-count="392">0</b>Шийдвэрлэгдсэн</span>
+          <span><b data-count="68" data-suf="%">0%</b>Шийдвэрлэлт</span>
+          <span><b data-count="205">0</b>Иргэн хандсан</span>
+        </div>
+      </div>
+      <div class="pcard rv"><div class="in2">
+        <span class="im"></span>
+        <span class="cap"><span><b>Улаанбаатар · Сүхбаатарын талбай</b><span>Таны хот. Таны дуу хоолой.</span></span><span class="badge"><span class="dot"></span>LIVE самбар</span></span>
+      </div></div>
+    </div>
+  </div></header>
+
+  <div class="mq"><div class="in3">
+    <span><span class="no">AT-000128</span> Гэр хорооллын зам засвар <span class="ok">— Шийдвэрлэгдсэн</span></span>
+    <span><span class="no">AT-000131</span> Автобусны буудлын байрлал <span class="pr">— Явцад</span></span>
+    <span><span class="no">AT-000135</span> Гэрэлтүүлэг нэмэгдүүлэх <span class="nw">— Хүлээн авсан</span></span>
+    <span><span class="no">AT-000138</span> Тоглоомын талбай шинэчлэх <span class="ok">— Шийдвэрлэгдсэн</span></span>
+    <span><span class="no">AT-000128</span> Гэр хорооллын зам засвар <span class="ok">— Шийдвэрлэгдсэн</span></span>
+    <span><span class="no">AT-000131</span> Автобусны буудлын байрлал <span class="pr">— Явцад</span></span>
+    <span><span class="no">AT-000135</span> Гэрэлтүүлэг нэмэгдүүлэх <span class="nw">— Хүлээн авсан</span></span>
+    <span><span class="no">AT-000138</span> Тоглоомын талбай шинэчлэх <span class="ok">— Шийдвэрлэгдсэн</span></span>
+  </div></div>
+
+  <section class="sec"><div class="ct">
+    <span class="gn">01</span>
+    <div class="shead"><h2>Амьд самбар</h2><a class="lk" href="#">Бүгдийг харах →</a></div>
+    <div class="bento">
+      <!-- БОДИТ САНАЛ АСУУЛГЫН КАРТ -->
+      <div class="bt sp5 rw2 rv">
+        <div class="bth">САНАЛ АСУУЛГА</div>
+        <div class="pollc">
+          <div class="pt">Их дээд сургуулиудын хичээлийг 9 сарын 15-нд эхлүүлэхийг дэмжиж байна уу?</div>
+          <div class="pm"><span class="pst"><span class="dot"></span>Явагдаж буй</span></div>
+          <div class="pa">
+            <img src="/assets/img/social/ig-member.jpg" alt=""/>
+            <span><b>Ц.Баатархүү</b><span class="tm">Өнөөдөр</span><span class="pbdg"><svg class="i"><use href="#ch"/></svg>Санал асуулга</span></span>
+          </div>
+          <div class="prw"><span>Хугацаа</span><b>2026/09/01 хүртэл</b></div>
+          <div class="prw"><span>Нийт санал</span><b>58</b></div>
+          <div class="ppanel">
+            <div class="res my"><div class="rt"><span>Тийм <span class="mych">✓ Таны сонголт</span></span><b>62%</b></div><div class="tr"><i style="width:62%"></i></div><div class="cnt2">36 санал</div></div>
+            <div class="res"><div class="rt"><span>Үгүй</span><b>26%</b></div><div class="tr"><i style="width:26%;animation-delay:.15s"></i></div><div class="cnt2">15 санал</div></div>
+            <div class="res"><div class="rt"><span>Мэдэхгүй</span><b>12%</b></div><div class="tr"><i style="width:12%;animation-delay:.3s"></i></div><div class="cnt2">7 санал</div></div>
+          </div>
+          <div class="pf">
+            <span class="join">Дүн харах</span>
+            <span class="shr"><span class="sb f"><svg class="i" style="fill:currentColor;stroke:none"><use href="#fb"/></svg></span><span class="sb x">𝕏</span></span>
+          </div>
+        </div>
+      </div>
+      <div class="bt sp7 rv" style="transition-delay:.06s">
+        <div class="bth">ХЭРХЭН АЖИЛЛАДАГ</div>
+        <div class="steps">
+          <span class="stp"><i><svg class="i"><use href="#sn"/></svg></i><span>Санал илгээх<small>зураг · бичлэг · байршилтай</small></span></span>
+          <span class="stp"><i><svg class="i"><use href="#dc"/></svg></i><span>Дугаар авах<small>AT-2026-XXXXXX шууд олгоно</small></span></span>
+          <span class="stp"><i><svg class="i"><use href="#in"/></svg></i><span>Байгууллагад уламжлах<small>албан бичгээр</small></span></span>
+          <span class="stp"><i><svg class="i"><use href="#ck"/></svg></i><span>Шийдвэрлэлтийн хяналт<small>явц, үр дүн ил тод</small></span></span>
+        </div>
+      </div>
+      <div class="bt sp7 rv" style="transition-delay:.12s">
+        <div class="bth">АСУУДЛЫН БАЙРШИЛ</div>
+        <div class="mapd">
+          <span class="pin p-a" style="left:18%;top:32%">27<em></em></span>
+          <span class="pin p-g" style="left:48%;top:20%">12<em></em></span>
+          <span class="pin p-b" style="left:66%;top:54%">14<em></em></span>
+          <span class="pin p-g" style="left:33%;top:64%;width:14px;height:14px"><em></em></span>
+          <span class="pin p-a" style="left:82%;top:28%;width:14px;height:14px"><em></em></span>
+        </div>
+        <div class="lgd">
+          <span style="color:#c07908"><span class="dot"></span>Явцад 27</span>
+          <span style="color:#0d9d74"><span class="dot"></span>Шийдвэрлэгдсэн 12</span>
+          <span style="color:#2563eb"><span class="dot"></span>Шинэ 14</span>
+        </div>
+      </div>
+      <div class="bt sp6 rv" style="transition-delay:.08s">
+        <div class="bth">ИРГЭНИЙ САНАЛ</div>
+        <div class="au"><img src="/assets/img/social/ig-member.jpg" alt=""/><span><b>Иргэн</b><span>2 цагийн өмнө · Хан-Уул, 15-р хороо</span></span></div>
+        <div class="ptx2">Зүүн хэсгийн замын түгжрэлийг бууруулах шийдлийн санал хүргүүлж байна.</div>
+        <div class="pim2"></div>
+        <div class="prw2"><span><svg class="i"><use href="#lk"/></svg> 23</span><span><svg class="i"><use href="#cm"/></svg> 7</span><span class="chip ch-g" style="margin-left:auto"><span class="dot"></span>Шийдвэрлэгдсэн</span></div>
+      </div>
+      <div class="bt sp6 rv" style="transition-delay:.14s">
+        <div class="bth">ТООН МЭДЭЭ</div>
+        <div class="snum">
+          <span><b data-count="1248">0</b><span>Нийт санал</span></span>
+          <span><b data-count="856">0</b><span>Байгууллагад илгээсэн</span></span>
+          <span><b data-count="392">0</b><span>Шийдвэрлэгдсэн</span></span>
+          <span><b data-count="68" data-suf="%">0%</b><span>Шийдвэрлэлтийн хувь</span></span>
+        </div>
+      </div>
+      <div class="bt sp7 rv" style="transition-delay:.18s">
+        <div class="bth">ВИДЕО МЭДЭЭ</div>
+        <div class="vim"><span class="pl"><svg class="i"><use href="#pl"/></svg></span><b>Иргэдийн санал хүсэлтийг шийдвэрлэх системийн танилцуулга</b></div>
+      </div>
+    </div>
+  </div></section>
+
+  <div class="ct"><div class="cta2 rv">
+    <span class="im"></span>
+    <div class="in4">
+      <h2>Санал, хүсэлтээ илгээхэд бэлэн үү?</h2>
+      <p>Хяналтын дугаар шууд очно. Явцыг нь та өөрөө хянана.</p>
+      <a class="btn b-main" href="#"><svg class="i"><use href="#sn"/></svg>Санал хүсэлт өгөх</a>
+    </div>
+  </div></div>
+
+  <footer class="foot"><div class="ct">
+    <div class="in5">
+      <a class="brand" href="#"><img src="/assets/img/logo.svg" alt=""/><span><b style="font-size:13px">ЦЭНДИЙН БААТАРХҮҮ</b></span></a>
+      <span class="sp"></span>
+      <span>© 2026 · 51-261467 · Төрийн ордон<a href="#">Нууцлал</a><a href="#">Холбоо барих</a></span>
+    </div>
+    <div class="cred">Фото: Wikimedia Commons, CC BY 2.0</div>
+  </div></footer>
+</main>
+
+<script>
+  document.querySelectorAll('[data-count]').forEach(function (el) {
+    var t = parseInt(el.dataset.count, 10), suf = el.dataset.suf || '', t0 = null;
+    function fin() { el.textContent = t.toLocaleString('en-US') + suf; }
+    function step(ts) { if (!t0) t0 = ts; var p = Math.min((ts - t0) / 1400, 1), e = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(t * e).toLocaleString('en-US') + suf; if (p < 1) requestAnimationFrame(step); else fin(); }
+    requestAnimationFrame(step); setTimeout(fin, 1800);
+  });
+  var rvs = document.querySelectorAll('.rv');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); }, { threshold: .12 });
+    rvs.forEach(function (el) { io.observe(el); });
+  }
+  setTimeout(function () { rvs.forEach(function (el) { el.classList.add('in'); }); }, 900);
+  document.querySelectorAll('.bt').forEach(function (c) {
+    c.addEventListener('mousemove', function (e) {
+      var r = c.getBoundingClientRect();
+      c.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      c.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+  });
+  var pr = document.getElementById('prog');
+  addEventListener('scroll', function () {
+    var h = document.documentElement;
+    pr.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+  }, { passive: true });
+</script>
+</body></html>
