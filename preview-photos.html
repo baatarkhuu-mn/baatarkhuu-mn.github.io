@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="mn"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Хотын зургийн хувилбарууд</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&display=swap" rel="stylesheet"/>
+<style>
+  :root { --navy:#0E2A5C; --blue:#2563EB; --ink:#0F1E38; --mut:#5A6B85; --line:#E4EAF3; }
+  * { box-sizing:border-box; margin:0; }
+  body { background:#F4F7FB; color:var(--ink); font-family:"Manrope","Segoe UI",sans-serif; padding:34px 18px 60px; }
+  .wrap { max-width:1080px; margin:0 auto; }
+  h1 { font-size:24px; margin-bottom:6px; }
+  .sub { color:var(--mut); font-size:14px; margin-bottom:28px; max-width:70ch; }
+  .it { background:#fff; border:1px solid var(--line); border-radius:16px; overflow:hidden; margin-bottom:26px; }
+  .ph { position:relative; height:270px; background-size:cover; background-position:center; }
+  .ph::after { content:""; position:absolute; inset:0; background:linear-gradient(180deg,rgba(10,22,48,.05) 40%,rgba(10,22,48,.72)); }
+  .tag { position:absolute; top:14px; left:14px; z-index:2; width:44px; height:44px; border-radius:12px; background:var(--blue); color:#fff; font-size:20px; font-weight:800; display:grid; place-items:center; box-shadow:0 10px 22px -8px rgba(37,99,235,.7); }
+  .tag.cur { background:#475569; }
+  .cap { position:absolute; left:16px; bottom:13px; right:16px; z-index:2; color:#fff; display:flex; justify-content:space-between; align-items:flex-end; gap:10px; }
+  .cap b { font-size:15px; }
+  .cap span { display:block; font-size:11px; color:#C9D8F2; font-weight:700; }
+  .lv { background:rgba(22,163,74,.9); font-size:11px; font-weight:800; padding:6px 12px; border-radius:16px; white-space:nowrap; }
+  .meta { display:flex; gap:14px; flex-wrap:wrap; padding:13px 16px; font-size:12.5px; color:var(--mut); font-weight:700; }
+  .meta b { color:var(--ink); }
+  .chip { background:#EAF2FF; color:var(--blue); padding:3px 11px; border-radius:8px; font-size:11.5px; font-weight:800; }
+  .chip.free { background:#E7F6EC; color:#16A34A; }
+  .rec { outline:3px solid var(--blue); outline-offset:-3px; }
+  .rec .meta::before { content:"Санал болгож буй"; background:var(--blue); color:#fff; padding:3px 11px; border-radius:8px; font-size:11.5px; }
+</style></head>
+<body><div class="wrap">
+  <h1>Хотын зургийн хувилбарууд</h1>
+  <p class="sub">Бүгд Wikimedia Commons-ын чөлөөт лицензтэй жинхэнэ Улаанбаатарын зургууд. Hero болон navy банд дээр тавигдах байдлаар (харанхуй наалттай) харууллаа. «CC0» гэсэн нь ямар ч нөхцөлгүй, зохиогч дурдах шаардлагагүй чөлөөтэй ашиглана гэсэн үг.</p>
+
+  <div class="it rec">
+    <div class="ph" style="background-image:url('/assets/img/city-cands/a.jpg');background-position:center 60%">
+      <span class="tag">А</span>
+      <span class="cap"><span><b>Улаанбаатар · Сүхбаатарын талбай</b><span>Таны хот. Таны дуу хоолой.</span></span><span class="lv">Ажиллаж байна</span></span>
+    </div>
+    <div class="meta"><span class="chip free">CC0 — нөхцөлгүй чөлөөтэй</span><span>Төрийн ордон + иргэд + шинэ хотхон нэг дор · нартай өдөр · <b>14992px панорам</b></span></div>
+  </div>
+
+  <div class="it">
+    <div class="ph" style="background-image:url('/assets/img/city-cands/b.jpg');background-position:center 55%">
+      <span class="tag">Б</span>
+      <span class="cap"><span><b>Улаанбаатар · Сүхбаатарын талбай</b><span>Таны хот. Таны дуу хоолой.</span></span><span class="lv">Ажиллаж байна</span></span>
+    </div>
+    <div class="meta"><span class="chip free">CC0</span><span>Талбай дүүрэн иргэд, үүлтэй тэнгэр · <b>7936px панорам</b></span></div>
+  </div>
+
+  <div class="it">
+    <div class="ph" style="background-image:url('/assets/img/city-cands/v.jpg');background-position:center 45%">
+      <span class="tag">В</span>
+      <span class="cap"><span><b>Улаанбаатар · Сүхбаатарын талбай</b><span>Таны хот. Таны дуу хоолой.</span></span><span class="lv">Ажиллаж байна</span></span>
+    </div>
+    <div class="meta"><span class="chip free">CC0</span><span>Гүн цэнхэр тэнгэр, Төрийн ордны өргөн харагдац · <b>8752px панорам</b></span></div>
+  </div>
+
+  <div class="it">
+    <div class="ph" style="background-image:url('/assets/img/city-cands/g.jpg');background-position:center 30%">
+      <span class="tag">Г</span>
+      <span class="cap"><span><b>Улаанбаатар · Зайсан толгойгоос</b><span>Таны хот. Таны дуу хоолой.</span></span><span class="lv">Ажиллаж байна</span></span>
+    </div>
+    <div class="meta"><span class="chip free">CC0</span><span>Зайсангийн дурсгал + хотын дэвсгэр, агаараас · <b>7952px</b></span></div>
+  </div>
+
+  <div class="it">
+    <div class="ph" style="background-image:url('/assets/img/city-cands/d.jpg');background-position:center 40%">
+      <span class="tag">Д</span>
+      <span class="cap"><span><b>Улаанбаатар · Хотын төв</b><span>Таны хот. Таны дуу хоолой.</span></span><span class="lv">Ажиллаж байна</span></span>
+    </div>
+    <div class="meta"><span class="chip">CC BY 4.0 — зохиогч дурдана (Alexkom000)</span><span>2024 он, цэлмэг тэнгэр, орчин үеийн барилгууд · <b>5850px</b></span></div>
+  </div>
+
+  <div class="it">
+    <div class="ph" style="background-image:url('/assets/img/city-cands/e.jpg');background-position:center 35%">
+      <span class="tag">Е</span>
+      <span class="cap"><span><b>Улаанбаатар · Хотын гудамж</b><span>Таны хот. Таны дуу хоолой.</span></span><span class="lv">Ажиллаж байна</span></span>
+    </div>
+    <div class="meta"><span class="chip free">CC0</span><span>Намрын өдрийн хотын амьдрал, дээрээс · <b>9344px панорам</b></span></div>
+  </div>
+
+  <div class="it">
+    <div class="ph" style="background-image:url('/assets/img/city-cands/j.jpg');background-position:center 45%">
+      <span class="tag">Ж</span>
+      <span class="cap"><span><b>Улаанбаатар · Зайсангаас</b><span>Таны хот. Таны дуу хоолой.</span></span><span class="lv">Ажиллаж байна</span></span>
+    </div>
+    <div class="meta"><span class="chip">CC BY 3.0 — зохиогч дурдана (Anagoria)</span><span>Үдшийн нарны гэрэлтэй өргөн харагдац · <b>4520px</b></span></div>
+  </div>
+
+  <div class="it">
+    <div class="ph" style="background-image:url('/assets/img/ub-square.jpg');background-position:center 36%">
+      <span class="tag cur">0</span>
+      <span class="cap"><span><b>Одоо ашиглаж буй зураг</b><span>ub-square.jpg — харьцуулахад</span></span></span>
+    </div>
+    <div class="meta"><span class="chip">CC BY 2.0 — зохиогч дурдана</span><span>Prototype 5-ийн hero дээр одоо байгаа зураг</span></div>
+  </div>
+</div></body></html>
