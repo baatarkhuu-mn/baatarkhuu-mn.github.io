@@ -790,6 +790,7 @@
       "Дэмжсэн": "Liked",
       "Сэтгэгдэл бичих": "Write a comment",
       "Хамгийн их дэмжигдсэн": "Most supported",
+      "Хотын зураг: Francisco Anzola — CC BY 2.0, Wikimedia Commons": "City photo: Francisco Anzola — CC BY 2.0, Wikimedia Commons",
       "Санал асуулга": "Poll",
       "Хүлээн авсан": "Received",
       "Шийдвэрлэгдсэн": "Resolved",
@@ -1560,16 +1561,15 @@
         (likeOf(b) - likeOf(a)) || (cmtOf(b) - cmtOf(a)) || (new Date(b.created_at) - new Date(a.created_at))
       ).slice(0, 10);
       box.innerHTML = "";
-      rows.forEach((r) => {
+      rows.forEach((r, i) => {
         const subj = this.SUBJ[r.subject] || r.subject || "Санал";
         const txt = (r.message || "").split("\n")[0] || subj;
         const el = document.createElement("button");
         el.type = "button"; el.className = "dxs-item";
         el.innerHTML =
+          '<span class="dxs-n">' + (i + 1) + '</span>' +
           '<span class="dxs-t">' + this.esc(txt) + '</span>' +
-          '<span class="dxs-meta"><span>' + this.esc(this.ago(r.created_at)) + '</span>' +
-          '<span class="dxs-badge">' + this.esc(subj) + '</span>' +
-          '<span class="dxs-likes">' + this.IC_LIKE.replace('class="ri"', 'class="mi"') + likeOf(r) + '</span></span>';
+          '<span class="dxs-likes">' + this.IC_LIKE.replace('class="ri"', 'class="mi"') + likeOf(r) + '</span>';
         el.addEventListener("click", () => {
           const card = document.querySelector('.fc3[data-id="' + r.id + '"]');
           if (card) {
@@ -2900,6 +2900,7 @@
       routed: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>',
       responded: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 10 4 15 9 20"/><path d="M20 4v7a4 4 0 0 1-4 4H4"/></svg>',
       resolved: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+      pct: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>',
     },
     count(el, target) {
       target = target || 0;
@@ -2923,10 +2924,10 @@
         if (error || !s) return;
         const pct = s.total ? Math.round(((s.resolved || 0) / s.total) * 100) : 0;
         const cards = [
-          { k: "total",     c: "fbd-blue",   n: s.total,     l: "Нийт хүсэлт" },
-          { k: "routed",    c: "fbd-amber",  n: s.routed,    l: "Хариуцсан байгууллагад илгээсэн" },
-          { k: "responded", c: "fbd-indigo", n: s.responded, l: "Хариу ирсэн" },
-          { k: "resolved",  c: "fbd-green",  n: pct, suffix: "%", l: "Шийдвэрлэлтийн хувь" },
+          { k: "total",    c: "fbd-blue",   n: s.total,    l: "Нийт хүсэлт" },
+          { k: "routed",   c: "fbd-amber",  n: s.routed,   l: "Хариуцсан байгууллагад илгээсэн" },
+          { k: "resolved", c: "fbd-green",  n: s.resolved, l: "Шийдвэрлэгдсэн" },
+          { k: "pct",      c: "fbd-purple", n: pct, suffix: "%", l: "Шийдвэрлэлтийн хувь" },
         ];
         box.innerHTML = cards.map((c) => {
           const val = (c.n == null ? 0 : c.n);
