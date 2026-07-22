@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="mn"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Нүүр — Дижитал үндэсний хэв (прототип 2)</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  * { box-sizing:border-box; margin:0; }
+  html { scroll-behavior:smooth; }
+  body { background:#06090f; color:#eef3fb; font-family:"Manrope","Segoe UI",system-ui,sans-serif; font-size:16px; line-height:1.6; overflow-x:hidden; }
+  .ct { max-width:1180px; margin:0 auto; padding:0 22px; }
+  a { text-decoration:none; color:inherit; }
+  svg.i { width:1em; height:1em; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; vertical-align:-.12em; }
+  .dot { display:inline-block; width:7px; height:7px; border-radius:50%; background:currentColor; margin-right:6px; vertical-align:1px; }
+  ::selection { background:#2563eb; color:#fff; }
+
+  @keyframes kb { from { transform:scale(1) } to { transform:scale(1.07) translate(-1%,1%) } }
+  @keyframes orb { from { transform:translate(-3%,-2%) scale(1) } to { transform:translate(3%,4%) scale(1.12) } }
+  @keyframes mq { to { transform:translateX(-50%) } }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+  @keyframes shimmer { to { background-position:200% center } }
+  @keyframes growW { from { width:0 } }
+  @keyframes ripple { from { transform:scale(.5); opacity:.9 } to { transform:scale(2); opacity:0 } }
+  @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(59,130,246,.5)} 60%{box-shadow:0 0 0 14px rgba(59,130,246,0)} }
+  .rv { opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease; }
+  .rv.in { opacity:1; transform:none; }
+
+  /* дэвсгэрийн тор + гэрлүүд */
+  .bgfx { position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);
+    background-size:52px 52px;
+    mask-image:radial-gradient(75% 60% at 50% 30%, #000 30%, transparent 100%); }
+  .orb { position:fixed; border-radius:50%; filter:blur(70px); z-index:0; pointer-events:none; animation:orb 11s ease-in-out infinite alternate; }
+  .o1 { width:480px; height:480px; background:rgba(37,99,235,.34); top:-160px; left:-120px; }
+  .o2 { width:420px; height:420px; background:rgba(20,184,166,.2); top:220px; right:-160px; animation-delay:3s; }
+  main { position:relative; z-index:1; }
+
+  /* scroll progress */
+  .prog { position:fixed; top:0; left:0; height:2.5px; width:0; background:linear-gradient(90deg,#2563eb,#38bdf8,#14b8a6); z-index:99; }
+
+  /* ---------- хөвөгч цэс ---------- */
+  .nav { position:fixed; top:14px; left:50%; transform:translateX(-50%); z-index:60; width:min(1120px, calc(100% - 28px));
+    display:flex; align-items:center; gap:14px; background:rgba(12,17,30,.72); border:1px solid rgba(255,255,255,.1);
+    backdrop-filter:blur(14px); border-radius:18px; padding:10px 14px; box-shadow:0 20px 50px -20px rgba(0,0,0,.7); }
+  .brand { display:flex; align-items:center; gap:10px; }
+  .brand img { width:34px; height:34px; }
+  .brand b { font-size:14.5px; letter-spacing:.02em; display:block; line-height:1.15; }
+  .brand small { font-size:8.5px; font-weight:700; color:#7f93bb; letter-spacing:.1em; display:block; }
+  .nlinks { display:flex; gap:2px; margin-left:auto; font-size:13px; font-weight:700; color:#9fb0d0; }
+  .nlinks a { padding:8px 12px; border-radius:10px; }
+  .nlinks a:hover { color:#fff; background:rgba(255,255,255,.07); }
+  .ncta { position:relative; overflow:hidden; background:linear-gradient(110deg,#2563eb 20%,#38bdf8 40%,#2563eb 60%); background-size:200% auto;
+    animation:shimmer 3.5s linear infinite; color:#fff; font-weight:800; font-size:13px; padding:10px 18px; border-radius:12px; display:inline-flex; gap:8px; align-items:center; }
+  @media (max-width:980px){ .nlinks { display:none; } }
+
+  /* ---------- HERO ---------- */
+  .hero { padding:132px 0 30px; }
+  .hgrid { display:grid; grid-template-columns:1.15fr 1fr; gap:44px; align-items:center; }
+  @media (max-width:940px){ .hgrid { grid-template-columns:1fr; } }
+  .live { display:inline-flex; align-items:center; gap:9px; background:rgba(20,184,166,.12); border:1px solid rgba(20,184,166,.35);
+    color:#5eead4; font-size:12.5px; font-weight:800; padding:7px 15px; border-radius:20px; margin-bottom:20px; }
+  .live i { width:8px; height:8px; border-radius:50%; background:#2dd4bf; animation:blink 1.6s infinite; font-style:normal; }
+  .hero h1 { font-size:clamp(38px,5.6vw,62px); line-height:1.06; letter-spacing:-.025em; margin-bottom:18px; font-weight:800; }
+  .hero h1 .gr { background:linear-gradient(100deg,#60a5fa,#38bdf8 45%,#2dd4bf); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .hero p { font-size:16.5px; color:#9fb0d0; max-width:46ch; margin-bottom:26px; }
+  .hbtns { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+  .btn { display:inline-flex; align-items:center; gap:9px; font-weight:800; font-size:14.5px; padding:14px 26px; border-radius:13px; transition:transform .2s; }
+  .btn:hover { transform:translateY(-2px); }
+  .b-main { position:relative; background:linear-gradient(110deg,#2563eb 20%,#38bdf8 40%,#2563eb 60%); background-size:200% auto; animation:shimmer 3.5s linear infinite; color:#fff; box-shadow:0 18px 40px -14px rgba(37,99,235,.6); }
+  .b-line { border:1.5px solid rgba(255,255,255,.22); color:#dbe6fa; background:rgba(255,255,255,.04); }
+  .htrust { display:flex; gap:22px; margin-top:26px; font-size:12.5px; color:#7f93bb; font-weight:700; flex-wrap:wrap; }
+  .htrust b { color:#eef3fb; font-size:17px; display:block; line-height:1.1; }
+  /* фото карт */
+  .pcard { position:relative; border-radius:26px; padding:3px; background:conic-gradient(from 180deg, rgba(37,99,235,.7), rgba(45,212,191,.5), rgba(37,99,235,.08), rgba(37,99,235,.7)); }
+  .pcard .in2 { border-radius:24px; overflow:hidden; position:relative; min-height:330px; }
+  .pcard .im { position:absolute; inset:0; background:url('/assets/img/ub-square.jpg') center 36%/cover; animation:kb 22s ease-in-out infinite alternate; }
+  .pcard .in2::after { content:""; position:absolute; inset:0; background:linear-gradient(180deg, transparent 40%, rgba(6,9,15,.88)); }
+  .pcard .cap { position:absolute; left:18px; right:18px; bottom:16px; z-index:2; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .pcard .cap b { font-size:14px; }
+  .pcard .cap span { display:block; font-size:11px; color:#9fb0d0; font-weight:700; }
+  .pcard .badge { background:rgba(12,17,30,.8); border:1px solid rgba(255,255,255,.16); backdrop-filter:blur(6px); border-radius:12px; padding:9px 13px; font-size:11.5px; font-weight:800; color:#5eead4; white-space:nowrap; }
+
+  /* ---------- гүйдэг статус тууз ---------- */
+  .mq { margin:34px 0 8px; overflow:hidden; border-block:1px solid rgba(255,255,255,.09); padding:13px 0; }
+  .mq .in3 { display:inline-flex; gap:52px; white-space:nowrap; animation:mq 26s linear infinite; font-size:14px; font-weight:800; letter-spacing:.06em; }
+  .mq .ok { color:#2dd4bf; } .mq .pr { color:#fbbf24; } .mq .nw { color:#60a5fa; }
+  .mq .no { color:#5b6b8c; font-weight:700; }
+
+  /* ---------- хэсгийн толгой (аварга дугаартай) ---------- */
+  .sec { position:relative; padding:64px 0 10px; }
+  .gn { position:absolute; top:8px; right:0; font-size:120px; font-weight:800; color:transparent; -webkit-text-stroke:1.5px rgba(255,255,255,.07); line-height:1; user-select:none; }
+  .shead { display:flex; align-items:baseline; gap:16px; margin-bottom:22px; }
+  .shead h2 { font-size:clamp(21px,2.6vw,28px); letter-spacing:-.01em; }
+  .shead .lk { margin-left:auto; font-size:13.5px; font-weight:800; color:#60a5fa; }
+
+  /* ---------- бенто ---------- */
+  .bento { display:grid; grid-template-columns:repeat(12,1fr); gap:14px; }
+  .bt { position:relative; grid-column:span 4; background:rgba(15,21,36,.75); border:1px solid rgba(255,255,255,.09); border-radius:20px; padding:22px; overflow:hidden; transition:transform .25s, border-color .25s; }
+  .bt::before { content:""; position:absolute; inset:0; border-radius:20px; opacity:0; transition:opacity .3s;
+    background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%), rgba(59,130,246,.14), transparent 45%); }
+  .bt:hover { transform:translateY(-4px); border-color:rgba(96,165,250,.4); }
+  .bt:hover::before { opacity:1; }
+  .bt > * { position:relative; }
+  .bth { font-size:11.5px; font-weight:800; letter-spacing:.16em; color:#7f93bb; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+  .bth::before { content:""; width:4px; height:13px; border-radius:2px; background:linear-gradient(#2563eb,#2dd4bf); }
+  .sp7 { grid-column:span 7; } .sp5 { grid-column:span 5; } .sp8 { grid-column:span 8; } .sp6 { grid-column:span 6; }
+  @media (max-width:900px){ .bt, .sp7, .sp5, .sp8, .sp6 { grid-column:span 12; } }
+  /* стат */
+  .snum { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .snum b { font-size:clamp(30px,3.6vw,42px); letter-spacing:-.03em; line-height:1; display:block;
+    background:linear-gradient(100deg,#fff,#93c5fd); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .snum span { font-size:11.5px; color:#7f93bb; font-weight:700; }
+  /* асуулга */
+  .prow { display:flex; align-items:center; gap:10px; margin-top:9px; font-size:13px; font-weight:700; }
+  .prow .lb { flex:0 0 34%; color:#c9d6ef; }
+  .prow .tr { flex:1; height:7px; border-radius:4px; background:rgba(255,255,255,.09); overflow:hidden; }
+  .prow .tr i { display:block; height:100%; border-radius:4px; background:linear-gradient(90deg,#2563eb,#38bdf8); animation:growW 1.2s ease both; }
+  .prow .pc { flex:0 0 34px; text-align:right; font-weight:800; }
+  .pjoin { margin-top:14px; display:inline-flex; gap:8px; align-items:center; background:rgba(37,99,235,.16); border:1px solid rgba(96,165,250,.4); color:#93c5fd; font-weight:800; font-size:12.5px; padding:9px 18px; border-radius:11px; }
+  /* процесс */
+  .steps { display:flex; flex-direction:column; gap:12px; }
+  .stp { display:flex; gap:12px; align-items:center; font-size:13.5px; font-weight:700; color:#c9d6ef; }
+  .stp i { flex:none; width:30px; height:30px; border-radius:10px; background:rgba(37,99,235,.15); border:1px solid rgba(96,165,250,.3); color:#93c5fd; display:grid; place-items:center; font-size:13px; font-style:normal; }
+  .stp small { display:block; font-size:10.5px; color:#7f93bb; font-weight:600; }
+  /* санал пост */
+  .au { display:flex; gap:11px; align-items:center; margin-bottom:11px; }
+  .au img { width:38px; height:38px; border-radius:50%; object-fit:cover; }
+  .au b { font-size:13.5px; display:block; }
+  .au span { font-size:10.5px; color:#7f93bb; font-weight:700; }
+  .ptx { font-size:13.5px; color:#c9d6ef; margin-bottom:11px; }
+  .pim { border-radius:14px; height:110px; background:url('/assets/img/orh-bur-5-mod.jpg') center/cover; margin-bottom:11px; }
+  .prw { display:flex; gap:18px; font-size:12.5px; font-weight:800; color:#7f93bb; }
+  .prw svg { color:#60a5fa; }
+  .chip { font-size:10.5px; font-weight:800; padding:4px 11px; border-radius:14px; }
+  .ch-g { background:rgba(45,212,191,.14); color:#5eead4; border:1px solid rgba(45,212,191,.3); }
+  /* map tile */
+  .mapd { position:relative; border-radius:14px; overflow:hidden; height:190px;
+    background:
+      repeating-linear-gradient(90deg, transparent 0 58px, rgba(255,255,255,.05) 58px 61px),
+      repeating-linear-gradient(0deg, transparent 0 48px, rgba(255,255,255,.05) 48px 51px),
+      linear-gradient(120deg,#0c1424,#101b30); }
+  .pin { position:absolute; width:32px; height:32px; border-radius:50%; color:#fff; font-weight:800; font-size:12px; display:grid; place-items:center; border:2.5px solid rgba(255,255,255,.85); }
+  .pin em { position:absolute; inset:-9px; border-radius:50%; border:2px solid currentColor; opacity:.5; animation:ripple 2.4s ease-out infinite; font-style:normal; }
+  .p-b { background:#2563eb; } .p-a { background:#d97706; } .p-g { background:#0d9d74; }
+  .lgd { display:flex; gap:14px; margin-top:12px; font-size:11px; font-weight:800; flex-wrap:wrap; }
+  .lgd span { display:inline-flex; align-items:center; }
+  /* видео tile */
+  .vim { position:relative; border-radius:14px; overflow:hidden; height:150px; background:url('/assets/img/member-hero.jpg') center 20%/cover; }
+  .vim::after { content:""; position:absolute; inset:0; background:linear-gradient(180deg,transparent 40%,rgba(6,9,15,.8)); }
+  .vim .pl { position:absolute; left:50%; top:44%; transform:translate(-50%,-50%); width:44px; height:44px; border-radius:50%; background:rgba(37,99,235,.95); color:#fff; display:grid; place-items:center; font-size:16px; animation:pulse 2.6s infinite; z-index:2; }
+  .vim b { position:absolute; left:12px; bottom:10px; right:12px; z-index:2; font-size:12.5px; line-height:1.4; }
+
+  /* ---------- CTA ---------- */
+  .cta2 { position:relative; margin:64px 0 0; border-radius:24px; padding:2.5px; background:conic-gradient(from 120deg, rgba(37,99,235,.8), rgba(45,212,191,.6), rgba(37,99,235,.1), rgba(37,99,235,.8)); }
+  .cta2 .in4 { border-radius:22px; background:#0a101d; padding:44px 40px; text-align:center; }
+  .cta2 h2 { font-size:clamp(24px,3.4vw,34px); letter-spacing:-.02em; margin-bottom:10px; }
+  .cta2 p { color:#9fb0d0; font-size:15px; margin-bottom:22px; }
+
+  /* ---------- footer ---------- */
+  .foot { margin-top:70px; border-top:1px solid rgba(255,255,255,.09); padding:28px 0 34px; color:#7f93bb; font-size:13px; }
+  .foot .in5 { display:flex; gap:20px; align-items:center; flex-wrap:wrap; }
+  .foot .brand img { width:30px; height:30px; }
+  .foot .sp { flex:1; }
+  .foot a { color:#9fb0d0; margin-left:18px; }
+  .foot a:hover { color:#fff; }
+  .cred { margin-top:10px; font-size:11px; color:#54648a; }
+</style></head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+  <g id="sn"><path d="M3 11l16-6v14L3 15v-4z"/><path d="M11 17.6a3 3 0 0 1-5.7-1.3"/></g>
+  <g id="sr"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></g>
+  <g id="ch"><path d="M18 20V10M12 20V4M6 20v-6"/></g>
+  <g id="ck"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></g>
+  <g id="in"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5.1 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.5-6.9A2 2 0 0 0 16.8 4H7.2a2 2 0 0 0-1.7 1.1z"/></g>
+  <g id="dc"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6"/></g>
+  <g id="lk"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></g>
+  <g id="cm"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></g>
+  <g id="pl"><path d="M8 5v14l11-7z"/></g>
+</defs></svg>
+<span class="prog" id="prog"></span>
+<span class="bgfx"></span><span class="orb o1"></span><span class="orb o2"></span>
+
+<nav class="nav">
+  <a class="brand" href="#"><img src="/assets/img/logo.svg" alt=""/><span><b>ЦЭНДИЙН БААТАРХҮҮ</b><small>ИРГЭДИЙН САНАЛ ХҮСЭЛТИЙН СИСТЕМ</small></span></a>
+  <span class="nlinks"><a href="#">Нүүр</a><a href="#">Намтар</a><a href="#">Хууль</a><a href="#">Төслүүд</a><a href="#">Мэдээ</a><a href="#">Видео</a><a href="#">Тайлан</a></span>
+  <a class="ncta" href="#"><svg class="i"><use href="#sn"/></svg>Санал илгээх</a>
+</nav>
+
+<main>
+  <!-- HERO -->
+  <header class="hero"><div class="ct">
+    <div class="hgrid">
+      <div>
+        <span class="live"><i></i>Систем ажиллаж байна · өнөөдөр 3 иргэн хандлаа</span>
+        <h1>Иргэдийн санал —<br/><span class="gr">ирээдүйн өөрчлөлт</span></h1>
+        <p>Асуудлаа илгээ. Дугаараа ав. Шийдвэрлэлтийг нь алхам бүрээр хяна. Бүгд ил тод.</p>
+        <div class="hbtns">
+          <a class="btn b-main" href="#"><svg class="i"><use href="#sn"/></svg>Санал өгөх</a>
+          <a class="btn b-line" href="#"><svg class="i"><use href="#sr"/></svg>Явц шалгах</a>
+        </div>
+        <div class="htrust">
+          <span><b data-count="1248">0</b>Нийт санал</span>
+          <span><b data-count="392">0</b>Шийдвэрлэгдсэн</span>
+          <span><b data-count="68" data-suf="%">0%</b>Шийдвэрлэлт</span>
+          <span><b data-count="205">0</b>Иргэн хандсан</span>
+        </div>
+      </div>
+      <div class="pcard rv"><div class="in2">
+        <span class="im"></span>
+        <span class="cap"><span><b>Улаанбаатар · Сүхбаатарын талбай</b><span>Таны хот. Таны дуу хоолой.</span></span><span class="badge"><span class="dot"></span>LIVE самбар</span></span>
+      </div></div>
+    </div>
+  </div></header>
+
+  <!-- MARQUEE -->
+  <div class="mq"><div class="in3">
+    <span><span class="no">AT-000128</span> Гэр хорооллын зам засвар <span class="ok">— Шийдвэрлэгдсэн</span></span>
+    <span><span class="no">AT-000131</span> Автобусны буудлын байрлал <span class="pr">— Явцад</span></span>
+    <span><span class="no">AT-000135</span> Гэрэлтүүлэг нэмэгдүүлэх <span class="nw">— Хүлээн авсан</span></span>
+    <span><span class="no">AT-000138</span> Тоглоомын талбай шинэчлэх <span class="ok">— Шийдвэрлэгдсэн</span></span>
+    <span><span class="no">AT-000128</span> Гэр хорооллын зам засвар <span class="ok">— Шийдвэрлэгдсэн</span></span>
+    <span><span class="no">AT-000131</span> Автобусны буудлын байрлал <span class="pr">— Явцад</span></span>
+    <span><span class="no">AT-000135</span> Гэрэлтүүлэг нэмэгдүүлэх <span class="nw">— Хүлээн авсан</span></span>
+    <span><span class="no">AT-000138</span> Тоглоомын талбай шинэчлэх <span class="ok">— Шийдвэрлэгдсэн</span></span>
+  </div></div>
+
+  <!-- BENTO -->
+  <section class="sec"><div class="ct">
+    <span class="gn">01</span>
+    <div class="shead"><h2>Амьд самбар</h2><a class="lk" href="#">Бүгдийг харах →</a></div>
+    <div class="bento">
+      <div class="bt sp7 rv">
+        <div class="bth">САНАЛ АСУУЛГА</div>
+        <div style="font-size:17px;font-weight:800;margin-bottom:6px">Танд хамгийн чухал асуудал юу вэ?</div>
+        <div class="prow"><span class="lb">Ажил эрхлэлт</span><span class="tr"><i style="width:38%"></i></span><span class="pc">38%</span></div>
+        <div class="prow"><span class="lb">Зам, тээвэр</span><span class="tr"><i style="width:28%;animation-delay:.15s"></i></span><span class="pc">28%</span></div>
+        <div class="prow"><span class="lb">Боловсрол</span><span class="tr"><i style="width:18%;animation-delay:.3s"></i></span><span class="pc">18%</span></div>
+        <div class="prow"><span class="lb">Эрүүл мэнд</span><span class="tr"><i style="width:10%;animation-delay:.45s"></i></span><span class="pc">10%</span></div>
+        <span class="pjoin"><svg class="i"><use href="#ch"/></svg>Оролцох</span>
+      </div>
+      <div class="bt sp5 rv" style="transition-delay:.08s">
+        <div class="bth">ХЭРХЭН АЖИЛЛАДАГ</div>
+        <div class="steps">
+          <span class="stp"><i><svg class="i"><use href="#sn"/></svg></i><span>Санал илгээх<small>зураг · бичлэг · байршилтай</small></span></span>
+          <span class="stp"><i><svg class="i"><use href="#dc"/></svg></i><span>Дугаар авах<small>AT-2026-XXXXXX шууд олгоно</small></span></span>
+          <span class="stp"><i><svg class="i"><use href="#in"/></svg></i><span>Байгууллагад уламжлах<small>албан бичгээр</small></span></span>
+          <span class="stp"><i><svg class="i"><use href="#ck"/></svg></i><span>Шийдвэрлэлтийн хяналт<small>явц, үр дүн ил тод</small></span></span>
+        </div>
+      </div>
+      <div class="bt sp5 rv" style="transition-delay:.05s">
+        <div class="bth">ИРГЭНИЙ САНАЛ</div>
+        <div class="au"><img src="/assets/img/social/ig-member.jpg" alt=""/><span><b>Иргэн</b><span>2 цагийн өмнө · Хан-Уул, 15-р хороо</span></span></div>
+        <div class="ptx">Зүүн хэсгийн замын түгжрэлийг бууруулах шийдлийн санал хүргүүлж байна.</div>
+        <div class="pim"></div>
+        <div class="prw"><span><svg class="i"><use href="#lk"/></svg> 23</span><span><svg class="i"><use href="#cm"/></svg> 7</span><span class="chip ch-g" style="margin-left:auto"><span class="dot"></span>Шийдвэрлэгдсэн</span></div>
+      </div>
+      <div class="bt sp7 rv" style="transition-delay:.12s">
+        <div class="bth">АСУУДЛЫН БАЙРШИЛ</div>
+        <div class="mapd">
+          <span class="pin p-a" style="left:18%;top:34%">27<em></em></span>
+          <span class="pin p-g" style="left:48%;top:22%">12<em></em></span>
+          <span class="pin p-b" style="left:66%;top:56%">14<em></em></span>
+          <span class="pin p-g" style="left:33%;top:66%;width:14px;height:14px"><em></em></span>
+          <span class="pin p-a" style="left:82%;top:30%;width:14px;height:14px"><em></em></span>
+        </div>
+        <div class="lgd">
+          <span style="color:#fbbf24"><span class="dot"></span>Явцад 27</span>
+          <span style="color:#2dd4bf"><span class="dot"></span>Шийдвэрлэгдсэн 12</span>
+          <span style="color:#60a5fa"><span class="dot"></span>Шинэ 14</span>
+        </div>
+      </div>
+      <div class="bt sp6 rv" style="transition-delay:.16s">
+        <div class="bth">ТООН МЭДЭЭ</div>
+        <div class="snum">
+          <span><b data-count="1248">0</b><span>Нийт санал</span></span>
+          <span><b data-count="856">0</b><span>Байгууллагад илгээсэн</span></span>
+          <span><b data-count="392">0</b><span>Шийдвэрлэгдсэн</span></span>
+          <span><b data-count="68" data-suf="%">0%</b><span>Шийдвэрлэлтийн хувь</span></span>
+        </div>
+      </div>
+      <div class="bt sp6 rv" style="transition-delay:.2s">
+        <div class="bth">ВИДЕО МЭДЭЭ</div>
+        <div class="vim"><span class="pl"><svg class="i"><use href="#pl"/></svg></span><b>Иргэдийн санал хүсэлтийг шийдвэрлэх системийн танилцуулга</b></div>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- CTA -->
+  <div class="ct"><div class="cta2 rv"><div class="in4">
+    <h2>Санал, хүсэлтээ илгээхэд бэлэн үү?</h2>
+    <p>Хяналтын дугаар шууд очно. Явцыг нь та өөрөө хянана.</p>
+    <a class="btn b-main" href="#"><svg class="i"><use href="#sn"/></svg>Санал хүсэлт өгөх</a>
+  </div></div></div>
+
+  <footer class="foot"><div class="ct">
+    <div class="in5">
+      <a class="brand" href="#"><img src="/assets/img/logo.svg" alt=""/><span><b style="font-size:13px">ЦЭНДИЙН БААТАРХҮҮ</b></span></a>
+      <span class="sp"></span>
+      <span>© 2026 · 51-261467 · Төрийн ордон<a href="#">Нууцлал</a><a href="#">Холбоо барих</a></span>
+    </div>
+    <div class="cred">Фото: Wikimedia Commons, CC BY 2.0</div>
+  </div></footer>
+</main>
+
+<script>
+  // тоолуур
+  document.querySelectorAll('[data-count]').forEach(function (el) {
+    var t = parseInt(el.dataset.count, 10), suf = el.dataset.suf || '', t0 = null;
+    function fin() { el.textContent = t.toLocaleString('en-US') + suf; }
+    function step(ts) { if (!t0) t0 = ts; var p = Math.min((ts - t0) / 1400, 1), e = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(t * e).toLocaleString('en-US') + suf; if (p < 1) requestAnimationFrame(step); else fin(); }
+    requestAnimationFrame(step); setTimeout(fin, 1800);
+  });
+  // reveal
+  var rvs = document.querySelectorAll('.rv');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); }, { threshold: .12 });
+    rvs.forEach(function (el) { io.observe(el); });
+  }
+  setTimeout(function () { rvs.forEach(function (el) { el.classList.add('in'); }); }, 900);
+  // курсор дагасан гэрэл (Linear-маяг)
+  document.querySelectorAll('.bt').forEach(function (c) {
+    c.addEventListener('mousemove', function (e) {
+      var r = c.getBoundingClientRect();
+      c.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      c.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+  });
+  // scroll progress
+  var pr = document.getElementById('prog');
+  addEventListener('scroll', function () {
+    var h = document.documentElement;
+    pr.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+  }, { passive: true });
+</script>
+</body></html>
