@@ -1,73 +1,95 @@
 <!DOCTYPE html>
 <html lang="mn"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Зохион байгуулалт 3 — Хос дэлгэц</title>
+<title>Зохион байгуулалт 3 — Хос дэлгэц (бүрэн)</title>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
   :root { --navy:#0b1f4e; --navy2:#14316f; --blue:#3071E7; --sky:#EAF2FF; --bg:#F5F8FC; --card:#fff;
-    --ink:#0F1E38; --mut:#5A6B85; --line:#E2E9F3; --am:#F59E0B; --gr:#16A34A; --pu:#8B5CF6; }
+    --ink:#0F1E38; --mut:#5A6B85; --line:#E2E9F3; --am:#F59E0B; --gr:#16A34A; --pu:#8B5CF6; --rd:#DC2626; }
+  [data-theme="dark"] { --sky:#152451; --bg:#0A1126; --card:#101A3C; --ink:#E7EEFA; --mut:#93A5C6; --line:#1E2C55; }
   * { box-sizing:border-box; margin:0; }
-  body { background:var(--bg); color:var(--ink); font-family:"Manrope","Segoe UI",sans-serif; font-size:15px; }
+  body { background:var(--bg); color:var(--ink); font-family:"Manrope","Segoe UI",sans-serif; font-size:15px; transition:background .3s; }
   a { text-decoration:none; color:inherit; }
+  button { font-family:inherit; }
   svg.i { width:1em; height:1em; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; vertical-align:-.12em; }
   .dot { display:inline-block; width:6px; height:6px; border-radius:50%; background:currentColor; margin-right:6px; vertical-align:1px; }
 
-  .split { display:grid; grid-template-columns:members 460px 1fr; grid-template-columns:460px 1fr; }
+  .split { display:grid; grid-template-columns:440px 1fr; }
   @media (max-width:960px){ .split { grid-template-columns:1fr; } .left { position:static !important; height:auto !important; } }
 
   /* ==== Зүүн зогсонги самбар ==== */
-  .left { position:sticky; top:0; height:100vh; background:linear-gradient(168deg,#0b1f4e, #14316f 60%, #1c48b0); color:#fff; padding:34px 36px; display:flex; flex-direction:column; overflow:hidden; }
+  .left { position:sticky; top:0; height:100vh; background:linear-gradient(168deg,#0b1f4e, #14316f 60%, #1c48b0); color:#fff; padding:30px 34px; display:flex; flex-direction:column; overflow:hidden; }
   .left::before { content:""; position:absolute; inset:0; background:url('/assets/img/hero-city.jpg') center 40%/cover; opacity:.14; pointer-events:none; }
   .left > * { position:relative; }
-  .lbrand { display:flex; gap:12px; align-items:center; margin-bottom:26px; }
+  .lbrand { display:flex; gap:12px; align-items:center; margin-bottom:22px; }
   .lbrand img { width:44px; height:44px; }
   .lbrand b { display:block; font-size:16px; }
   .lbrand small { font-size:9px; letter-spacing:.1em; color:#9DB4DC; font-weight:700; }
-  .left h1 { font-size:clamp(21px,2.2vw,27px); line-height:1.3; margin-bottom:12px; }
-  .left .sub { color:#C9D8F2; font-size:13px; line-height:1.7; margin-bottom:22px; }
+  .left h1 { font-size:clamp(20px,2.1vw,26px); line-height:1.3; margin-bottom:11px; }
+  .left .sub { color:#C9D8F2; font-size:12.5px; line-height:1.7; margin-bottom:18px; }
   .left .sub strong { color:#fff; }
-  .lbtns { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:26px; }
-  .btn { display:inline-flex; gap:8px; align-items:center; font-weight:800; font-size:13.5px; padding:12px 20px; border-radius:11px; }
+  .lbtns { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
+  .btn { display:inline-flex; gap:8px; align-items:center; font-weight:800; font-size:13px; padding:11px 19px; border-radius:11px; border:0; cursor:pointer; }
   .b-blue { background:var(--blue); color:#fff; box-shadow:0 14px 28px -12px rgba(48,113,231,.7); }
-  .b-ghost { border:1.5px solid rgba(255,255,255,.35); color:#fff; }
-  .lkpi { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-bottom:24px; }
-  .lk { border-radius:11px; padding:11px 14px; color:#fff; }
-  .lk b { display:block; font-size:20px; line-height:1.1; }
-  .lk span { font-size:9.5px; font-weight:700; opacity:.9; }
+  .b-ghost { border:1.5px solid rgba(255,255,255,.35); color:#fff; background:none; }
+  .lkpi { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-bottom:18px; }
+  .lk { border-radius:11px; padding:10px 13px; color:#fff; }
+  .lk b { display:block; font-size:19px; line-height:1.1; }
+  .lk span { font-size:9.5px; font-weight:700; opacity:.92; }
   .lk.k1 { background:rgba(48,113,231,.85); } .lk.k2 { background:rgba(245,158,11,.85); }
   .lk.k3 { background:rgba(22,163,74,.85); } .lk.k4 { background:rgba(139,92,246,.85); }
-  .lsteps { border-top:1px solid rgba(255,255,255,.16); padding-top:18px; display:flex; flex-direction:column; gap:11px; }
-  .ls { display:flex; gap:11px; align-items:flex-start; }
-  .ls .n { flex:none; width:24px; height:24px; border-radius:50%; background:rgba(255,255,255,.16); font-size:10.5px; font-weight:800; display:grid; place-items:center; }
-  .ls b { font-size:12.5px; display:block; }
-  .ls span { font-size:10.5px; color:#C9D8F2; }
-  .lfoot { margin-top:auto; font-size:10px; color:#8FA3C8; padding-top:16px; }
+  .lsteps { border-top:1px solid rgba(255,255,255,.16); padding-top:14px; display:flex; flex-direction:column; gap:9px; }
+  .ls { display:flex; gap:10px; align-items:flex-start; }
+  .ls .n { flex:none; width:23px; height:23px; border-radius:50%; background:rgba(255,255,255,.16); font-size:10px; font-weight:800; display:grid; place-items:center; }
+  .ls b { font-size:12px; display:block; }
+  .ls span { font-size:10px; color:#C9D8F2; }
+  .lfoot { margin-top:auto; padding-top:14px; border-top:1px solid rgba(255,255,255,.16); font-size:10.5px; color:#C9D8F2; }
+  .lfoot .soc { display:flex; gap:8px; margin-bottom:9px; }
+  .lfoot .soc a { width:30px; height:30px; border-radius:9px; background:rgba(255,255,255,.13); display:grid; place-items:center; font-size:12px; color:#fff; }
+  .lfoot .soc a:hover { background:var(--blue); }
+  .lfoot p { margin-bottom:3px; }
+  .lfoot .cp { color:#8FA3C8; font-size:9.5px; margin-top:8px; }
 
-  /* ==== Баруун гүйдэг тал ==== */
-  .right { padding:26px 34px 40px; min-width:0; }
-  .rnav { display:flex; gap:4px; align-items:center; margin-bottom:22px; flex-wrap:wrap; font-size:13px; font-weight:700; color:#3D4F6E; }
-  .rnav a { padding:8px 12px; border-radius:9px; }
-  .rnav a:hover { background:var(--sky); color:var(--blue); }
-  .rnav .tr2 { margin-left:auto; display:flex; gap:8px; background:#fff; border:1.5px solid var(--line); border-radius:11px; padding:5px 5px 5px 13px; align-items:center; }
-  .rnav .tr2 svg { color:var(--mut); }
-  .rnav .tr2 input { border:0; outline:0; font:inherit; font-size:12.5px; width:180px; background:none; }
-  .rnav .tr2 button { background:var(--blue); color:#fff; border:0; border-radius:8px; font:inherit; font-size:12px; font-weight:800; padding:7px 14px; cursor:pointer; }
+  /* ==== Баруун тал ==== */
+  .right { padding:20px 30px 40px; min-width:0; }
 
-  .sec { margin-bottom:30px; }
-  .sh { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+  /* Тод цэс + хэрэгслүүд */
+  .toolbar { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:10px; }
+  .pnav { display:flex; gap:6px; flex-wrap:wrap; margin-right:auto; }
+  .pn { font-size:13px; font-weight:800; padding:9px 16px; border-radius:11px; background:var(--card); border:1.5px solid var(--line); color:var(--ink); cursor:pointer; transition:all .15s; }
+  .pn:hover { border-color:var(--blue); color:var(--blue); }
+  .pn.on { background:var(--blue); border-color:var(--blue); color:#fff; box-shadow:0 10px 20px -10px rgba(48,113,231,.7); }
+  .tools { display:flex; gap:7px; align-items:center; }
+  .tbtn { width:38px; height:38px; border-radius:11px; background:var(--card); border:1.5px solid var(--line); color:var(--ink); display:grid; place-items:center; cursor:pointer; font-size:15px; }
+  .tbtn:hover { border-color:var(--blue); color:var(--blue); }
+  .lang { display:flex; border:1.5px solid var(--line); border-radius:11px; overflow:hidden; background:var(--card); }
+  .lang button { border:0; background:none; font-size:12px; font-weight:800; padding:9px 13px; cursor:pointer; color:var(--mut); }
+  .lang button.on { background:var(--blue); color:#fff; }
+  .srch { display:none; }
+  .srch.open { display:flex; gap:8px; width:100%; background:var(--card); border:1.5px solid var(--blue); border-radius:11px; padding:5px 5px 5px 13px; align-items:center; }
+  .srch input { flex:1; border:0; outline:0; font:inherit; font-size:13px; background:none; color:var(--ink); }
+  .srch button { background:var(--blue); color:#fff; border:0; border-radius:8px; font-size:12px; font-weight:800; padding:8px 15px; cursor:pointer; }
+  .crumb { font-size:11.5px; color:var(--mut); font-weight:700; margin:8px 0 18px; }
+  .crumb b { color:var(--blue); }
+
+  .sec { margin-bottom:28px; }
+  .sh { display:flex; align-items:center; gap:12px; margin-bottom:13px; }
   .sh .bar { width:5px; height:20px; border-radius:3px; background:var(--blue); }
-  .sh h2 { font-size:15.5px; letter-spacing:.04em; text-transform:uppercase; margin-right:auto; }
+  .sh h2 { font-size:15px; letter-spacing:.04em; text-transform:uppercase; margin-right:auto; }
   .sh a { font-size:12.5px; font-weight:800; color:var(--blue); }
   .card { background:var(--card); border:1px solid var(--line); border-radius:15px; }
+  .view { display:none; }
+  .view.on { display:block; }
 
+  /* Нүүр — фийд/асуулга/видео/мэдээ (өмнөх хэвээр) */
   .fgrid { display:grid; grid-template-columns:1fr 1fr; gap:13px; }
   @media (max-width:1240px){ .fgrid { grid-template-columns:1fr; } }
   .fc { overflow:hidden; }
   .fc .im { height:150px; background-size:cover; background-position:center; position:relative; }
   .stc { position:absolute; top:9px; left:9px; font-size:10px; font-weight:800; padding:4px 11px; border-radius:12px; color:#fff; }
-  .stc.done { background:var(--gr); } .stc.new { background:var(--blue); }
+  .stc.done { background:var(--gr); } .stc.new { background:var(--blue); } .stc.prog { background:var(--am); }
   .fc .bd { padding:13px 15px; }
   .fc h3 { font-size:12.5px; text-transform:uppercase; line-height:1.45; margin-bottom:9px; }
-  .meta { display:flex; gap:8px; align-items:center; font-size:10.5px; color:var(--mut); font-weight:700; margin-bottom:10px; }
+  .meta { display:flex; gap:8px; align-items:center; font-size:10.5px; color:var(--mut); font-weight:700; margin-bottom:10px; flex-wrap:wrap; }
   .bdg { background:var(--sky); color:var(--blue); padding:3px 9px; border-radius:6px; font-size:9.5px; font-weight:800; }
   .acts { display:flex; gap:15px; align-items:center; font-size:12px; color:var(--mut); font-weight:700; border-top:1px solid var(--bg); padding-top:9px; }
   .acts .a { display:inline-flex; gap:6px; align-items:center; cursor:pointer; }
@@ -77,19 +99,17 @@
   .cpanel { display:none; border-top:1px dashed var(--line); margin-top:9px; padding-top:9px; }
   .cpanel.open { display:block; }
   .cpanel form { display:flex; gap:7px; }
-  .cpanel textarea { flex:1; border:1px solid var(--line); background:var(--bg); border-radius:8px; font:inherit; font-size:11.5px; padding:7px 10px; resize:none; }
-  .cpanel button { background:var(--blue); color:#fff; border:0; border-radius:7px; font:inherit; font-size:11.5px; font-weight:800; padding:0 13px; cursor:pointer; }
-
+  .cpanel textarea { flex:1; border:1px solid var(--line); background:var(--bg); border-radius:8px; font:inherit; font-size:11.5px; padding:7px 10px; resize:none; color:var(--ink); }
+  .cpanel button { background:var(--blue); color:#fff; border:0; border-radius:7px; font-size:11.5px; font-weight:800; padding:0 13px; cursor:pointer; }
   .top5 { display:flex; gap:10px; overflow-x:auto; padding-bottom:4px; }
-  .t5 { flex:0 0 210px; border-radius:13px; background:#fff; border:1px solid var(--line); padding:12px 14px; display:flex; gap:9px; align-items:flex-start; font-size:12px; font-weight:700; }
+  .t5 { flex:0 0 210px; border-radius:13px; background:var(--card); border:1px solid var(--line); padding:12px 14px; display:flex; gap:9px; align-items:flex-start; font-size:12px; font-weight:700; }
   .t5 .n { flex:none; width:22px; height:22px; border-radius:7px; background:var(--sky); color:var(--blue); font-size:10px; font-weight:800; display:grid; place-items:center; }
   .t5 .lc { margin-left:auto; color:var(--blue); font-size:10.5px; white-space:nowrap; }
-
   .pgrid { display:grid; grid-template-columns:1fr 1fr; gap:13px; }
   @media (max-width:1240px){ .pgrid { grid-template-columns:1fr; } }
   .pc { padding:15px 16px; }
   .pc h3 { font-size:12.5px; text-transform:uppercase; line-height:1.5; margin-bottom:11px; }
-  .popt { display:block; width:100%; text-align:left; font:inherit; font-size:12.5px; font-weight:700; color:#fff; background:var(--blue); border:0; border-radius:8px; padding:10px 13px; margin-bottom:8px; cursor:pointer; }
+  .popt { display:block; width:100%; text-align:left; font-size:12.5px; font-weight:700; color:#fff; background:var(--blue); border:0; border-radius:8px; padding:10px 13px; margin-bottom:8px; cursor:pointer; }
   .popt:hover { background:#2159c4; }
   .prow { display:flex; justify-content:space-between; font-size:12px; color:var(--mut); font-weight:700; padding:6px 0; }
   .prow b { color:var(--ink); }
@@ -98,7 +118,6 @@
   .res .trk i { display:block; height:100%; border-radius:5px; background:var(--blue); }
   .res.my .trk i { background:var(--gr); }
   .mych { color:var(--gr); font-size:10px; font-weight:800; }
-
   .vrow { display:grid; grid-template-columns:1.1fr 1fr; gap:13px; }
   @media (max-width:1240px){ .vrow { grid-template-columns:1fr; } }
   .vmain { min-height:230px; border-radius:15px; background:url('/assets/img/member-hero.jpg') center/cover; position:relative; overflow:hidden; border:1px solid var(--line); }
@@ -106,20 +125,65 @@
   .vmain .pl { position:absolute; left:50%; top:42%; transform:translate(-50%,-50%); width:46px; height:46px; border-radius:50%; background:var(--blue); color:#fff; display:grid; place-items:center; z-index:2; }
   .vmain .t { position:absolute; left:13px; right:13px; bottom:11px; color:#fff; font-size:12.5px; font-weight:700; z-index:2; }
   .vlist { display:flex; flex-direction:column; gap:9px; }
-  .vit { display:flex; gap:10px; align-items:center; background:#fff; border:1px solid var(--line); border-radius:11px; padding:7px; cursor:pointer; }
+  .vit { display:flex; gap:10px; align-items:center; background:var(--card); border:1px solid var(--line); border-radius:11px; padding:7px; cursor:pointer; }
   .vit:hover { border-color:var(--blue); }
   .vit .th { flex:none; width:78px; height:52px; border-radius:8px; background-size:cover; background-position:center; }
   .vit b { font-size:11.5px; line-height:1.45; }
   .vit small { display:block; font-size:9.5px; color:var(--mut); font-weight:700; }
-
   .ngrid { display:grid; grid-template-columns:repeat(3,1fr); gap:13px; }
   @media (max-width:1240px){ .ngrid { grid-template-columns:1fr; } }
   .nc { overflow:hidden; }
   .nc .im { height:96px; background-size:cover; background-position:center; position:relative; }
-  .nc .dt { position:absolute; top:8px; left:8px; background:#fff; border-radius:9px; padding:4px 8px; text-align:center; }
+  .nc .dt { position:absolute; top:8px; left:8px; background:var(--card); border-radius:9px; padding:4px 8px; text-align:center; }
   .nc .dt b { display:block; font-size:14px; color:var(--blue); line-height:1; }
   .nc .dt span { font-size:7.5px; font-weight:800; color:var(--mut); }
   .nc h4 { font-size:11.5px; line-height:1.45; padding:10px 12px; }
+
+  /* Намтар */
+  .bio { display:grid; grid-template-columns:200px 1fr; gap:18px; align-items:start; }
+  @media (max-width:800px){ .bio { grid-template-columns:1fr; } }
+  .bio .ph { border-radius:15px; overflow:hidden; border:1px solid var(--line); }
+  .bio .ph img { width:100%; display:block; }
+  .bio .facts { padding:15px 17px; }
+  .bio .facts .fr { display:flex; justify-content:space-between; gap:12px; font-size:12.5px; padding:8px 0; border-bottom:1px dashed var(--line); }
+  .bio .facts .fr:last-child { border:0; }
+  .bio .facts .fr span { color:var(--mut); font-weight:700; }
+  .bio .facts .fr b { text-align:right; }
+  .tline { padding:15px 17px; }
+  .tl { display:flex; gap:12px; }
+  .tl .rail2 { display:flex; flex-direction:column; align-items:center; }
+  .tl .nd { width:12px; height:12px; border-radius:50%; background:var(--blue); flex:none; margin-top:4px; }
+  .tl .ln { width:2px; flex:1; background:var(--line); min-height:14px; }
+  .tl b { font-size:12.5px; display:block; }
+  .tl span { font-size:11px; color:var(--mut); font-weight:600; display:block; padding-bottom:14px; }
+  .tl .yr { color:var(--blue); font-weight:800; font-size:11px; }
+
+  /* Хууль / Төслүүд / Тайлан */
+  .lrow { display:flex; gap:12px; align-items:flex-start; padding:13px 15px; border-bottom:1px dashed var(--line); }
+  .lrow:last-child { border:0; }
+  .lrow .lic { flex:none; width:38px; height:38px; border-radius:10px; background:var(--sky); color:var(--blue); display:grid; place-items:center; font-size:16px; }
+  .lrow h4 { font-size:12.5px; line-height:1.5; margin-bottom:4px; }
+  .lrow small { font-size:10.5px; color:var(--mut); font-weight:700; }
+  .st2 { margin-left:auto; flex:none; font-size:10px; font-weight:800; padding:4px 11px; border-radius:12px; }
+  .st2.ok { background:rgba(22,163,74,.14); color:var(--gr); }
+  .st2.pr { background:rgba(245,158,11,.16); color:var(--am); }
+  .st2.nw { background:var(--sky); color:var(--blue); }
+  .pjc { padding:14px 16px; }
+  .pjc h4 { font-size:12.5px; line-height:1.45; margin-bottom:8px; text-transform:uppercase; }
+  .pbar { height:8px; border-radius:5px; background:var(--bg); overflow:hidden; margin:8px 0 5px; }
+  .pbar i { display:block; height:100%; border-radius:5px; background:var(--gr); }
+  .pjc .pm { display:flex; justify-content:space-between; font-size:10.5px; color:var(--mut); font-weight:700; }
+
+  /* Холбоо барих */
+  .cgrid { display:grid; grid-template-columns:1fr 1fr; gap:13px; align-items:start; }
+  @media (max-width:1000px){ .cgrid { grid-template-columns:1fr; } }
+  .form { padding:16px 17px; }
+  .form label { display:block; font-size:11px; font-weight:800; color:var(--mut); margin:10px 0 5px; text-transform:uppercase; letter-spacing:.05em; }
+  .form input, .form textarea, .form select { width:100%; border:1.5px solid var(--line); background:var(--bg); border-radius:10px; font:inherit; font-size:13px; padding:10px 13px; color:var(--ink); }
+  .form input:focus, .form textarea:focus { outline:none; border-color:var(--blue); }
+  .cinfo { padding:16px 17px; }
+  .cinfo .cr { display:flex; gap:11px; align-items:flex-start; padding:9px 0; font-size:12.5px; }
+  .cinfo .cr svg { color:var(--blue); flex:none; margin-top:2px; }
 </style></head>
 <body>
 <svg width="0" height="0" style="position:absolute"><defs>
@@ -130,131 +194,330 @@
   <g id="pl"><path d="M8 5v14l11-7z"/></g>
   <g id="lk"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></g>
   <g id="cm"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></g>
+  <g id="sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></g>
+  <g id="mn"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></g>
+  <g id="dc"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6"/></g>
+  <g id="lw"><path d="M12 3v18M5 7h14M7 7l-3 6a3 3 0 0 0 6 0zm10 0-3 6a3 3 0 0 0 6 0z"/></g>
+  <g id="mp"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></g>
+  <g id="ph"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"/></g>
+  <g id="em"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 6 10 7 10-7"/></g>
+  <g id="fb2"><path d="M13 22v-8h3l1-4h-4V7c0-1 .3-2 2-2h2V1.5C18.5 1.4 17.3 1 16 1c-3 0-5 2-5 5v3H7v4h4v8h2z"/></g>
+  <g id="dl"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></g>
 </defs></svg>
 
 <div class="split">
-  <!-- Зүүн зогсонги -->
+  <!-- ЗҮҮН ЗОГСОНГИ САМБАР -->
   <aside class="left">
-    <div class="lbrand"><img src="/assets/img/logo.svg" alt=""/><span><b>Цэндийн БААТАРХҮҮ</b><small>МОНГОЛ УЛСЫН ИХ ХУРЛЫН ГИШҮҮН</small></span></div>
-    <h1>ИРГЭДИЙН САНАЛ ХҮСЭЛТИЙГ ШИЙДВЭРЛЭХ СИСТЕМ</h1>
-    <p class="sub">Иргэдийн санал, гомдол, өргөдөл <strong>шийдвэр гаргах түвшинд хүрч, ил тод хянагддаг</strong> байх ёстой. Байршил, үе шат, хэрэгжилтийн явц — бүгд нээлттэй.</p>
+    <div class="lbrand"><img src="/assets/img/logo.svg" alt=""/><span><b data-en="Tsendiin BAATARKHUU">Цэндийн БААТАРХҮҮ</b><small data-en="MEMBER OF THE STATE GREAT KHURAL">МОНГОЛ УЛСЫН ИХ ХУРЛЫН ГИШҮҮН</small></span></div>
+    <h1 data-en="CITIZEN FEEDBACK RESOLUTION SYSTEM">ИРГЭДИЙН САНАЛ ХҮСЭЛТИЙГ ШИЙДВЭРЛЭХ СИСТЕМ</h1>
+    <p class="sub" data-en="Citizen requests must reach the decision-making level and be tracked transparently — location, stage and progress are all open.">Иргэдийн санал, гомдол, өргөдөл <strong>шийдвэр гаргах түвшинд хүрч, ил тод хянагддаг</strong> байх ёстой. Байршил, үе шат, хэрэгжилтийн явц — бүгд нээлттэй.</p>
     <div class="lbtns">
-      <a class="btn b-blue" href="#"><svg class="i"><use href="#sn"/></svg>Санал илгээх</a>
-      <a class="btn b-ghost" href="#"><svg class="i"><use href="#sr"/></svg>Явц шалгах</a>
+      <button class="btn b-blue"><svg class="i"><use href="#sn"/></svg><span data-en="Submit feedback">Санал илгээх</span></button>
+      <button class="btn b-ghost"><svg class="i"><use href="#sr"/></svg><span data-en="Track status">Явц шалгах</span></button>
     </div>
     <div class="lkpi">
-      <div class="lk k1"><b>1,248</b><span>Нийт хүсэлт</span></div>
-      <div class="lk k2"><b>856</b><span>Байгууллагад илгээсэн</span></div>
-      <div class="lk k3"><b>392</b><span>Шийдвэрлэгдсэн</span></div>
-      <div class="lk k4"><b>68%</b><span>Шийдвэрлэлтийн хувь</span></div>
+      <div class="lk k1"><b>1,248</b><span data-en="Total requests">Нийт хүсэлт</span></div>
+      <div class="lk k2"><b>856</b><span data-en="Forwarded to agencies">Байгууллагад илгээсэн</span></div>
+      <div class="lk k3"><b>392</b><span data-en="Resolved">Шийдвэрлэгдсэн</span></div>
+      <div class="lk k4"><b>68%</b><span data-en="Resolution rate">Шийдвэрлэлтийн хувь</span></div>
     </div>
     <div class="lsteps">
-      <div class="ls"><span class="n">1</span><span><b>Санал хүсэлт илгээх</b><span>Зураг, бичлэг, байршилтай нь</span></span></div>
-      <div class="ls"><span class="n">2</span><span><b>Бүртгэж дугаар олгох</b><span>Хяналтын дугаар шууд очно</span></span></div>
-      <div class="ls"><span class="n">3</span><span><b>Байгууллагад уламжлах</b><span>Албан бичгээр хүргүүлнэ</span></span></div>
-      <div class="ls"><span class="n">4</span><span><b>Шийдвэрлэлтийн хяналт</b><span>Явц, үр дүн ил тод</span></span></div>
+      <div class="ls"><span class="n">1</span><span><b data-en="Submit a request">Санал хүсэлт илгээх</b><span data-en="With photo, video and location">Зураг, бичлэг, байршилтай нь</span></span></div>
+      <div class="ls"><span class="n">2</span><span><b data-en="Registered with tracking ID">Бүртгэж дугаар олгох</b><span data-en="You get a tracking number instantly">Хяналтын дугаар шууд очно</span></span></div>
+      <div class="ls"><span class="n">3</span><span><b data-en="Forwarded to the agency">Байгууллагад уламжлах</b><span data-en="Delivered as an official letter">Албан бичгээр хүргүүлнэ</span></span></div>
+      <div class="ls"><span class="n">4</span><span><b data-en="Resolution oversight">Шийдвэрлэлтийн хяналт</b><span data-en="Progress and results are public">Явц, үр дүн ил тод</span></span></div>
     </div>
-    <div class="lfoot">© 2026 Ц.Баатархүү · Хотын зураг: CC BY 2.0, Wikimedia Commons</div>
+    <div class="lfoot">
+      <div class="soc"><a href="#"><svg class="i" style="fill:currentColor;stroke:none"><use href="#fb2"/></svg></a><a href="#">𝕏</a></div>
+      <p><svg class="i"><use href="#mp"/></svg> <span data-en="Ulaanbaatar, Sukhbaatar district, Government Palace">Улаанбаатар, Сүхбаатар дүүрэг, Төрийн ордон</span></p>
+      <p><svg class="i"><use href="#ph"/></svg> 261467 · <svg class="i"><use href="#em"/></svg> baatarkhuu@gmail.com</p>
+      <p class="cp">© 2026 Ц.Баатархүү · <span data-en="City photo">Хотын зураг</span>: CC BY 2.0, Wikimedia Commons</p>
+    </div>
   </aside>
 
-  <!-- Баруун гүйдэг -->
+  <!-- БАРУУН ТАЛ -->
   <main class="right">
-    <div class="rnav">
-      <a href="#">Намтар</a><a href="#">Хууль</a><a href="#">Төслүүд</a><a href="#">Мэдээ</a><a href="#">Видео</a><a href="#">Тайлан</a>
-      <span class="tr2"><svg class="i"><use href="#sr"/></svg><input placeholder="AT-2026-000001"/><button>Шалгах</button></span>
+    <div class="toolbar">
+      <nav class="pnav">
+        <button class="pn on" data-v="home" data-en="Home">Нүүр</button>
+        <button class="pn" data-v="namtar" data-en="Biography">Намтар</button>
+        <button class="pn" data-v="huuli" data-en="Laws">Хууль</button>
+        <button class="pn" data-v="tusul" data-en="Projects">Төслүүд</button>
+        <button class="pn" data-v="medee" data-en="News">Мэдээ</button>
+        <button class="pn" data-v="video" data-en="Videos">Видео</button>
+        <button class="pn" data-v="tailan" data-en="Reports">Тайлан</button>
+        <button class="pn" data-v="holboo" data-en="Contact">Холбоо барих</button>
+      </nav>
+      <div class="tools">
+        <button class="tbtn" id="sbtn" title="Хайх"><svg class="i"><use href="#sr"/></svg></button>
+        <span class="lang"><button class="on" id="l-mn">МН</button><button id="l-en">EN</button></span>
+        <button class="tbtn" id="thm" title="Гэрэл/харанхуй"><svg class="i" id="thm-sun"><use href="#sun"/></svg><svg class="i" id="thm-moon" style="display:none"><use href="#mn"/></svg></button>
+      </div>
+      <div class="srch" id="srch"><svg class="i"><use href="#sr"/></svg><input placeholder="Сайтаас хайх… (жишээ: гэрэлтүүлэг)" data-en-ph="Search the site… (e.g. lighting)"/><button data-en="Search">Хайх</button></div>
+    </div>
+    <div class="crumb" id="crumb"><b data-en="Home">Нүүр</b> — <span data-en="all features in one view">бүх хэрэгсэл нэг дор</span></div>
+
+    <!-- ================= НҮҮР ================= -->
+    <div class="view on" data-view="home">
+      <section class="sec">
+        <div class="sh"><span class="bar"></span><h2 data-en="Citizens' published requests">Иргэдийн нийтэлсэн саналууд</h2><a href="#" data-en="All →">Бүгд →</a></div>
+        <div class="fgrid">
+          <article class="card fc">
+            <div class="im" style="background-image:url('/assets/img/orh-bur-5-mod.jpg')"><span class="stc done"><span class="dot"></span><span data-en="Resolved">Шийдвэрлэгдсэн</span></span></div>
+            <div class="bd">
+              <h3 data-en="Proposal to reduce traffic congestion">Замын түгжрэлийг бууруулах санал</h3>
+              <div class="meta"><span data-en="Citizen · 10 days ago">Иргэн · 10 хоногийн өмнө</span> <span class="bdg" data-en="Roads">Зам, нүх, эвдрэл</span></div>
+              <div class="acts">
+                <span class="a"><svg class="i"><use href="#lk"/></svg><span data-en="Like">Лайк</span> <b>23</b></span>
+                <span class="a jc"><svg class="i"><use href="#cm"/></svg><span data-en="Comment">Сэтгэгдэл</span> <b>7</b></span>
+                <a class="snd" href="#" data-en="Submit">Санал илгээх</a>
+              </div>
+              <div class="cpanel"><form onsubmit="return false"><textarea rows="1" placeholder="Сэтгэгдлээ бичээрэй…"></textarea><button data-en="Send">Илгээх</button></form></div>
+            </div>
+          </article>
+          <article class="card fc">
+            <div class="im" style="background-image:url('/assets/img/ub-square.jpg')"><span class="stc new"><span class="dot"></span><span data-en="Received">Хүлээн авсан</span></span></div>
+            <div class="bd">
+              <h3 data-en="Request to renovate pedestrian walkways">Явган хүний зам шинэчлэх хүсэлт</h3>
+              <div class="meta"><span data-en="Citizen · 12 days ago">Иргэн · 12 хоногийн өмнө</span> <span class="bdg" data-en="Walkways">Явган хүний зам</span></div>
+              <div class="acts">
+                <span class="a"><svg class="i"><use href="#lk"/></svg><span data-en="Like">Лайк</span> <b>8</b></span>
+                <span class="a jc"><svg class="i"><use href="#cm"/></svg><span data-en="Comment">Сэтгэгдэл</span> <b>2</b></span>
+                <a class="snd" href="#" data-en="Submit">Санал илгээх</a>
+              </div>
+              <div class="cpanel"><form onsubmit="return false"><textarea rows="1" placeholder="Сэтгэгдлээ бичээрэй…"></textarea><button data-en="Send">Илгээх</button></form></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="sec">
+        <div class="sh"><span class="bar"></span><h2 data-en="Most supported">Хамгийн их дэмжигдсэн</h2></div>
+        <div class="top5">
+          <div class="t5"><span class="n">1</span><span data-en="Reduce traffic congestion">Замын түгжрэл бууруулах</span><span class="lc">23</span></div>
+          <div class="t5"><span class="n">2</span><span data-en="Add street lighting">Гэрэлтүүлэг нэмэгдүүлэх</span><span class="lc">17</span></div>
+          <div class="t5"><span class="n">3</span><span data-en="Renovate walkways">Явган хүний зам шинэчлэх</span><span class="lc">8</span></div>
+          <div class="t5"><span class="n">4</span><span data-en="Improve bus stops">Автобусны буудал тохижуулах</span><span class="lc">6</span></div>
+          <div class="t5"><span class="n">5</span><span data-en="Add waste points">Хогийн цэг нэмүүлэх</span><span class="lc">4</span></div>
+        </div>
+      </section>
+
+      <section class="sec">
+        <div class="sh"><span class="bar"></span><h2 data-en="Public polls">Нийтийн санал асуулга</h2></div>
+        <div class="pgrid">
+          <article class="card pc">
+            <h3 data-en="Do you support starting the university semester on September 15?">Их дээд сургуулиудын хичээлийг 9 сарын 15-нд эхлүүлэхийг дэмжиж байна уу?</h3>
+            <div class="res my"><div class="rt"><span><span data-en="Yes">Тийм</span> <span class="mych" data-en="✓ Your choice">✓ Таны сонголт</span></span><b>62%</b></div><div class="trk"><i style="width:62%"></i></div></div>
+            <div class="res"><div class="rt"><span data-en="No">Үгүй</span><b>26%</b></div><div class="trk"><i style="width:26%"></i></div></div>
+            <div class="res"><div class="rt"><span data-en="Not sure">Мэдэхгүй</span><b>12%</b></div><div class="trk"><i style="width:12%"></i></div></div>
+            <div class="prow"><span data-en="Until 2026/09/01">Хугацаа — 2026/09/01 хүртэл</span><b><span data-en="58 votes">58 санал</span></b></div>
+          </article>
+          <article class="card pc">
+            <h3 data-en="Which format is best for the report meeting?">Тайлангийн уулзалтыг аль хэлбэрээр зохион байгуулбал тохиромжтой вэ?</h3>
+            <button class="popt" data-en="In person">Танхимаар</button>
+            <button class="popt" data-en="Online">Цахимаар</button>
+            <button class="popt" data-en="Hybrid">Хосолсон хэлбэрээр</button>
+            <div class="prow"><span data-en="No deadline">Хугацаагүй</span><b><span data-en="0 votes">0 санал</span></b></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="sec">
+        <div class="sh"><span class="bar"></span><h2 data-en="Video news">Видео мэдээ</h2><a href="#" data-en="All →">Бүгд →</a></div>
+        <div class="vrow">
+          <div class="vmain"><span class="pl"><svg class="i"><use href="#pl"/></svg></span><span class="t" data-en="Introduction to the citizen feedback resolution system">Иргэдийн санал хүсэлтийг шийдвэрлэх системийн танилцуулга</span></div>
+          <div class="vlist">
+            <div class="vit"><span class="th" style="background-image:url('/assets/img/parliament-bg.jpg')"></span><span><b data-en="Ad hoc committee briefing">Түр хорооны мэдээлэл</b><small>2026/06/19</small></span></div>
+            <div class="vit"><span class="th" style="background-image:url('/assets/img/greeting.jpg')"></span><span><b data-en="Meeting with citizens — recap">Иргэдтэй хийсэн уулзалтын тойм</b><small>2026/06/12</small></span></div>
+            <div class="vit"><span class="th" style="background-image:url('/assets/img/orh-bur-5-mod.jpg')"></span><span><b data-en="Green area project progress">Ногоон байгууламжийн төслийн явц</b><small>2026/06/10</small></span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec">
+        <div class="sh"><span class="bar"></span><h2 data-en="News & events">Мэдээ, арга хэмжээ</h2><a href="#" data-en="All →">Бүгд →</a></div>
+        <div class="ngrid">
+          <article class="card nc"><span class="im" style="background-image:url('/assets/img/parliament-bg.jpg')"><span class="dt"><b>21</b><span data-en="JUL">7-Р САР</span></span></span><h4 data-en="Open meeting with citizens — 10:00, Chingeltei">Иргэдтэй нээлттэй уулзалт — 10:00, Чингэлтэй</h4></article>
+          <article class="card nc"><span class="im" style="background-image:url('/assets/img/greeting.jpg')"><span class="dt"><b>19</b><span data-en="JUL">7-Р САР</span></span></span><h4 data-en="Public project discussion held">Төсөл хөтөлбөрийн хэлэлцүүлэг боллоо</h4></article>
+          <article class="card nc"><span class="im" style="background-image:url('/assets/img/ub-square.jpg')"><span class="dt"><b>14</b><span data-en="JUL">7-Р САР</span></span></span><h4 data-en="School zone road safety improvements">Сургуулийн орчмын замын аюулгүй байдал</h4></article>
+        </div>
+      </section>
     </div>
 
-    <section class="sec">
-      <div class="sh"><span class="bar"></span><h2>Иргэдийн нийтэлсэн саналууд</h2><a href="#">Бүгд →</a></div>
-      <div class="fgrid">
-        <article class="card fc">
-          <div class="im" style="background-image:url('/assets/img/orh-bur-5-mod.jpg')"><span class="stc done"><span class="dot"></span>Шийдвэрлэгдсэн</span></div>
-          <div class="bd">
-            <h3>Замын түгжрэлийг бууруулах санал</h3>
-            <div class="meta">Иргэн · 10 хоногийн өмнө <span class="bdg">Зам, нүх, эвдрэл</span></div>
-            <div class="acts">
-              <span class="a"><svg class="i"><use href="#lk"/></svg>Лайк <b>23</b></span>
-              <span class="a jc"><svg class="i"><use href="#cm"/></svg>Сэтгэгдэл <b>7</b></span>
-              <a class="snd" href="#">Санал илгээх</a>
-            </div>
-            <div class="cpanel"><form onsubmit="return false"><textarea rows="1" placeholder="Сэтгэгдлээ бичээрэй…"></textarea><button>Илгээх</button></form></div>
+    <!-- ================= НАМТАР ================= -->
+    <div class="view" data-view="namtar">
+      <section class="sec">
+        <div class="sh"><span class="bar"></span><h2 data-en="Biography">Намтар</h2></div>
+        <div class="bio">
+          <div class="ph"><img src="/assets/img/social/ig-member.jpg" alt="Ц.Баатархүү"/></div>
+          <div class="card facts">
+            <div class="fr"><span data-en="Full name">Овог нэр</span><b>Цэндийн Баатархүү</b></div>
+            <div class="fr"><span data-en="Born">Төрсөн</span><b data-en="1981, Khentii province">1981 он, Хэнтий аймаг</b></div>
+            <div class="fr"><span data-en="Position">Албан тушаал</span><b data-en="Member of the State Great Khural">УИХ-ын гишүүн</b></div>
+            <div class="fr"><span data-en="Constituency">Тойрог</span><b data-en="10th — Chingeltei, Sukhbaatar districts">10-р тойрог — Чингэлтэй, Сүхбаатар</b></div>
+            <div class="fr"><span data-en="Party">Нам</span><b data-en="Democratic Party">Ардчилсан нам</b></div>
           </div>
-        </article>
-        <article class="card fc">
-          <div class="im" style="background-image:url('/assets/img/ub-square.jpg')"><span class="stc new"><span class="dot"></span>Хүлээн авсан</span></div>
-          <div class="bd">
-            <h3>Явган хүний зам шинэчлэх хүсэлт</h3>
-            <div class="meta">Иргэн · 12 хоногийн өмнө <span class="bdg">Явган хүний зам</span></div>
-            <div class="acts">
-              <span class="a"><svg class="i"><use href="#lk"/></svg>Лайк <b>8</b></span>
-              <span class="a jc"><svg class="i"><use href="#cm"/></svg>Сэтгэгдэл <b>2</b></span>
-              <a class="snd" href="#">Санал илгээх</a>
-            </div>
-            <div class="cpanel"><form onsubmit="return false"><textarea rows="1" placeholder="Сэтгэгдлээ бичээрэй…"></textarea><button>Илгээх</button></form></div>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="sec">
-      <div class="sh"><span class="bar"></span><h2>Хамгийн их дэмжигдсэн</h2></div>
-      <div class="top5">
-        <div class="t5"><span class="n">1</span>Замын түгжрэл бууруулах<span class="lc">23</span></div>
-        <div class="t5"><span class="n">2</span>Гэрэлтүүлэг нэмэгдүүлэх<span class="lc">17</span></div>
-        <div class="t5"><span class="n">3</span>Явган хүний зам шинэчлэх<span class="lc">8</span></div>
-        <div class="t5"><span class="n">4</span>Автобусны буудал тохижуулах<span class="lc">6</span></div>
-        <div class="t5"><span class="n">5</span>Хогийн цэг нэмүүлэх<span class="lc">4</span></div>
-      </div>
-    </section>
-
-    <section class="sec">
-      <div class="sh"><span class="bar"></span><h2>Нийтийн санал асуулга</h2></div>
-      <div class="pgrid">
-        <article class="card pc">
-          <h3>Их дээд сургуулиудын хичээлийг 9 сарын 15-нд эхлүүлэхийг дэмжиж байна уу?</h3>
-          <div class="res my"><div class="rt"><span>Тийм <span class="mych">✓ Таны сонголт</span></span><b>62%</b></div><div class="trk"><i style="width:62%"></i></div></div>
-          <div class="res"><div class="rt"><span>Үгүй</span><b>26%</b></div><div class="trk"><i style="width:26%"></i></div></div>
-          <div class="res"><div class="rt"><span>Мэдэхгүй</span><b>12%</b></div><div class="trk"><i style="width:12%"></i></div></div>
-          <div class="prow"><span>Хугацаа — 2026/09/01 хүртэл</span><b>58 санал</b></div>
-        </article>
-        <article class="card pc">
-          <h3>Тайлангийн уулзалтыг аль хэлбэрээр зохион байгуулбал тохиромжтой вэ?</h3>
-          <button class="popt">Танхимаар</button>
-          <button class="popt">Цахимаар</button>
-          <button class="popt">Хосолсон хэлбэрээр</button>
-          <div class="prow"><span>Хугацаагүй</span><b>0 санал</b></div>
-        </article>
-      </div>
-    </section>
-
-    <section class="sec">
-      <div class="sh"><span class="bar"></span><h2>Видео мэдээ</h2><a href="#">Бүгд →</a></div>
-      <div class="vrow">
-        <div class="vmain"><span class="pl"><svg class="i"><use href="#pl"/></svg></span><span class="t">Иргэдийн санал хүсэлтийг шийдвэрлэх системийн танилцуулга</span></div>
-        <div class="vlist">
-          <div class="vit"><span class="th" style="background-image:url('/assets/img/parliament-bg.jpg')"></span><span><b>Түр хорооны мэдээлэл</b><small>2026/06/19</small></span></div>
-          <div class="vit"><span class="th" style="background-image:url('/assets/img/greeting.jpg')"></span><span><b>Иргэдтэй хийсэн уулзалтын тойм</b><small>2026/06/12</small></span></div>
-          <div class="vit"><span class="th" style="background-image:url('/assets/img/orh-bur-5-mod.jpg')"></span><span><b>Ногоон байгууламжийн төслийн явц</b><small>2026/06/10</small></span></div>
         </div>
-      </div>
-    </section>
+      </section>
+      <section class="sec">
+        <div class="sh"><span class="bar"></span><h2 data-en="Career timeline">Ажлын намтар</h2></div>
+        <div class="card tline">
+          <div class="tl"><span class="rail2"><span class="nd"></span><span class="ln"></span></span><span><span class="yr">2024</span><b data-en="Minister of Digital Development, Innovation and Communications">Цахим хөгжил, инновац, харилцаа холбооны сайд</b><span data-en="Appointed to the Government of Mongolia">Монгол Улсын Засгийн газарт томилогдов</span></span></div>
+          <div class="tl"><span class="rail2"><span class="nd"></span><span class="ln"></span></span><span><span class="yr">2024</span><b data-en="Elected Member of the State Great Khural">УИХ-ын гишүүнээр сонгогдов</b><span data-en="10th constituency">Сонгуулийн 10-р тойрог</span></span></div>
+          <div class="tl"><span class="rail2"><span class="nd"></span></span><span><span class="yr">2020</span><b data-en="Representative, Citizens' Council of the Capital">Нийслэлийн ИТХ-ын төлөөлөгч</b><span data-en="Public service in Ulaanbaatar">Улаанбаатар хотод төрийн алба</span></span></div>
+        </div>
+      </section>
+    </div>
 
-    <section class="sec">
-      <div class="sh"><span class="bar"></span><h2>Мэдээ, арга хэмжээ</h2><a href="#">Бүгд →</a></div>
-      <div class="ngrid">
-        <article class="card nc"><span class="im" style="background-image:url('/assets/img/parliament-bg.jpg')"><span class="dt"><b>21</b><span>7-Р САР</span></span></span><h4>Иргэдтэй нээлттэй уулзалт — 10:00, Чингэлтэй</h4></article>
-        <article class="card nc"><span class="im" style="background-image:url('/assets/img/greeting.jpg')"><span class="dt"><b>19</b><span>7-Р САР</span></span></span><h4>Төсөл хөтөлбөрийн хэлэлцүүлэг боллоо</h4></article>
-        <article class="card nc"><span class="im" style="background-image:url('/assets/img/ub-square.jpg')"><span class="dt"><b>14</b><span>7-Р САР</span></span></span><h4>Сургуулийн орчмын замын аюулгүй байдал</h4></article>
-      </div>
-    </section>
+    <!-- ================= ХУУЛЬ ================= -->
+    <div class="view" data-view="huuli">
+      <section class="sec">
+        <div class="sh"><span class="bar"></span><h2 data-en="Law initiatives">Хууль санаачилга</h2></div>
+        <div class="card">
+          <div class="lrow"><span class="lic"><svg class="i"><use href="#lw"/></svg></span><span><h4 data-en="Resolution to establish an ad hoc oversight committee on capital city land allocation">Нийслэлд олгосон газрыг хянан шалгах түр хороо байгуулах тогтоол</h4><small data-en="Initiator · 2026">Санаачлагч · 2026</small></span><span class="st2 pr" data-en="In discussion">Хэлэлцүүлгийн шатанд</span></div>
+          <div class="lrow"><span class="lic"><svg class="i"><use href="#lw"/></svg></span><span><h4 data-en="Amendments to the Law on Digital Development">Цахим хөгжлийн тухай хуулийн нэмэлт өөрчлөлт</h4><small data-en="Co-initiator · 2025">Хамтран санаачлагч · 2025</small></span><span class="st2 ok" data-en="Passed">Батлагдсан</span></div>
+          <div class="lrow"><span class="lic"><svg class="i"><use href="#lw"/></svg></span><span><h4 data-en="Draft law on citizen participation">Иргэдийн оролцооны тухай хуулийн төсөл</h4><small data-en="Working group member · 2026">Ажлын хэсгийн гишүүн · 2026</small></span><span class="st2 nw" data-en="Submitted">Өргөн барьсан</span></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ================= ТӨСЛҮҮД ================= -->
+    <div class="view" data-view="tusul">
+      <section class="sec">
+        <div class="sh"><span class="bar"></span><h2 data-en="Projects">Төслүүд</h2></div>
+        <div class="pgrid">
+          <article class="card pjc">
+            <h4 data-en="Ger district infrastructure improvement">Гэр хорооллын дэд бүтцийг сайжруулах</h4>
+            <div class="meta"><span class="bdg" data-en="Chingeltei">Чингэлтэй</span><span data-en="2026–2027">2026–2027</span></div>
+            <div class="pbar"><i style="width:45%"></i></div>
+            <div class="pm"><span data-en="Progress">Явц</span><b>45%</b></div>
+          </article>
+          <article class="card pjc">
+            <h4 data-en="School zone road safety">Сургуулийн орчмын замын аюулгүй байдал</h4>
+            <div class="meta"><span class="bdg" data-en="Sukhbaatar">Сүхбаатар</span><span>2026</span></div>
+            <div class="pbar"><i style="width:70%"></i></div>
+            <div class="pm"><span data-en="Progress">Явц</span><b>70%</b></div>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <!-- ================= МЭДЭЭ ================= -->
+    <div class="view" data-view="medee">
+      <section class="sec">
+        <div class="sh"><span class="bar"></span><h2 data-en="News">Мэдээ</h2></div>
+        <div class="ngrid">
+          <article class="card nc"><span class="im" style="background-image:url('/assets/img/parliament-bg.jpg')"><span class="dt"><b>07</b><span data-en="APR">4-Р САР</span></span></span><h4 data-en="Initiated an oversight committee on capital land allocation">Газрын асуудлаар хянан шалгах түр хороо байгуулахыг санаачиллаа</h4></article>
+          <article class="card nc"><span class="im" style="background-image:url('/assets/img/greeting.jpg')"><span class="dt"><b>17</b><span data-en="JUL">7-Р САР</span></span></span><h4 data-en="Appointed Minister of Digital Development">Цахим хөгжлийн сайдаар томилогдов</h4></article>
+          <article class="card nc"><span class="im" style="background-image:url('/assets/img/ub-square.jpg')"><span class="dt"><b>21</b><span data-en="JUL">7-Р САР</span></span></span><h4 data-en="Open meeting with citizens announced">Иргэдтэй нээлттэй уулзалт зарлагдлаа</h4></article>
+        </div>
+      </section>
+    </div>
+
+    <!-- ================= ВИДЕО ================= -->
+    <div class="view" data-view="video">
+      <section class="sec">
+        <div class="sh"><span class="bar"></span><h2 data-en="Videos">Видео</h2></div>
+        <div class="vrow">
+          <div class="vmain"><span class="pl"><svg class="i"><use href="#pl"/></svg></span><span class="t" data-en="Featured: system introduction">Онцлох: системийн танилцуулга</span></div>
+          <div class="vlist">
+            <div class="vit"><span class="th" style="background-image:url('/assets/img/parliament-bg.jpg')"></span><span><b data-en="Ad hoc committee briefing">Түр хорооны мэдээлэл</b><small>2026/06/19</small></span></div>
+            <div class="vit"><span class="th" style="background-image:url('/assets/img/greeting.jpg')"></span><span><b data-en="Meeting recap">Уулзалтын тойм</b><small>2026/06/12</small></span></div>
+            <div class="vit"><span class="th" style="background-image:url('/assets/img/orh-bur-5-mod.jpg')"></span><span><b data-en="Project progress">Төслийн явц</b><small>2026/06/10</small></span></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ================= ТАЙЛАН ================= -->
+    <div class="view" data-view="tailan">
+      <section class="sec">
+        <div class="sh"><span class="bar"></span><h2 data-en="Reports">Тайлан</h2></div>
+        <div class="card">
+          <div class="lrow"><span class="lic"><svg class="i"><use href="#dc"/></svg></span><span><h4 data-en="2026 first-half activity report">2026 оны эхний хагасын үйл ажиллагааны тайлан</h4><small>PDF · 2026/07</small></span><span class="st2 nw"><svg class="i"><use href="#dl"/></svg> <span data-en="Download">Татах</span></span></div>
+          <div class="lrow"><span class="lic"><svg class="i"><use href="#dc"/></svg></span><span><h4 data-en="2025 annual report to voters">2025 оны сонгогчдод хүрсэн ажлын тайлан</h4><small>PDF · 2026/01</small></span><span class="st2 nw"><svg class="i"><use href="#dl"/></svg> <span data-en="Download">Татах</span></span></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ================= ХОЛБОО БАРИХ ================= -->
+    <div class="view" data-view="holboo">
+      <section class="sec">
+        <div class="sh"><span class="bar"></span><h2 data-en="Contact & feedback">Холбоо барих, санал илгээх</h2></div>
+        <div class="cgrid">
+          <div class="card form">
+            <label data-en="Subject">Асуудлын төрөл</label>
+            <select><option data-en="Roads">Зам, нүх, эвдрэл</option><option data-en="Lighting">Гэрэлтүүлэг</option><option data-en="Walkways">Явган хүний зам</option></select>
+            <label data-en="Your request">Санал хүсэлт</label>
+            <textarea rows="4" placeholder="Асуудлаа дэлгэрэнгүй бичээрэй…"></textarea>
+            <label data-en="Location">Байршил</label>
+            <input placeholder="Дүүрэг, хороо, байршил…"/>
+            <div style="margin-top:14px"><button class="btn b-blue"><svg class="i"><use href="#sn"/></svg><span data-en="Submit feedback">Санал илгээх</span></button></div>
+          </div>
+          <div>
+            <div class="card cinfo" style="margin-bottom:13px">
+              <div class="cr"><svg class="i"><use href="#mp"/></svg><span data-en="Ulaanbaatar, Sukhbaatar district, Government Palace">Улаанбаатар хот, Сүхбаатар дүүрэг, Төрийн ордон</span></div>
+              <div class="cr"><svg class="i"><use href="#ph"/></svg>261467</div>
+              <div class="cr"><svg class="i"><use href="#em"/></svg>baatarkhuu@gmail.com</div>
+            </div>
+            <div class="card pc">
+              <h3 data-en="Track your request">Явц шалгах</h3>
+              <div style="display:flex;gap:8px"><input style="flex:1;border:1.5px solid var(--line);background:var(--bg);border-radius:10px;font:inherit;font-size:13px;padding:10px 13px;color:var(--ink)" placeholder="AT-2026-000001"/><button class="btn b-blue" style="padding:10px 18px" data-en="Check">Шалгах</button></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   </main>
 </div>
+
 <script>
+  // Хуудас солих
+  var CRUMB = { home:["Нүүр","Home"], namtar:["Намтар","Biography"], huuli:["Хууль","Laws"], tusul:["Төслүүд","Projects"], medee:["Мэдээ","News"], video:["Видео","Videos"], tailan:["Тайлан","Reports"], holboo:["Холбоо барих","Contact"] };
+  var lang = "mn";
+  document.querySelectorAll('.pn').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('.pn').forEach(function (x) { x.classList.toggle('on', x === b); });
+      document.querySelectorAll('.view').forEach(function (v) { v.classList.toggle('on', v.dataset.view === b.dataset.v); });
+      var c = CRUMB[b.dataset.v];
+      document.getElementById('crumb').innerHTML = '<b>' + (lang === 'mn' ? c[0] : c[1]) + '</b>';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+  // Сэтгэгдэл нээх
   document.querySelectorAll('.jc').forEach(function (r) {
     r.addEventListener('click', function () {
       var p = r.closest('.bd').querySelector('.cpanel');
       if (p) p.classList.toggle('open');
     });
   });
+  // Хайлт
+  document.getElementById('sbtn').addEventListener('click', function () {
+    var s = document.getElementById('srch');
+    s.classList.toggle('open');
+    if (s.classList.contains('open')) s.querySelector('input').focus();
+  });
+  // Гэрэл / харанхуй
+  document.getElementById('thm').addEventListener('click', function () {
+    var el = document.documentElement;
+    var dark = el.getAttribute('data-theme') !== 'dark';
+    el.setAttribute('data-theme', dark ? 'dark' : 'light');
+    document.getElementById('thm-sun').style.display = dark ? 'none' : '';
+    document.getElementById('thm-moon').style.display = dark ? '' : 'none';
+  });
+  // МН / EN
+  document.querySelectorAll('[data-en]').forEach(function (el) { el.dataset.mn = el.textContent; });
+  function setLang(l) {
+    lang = l;
+    document.getElementById('l-mn').classList.toggle('on', l === 'mn');
+    document.getElementById('l-en').classList.toggle('on', l === 'en');
+    document.querySelectorAll('[data-en]').forEach(function (el) {
+      el.textContent = l === 'en' ? el.dataset.en : el.dataset.mn;
+    });
+    var inp = document.querySelector('.srch input');
+    if (inp) inp.placeholder = l === 'en' ? inp.dataset.enPh : 'Сайтаас хайх… (жишээ: гэрэлтүүлэг)';
+  }
+  document.getElementById('l-mn').addEventListener('click', function () { setLang('mn'); });
+  document.getElementById('l-en').addEventListener('click', function () { setLang('en'); });
 </script>
 </body></html>
