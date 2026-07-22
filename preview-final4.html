@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="mn"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Нүүр — Үндэсний цайвар хэв (прототип 4, бүрэн агуулгатай)</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  * { box-sizing:border-box; margin:0; }
+  html { scroll-behavior:smooth; }
+  body { background:#faf9f6; color:#1a2440; font-family:"Manrope","Segoe UI",system-ui,sans-serif; font-size:16px; line-height:1.6; }
+  .ct { max-width:1180px; margin:0 auto; padding:0 22px; }
+  a { text-decoration:none; color:inherit; }
+  svg.i { width:1em; height:1em; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; vertical-align:-.12em; }
+  .dot { display:inline-block; width:7px; height:7px; border-radius:50%; background:currentColor; margin-right:6px; vertical-align:1px; }
+  @keyframes kb { from { transform:scale(1) } to { transform:scale(1.06) translate(-1%,1%) } }
+  @keyframes growW { from { width:0 } }
+  @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(28,72,176,.4)} 60%{box-shadow:0 0 0 14px rgba(28,72,176,0)} }
+  .rv { opacity:0; transform:translateY(16px); transition:opacity .65s ease, transform .65s ease; }
+  .rv.in { opacity:1; transform:none; }
+  /* Монгол хээ — алхан хээний зурвас */
+  .hee { height:11px; background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='11' viewBox='0 0 22 11'%3E%3Cpath d='M1 10V1h14v6H7V4h4' fill='none' stroke='%231c48b0' stroke-width='1.5'/%3E%3C/svg%3E") repeat-x left center; opacity:.6; }
+  .hee.sm { transform:scale(.85); transform-origin:left center; }
+
+  /* ---------- NAV ---------- */
+  .nav { position:sticky; top:0; z-index:50; background:rgba(250,249,246,.94); backdrop-filter:blur(10px); border-bottom:1px solid #e8e5dc; }
+  .nav .in { display:flex; align-items:center; gap:18px; padding:13px 0; }
+  .brand { display:flex; align-items:center; gap:11px; }
+  .brand img { width:40px; height:40px; }
+  .brand b { display:block; font-size:16px; letter-spacing:.02em; line-height:1.15; }
+  .brand small { display:block; font-size:9px; font-weight:700; color:#7d7a6e; letter-spacing:.1em; }
+  .nlinks { display:flex; gap:2px; margin-left:auto; font-size:13.5px; font-weight:700; color:#4c5670; }
+  .nlinks a { padding:8px 12px; border-radius:9px; }
+  .nlinks a:hover { color:#1c48b0; background:#eef1f9; }
+  .ncta { background:#1c48b0; color:#fff; font-weight:800; font-size:13.5px; padding:10px 18px; border-radius:10px; display:inline-flex; gap:8px; align-items:center; box-shadow:0 10px 22px -10px rgba(28,72,176,.5); }
+  @media (max-width:980px){ .nlinks { display:none; } }
+
+  /* ---------- HERO (одоогийн шиг: төв брэнд + CTA + 6 хавтан) ---------- */
+  .hero { position:relative; text-align:center; padding:54px 0 46px; overflow:hidden;
+    background:linear-gradient(180deg,#f3f1ea, #faf9f6 70%); }
+  .hero::before { content:""; position:absolute; inset:0; opacity:.5;
+    background:url('/assets/img/ub-square.jpg') center 64%/cover; }
+  .hero::after { content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(250,249,246,.9), rgba(250,249,246,.72) 45%, #faf9f6 92%); }
+  .hero .ct { position:relative; z-index:2; }
+  .hero .emblem { width:84px; height:84px; margin:0 auto 12px; display:block; filter:drop-shadow(0 8px 18px rgba(28,72,176,.3)); }
+  .hero .role { font-size:14px; font-weight:700; color:#5b6478; letter-spacing:.04em; }
+  .hero h1 { font-size:clamp(32px,4.6vw,48px); letter-spacing:.01em; line-height:1.12; margin:4px 0 20px; }
+  .hero .cta { display:inline-flex; align-items:center; gap:10px; background:#1c48b0; color:#fff; font-weight:800; font-size:15px; padding:16px 30px; border-radius:14px; box-shadow:0 18px 40px -14px rgba(28,72,176,.6); transition:transform .2s; }
+  .hero .cta:hover { transform:translateY(-2px); }
+  .tiles { display:grid; grid-template-columns:repeat(6,1fr); gap:14px; margin-top:34px; }
+  @media (max-width:860px){ .tiles { grid-template-columns:repeat(3,1fr); } }
+  .tile { background:#14316f; color:#fff; border-radius:14px; padding:18px 8px; text-align:center; font-weight:800; font-size:13.5px; transition:transform .2s, background .2s; position:relative; overflow:hidden; }
+  .tile::before { content:""; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,#c9a24b,#1c48b0); opacity:.85; }
+  .tile:hover { transform:translateY(-4px); background:#1c48b0; }
+  .tile svg { display:block; margin:0 auto 8px; font-size:22px; }
+
+  /* ---------- хэсгийн толгой ---------- */
+  .sec { padding:48px 0 8px; }
+  .shead { margin-bottom:8px; display:flex; align-items:baseline; gap:14px; }
+  .shead h2 { font-size:clamp(19px,2.4vw,24px); letter-spacing:.06em; }
+  .shead .lk { margin-left:auto; font-size:13.5px; font-weight:800; color:#1c48b0; }
+  .shead + .hee { margin-bottom:20px; }
+
+  /* ---------- Мэдээ + Арга хэмжээ ---------- */
+  .duo { display:grid; grid-template-columns:1fr 1.2fr; gap:16px; }
+  @media (max-width:900px){ .duo { grid-template-columns:1fr; } }
+  .card { background:#fff; border:1px solid #e8e5dc; border-radius:16px; transition:transform .22s, box-shadow .22s; }
+  .card:hover { transform:translateY(-3px); box-shadow:0 24px 46px -28px rgba(26,36,64,.35); }
+  .ev { display:flex; gap:16px; padding:18px; align-items:flex-start; }
+  .ev .date { flex:none; width:70px; text-align:center; background:#f3f1ea; border:1px solid #e8e5dc; border-radius:12px; padding:11px 6px; }
+  .ev .date b { display:block; font-size:24px; color:#1c48b0; line-height:1; }
+  .ev .date span { font-size:10px; font-weight:800; color:#7d7a6e; }
+  .ev h3 { font-size:16px; margin-bottom:5px; }
+  .ev p { font-size:13px; color:#5b6478; }
+  .nrow { display:flex; gap:13px; padding:12px 16px; border-top:1px solid #f0ede4; align-items:center; }
+  .nrow:first-of-type { border-top:0; }
+  .nrow .im { flex:none; width:74px; height:52px; border-radius:9px; background-size:cover; background-position:center; }
+  .nrow b { font-size:13.5px; line-height:1.4; display:block; }
+  .nrow span { font-size:11px; color:#8a8778; font-weight:700; }
+
+  /* ---------- Бидний тухай баннер (одоогийн шиг) ---------- */
+  .ab { position:relative; border-radius:20px; overflow:hidden; color:#fff; margin-top:44px;
+    background:linear-gradient(105deg,#0b1f4e 0%,#14316f 48%,#1c48b0 100%); }
+  .ab .im { position:absolute; inset:0; background:url('/assets/img/city-blue.jpg') center right/cover; opacity:.55;
+    -webkit-mask-image:linear-gradient(to right, rgba(0,0,0,.25), rgba(0,0,0,.55) 35%, #000 70%); mask-image:linear-gradient(to right, rgba(0,0,0,.25), rgba(0,0,0,.55) 35%, #000 70%); }
+  .ab .in { position:relative; z-index:2; padding:44px 42px; max-width:640px; }
+  .ab h2 { font-size:clamp(20px,2.8vw,27px); line-height:1.3; margin-bottom:12px; }
+  .ab p { font-size:14px; color:#c9d8f2; margin-bottom:22px; }
+  .ab p strong { color:#9cc0ff; }
+  .ab .cta { display:inline-flex; align-items:center; gap:9px; background:#fff; color:#14316f; font-weight:800; font-size:14px; padding:13px 26px; border-radius:12px; }
+
+  /* ---------- 4 алхам (одоогийн хөх картууд) ---------- */
+  .steps4 { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:20px; }
+  @media (max-width:860px){ .steps4 { grid-template-columns:repeat(2,1fr); } }
+  .st4 { background:linear-gradient(160deg,#1c48b0 0%,#14316f 100%); color:#fff; border-radius:16px; padding:26px 18px; text-align:center; transition:transform .22s; }
+  .st4:hover { transform:translateY(-4px); }
+  .st4 i { display:grid; place-items:center; width:60px; height:60px; border-radius:15px; background:rgba(255,255,255,.16); margin:0 auto 14px; font-style:normal; }
+  .st4 svg { font-size:28px; }
+  .st4 b { font-size:16px; display:block; margin-bottom:6px; }
+  .st4 span { font-size:12.5px; color:#c9d8f2; }
+
+  /* ---------- Тоон мэдээ (одоогийн голлосон KPI) ---------- */
+  .kpi { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+  @media (max-width:860px){ .kpi { grid-template-columns:repeat(2,1fr); } }
+  .kp { background:#fff; border:1px solid #e8e5dc; border-radius:17px; padding:22px; text-align:center; transition:transform .22s, box-shadow .22s; }
+  .kp:hover { transform:translateY(-3px); box-shadow:0 22px 44px -28px rgba(26,36,64,.35); }
+  .kp i { display:grid; place-items:center; width:54px; height:54px; border-radius:14px; margin:0 auto 12px; color:#fff; font-style:normal; }
+  .kp svg { font-size:25px; }
+  .k1 i { background:#1c48b0; box-shadow:0 8px 18px -8px rgba(28,72,176,.7); }
+  .k2 i { background:#d97706; box-shadow:0 8px 18px -8px rgba(217,119,6,.7); }
+  .k3 i { background:#0d9488; box-shadow:0 8px 18px -8px rgba(13,148,136,.7); }
+  .k4 i { background:#15803d; box-shadow:0 8px 18px -8px rgba(21,128,61,.7); }
+  .kp b { font-size:32px; letter-spacing:-.02em; display:block; line-height:1.1; }
+  .kp span { font-size:12px; color:#5b6478; font-weight:700; }
+
+  /* ---------- Саналын картууд + sticky самбар ---------- */
+  .cols { display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:20px; align-items:start; }
+  @media (max-width:900px){ .cols { grid-template-columns:1fr; } }
+  .fgrid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media (max-width:720px){ .fgrid { grid-template-columns:1fr; } }
+  .fc3 { background:#fff; border:1px solid #e8e5dc; border-radius:16px; padding:16px; display:flex; flex-direction:column; gap:12px; transition:transform .22s, box-shadow .22s; }
+  .fc3:hover { transform:translateY(-3px); box-shadow:0 24px 46px -28px rgba(26,36,64,.35); }
+  .fc3 .t { font-size:14px; font-weight:800; text-transform:uppercase; line-height:1.45; }
+  .fc3 .m { position:relative; border-radius:12px; overflow:hidden; height:150px; background-size:cover; background-position:center; }
+  .fc3 .stc { position:absolute; top:10px; left:10px; font-size:11px; font-weight:800; padding:4px 12px; border-radius:16px; }
+  .stc.n { background:#e7effc; color:#1c48b0; } .stc.g { background:#e2f3ea; color:#15803d; }
+  .fc3 .au { display:flex; gap:10px; align-items:flex-start; }
+  .fc3 .au .av { flex:none; width:42px; height:42px; border-radius:50%; background:#f3f1ea; border:1px solid #e8e5dc; display:grid; place-items:center; color:#8a8778; overflow:hidden; }
+  .fc3 .au b { font-size:13.5px; display:block; }
+  .fc3 .au .tm { font-size:11px; color:#8a8778; font-weight:700; display:block; margin:1px 0 5px; }
+  .fc3 .bdg { display:inline-block; background:#1c48b0; color:#fff; font-size:10.5px; font-weight:800; padding:4px 11px; border-radius:7px; }
+  .fc3 .rw { display:flex; justify-content:space-between; align-items:center; font-size:13px; color:#5b6478; font-weight:700; border-top:1px solid #f0ede4; padding-top:10px; cursor:pointer; }
+  .fc3 .rw:hover { color:#1c48b0; }
+  .fc3 .rw b { color:#1a2440; }
+  .fc3 .rw svg { margin-right:7px; color:#1c48b0; }
+  .cpanel { display:none; border-top:1px dashed #e8e5dc; padding-top:11px; flex-direction:column; gap:8px; }
+  .cpanel.open { display:flex; }
+  .cpanel .emp { font-size:12px; color:#8a8778; }
+  .cpanel form { display:flex; gap:8px; }
+  .cpanel textarea { flex:1; border:1px solid #e8e5dc; background:#faf9f6; border-radius:10px; padding:9px 12px; font:inherit; font-size:12.5px; resize:vertical; min-height:40px; }
+  .cpanel button { background:#1c48b0; color:#fff; border:0; border-radius:9px; font:inherit; font-size:12.5px; font-weight:800; padding:0 16px; cursor:pointer; }
+  .fc3 .ft { display:flex; justify-content:space-between; align-items:center; border-top:1px solid #f0ede4; padding-top:12px; }
+  .fc3 .send { background:#1c48b0; color:#fff; font-weight:800; font-size:12.5px; padding:9px 20px; border-radius:10px; box-shadow:0 10px 20px -10px rgba(28,72,176,.6); }
+  .fc3 .shr { display:flex; gap:8px; }
+  .fc3 .sb { width:35px; height:35px; border-radius:50%; display:grid; place-items:center; color:#fff; font-size:13px; font-weight:800; }
+  .sb.f { background:#1877f2; } .sb.x { background:#101418; }
+  .side { position:sticky; top:86px; background:#fff; border:1px solid #e8e5dc; border-radius:16px; overflow:hidden; }
+  .side .hd { padding:13px 16px; font-size:13px; font-weight:800; letter-spacing:.06em; border-bottom:1px solid #f0ede4; background:#f7f5ef; display:flex; align-items:center; gap:9px; }
+  .side .hd svg { color:#1c48b0; }
+  .side .it { display:flex; gap:10px; padding:12px 16px; border-bottom:1px dashed #f0ede4; font-size:13px; font-weight:700; align-items:flex-start; cursor:pointer; }
+  .side .it:hover { background:#faf9f4; }
+  .side .it:last-child { border-bottom:0; }
+  .side .n { flex:none; width:22px; height:22px; border-radius:7px; background:#eef1f9; color:#1c48b0; font-size:11px; font-weight:800; display:grid; place-items:center; }
+  .side .lc { margin-left:auto; color:#1c48b0; font-size:11.5px; white-space:nowrap; }
+  .side .lc svg { margin-right:3px; }
+
+  /* ---------- Асуулгын карт (бодит) ---------- */
+  .polls { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+  @media (max-width:860px){ .polls { grid-template-columns:1fr; } }
+  .res .rt { display:flex; justify-content:space-between; font-size:13px; font-weight:700; margin-bottom:4px; }
+  .res .tr { height:8px; border-radius:5px; background:#f0ede4; overflow:hidden; }
+  .res .tr i { display:block; height:100%; border-radius:5px; background:linear-gradient(90deg,#1c48b0,#4f79d9); animation:growW 1.1s ease both; }
+  .res.my .tr i { background:linear-gradient(90deg,#15803d,#4ba36c); }
+  .mych { color:#15803d; font-size:11px; font-weight:800; }
+  .cnt2 { font-size:11px; color:#8a8778; font-weight:700; margin-top:3px; }
+  .popt { text-align:left; font:inherit; font-size:13.5px; font-weight:700; background:#faf9f6; border:1.5px solid #e8e5dc; border-radius:11px; padding:12px 15px; cursor:pointer; transition:border-color .2s, color .2s, transform .2s; }
+  .popt:hover { border-color:#1c48b0; color:#1c48b0; transform:translateX(3px); }
+
+  /* ---------- Явц шалгах ---------- */
+  .track { background:#fff; border:1px solid #e8e5dc; border-radius:18px; padding:26px; display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+  @media (max-width:820px){ .track { grid-template-columns:1fr; } }
+  .track .row { display:flex; gap:10px; }
+  .track input { flex:1; border:1.5px solid #e8e5dc; background:#faf9f6; border-radius:12px; padding:13px 16px; font:inherit; font-size:14.5px; letter-spacing:.04em; }
+  .track input:focus { outline:none; border-color:#1c48b0; }
+  .track .go { background:#1c48b0; color:#fff; border:0; border-radius:12px; font:inherit; font-weight:800; font-size:14px; padding:0 26px; cursor:pointer; }
+  .track .hint { font-size:12.5px; color:#8a8778; margin-top:10px; }
+  .tl { display:none; flex-direction:column; gap:0; }
+  .tl.on { display:flex; }
+  .tl .s { display:flex; gap:12px; }
+  .tl .rail { display:flex; flex-direction:column; align-items:center; }
+  .tl .nd { width:26px; height:26px; border-radius:50%; display:grid; place-items:center; color:#fff; font-size:11px; flex:none; }
+  .tl .ln { width:2.5px; flex:1; min-height:18px; background:#e8e5dc; }
+  .tl .ok { background:#15803d; } .tl .off { background:#cfccc0; }
+  .tl b { font-size:13.5px; display:block; padding-top:3px; }
+  .tl span { font-size:11px; color:#8a8778; font-weight:700; display:block; padding-bottom:12px; }
+
+  /* ---------- Видео: тоглуулагч + жагсаалт ---------- */
+  .vid { display:grid; grid-template-columns:minmax(300px,400px) 1fr; gap:20px; align-items:start; }
+  @media (max-width:860px){ .vid { grid-template-columns:1fr; } }
+  .player { position:relative; border-radius:16px; overflow:hidden; height:420px; background:#101418; }
+  .player .im2 { position:absolute; inset:0; background-size:cover; background-position:center; transition:opacity .3s; }
+  .player::after { content:""; position:absolute; inset:0; background:linear-gradient(180deg,transparent 45%,rgba(6,10,20,.85)); }
+  .player .pl { position:absolute; left:50%; top:42%; transform:translate(-50%,-50%); width:58px; height:58px; border-radius:50%; background:rgba(28,72,176,.95); color:#fff; display:grid; place-items:center; font-size:22px; animation:pulse 2.6s infinite; z-index:2; }
+  .player .cap { position:absolute; left:16px; right:16px; bottom:14px; z-index:2; color:#fff; }
+  .player .cap .st { display:inline-block; background:#1c48b0; font-size:10.5px; font-weight:800; padding:4px 11px; border-radius:14px; margin-bottom:7px; }
+  .player .cap b { font-size:14.5px; line-height:1.4; display:block; }
+  .vlist { display:flex; flex-direction:column; gap:11px; max-height:420px; overflow-y:auto; padding-right:6px; }
+  .vlist::-webkit-scrollbar { width:7px; } .vlist::-webkit-scrollbar-thumb { background:#e8e5dc; border-radius:4px; }
+  .vit { display:flex; gap:13px; background:#fff; border:1px solid #e8e5dc; border-radius:13px; padding:9px; cursor:pointer; transition:transform .2s, border-color .2s; align-items:center; }
+  .vit:hover { transform:translateX(3px); border-color:#1c48b0; }
+  .vit.on { border-color:#1c48b0; background:#f5f7fc; }
+  .vit .th { flex:none; width:118px; height:76px; border-radius:9px; background-size:cover; background-position:center; position:relative; overflow:hidden; }
+  .vit .th::after { content:""; position:absolute; inset:0; background:rgba(10,16,32,.25); }
+  .vit .th i { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:26px; height:26px; border-radius:50%; background:rgba(28,72,176,.95); color:#fff; display:grid; place-items:center; font-size:10px; font-style:normal; z-index:2; }
+  .vit b { font-size:13px; line-height:1.45; display:block; }
+  .vit span { font-size:11px; color:#8a8778; font-weight:700; }
+
+  /* ---------- footer ---------- */
+  .foot { background:#14316f; color:#c3d2ee; margin-top:56px; }
+  .fgrid2 { display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:26px; padding:38px 0 26px; }
+  @media (max-width:860px){ .fgrid2 { grid-template-columns:1fr; } }
+  .fgrid2 h5 { color:#fff; font-size:14px; letter-spacing:.06em; margin-bottom:12px; }
+  .fgrid2 p, .fgrid2 a { display:block; font-size:13px; margin-bottom:7px; color:#c3d2ee; }
+  .fbrand { display:flex; gap:12px; align-items:flex-start; }
+  .fbrand img { width:42px; height:42px; }
+  .soc { display:flex; gap:9px; margin-top:12px; }
+  .soc span { width:34px; height:34px; border-radius:10px; background:rgba(255,255,255,.12); display:grid; place-items:center; font-size:14px; }
+  .fbot { border-top:1px solid rgba(255,255,255,.14); padding:14px 0; display:flex; justify-content:space-between; gap:10px; font-size:11.5px; color:#8fa3c8; flex-wrap:wrap; }
+</style></head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+  <g id="us"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></g>
+  <g id="lw"><path d="M12 3v18M5 7h14M7 7l-3 6a3 3 0 0 0 6 0zm10 0-3 6a3 3 0 0 0 6 0z"/></g>
+  <g id="pj"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1h6c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></g>
+  <g id="nw"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></g>
+  <g id="vd"><circle cx="12" cy="12" r="9"/><path d="M10 9l5 3-5 3z"/></g>
+  <g id="rp"><path d="M4 20V10M10 20V4M16 20v-7M21 20H3"/></g>
+  <g id="sn"><path d="M3 11l16-6v14L3 15v-4z"/><path d="M11 17.6a3 3 0 0 1-5.7-1.3"/></g>
+  <g id="ch"><path d="M18 20V10M12 20V4M6 20v-6"/></g>
+  <g id="ck"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></g>
+  <g id="in"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5.1 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.5-6.9A2 2 0 0 0 16.8 4H7.2a2 2 0 0 0-1.7 1.1z"/></g>
+  <g id="dc"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6"/></g>
+  <g id="lk"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></g>
+  <g id="cm"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></g>
+  <g id="pl"><path d="M8 5v14l11-7z"/></g>
+  <g id="tr"><path d="M23 6 13.5 15.5l-5-5L1 18"/><path d="M17 6h6v6"/></g>
+  <g id="sr"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></g>
+  <g id="fb"><path d="M13 22v-8h3l1-4h-4V7c0-1 .3-2 2-2h2V1.5C18.5 1.4 17.3 1 16 1c-3 0-5 2-5 5v3H7v4h4v8h2z"/></g>
+  <g id="mp"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></g>
+  <g id="tm"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></g>
+  <g id="wk"><circle cx="12" cy="5" r="2"/><path d="M12 7v5l-3 8M12 12l3 8M9 10l3-2 3 2"/></g>
+</defs></svg>
+
+<!-- NAV -->
+<nav class="nav"><div class="ct in">
+  <a class="brand" href="#"><img src="/assets/img/logo.svg" alt=""/><span><b>ЦЭНДИЙН БААТАРХҮҮ</b><small>МОНГОЛ УЛСЫН ИХ ХУРЛЫН ГИШҮҮН</small></span></a>
+  <span class="nlinks"><a href="#">Нүүр</a><a href="#">Намтар</a><a href="#">Хууль</a><a href="#">Төслүүд</a><a href="#">Мэдээ</a><a href="#">Видео</a><a href="#">Тайлан</a><a href="#">Холбоо барих</a></span>
+  <a class="ncta" href="#"><svg class="i"><use href="#sn"/></svg>Санал илгээх</a>
+</div></nav>
+
+<!-- HERO: төв брэнд + CTA + 6 хавтан (одоогийн бүтэц) -->
+<header class="hero"><div class="ct">
+  <img class="emblem" src="/assets/img/logo.svg" alt="Төрийн сүлд"/>
+  <div class="role">Монгол Улсын Их Хурлын гишүүн</div>
+  <h1>Цэндийн БААТАРХҮҮ</h1>
+  <a class="cta" href="#"><svg class="i"><use href="#sn"/></svg>ИРГЭДИЙН САНАЛ ХҮСЭЛТИЙГ ШИЙДВЭРЛЭХ СИСТЕМ</a>
+  <div class="tiles">
+    <a class="tile" href="#"><svg class="i"><use href="#us"/></svg>Намтар</a>
+    <a class="tile" href="#"><svg class="i"><use href="#lw"/></svg>Хууль</a>
+    <a class="tile" href="#"><svg class="i"><use href="#pj"/></svg>Төслүүд</a>
+    <a class="tile" href="#"><svg class="i"><use href="#nw"/></svg>Мэдээ</a>
+    <a class="tile" href="#"><svg class="i"><use href="#vd"/></svg>Видео</a>
+    <a class="tile" href="#"><svg class="i"><use href="#rp"/></svg>Тайлан</a>
+  </div>
+</div></header>
+
+<!-- МЭДЭЭ + АРГА ХЭМЖЭЭ -->
+<section class="sec"><div class="ct">
+  <div class="duo">
+    <div class="rv">
+      <div class="shead"><h2>УДАХГҮЙ БОЛОХ</h2><a class="lk" href="#">Бүгдийг үзэх →</a></div>
+      <div class="hee sm"></div>
+      <div class="card ev" style="margin-top:14px">
+        <span class="date"><b>21</b><span>7-Р САР</span></span>
+        <span><h3>Иргэдтэй нээлттэй уулзалт</h3><p>Иргэдийн санал, хүсэлтийг сонсох нээлттэй уулзалт болно.</p>
+        <p style="margin-top:8px;font-size:12px;font-weight:700;color:#8a8778"><svg class="i"><use href="#tm"/></svg> 10:00 · <svg class="i"><use href="#mp"/></svg> Чингэлтэй дүүрэг</p></span>
+      </div>
+    </div>
+    <div class="rv" style="transition-delay:.08s">
+      <div class="shead"><h2>СҮҮЛИЙН МЭДЭЭ</h2><a class="lk" href="#">Бүгдийг үзэх →</a></div>
+      <div class="hee sm"></div>
+      <div class="card" style="margin-top:14px">
+        <div class="nrow"><span class="im" style="background-image:url('/assets/img/parliament-bg.jpg')"></span><span><b>УИХ-ын чуулганаар хэлэлцсэн асуудлууд</b><span>2026/07/08</span></span></div>
+        <div class="nrow"><span class="im" style="background-image:url('/assets/img/greeting.jpg')"></span><span><b>Иргэдийн оролцоотой төсөл хөтөлбөрийн хэлэлцүүлэг</b><span>2026/07/05</span></span></div>
+        <div class="nrow"><span class="im" style="background-image:url('/assets/img/orh-bur-5-mod.jpg')"></span><span><b>Хот халдлын нөхөн сэргээлтийн ажил эхэллээ</b><span>2026/07/01</span></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- БИДНИЙ ТУХАЙ БАННЕР -->
+  <div class="ab rv">
+    <span class="im"></span>
+    <div class="in">
+      <h2>ИРГЭДИЙН САНАЛ ХҮСЭЛТИЙГ ШИЙДВЭРЛЭХ СИСТЕМ</h2>
+      <p>Иргэдийн санал, гомдол, өргөдөл олон нийтийн сүлжээнд хязгаарлагдан үлдэх бус, <strong>шийдвэр гаргах түвшинд хүрч, ил тод хянагддаг</strong> байх ёстой. Энэхүү платформ нь иргэдийн гаргасан асуудал, өргөдөл, саналыг нэгтгэн бүртгэж, <strong>байршлын мэдээлэл, шийдвэрлэлтийн үе шат, хэрэгжилтийн явцыг</strong> нээлттэй харуулах цогц систем юм.</p>
+      <a class="cta" href="#"><svg class="i"><use href="#sn"/></svg>Санал илгээх</a>
+    </div>
+  </div>
+
+  <!-- 4 АЛХАМ -->
+  <div class="steps4">
+    <div class="st4 rv"><i><svg class="i"><use href="#sn"/></svg></i><b>Санал хүсэлт илгээх</b><span>Асуудлаа зураг, бичлэг, байршлын мэдээлэлтэй нь илгээнэ</span></div>
+    <div class="st4 rv" style="transition-delay:.07s"><i><svg class="i"><use href="#dc"/></svg></i><b>Бүртгэж дугаар олгох</b><span>Таны хүсэлтэд хяналтын дугаар шууд олгогдоно</span></div>
+    <div class="st4 rv" style="transition-delay:.14s"><i><svg class="i"><use href="#in"/></svg></i><b>Байгууллагад уламжлах</b><span>Хариуцсан газарт нь албан бичгээр хүргүүлнэ</span></div>
+    <div class="st4 rv" style="transition-delay:.21s"><i><svg class="i"><use href="#ck"/></svg></i><b>Шийдвэрлэлтийн хяналт</b><span>Явц, үр дүнг нээлттэй, ил тод харуулна</span></div>
+  </div>
+</div></section>
+
+<!-- ТООН МЭДЭЭ -->
+<section class="sec"><div class="ct">
+  <div class="shead"><h2>ШИЙДВЭРЛЭЛТИЙН ТООН МЭДЭЭ</h2><a class="lk" href="#">Явц шалгах →</a></div>
+  <div class="hee"></div>
+  <div class="kpi" style="margin-top:20px">
+    <div class="kp k1 rv"><i><svg class="i"><use href="#in"/></svg></i><b data-count="1248">0</b><span>Нийт хүсэлт</span></div>
+    <div class="kp k2 rv" style="transition-delay:.07s"><i><svg class="i"><use href="#sn"/></svg></i><b data-count="856">0</b><span>Хариуцсан байгууллагад илгээсэн</span></div>
+    <div class="kp k3 rv" style="transition-delay:.14s"><i><svg class="i"><use href="#cm"/></svg></i><b data-count="392">0</b><span>Хариу ирсэн</span></div>
+    <div class="kp k4 rv" style="transition-delay:.21s"><i><svg class="i"><use href="#ck"/></svg></i><b data-count="68" data-suf="%">0%</b><span>Шийдвэрлэлтийн хувь</span></div>
+  </div>
+</div></section>
+
+<!-- ИРГЭДИЙН САНАЛУУД + STICKY САМБАР -->
+<section class="sec"><div class="ct">
+  <div class="cols">
+    <div>
+      <div class="shead"><h2>ИРГЭДИЙН НИЙТЭЛСЭН САНАЛУУД</h2><a class="lk" href="#">Бүгдийг харах →</a></div>
+      <div class="hee"></div>
+      <div class="fgrid" style="margin-top:20px">
+        <article class="fc3 rv">
+          <div class="t">Улаанбаатар хотын зүүн хэсгийн замын түгжрэлийг бууруулах санал</div>
+          <div class="m" style="background-image:url('/assets/img/orh-bur-5-mod.jpg')"><span class="stc g"><span class="dot"></span>Шийдвэрлэгдсэн</span></div>
+          <div class="au"><span class="av"><svg class="i" style="font-size:20px"><use href="#us"/></svg></span><span><b>Иргэн</b><span class="tm">10 хоногийн өмнө</span><span class="bdg">Зам, нүх, эвдрэл</span></span></div>
+          <div class="rw jlike"><span><svg class="i"><use href="#lk"/></svg>Лайк дарах</span><b>23</b></div>
+          <div class="rw jcmt"><span><svg class="i"><use href="#cm"/></svg>Сэтгэгдэл бичих</span><b>7</b></div>
+          <div class="cpanel"><span class="emp">Хараахан сэтгэгдэл алга. Эхэлж бичээрэй.</span><form onsubmit="return false"><textarea rows="2" placeholder="Сэтгэгдлээ бичээрэй…"></textarea><button>Илгээх</button></form></div>
+          <div class="ft"><a class="send" href="#">Санал илгээх</a><span class="shr"><span class="sb f"><svg class="i" style="fill:currentColor;stroke:none"><use href="#fb"/></svg></span><span class="sb x">𝕏</span></span></div>
+        </article>
+        <article class="fc3 rv" style="transition-delay:.08s">
+          <div class="t">Явган хүний зам шинэчлэх хүсэлт — тест</div>
+          <div class="m"><span style="position:absolute;inset:0;display:grid;place-items:center;color:#1c48b0;background:linear-gradient(150deg,#eef1f9,transparent 70%)"><svg class="i" style="font-size:44px"><use href="#wk"/></svg></span><span class="stc n"><span class="dot"></span>Хүлээн авсан</span></div>
+          <div class="au"><span class="av"><svg class="i" style="font-size:20px"><use href="#us"/></svg></span><span><b>Иргэн</b><span class="tm">12 хоногийн өмнө</span><span class="bdg">Явган хүний зам</span></span></div>
+          <div class="rw jlike"><span><svg class="i"><use href="#lk"/></svg>Лайк дарах</span><b>8</b></div>
+          <div class="rw jcmt"><span><svg class="i"><use href="#cm"/></svg>Сэтгэгдэл бичих</span><b>2</b></div>
+          <div class="cpanel"><span class="emp">Хараахан сэтгэгдэл алга. Эхэлж бичээрэй.</span><form onsubmit="return false"><textarea rows="2" placeholder="Сэтгэгдлээ бичээрэй…"></textarea><button>Илгээх</button></form></div>
+          <div class="ft"><a class="send" href="#">Санал илгээх</a><span class="shr"><span class="sb f"><svg class="i" style="fill:currentColor;stroke:none"><use href="#fb"/></svg></span><span class="sb x">𝕏</span></span></div>
+        </article>
+      </div>
+    </div>
+    <aside class="side rv" style="transition-delay:.1s">
+      <div class="hd"><svg class="i"><use href="#tr"/></svg>ХАМГИЙН ИХ ДЭМЖИГДСЭН</div>
+      <div class="it"><span class="n">1</span>Замын түгжрэл бууруулах санал<span class="lc"><svg class="i"><use href="#lk"/></svg>23</span></div>
+      <div class="it"><span class="n">2</span>Гэрэлтүүлэг нэмэгдүүлэх<span class="lc"><svg class="i"><use href="#lk"/></svg>17</span></div>
+      <div class="it"><span class="n">3</span>Явган хүний зам шинэчлэх<span class="lc"><svg class="i"><use href="#lk"/></svg>8</span></div>
+      <div class="it"><span class="n">4</span>Автобусны буудал тохижуулах<span class="lc"><svg class="i"><use href="#lk"/></svg>6</span></div>
+      <div class="it"><span class="n">5</span>Хогийн цэг нэмүүлэх<span class="lc"><svg class="i"><use href="#lk"/></svg>4</span></div>
+    </aside>
+  </div>
+</div></section>
+
+<!-- НИЙТИЙН САНАЛ АСУУЛГА (бодит карт) -->
+<section class="sec"><div class="ct">
+  <div class="shead"><h2>НИЙТИЙН САНАЛ АСУУЛГА</h2></div>
+  <div class="hee"></div>
+  <div class="polls" style="margin-top:20px">
+    <article class="fc3 rv">
+      <div class="t">Их дээд сургуулиудын хичээлийг 9 сарын 15-нд эхлүүлэхийг дэмжиж байна уу?</div>
+      <div class="m" style="background-image:url('/assets/img/parliament-bg.jpg');background-position:center 22%"><span class="stc g"><span class="dot"></span>Явагдаж буй</span></div>
+      <div class="au"><span class="av"><img src="/assets/img/social/ig-member.jpg" style="width:100%;height:100%;object-fit:cover" alt=""/></span><span><b>Ц.Баатархүү</b><span class="tm">Өнөөдөр</span><span class="bdg"><svg class="i" style="font-size:11px"><use href="#ch"/></svg> Санал асуулга</span></span></div>
+      <div class="rw"><span>Хугацаа</span><b>2026/09/01 хүртэл</b></div>
+      <div class="rw"><span>Нийт санал</span><b>58</b></div>
+      <div class="cpanel open">
+        <div class="res my"><div class="rt"><span>Тийм <span class="mych">✓ Таны сонголт</span></span><b>62%</b></div><div class="tr"><i style="width:62%"></i></div><div class="cnt2">36 санал</div></div>
+        <div class="res"><div class="rt"><span>Үгүй</span><b>26%</b></div><div class="tr"><i style="width:26%;animation-delay:.15s"></i></div><div class="cnt2">15 санал</div></div>
+        <div class="res"><div class="rt"><span>Мэдэхгүй</span><b>12%</b></div><div class="tr"><i style="width:12%;animation-delay:.3s"></i></div><div class="cnt2">7 санал</div></div>
+      </div>
+      <div class="ft"><a class="send" href="#">Дүн харах</a><span class="shr"><span class="sb f"><svg class="i" style="fill:currentColor;stroke:none"><use href="#fb"/></svg></span><span class="sb x">𝕏</span></span></div>
+    </article>
+    <article class="fc3 rv" style="transition-delay:.08s">
+      <div class="t">Тайлангийн уулзалтыг аль хэлбэрээр зохион байгуулбал тохиромжтой вэ?</div>
+      <div class="m" style="background-image:url('/assets/img/greeting.jpg')"><span class="stc g"><span class="dot"></span>Явагдаж буй</span></div>
+      <div class="au"><span class="av"><img src="/assets/img/social/ig-member.jpg" style="width:100%;height:100%;object-fit:cover" alt=""/></span><span><b>Ц.Баатархүү</b><span class="tm">3 хоногийн өмнө</span><span class="bdg"><svg class="i" style="font-size:11px"><use href="#ch"/></svg> Санал асуулга</span></span></div>
+      <div class="rw"><span>Хугацаа</span><b>Хугацаагүй</b></div>
+      <div class="rw"><span>Нийт санал</span><b>0</b></div>
+      <div class="cpanel open">
+        <button class="popt">Танхимаар</button>
+        <button class="popt">Цахимаар</button>
+        <button class="popt">Хосолсон хэлбэрээр</button>
+      </div>
+      <div class="ft"><a class="send" href="#">Оролцох</a><span class="shr"><span class="sb f"><svg class="i" style="fill:currentColor;stroke:none"><use href="#fb"/></svg></span><span class="sb x">𝕏</span></span></div>
+    </article>
+  </div>
+</div></section>
+
+<!-- ЯВЦ ШАЛГАХ -->
+<section class="sec"><div class="ct">
+  <div class="shead"><h2>ТА ӨӨРИЙН САНАЛ, ХҮСЭЛТИЙН ЯВЦАА ШАЛГАНА УУ</h2></div>
+  <div class="hee"></div>
+  <div class="track rv" style="margin-top:20px">
+    <div>
+      <div class="row"><input id="tin" placeholder="AT-2026-000001" /><button class="go" id="tgo">Шалгах</button></div>
+      <div class="hint">Санал илгээхэд авсан хяналтын дугаараа оруулаад явцаа шалгана уу. (Прототип: Шалгах товч дарж жишээ үр дүн харна)</div>
+    </div>
+    <div class="tl" id="tl">
+      <div class="s"><span class="rail"><span class="nd ok"><svg class="i"><use href="#ck"/></svg></span><span class="ln ok"></span></span><span><b>Хүлээн авсан</b><span>2026/06/30 · Дугаар: AT-2026-000001</span></span></div>
+      <div class="s"><span class="rail"><span class="nd ok"><svg class="i"><use href="#ck"/></svg></span><span class="ln ok"></span></span><span><b>Хариуцсан байгууллагад уламжилсан</b><span>2026/07/02 · Нийслэлийн ЗАА</span></span></div>
+      <div class="s"><span class="rail"><span class="nd ok"><svg class="i"><use href="#ck"/></svg></span><span class="ln"></span></span><span><b>Хариу ирсэн</b><span>2026/07/08</span></span></div>
+      <div class="s"><span class="rail"><span class="nd off">4</span></span><span><b style="color:#8a8778">Шийдвэрлэгдсэн</b><span>Хүлээгдэж байна</span></span></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ВИДЕО: тоглуулагч + жагсаалт -->
+<section class="sec"><div class="ct">
+  <div class="shead"><h2>СҮҮЛИЙН ҮЕИЙН ВИДЕО МЭДЭЭ</h2><a class="lk" href="#">Бүгдийг үзэх →</a></div>
+  <div class="hee"></div>
+  <div class="vid" style="margin-top:20px">
+    <div class="player rv">
+      <span class="im2" id="pim" style="background-image:url('/assets/img/member-hero.jpg')"></span>
+      <span class="pl"><svg class="i"><use href="#pl"/></svg></span>
+      <span class="cap"><span class="st">Онцлох</span><b id="pcap">Иргэдийн санал хүсэлтийг шийдвэрлэх системийн танилцуулга</b></span>
+    </div>
+    <div class="vlist rv" style="transition-delay:.08s">
+      <div class="vit on" data-im="/assets/img/member-hero.jpg" data-t="Иргэдийн санал хүсэлтийг шийдвэрлэх системийн танилцуулга"><span class="th" style="background-image:url('/assets/img/member-hero.jpg')"><i><svg class="i"><use href="#pl"/></svg></i></span><span><b>Иргэдийн санал хүсэлтийг шийдвэрлэх системийн танилцуулга</b><span>2026/06/29</span></span></div>
+      <div class="vit" data-im="/assets/img/parliament-bg.jpg" data-t="Нийслэлийн газар олголтыг хянан шалгах түр хорооны мэдээлэл"><span class="th" style="background-image:url('/assets/img/parliament-bg.jpg')"><i><svg class="i"><use href="#pl"/></svg></i></span><span><b>Нийслэлийн газар олголтыг хянан шалгах түр хорооны мэдээлэл</b><span>2026/06/19</span></span></div>
+      <div class="vit" data-im="/assets/img/greeting.jpg" data-t="Иргэдтэй хийсэн уулзалтын тойм"><span class="th" style="background-image:url('/assets/img/greeting.jpg')"><i><svg class="i"><use href="#pl"/></svg></i></span><span><b>Иргэдтэй хийсэн уулзалтын тойм</b><span>2026/06/12</span></span></div>
+      <div class="vit" data-im="/assets/img/orh-bur-5-mod.jpg" data-t="Ногоон байгууламж нэмэгдүүлэх төслийн явц"><span class="th" style="background-image:url('/assets/img/orh-bur-5-mod.jpg')"><i><svg class="i"><use href="#pl"/></svg></i></span><span><b>Ногоон байгууламж нэмэгдүүлэх төслийн явц</b><span>2026/06/10</span></span></div>
+      <div class="vit" data-im="/assets/img/ub-square.jpg" data-t="Хотын хөгжлийн бодлогын хэлэлцүүлэг"><span class="th" style="background-image:url('/assets/img/ub-square.jpg')"><i><svg class="i"><use href="#pl"/></svg></i></span><span><b>Хотын хөгжлийн бодлогын хэлэлцүүлэг</b><span>2026/06/05</span></span></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- FOOTER -->
+<footer class="foot"><div class="ct">
+  <div class="fgrid2">
+    <div class="fbrand"><img src="/assets/img/logo.svg" alt=""/><span>
+      <h5>ЦЭНДИЙН БААТАРХҮҮ</h5>
+      <p>Монгол Улсын Их Хурлын гишүүн. Иргэдийн санал, хүсэлтийг сонсож, шийдвэрлэдэг нээлттэй, ил тод систем.</p>
+      <span class="soc"><span><svg class="i" style="fill:currentColor;stroke:none"><use href="#fb"/></svg></span><span>𝕏</span><span><svg class="i"><use href="#vd"/></svg></span></span>
+    </span></div>
+    <div><h5>ЦЭС</h5><a href="#">Намтар</a><a href="#">Хууль</a><a href="#">Төслүүд</a><a href="#">Мэдээ</a><a href="#">Видео</a><a href="#">Тайлан</a></div>
+    <div><h5>ХОЛБОО БАРИХ</h5>
+      <p><svg class="i"><use href="#mp"/></svg> Улаанбаатар, Сүхбаатар дүүрэг, Төрийн ордон</p>
+      <p>51-261467 · baatarkhuu@parliament.mn</p>
+      <p>Даваа–Баасан 09:00–18:00</p></div>
+  </div>
+  <div class="fbot"><span>© 2026 Ц.Баатархүү. Бүх эрх хуулиар хамгаалагдсан.</span><span>Фото: Wikimedia Commons (CC BY 2.0)</span></div>
+</div></footer>
+
+<script>
+  document.querySelectorAll('[data-count]').forEach(function (el) {
+    var t = parseInt(el.dataset.count, 10), suf = el.dataset.suf || '', t0 = null;
+    function fin() { el.textContent = t.toLocaleString('en-US') + suf; }
+    function step(ts) { if (!t0) t0 = ts; var p = Math.min((ts - t0) / 1400, 1), e = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(t * e).toLocaleString('en-US') + suf; if (p < 1) requestAnimationFrame(step); else fin(); }
+    requestAnimationFrame(step); setTimeout(fin, 1800);
+  });
+  var rvs = document.querySelectorAll('.rv');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); }, { threshold: .1 });
+    rvs.forEach(function (el) { io.observe(el); });
+  }
+  setTimeout(function () { rvs.forEach(function (el) { el.classList.add('in'); }); }, 900);
+  // сэтгэгдлийн мөр — задардаг panel (бодит сайтын жишгээр)
+  document.querySelectorAll('.jcmt').forEach(function (r) {
+    r.addEventListener('click', function () {
+      var p = r.parentElement.querySelector('.cpanel');
+      if (p) p.classList.toggle('open');
+    });
+  });
+  // явц шалгах — жишээ үр дүн
+  document.getElementById('tgo').addEventListener('click', function () {
+    document.getElementById('tl').classList.add('on');
+  });
+  // видео жагсаалт → тоглуулагч солих (бодит сайтын жишгээр)
+  document.querySelectorAll('.vit').forEach(function (v) {
+    v.addEventListener('click', function () {
+      document.querySelectorAll('.vit').forEach(function (x) { x.classList.toggle('on', x === v); });
+      document.getElementById('pim').style.backgroundImage = 'url(' + v.dataset.im + ')';
+      document.getElementById('pcap').textContent = v.dataset.t;
+    });
+  });
+</script>
+</body></html>
