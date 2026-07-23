@@ -1483,8 +1483,8 @@
           '<h4 class="fc3-t">' + this.esc(txt) + '</h4>' +
           '<div class="fc3-meta"><span>' + this.esc(author) + ' · ' + this.esc(this.ago(r.created_at)) + '</span><span class="fc3-badge">' + this.esc(subj) + '</span></div>' +
           '<div class="fc3-acts">' +
-          '<button type="button" class="fc3-row fc3-like' + (liked ? ' on' : '') + '" aria-pressed="' + liked + '"><span>' + this.IC_LIKE + (liked ? 'Дэмжсэн' : 'Лайк') + '</span><b class="cnt">' + likes + '</b></button>' +
-          '<button type="button" class="fc3-row fc3-cmt" aria-expanded="false"><span>' + this.IC_CMT + 'Сэтгэгдэл</span><b class="ccnt">' + cmts + '</b></button>' +
+          '<button type="button" class="fc3-row fc3-like' + (liked ? ' on' : '') + '" aria-pressed="' + liked + '" aria-label="Лайк дарах" title="Лайк"><span>' + this.IC_LIKE + '</span><b class="cnt">' + likes + '</b></button>' +
+          '<button type="button" class="fc3-row fc3-cmt" aria-expanded="false" aria-label="Сэтгэгдэл бичих" title="Сэтгэгдэл"><span>' + this.IC_CMT + '</span><b class="ccnt">' + cmts + '</b></button>' +
             '<a href="/holboo/#feedback" class="fc3-send">Санал илгээх</a>' +
             '<span class="fc3-share">' +
               '<a class="fc3-sbtn fb" href="https://www.facebook.com/sharer/sharer.php?u=' + shareUrl + '" target="_blank" rel="noopener" aria-label="Facebook-т хуваалцах"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 22v-8h3l1-4h-4V7c0-1 .3-2 2-2h2V1.5C18.5 1.4 17.3 1 16 1c-3 0-5 2-5 5v3H7v4h4v8h2z"/></svg></a>' +
@@ -1510,7 +1510,7 @@
             this.saveLiked(set);
             likeBtn.classList.toggle("on", nowLiked);
             likeBtn.setAttribute("aria-pressed", String(nowLiked));
-            likeBtn.querySelector("span").innerHTML = this.IC_LIKE + (nowLiked ? "Дэмжсэн" : "Лайк");
+            likeBtn.querySelector("span").innerHTML = this.IC_LIKE;
             if (typeof data === "number") likeBtn.querySelector(".cnt").textContent = data;
           } catch (_) {} finally { likeBtn.disabled = false; }
         });
