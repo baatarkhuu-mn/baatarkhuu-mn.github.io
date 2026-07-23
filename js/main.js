@@ -42,7 +42,6 @@
       <span class="sb-label">Хуваалцах:</span>
       <a class="sb-btn sb-fb" href="https://www.facebook.com/sharer/sharer.php?u=${u}" target="_blank" rel="noopener" aria-label="Facebook-д хуваалцах"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 22v-8h3l1-4h-4V7c0-1 .3-2 2-2h2V1.5C18.5 1.4 17.3 1 16 1c-3 0-5 2-5 5v3H7v4h4v8h2z"/></svg></a>
       <a class="sb-btn sb-x" href="https://twitter.com/intent/tweet?url=${u}&text=${t}" target="_blank" rel="noopener" aria-label="X-д хуваалцах"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.657l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-      <a class="sb-btn sb-tg" href="https://t.me/share/url?url=${u}&text=${t}" target="_blank" rel="noopener" aria-label="Telegram-д хуваалцах"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.94 4.5 18.6 20.2c-.25 1.1-.9 1.37-1.83.85l-5.05-3.72-2.44 2.35c-.27.27-.5.5-1.02.5l.36-5.16L16.9 7.7c.41-.36-.09-.56-.63-.2L6.4 13.78l-5.1-1.6c-1.1-.34-1.13-1.1.23-1.63l19.9-7.67c.92-.34 1.73.22 1.43 1.62z"/></svg></a>
       <button type="button" class="sb-btn sb-copy js-copy-link" data-url="${attr}" aria-label="Холбоос хуулах" title="Холбоос хуулах"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg></button>
     </div>`;
   }
