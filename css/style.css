@@ -2489,11 +2489,11 @@ body.hp .hh-btn { font-size: clamp(1rem, 1.4vw, 1.14rem); padding: 18px 34px; fo
 body.hp .home-hero::before { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
   background:
     linear-gradient(180deg, rgba(10,17,42,.82) 0%, rgba(10,19,48,.9) 62%, rgba(10,17,38,.96) 100%),
-    url("/assets/img/hero-city.jpg?v=20260725b") center 42% / cover no-repeat; }
+    url("/assets/img/hero-city.jpg?v=20260725d") center 42% / cover no-repeat; }
 [data-theme="light"] body.hp .home-hero::before {
   background:
     linear-gradient(180deg, rgba(238,242,249,.82) 0%, rgba(243,247,252,.88) 58%, rgba(245,248,252,.97) 100%),
-    url("/assets/img/hero-city.jpg?v=20260725b") center 42% / cover no-repeat; }
+    url("/assets/img/hero-city.jpg?v=20260725d") center 42% / cover no-repeat; }
 body.hp .home-hero > .container { position: relative; z-index: 2; }
 
 /* Footer — зургийн эх сурвалжийн тэмдэглэл */
@@ -2511,7 +2511,7 @@ body.hp-split .rcol { min-width:0; }
     radial-gradient(ellipse 50% 130% at 85% 0%, rgba(48,113,231,.16), transparent 60%),
     radial-gradient(ellipse 40% 110% at 8% 100%, rgba(48,113,231,.18), transparent 60%),
     linear-gradient(168deg, rgba(10,18,40,.72) 0%, rgba(8,15,32,.86) 100%),
-    url("/assets/img/hero-city.jpg?v=20260725b") center 38% / cover no-repeat,
+    url("/assets/img/hero-city.jpg?v=20260725d") center 38% / cover no-repeat,
     linear-gradient(160deg, #0a1228, #080f20); }
 .lpan::-webkit-scrollbar { width:6px; }
 .lpan::-webkit-scrollbar-thumb { background:rgba(255,255,255,.2); border-radius:4px; }
