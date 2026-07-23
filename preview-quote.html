@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="mn"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Уриа эшлэлийн хувилбарууд</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  :root { --blue:#3071E7; --line:#E2E9F3; --mut:#5A6B85; }
+  * { box-sizing:border-box; margin:0; }
+  body { background:#EEF3FA; color:#0F1E38; font-family:'Manrope','Segoe UI',sans-serif; padding:30px 18px 60px; }
+  .wrap { max-width:1000px; margin:0 auto; }
+  h1 { font-size:23px; margin-bottom:6px; }
+  .sub { color:var(--mut); font-size:14px; margin-bottom:26px; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+  @media (max-width:820px){ .grid { grid-template-columns:1fr; } }
+  .vc { border:1px solid var(--line); border-radius:16px; overflow:hidden; background:#fff; }
+  .vh { display:flex; gap:10px; align-items:center; padding:10px 15px; border-bottom:1px solid var(--line); font-size:13px; }
+  .vh .tag { flex:none; width:32px; height:24px; border-radius:7px; background:var(--blue); color:#fff; font-size:12px; font-weight:800; display:grid; place-items:center; }
+  .vh b { font-size:13.5px; } .vh span { color:var(--mut); font-size:11.5px; }
+  /* Navy самбарын хэсэг (context) */
+  .pan { padding:26px 26px; color:#fff;
+    background:
+      linear-gradient(168deg, rgba(10,18,40,.72), rgba(8,15,32,.88)),
+      url('/assets/img/hero-city.jpg') center 38%/cover,
+      linear-gradient(160deg,#0a1228,#080f20); }
+  .ava { width:38px; height:38px; border-radius:50%; overflow:hidden; flex:none; border:2px solid rgba(255,255,255,.25); }
+  .ava img { width:100%; height:100%; object-fit:cover; }
+  .nm { font-size:12px; font-weight:800; color:#fff; }
+  .rl { font-size:9.5px; color:#9DB4DC; font-weight:700; letter-spacing:.05em; text-transform:uppercase; }
+
+  /* Q1 — том хашилт */
+  .q1 .qm { font-size:52px; line-height:.6; color:var(--blue); font-family:Georgia,serif; }
+  .q1 .qt { font-size:17px; font-weight:700; line-height:1.5; margin:6px 0 16px; }
+  .q1 .by { display:flex; gap:10px; align-items:center; }
+
+  /* Q2 — зүүн зузаан зураас */
+  .q2 .bx { border-left:3px solid var(--blue); padding-left:14px; }
+  .q2 .qt { font-size:16px; font-weight:700; font-style:italic; line-height:1.55; margin-bottom:14px; }
+  .q2 .by { display:flex; gap:10px; align-items:center; }
+
+  /* Q3 — доор нь зураас + нэр голд */
+  .q3 { text-align:center; }
+  .q3 .qm { font-size:34px; color:var(--blue); font-family:Georgia,serif; line-height:.8; }
+  .q3 .qt { font-size:16.5px; font-weight:700; line-height:1.55; margin:8px 0 14px; }
+  .q3 .dv { width:44px; height:2px; background:var(--blue); margin:0 auto 12px; border-radius:2px; }
+  .q3 .nm { font-size:12.5px; } .q3 .rl { margin-top:2px; }
+
+  /* Q4 — шилэн карт дотор */
+  .q4 .card { background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.16); border-radius:14px; padding:18px; backdrop-filter:blur(3px); }
+  .q4 .qm { font-size:26px; color:var(--blue); font-family:Georgia,serif; line-height:.7; }
+  .q4 .qt { font-size:15px; font-weight:700; line-height:1.55; margin:6px 0 14px; }
+  .q4 .by { display:flex; gap:10px; align-items:center; }
+
+  /* Q5 — минимал, зөвхөн бичиг */
+  .q5 .qt { font-size:18px; font-weight:800; line-height:1.5; letter-spacing:-.01em; margin-bottom:12px; }
+  .q5 .qt span { color:#8FB4FF; }
+  .q5 .by { font-size:11.5px; color:#9DB4DC; font-weight:700; }
+  .q5 .by b { color:#fff; }
+
+  /* Q6 — гарын үсэг маягтай */
+  .q6 .qt { font-size:16px; font-weight:700; line-height:1.55; margin-bottom:16px; }
+  .q6 .sig { border-top:1px solid rgba(255,255,255,.16); padding-top:12px; display:flex; gap:10px; align-items:center; }
+  .q6 .sg { font-family:Georgia,serif; font-style:italic; font-size:15px; color:#cddcf5; }
+</style></head>
+<body><div class="wrap">
+  <h1>Уриа эшлэлийн хувилбарууд (зүүн самбарт)</h1>
+  <p class="sub">«Асуудал бүхэн шийдэлтэй. Хамтдаа шийдье.» — Ц.Баатархүүгийн эшлэл маягаар. Q1–Q6. Дуртайгаа хэлээрэй.</p>
+  <div class="grid">
+
+    <div class="vc"><div class="vh"><span class="tag">Q1</span><b>Том хашилт</b><span>сонгодог эшлэл хэлбэр</span></div>
+      <div class="pan q1"><div class="qm">“</div><div class="qt">Асуудал бүхэн шийдэлтэй. Хамтдаа шийдье.</div>
+        <div class="by"><span class="ava"><img src="/assets/img/social/ig-member.jpg" alt=""/></span><span><span class="nm">Ц.Баатархүү</span><br><span class="rl">УИХ-ын гишүүн</span></span></div></div>
+    </div>
+
+    <div class="vc"><div class="vh"><span class="tag">Q2</span><b>Зүүн зузаан зураас</b><span>налуу бичиг, цэвэрхэн</span></div>
+      <div class="pan q2"><div class="bx"><div class="qt">«Асуудал бүхэн шийдэлтэй. Хамтдаа шийдье.»</div>
+        <div class="by"><span class="ava"><img src="/assets/img/social/ig-member.jpg" alt=""/></span><span><span class="nm">Ц.Баатархүү</span><br><span class="rl">УИХ-ын гишүүн</span></span></div></div></div>
+    </div>
+
+    <div class="vc"><div class="vh"><span class="tag">Q3</span><b>Голлосон + зураас</b><span>тэнцвэртэй, албан ёсны</span></div>
+      <div class="pan q3"><div class="qm">“</div><div class="qt">Асуудал бүхэн шийдэлтэй.<br>Хамтдаа шийдье.</div><div class="dv"></div>
+        <div class="nm">Ц.Баатархүү</div><div class="rl">УИХ-ын гишүүн</div></div>
+    </div>
+
+    <div class="vc"><div class="vh"><span class="tag">Q4</span><b>Шилэн карт дотор</b><span>ялгарсан хайрцаг</span></div>
+      <div class="pan q4"><div class="card"><div class="qm">“</div><div class="qt">Асуудал бүхэн шийдэлтэй. Хамтдаа шийдье.</div>
+        <div class="by"><span class="ava"><img src="/assets/img/social/ig-member.jpg" alt=""/></span><span><span class="nm">Ц.Баатархүү</span><br><span class="rl">УИХ-ын гишүүн</span></span></div></div></div>
+    </div>
+
+    <div class="vc"><div class="vh"><span class="tag">Q5</span><b>Минимал бичиг</b><span>хамгийн энгийн, том үсэг</span></div>
+      <div class="pan q5"><div class="qt">Асуудал бүхэн шийдэлтэй.<br><span>Хамтдаа шийдье.</span></div>
+        <div class="by">— <b>Ц.Баатархүү</b>, УИХ-ын гишүүн</div></div>
+    </div>
+
+    <div class="vc"><div class="vh"><span class="tag">Q6</span><b>Гарын үсэг маяг</b><span>доор нь зураас, налуу нэр</span></div>
+      <div class="pan q6"><div class="qt">«Асуудал бүхэн шийдэлтэй. Хамтдаа шийдье.»</div>
+        <div class="sig"><span class="ava"><img src="/assets/img/social/ig-member.jpg" alt=""/></span><span class="sg">Ц.Баатархүү</span></div></div>
+    </div>
+
+  </div></div></body></html>
