@@ -791,12 +791,12 @@ body.am-lock { overflow: hidden; }
 /* ---------- 14. Page hero (дотоод хуудас) ---------- */
 .page-hero {
   position: relative; overflow: hidden;
-  background:
-    radial-gradient(ellipse 60% 110% at 80% 0%, rgba(48,113,231,.16), transparent 60%),
-    radial-gradient(ellipse 55% 90% at 8% 100%, rgba(48,113,231,.2), transparent 60%),
-    linear-gradient(150deg, #0b1430, #0c1838);
-  color: #fff; padding: 26px 0; border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-soft); color: var(--color-text);
+  padding: 16px 0; border-bottom: 1px solid var(--color-border);
 }
+.page-hero .container { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.page-hero .container::before { content: ""; width: 5px; height: 24px; border-radius: 3px; background: var(--color-accent); flex: none; }
+.page-hero .breadcrumb { margin-top: 0; margin-left: auto; }
 /* Банер ч цагаан тексттэй — хоёр горимд ижил гүн дижитал өнгө */
 [data-theme="light"] .page-hero {
   background:
@@ -812,9 +812,9 @@ body.am-lock { overflow: hidden; }
   background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
 }
 .page-hero > .container { position: relative; z-index: 1; }
-.page-hero h1 { color: #fff; font-size: clamp(1.4rem, 2.6vw, 1.9rem); }
-.breadcrumb { display: flex; gap: 8px; align-items: center; font-size: .8rem; margin-top: 6px; color: #9db4d8; }
-.breadcrumb a { color: #9db4d8; }
+.page-hero h1 { color: var(--color-text); font-size: clamp(1.3rem, 2.4vw, 1.7rem); margin: 0; }
+.breadcrumb { display: flex; gap: 8px; align-items: center; font-size: .8rem; margin-top: 6px; color: var(--color-text-soft); }
+.breadcrumb a { color: var(--color-text-soft); }
 .breadcrumb a:hover { color: var(--color-accent); }
 .breadcrumb span { opacity: .7; }
 
