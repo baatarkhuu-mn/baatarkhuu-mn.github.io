@@ -2695,3 +2695,52 @@ body.hp-split .polls-grid { grid-template-columns: repeat(auto-fill, minmax(min(
   .lps-w b { font-size: .88rem; }
   .lp-foot { padding-top: 12px; font-size: .72rem; }
 }
+
+/* ---------- Санал илгээх форм — хар хөх суурьтай, ялгарсан ---------- */
+#feedback .form-card { background: linear-gradient(160deg, #0b1f4e, #101a3c 55%, #0a1228);
+  border-color: rgba(255,255,255,.16); color: #DCE7FA;
+  box-shadow: 0 26px 52px -22px rgba(10,18,40,.6); }
+#feedback .form-card .fc-title { color: #ffffff; }
+#feedback .form-card label, #feedback .form-card .fc-grouplabel { color: #C9D8F2; }
+#feedback .form-card input, #feedback .form-card select, #feedback .form-card textarea {
+  background: #ffffff; color: #0F1E38; border-color: transparent; }
+#feedback .form-card input::placeholder, #feedback .form-card textarea::placeholder { color: #7B8CA8; }
+#feedback .form-card input:focus, #feedback .form-card select:focus, #feedback .form-card textarea:focus {
+  border-color: #60A5FA; outline: none; }
+#feedback .form-card .char-counter, #feedback .form-card .form-note, #feedback .form-card .geo-status { color: #9DB4DC; }
+#feedback .form-card .upload-zone { background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.35); color: #DCE7FA; }
+#feedback .form-card .upload-zone:hover { background: rgba(255,255,255,.12); border-color: #60A5FA; }
+#feedback .form-card .upload-zone .up-hint { color: #9DB4DC; }
+#feedback .form-card .btn-outline { border-color: rgba(255,255,255,.4); color: #ffffff; background: rgba(255,255,255,.06); }
+#feedback .form-card .btn-outline:hover { border-color: #fff; background: rgba(255,255,255,.14); color: #fff; }
+#feedback .form-card strong, #feedback .form-card u { color: #ffffff; }
+
+/* ---------- Санал карт (fcv2) — мокапын дагуу: зураг дээрээ, доор нь гарчиг/мета/нэг мөр үйлдэл ---------- */
+.fc3.fcv2 { padding: 0; }
+.fcv2 .fc3-media { border-radius: 0; height: 185px; }
+.fcv2 .fc3-bd { padding: 14px 16px 14px; display: flex; flex-direction: column; gap: 11px; }
+.fcv2 .fc3-t { font-size: .88rem; }
+.fcv2 .fc3-meta { display: flex; align-items: center; gap: 8px; font-size: .78rem; color: var(--color-text-soft); font-weight: 600; }
+.fcv2 .fc3-meta .fc3-badge { margin-left: auto; background: var(--color-accent-soft); color: var(--color-accent); font-size: .66rem; font-weight: 800; padding: 4px 10px; border-radius: 7px; }
+.fcv2 .fc3-acts { display: flex; align-items: center; gap: 15px; border-top: 1px solid var(--color-border); padding-top: 11px; }
+.fcv2 .fc3-row { width: auto; display: inline-flex; gap: 7px; align-items: center; font-size: .8rem; padding: 0; border: 0; justify-content: flex-start; }
+.fcv2 .fc3-row b { font-size: .85rem; }
+.fcv2 .fc3-send { margin-left: auto; font-size: .78rem; padding: 8px 16px; }
+.fcv2 .fc3-share { display: inline-flex; gap: 6px; }
+.fcv2 .fc3-sbtn { width: 30px; height: 30px; }
+.fcv2 .fc3-cpanel { margin: 0; }
+
+/* ---------- Асуулгын карт (pc2) — мокапын дагуу: асуулт + шууд нээлттэй сонголт/дүн + нэг мөр хөл ---------- */
+.fc3.pc2 { padding: 0; }
+.pc2 .pc-media { border-radius: 0; height: 160px; margin: 0; }
+.pc2 .pc-bd { padding: 16px 18px 15px; display: flex; flex-direction: column; gap: 12px; }
+.pc2 .fc3-t { font-size: .88rem; }
+.pc2 .pc-panel { display: flex; flex-direction: column; gap: 9px; }
+.pc2 .pc-more { align-self: flex-end; background: none; border: 0; cursor: pointer; font-family: inherit;
+  font-size: .74rem; font-weight: 800; color: var(--color-accent); padding: 0; }
+.pc2 .pc-more:hover { text-decoration: underline; }
+.pc2 .pc-ft { display: flex; justify-content: space-between; align-items: center; gap: 10px;
+  border-top: 1px solid var(--color-border); padding-top: 11px; font-size: .8rem; color: var(--color-text-soft); font-weight: 600; }
+.pc2 .pc-ft b { color: var(--color-text); font-size: .85rem; }
+.pc2 .pc-ftr { display: inline-flex; align-items: center; gap: 9px; }
+.pc2 .pc-ftr .fc3-sbtn { width: 28px; height: 28px; }

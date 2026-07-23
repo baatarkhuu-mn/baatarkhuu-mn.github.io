@@ -787,10 +787,13 @@
       "Хугацаагүй": "No deadline",
       "Оролцох": "Participate",
       "Дүн харах": "View results",
+      "Дүн харах →": "View results →",
       "Ц.Баатархүү": "Ts.Baatarkhuu",
       "Иргэн": "Citizen",
       "Лайк дарах": "Like",
       "Дэмжсэн": "Liked",
+      "Лайк": "Like",
+      "Сэтгэгдэл": "Comments",
       "Сэтгэгдэл бичих": "Write a comment",
       "Хамгийн их дэмжигдсэн": "Most supported",
       "Хотын зураг: Francisco Anzola — CC BY 2.0, Wikimedia Commons": "City photo: Francisco Anzola — CC BY 2.0, Wikimedia Commons",
@@ -1469,34 +1472,29 @@
         const liked = this.likedSet().has(r.id);
         const shareTxt = encodeURIComponent(txt.slice(0, 100));
         const card = document.createElement("article");
-        card.className = "fc3";
+        card.className = "fc3 fcv2";
         card.dataset.id = r.id;
         card.innerHTML =
-          '<h4 class="fc3-t">' + this.esc(txt) + '</h4>' +
           '<button type="button" class="fc3-media" aria-label="' + this.esc(subj) + '">' +
             (url ? '<img src="' + url + '" alt="' + this.esc(subj) + '" loading="lazy" />' : '<span class="fc3-icoph" aria-hidden="true">' + this.subjSvg(r.subject, 44) + '</span>') +
             this.statusChip(r) +
           '</button>' +
-          '<div class="fc3-author">' +
-            '<span class="fc3-ava"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="22" height="22"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span>' +
-            '<span class="fc3-awrap">' +
-              '<span class="fc3-aname">' + this.esc(author) + '</span>' +
-              '<span class="fc3-atime">' + this.esc(this.ago(r.created_at)) + '</span>' +
-              '<span class="fc3-badge">' + this.esc(subj) + '</span>' +
-            '</span>' +
-          '</div>' +
-          '<button type="button" class="fc3-row fc3-like' + (liked ? ' on' : '') + '" aria-pressed="' + liked + '"><span>' + this.IC_LIKE + (liked ? 'Дэмжсэн' : 'Лайк дарах') + '</span><b class="cnt">' + likes + '</b></button>' +
-          '<button type="button" class="fc3-row fc3-cmt" aria-expanded="false"><span>' + this.IC_CMT + 'Сэтгэгдэл бичих</span><b class="ccnt">' + cmts + '</b></button>' +
-          '<div class="fc3-cpanel">' +
-            '<div class="fc3-clist"></div>' +
-            '<form class="fc3-cform"><textarea rows="2" placeholder="Сэтгэгдлээ бичээрэй…" maxlength="500" required></textarea><button type="submit" class="fc3-csend">Илгээх</button></form>' +
-          '</div>' +
-          '<div class="fc3-foot">' +
+          '<div class="fc3-bd">' +
+          '<h4 class="fc3-t">' + this.esc(txt) + '</h4>' +
+          '<div class="fc3-meta"><span>' + this.esc(author) + ' · ' + this.esc(this.ago(r.created_at)) + '</span><span class="fc3-badge">' + this.esc(subj) + '</span></div>' +
+          '<div class="fc3-acts">' +
+          '<button type="button" class="fc3-row fc3-like' + (liked ? ' on' : '') + '" aria-pressed="' + liked + '"><span>' + this.IC_LIKE + (liked ? 'Дэмжсэн' : 'Лайк') + '</span><b class="cnt">' + likes + '</b></button>' +
+          '<button type="button" class="fc3-row fc3-cmt" aria-expanded="false"><span>' + this.IC_CMT + 'Сэтгэгдэл</span><b class="ccnt">' + cmts + '</b></button>' +
             '<a href="/holboo/#feedback" class="fc3-send">Санал илгээх</a>' +
             '<span class="fc3-share">' +
               '<a class="fc3-sbtn fb" href="https://www.facebook.com/sharer/sharer.php?u=' + shareUrl + '" target="_blank" rel="noopener" aria-label="Facebook-т хуваалцах"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 22v-8h3l1-4h-4V7c0-1 .3-2 2-2h2V1.5C18.5 1.4 17.3 1 16 1c-3 0-5 2-5 5v3H7v4h4v8h2z"/></svg></a>' +
               '<a class="fc3-sbtn x" href="https://twitter.com/intent/tweet?url=' + shareUrl + '&text=' + shareTxt + '" target="_blank" rel="noopener" aria-label="X-д хуваалцах"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.657l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>' +
             '</span>' +
+          '</div>' +
+          '<div class="fc3-cpanel">' +
+            '<div class="fc3-clist"></div>' +
+            '<form class="fc3-cform"><textarea rows="2" placeholder="Сэтгэгдлээ бичээрэй…" maxlength="500" required></textarea><button type="submit" class="fc3-csend">Илгээх</button></form>' +
+          '</div>' +
           '</div>';
         const media = card.querySelector(".fc3-media");
         if (url) media.addEventListener("click", () => this.openLightbox(url, subj));
@@ -1513,7 +1511,7 @@
             this.saveLiked(set);
             likeBtn.classList.toggle("on", nowLiked);
             likeBtn.setAttribute("aria-pressed", String(nowLiked));
-            likeBtn.querySelector("span").innerHTML = this.IC_LIKE + (nowLiked ? "Дэмжсэн" : "Лайк дарах");
+            likeBtn.querySelector("span").innerHTML = this.IC_LIKE + (nowLiked ? "Дэмжсэн" : "Лайк");
             if (typeof data === "number") likeBtn.querySelector(".cnt").textContent = data;
           } catch (_) {} finally { likeBtn.disabled = false; }
         });
@@ -2875,14 +2873,14 @@
         });
       } catch (_) {}
     },
-    fill(el, p, sb, open) {
+    fill(el, p, sb, open, forceRes) {
       const opts = Array.isArray(p.options) ? p.options : [];
       const cmap = this._counts[p.id] || {};
       const counts = opts.map((_, i) => cmap[i] || 0);
       const total = counts.reduce((a, b) => a + b, 0);
       const closed = p.closes_at && new Date(p.closes_at) < new Date();
       const my = this.voted()[p.id];
-      const showRes = closed || my != null;
+      const showRes = closed || my != null || !!forceRes;
       const chip = closed
         ? '<span class="pc-st pc-closed"><i class="st-dot"></i>Дууссан</span>'
         : '<span class="pc-st pc-open"><i class="st-dot"></i>Явагдаж буй</span>';
@@ -2901,37 +2899,24 @@
       }
       const shareU = encodeURIComponent("https://baatarkhuu.mn/#polls");
       const shareT = encodeURIComponent((p.question || "").slice(0, 100));
-      el.className = "fc3 pc";
+      el.className = "fc3 pc pc2";
+      const shareHtml =
+        '<span class="fc3-share">' +
+          '<a class="fc3-sbtn fb" href="https://www.facebook.com/sharer/sharer.php?u=' + shareU + '" target="_blank" rel="noopener" aria-label="Facebook-т хуваалцах"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 22v-8h3l1-4h-4V7c0-1 .3-2 2-2h2V1.5C18.5 1.4 17.3 1 16 1c-3 0-5 2-5 5v3H7v4h4v8h2z"/></svg></a>' +
+          '<a class="fc3-sbtn x" href="https://twitter.com/intent/tweet?url=' + shareU + '&text=' + shareT + '" target="_blank" rel="noopener" aria-label="X-д хуваалцах"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.657l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>' +
+        '</span>';
       el.innerHTML =
+        (p.image ? '<div class="fc3-media pc-media"><img src="' + this.esc(p.image) + '" alt="" loading="lazy" />' + chip + '</div>' : '') +
+        '<div class="pc-bd">' +
         '<h4 class="fc3-t">' + this.esc(p.question) + '</h4>' +
-        '<div class="fc3-media pc-media">' +
-          (p.image ? '<img src="' + this.esc(p.image) + '" alt="" loading="lazy" />' : '<span class="fc3-icoph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" width="44" height="44"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></span>') +
-          chip +
+        '<div class="pc-panel open">' + panel +
+          (!showRes ? '<button type="button" class="pc-more">Дүн харах →</button>' : '') +
         '</div>' +
-        '<div class="fc3-author">' +
-          '<span class="fc3-ava"><img src="/assets/img/social/ig-member.jpg" alt="Ц.Баатархүү" loading="lazy" /></span>' +
-          '<span class="fc3-awrap">' +
-            '<span class="fc3-aname">Ц.Баатархүү</span>' +
-            '<span class="fc3-atime">' + this.esc(this.ago(p.created_at)) + '</span>' +
-            '<span class="fc3-badge pc-bdg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>Санал асуулга</span>' +
-          '</span>' +
-        '</div>' +
-        '<div class="fc3-row"><span>Хугацаа</span><b>' + this.esc(durVal) + '</b></div>' +
-        '<div class="fc3-row"><span>Нийт санал</span><b>' + total + '</b></div>' +
-        '<div class="pc-panel' + (open ? " open" : "") + '">' + panel + '</div>' +
-        '<div class="fc3-foot">' +
-          '<button type="button" class="fc3-send pc-join" aria-expanded="' + !!open + '">' + (showRes ? "Дүн харах" : "Оролцох") + '</button>' +
-          '<span class="fc3-share">' +
-            '<a class="fc3-sbtn fb" href="https://www.facebook.com/sharer/sharer.php?u=' + shareU + '" target="_blank" rel="noopener" aria-label="Facebook-т хуваалцах"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 22v-8h3l1-4h-4V7c0-1 .3-2 2-2h2V1.5C18.5 1.4 17.3 1 16 1c-3 0-5 2-5 5v3H7v4h4v8h2z"/></svg></a>' +
-            '<a class="fc3-sbtn x" href="https://twitter.com/intent/tweet?url=' + shareU + '&text=' + shareT + '" target="_blank" rel="noopener" aria-label="X-д хуваалцах"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.657l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>' +
-          '</span>' +
+        '<div class="pc-ft"><span>' + this.esc(p.closes_at ? "Хугацаа — " + durVal : durVal) + '</span>' +
+          '<span class="pc-ftr"><b>' + total + ' санал</b>' + shareHtml + '</span></div>' +
         '</div>';
-      const joinBtn = el.querySelector(".pc-join");
-      const pn = el.querySelector(".pc-panel");
-      joinBtn.addEventListener("click", () => {
-        const isOpen = pn.classList.toggle("open");
-        joinBtn.setAttribute("aria-expanded", String(isOpen));
-      });
+      const more = el.querySelector(".pc-more");
+      if (more) more.addEventListener("click", () => this.fill(el, p, sb, true, true));
       if (!showRes) {
         el.querySelectorAll(".pc-opt").forEach((b) => b.addEventListener("click", async () => {
           b.disabled = true;
