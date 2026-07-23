@@ -2508,10 +2508,10 @@ body.hp-split .rcol { min-width:0; }
 .lpan { position:sticky; top:0; height:125vh; overflow-y:auto; color:#fff; padding:38px 42px;
   display:flex; flex-direction:column;
   background:
-    radial-gradient(ellipse 50% 130% at 85% 0%, rgba(48,113,231,.14), transparent 60%),
-    radial-gradient(ellipse 40% 110% at 8% 100%, rgba(48,113,231,.16), transparent 60%),
-    linear-gradient(168deg, rgba(10,18,40,.93) 0%, rgba(8,15,32,.96) 100%),
-    url("/assets/img/hero-city.jpg") center 40% / cover no-repeat,
+    radial-gradient(ellipse 50% 130% at 85% 0%, rgba(48,113,231,.16), transparent 60%),
+    radial-gradient(ellipse 40% 110% at 8% 100%, rgba(48,113,231,.18), transparent 60%),
+    linear-gradient(168deg, rgba(10,18,40,.72) 0%, rgba(8,15,32,.86) 100%),
+    url("/assets/img/hero-city.jpg") center 38% / cover no-repeat,
     linear-gradient(160deg, #0a1228, #080f20); }
 .lpan::-webkit-scrollbar { width:6px; }
 .lpan::-webkit-scrollbar-thumb { background:rgba(255,255,255,.2); border-radius:4px; }
