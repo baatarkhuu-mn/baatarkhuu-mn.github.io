@@ -790,12 +790,20 @@ body.am-lock { overflow: hidden; }
 
 /* ---------- 14. Page hero (дотоод хуудас) ---------- */
 .page-hero {
-  position: relative; overflow: hidden;
-  background: var(--color-bg-soft); color: var(--color-text);
-  padding: 16px 0; border-bottom: 1px solid var(--color-border);
+  position: relative; overflow: hidden; color: var(--color-text);
+  padding: 18px 0; border-bottom: 1px solid var(--color-border);
+  background:
+    linear-gradient(90deg, var(--color-accent-soft), transparent 60%),
+    var(--color-bg-soft);
+}
+[data-theme="light"] .page-hero {
+  background:
+    linear-gradient(90deg, rgba(48,113,231,.10), rgba(48,113,231,.02) 55%),
+    linear-gradient(180deg, #f0f5fc, #f6f9fd);
 }
 .page-hero .container { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-.page-hero .container::before { content: ""; width: 5px; height: 24px; border-radius: 3px; background: var(--color-accent); flex: none; }
+.page-hero .container::before { content: ""; width: 5px; height: 26px; border-radius: 3px; background: var(--color-accent); flex: none;
+  box-shadow: 0 0 14px -2px var(--color-accent); }
 .page-hero .breadcrumb { margin-top: 0; margin-left: auto; }
 /* Банер ч цагаан тексттэй — хоёр горимд ижил гүн дижитал өнгө */
 [data-theme="light"] .page-hero {
@@ -2740,3 +2748,7 @@ body.hp-split .polls-grid { grid-template-columns: repeat(auto-fill, minmax(min(
 
 /* Самбарын хамгийн доод — зохиогчийн эрх */
 .lp-copy { margin: 10px 0 0; padding-top: 10px; border-top: 1px solid rgba(255,255,255,.1); font-size: .62rem; color: #8FA3C8; }
+
+/* Дотоод хуудсын гарчгийн банерийг түр далдлав — зөвхөн цэсээрээ */
+body.hp-split .page-hero { display: none; }
+body.hp-split main .section:first-of-type, body.hp-split main > .section:first-child { padding-top: 30px; }
