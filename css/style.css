@@ -2522,7 +2522,7 @@ body.hp-split .rcol { min-width:0; }
 .lp-title { font-size:clamp(1.5rem, 2vw, 1.9rem); line-height:1.28; color:#fff; margin:auto 0 16px; text-align:center; }
 .lp-sub { color:#C9D8F2; font-size:.78rem; line-height:1.68; margin:0 0 20px; text-align:center; }
 .lp-sub strong { color:#fff; }
-.lp-btns { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin:0 0 26px; }
+.lp-btns { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin:22px 0 26px; }
 .lp-btn { display:inline-flex; gap:9px; align-items:center; justify-content:center; font-size:.9rem; font-weight:800; padding:16px 20px; border-radius:13px; flex:1 1 0; min-width:0; text-transform:uppercase; letter-spacing:.02em; white-space:nowrap;
   background:linear-gradient(120deg, #2563EB, #3B82F6 55%, #60A5FA); color:#fff; border:0;
   box-shadow:0 18px 36px -12px rgba(59,130,246,.8), inset 0 1px 0 rgba(255,255,255,.3); }
@@ -2545,13 +2545,13 @@ body.hp-split .rcol { min-width:0; }
   font-size:.68rem; font-weight:800; display:grid; place-items:center; }
 .lps-w b { font-size:.82rem; color:#fff; display:block; }
 .lps-d { display:none; }
-.lp-foot { margin-top:0; padding-top:12px; border-top:1px solid rgba(255,255,255,.16); font-size:.68rem; color:#C9D8F2; }
-.lp-foot .lp-soc { display:flex; gap:8px; margin-bottom:10px; }
+.lp-foot { margin-top:0; padding-top:12px; border-top:1px solid rgba(255,255,255,.16); font-size:.68rem; color:#C9D8F2; text-align:center; }
+.lp-foot .lp-soc { display:flex; gap:8px; margin-bottom:10px; justify-content:center; }
 .lp-foot .lp-soc a { width:30px; height:30px; border-radius:9px; background:rgba(255,255,255,.13); display:grid; place-items:center; color:#fff; transition:background var(--transition); }
 .lp-foot .lp-soc a:hover { background:var(--color-accent); }
-.lp-foot p { margin:0 0 4px; display:flex; gap:7px; align-items:flex-start; line-height:1.5; }
+.lp-foot p { margin:0 0 4px; display:flex; gap:7px; align-items:flex-start; justify-content:center; line-height:1.5; text-align:center; }
 .lp-foot p svg { flex:none; margin-top:2px; }
-.lp-cp { color:#8FA3C8; font-size:.62rem; margin-top:9px !important; display:block !important; }
+.lp-cp { color:#8FA3C8; font-size:.62rem; margin-top:9px !important; display:block !important; text-align:center; }
 
 /* Баруун талын цэс — pill товчнууд, тод */
 body.hp-split .navbar-wrap { position:sticky; top:0; z-index:60; background:color-mix(in srgb, var(--color-bg) 88%, transparent); backdrop-filter:blur(9px); border-bottom:1px solid var(--color-border); }
@@ -2773,3 +2773,6 @@ body.hp-split main .section:first-of-type, body.hp-split main > .section:first-c
 .lpq-mark { font-family: Georgia, 'Times New Roman', serif; font-size: 2.4rem; line-height: .5; color: var(--color-accent); display: block; }
 .lpq-text { font-size: 1.08rem; font-weight: 800; line-height: 1.5; color: #ffffff; margin: 10px 0 14px; }
 .lpq-line { display: inline-block; width: 46px; height: 3px; border-radius: 2px; background: var(--color-accent); }
+
+/* Наалттай цэсийн доор anchor үсрэхэд гарчиг халхлагдахгүй */
+.section[id], #feedback, #track, #public-feed, #stats, #polls { scroll-margin-top: 66px; }
