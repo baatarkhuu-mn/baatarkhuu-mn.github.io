@@ -2512,19 +2512,19 @@ body.hp-split .rcol { min-width:0; }
     linear-gradient(168deg, #0b1f4e, #14316f 60%, #1c48b0); }
 .lpan::-webkit-scrollbar { width:6px; }
 .lpan::-webkit-scrollbar-thumb { background:rgba(255,255,255,.2); border-radius:4px; }
-.lp-brand { display:flex; gap:12px; align-items:center; margin-bottom:22px; }
+.lp-brand { display:flex; gap:12px; align-items:center; justify-content:center; margin-bottom:28px; }
 .lp-brand .emblem { width:44px; height:44px; flex:none; }
 .lp-brand .hb-role { font-size:.6rem; letter-spacing:.1em; color:#9DB4DC; font-weight:700; text-transform:uppercase; }
 .lp-brand .hb-name { font-size:1.05rem; color:#fff; }
-.lp-title { font-size:clamp(1.25rem, 1.6vw, 1.55rem); line-height:1.3; color:#fff; margin:0 0 11px; }
-.lp-sub { color:#C9D8F2; font-size:.78rem; line-height:1.68; margin:0 0 18px; }
+.lp-title { font-size:clamp(1.25rem, 1.6vw, 1.55rem); line-height:1.3; color:#fff; margin:0 0 14px; text-align:center; }
+.lp-sub { color:#C9D8F2; font-size:.78rem; line-height:1.68; margin:0 0 22px; }
 .lp-sub strong { color:#fff; }
-.lp-btns { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
+.lp-btns { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-bottom:26px; }
 .lp-btn { display:inline-flex; gap:8px; align-items:center; font-size:.86rem; font-weight:800; padding:12px 20px; border-radius:11px; }
 .lp-ghost { display:inline-flex; gap:8px; align-items:center; font-size:.86rem; font-weight:800; padding:12px 20px; border-radius:11px;
   border:1.5px solid rgba(255,255,255,.35); color:#fff; transition:border-color var(--transition), background var(--transition); }
 .lp-ghost:hover { border-color:#fff; background:rgba(255,255,255,.08); color:#fff; }
-.lp-kpi { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-bottom:18px; }
+.lp-kpi { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:24px; }
 .lpk { border-radius:11px; padding:10px 13px; color:#fff; }
 .lpk b { display:block; font-size:1.25rem; line-height:1.1; font-variant-numeric:tabular-nums; }
 .lpk span { font-size:.62rem; font-weight:700; opacity:.92; display:block; margin-top:2px; line-height:1.3; }
@@ -2532,7 +2532,7 @@ body.hp-split .rcol { min-width:0; }
 .lpk-amber  { background:rgba(245,158,11,.85); }
 .lpk-green  { background:rgba(22,163,74,.85); }
 .lpk-purple { background:rgba(139,92,246,.85); }
-.lp-steps { border-top:1px solid rgba(255,255,255,.16); padding-top:16px; display:flex; flex-direction:column; gap:10px; }
+.lp-steps { border-top:1px solid rgba(255,255,255,.16); padding-top:20px; display:flex; flex-direction:column; gap:12px; }
 .lps { display:flex; gap:12px; align-items:center; }
 .lps-n { flex:none; width:25px; height:25px; border-radius:50%; background:rgba(255,255,255,.16); color:#fff;
   font-size:.68rem; font-weight:800; display:grid; place-items:center; }
