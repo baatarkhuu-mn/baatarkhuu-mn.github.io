@@ -1488,7 +1488,6 @@
             '<a href="/holboo/#feedback" class="fc3-send">Санал илгээх</a>' +
             '<span class="fc3-share">' +
               '<a class="fc3-sbtn fb" href="https://www.facebook.com/sharer/sharer.php?u=' + shareUrl + '" target="_blank" rel="noopener" aria-label="Facebook-т хуваалцах"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 22v-8h3l1-4h-4V7c0-1 .3-2 2-2h2V1.5C18.5 1.4 17.3 1 16 1c-3 0-5 2-5 5v3H7v4h4v8h2z"/></svg></a>' +
-              '<a class="fc3-sbtn x" href="https://twitter.com/intent/tweet?url=' + shareUrl + '&text=' + shareTxt + '" target="_blank" rel="noopener" aria-label="X-д хуваалцах"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.657l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>' +
             '</span>' +
           '</div>' +
           '<div class="fc3-cpanel">' +
@@ -2903,7 +2902,6 @@
       const shareHtml =
         '<span class="fc3-share">' +
           '<a class="fc3-sbtn fb" href="https://www.facebook.com/sharer/sharer.php?u=' + shareU + '" target="_blank" rel="noopener" aria-label="Facebook-т хуваалцах"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 22v-8h3l1-4h-4V7c0-1 .3-2 2-2h2V1.5C18.5 1.4 17.3 1 16 1c-3 0-5 2-5 5v3H7v4h4v8h2z"/></svg></a>' +
-          '<a class="fc3-sbtn x" href="https://twitter.com/intent/tweet?url=' + shareU + '&text=' + shareT + '" target="_blank" rel="noopener" aria-label="X-д хуваалцах"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.657l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>' +
         '</span>';
       el.innerHTML =
         (p.image ? '<div class="fc3-media pc-media"><img src="' + this.esc(p.image) + '" alt="" loading="lazy" />' + chip + '</div>' : '') +
