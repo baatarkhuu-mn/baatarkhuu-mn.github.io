@@ -2523,10 +2523,14 @@ body.hp-split .rcol { min-width:0; }
 .lp-sub { color:#C9D8F2; font-size:.78rem; line-height:1.68; margin:auto 0 22px; }
 .lp-sub strong { color:#fff; }
 .lp-btns { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:auto; margin-bottom:26px; }
-.lp-btn { display:inline-flex; gap:9px; align-items:center; justify-content:center; font-size:.98rem; font-weight:800; padding:16px 26px; border-radius:12px; flex:1 1 auto; }
-.lp-ghost { display:inline-flex; gap:9px; align-items:center; justify-content:center; font-size:.98rem; font-weight:800; padding:16px 26px; border-radius:12px; flex:1 1 auto;
-  border:1.5px solid rgba(255,255,255,.35); color:#fff; transition:border-color var(--transition), background var(--transition); }
-.lp-ghost:hover { border-color:#fff; background:rgba(255,255,255,.08); color:#fff; }
+.lp-btn { display:inline-flex; gap:9px; align-items:center; justify-content:center; font-size:.98rem; font-weight:800; padding:16px 26px; border-radius:13px; flex:1 1 auto;
+  background:linear-gradient(120deg, #2563EB, #3B82F6 55%, #60A5FA); color:#fff; border:0;
+  box-shadow:0 18px 36px -12px rgba(59,130,246,.8), inset 0 1px 0 rgba(255,255,255,.3); }
+.lp-btn:hover { filter:brightness(1.08); background:linear-gradient(120deg, #2563EB, #3B82F6 55%, #60A5FA); color:#fff; }
+.lp-ghost { display:inline-flex; gap:9px; align-items:center; justify-content:center; font-size:.98rem; font-weight:800; padding:16px 26px; border-radius:13px; flex:1 1 auto;
+  background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); color:#fff; backdrop-filter:blur(4px);
+  transition:border-color var(--transition), background var(--transition); }
+.lp-ghost:hover { border-color:rgba(255,255,255,.35); background:rgba(255,255,255,.18); color:#fff; }
 .lp-kpi { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:auto; margin-bottom:24px; }
 .lpk { border-radius:11px; padding:10px 13px; color:#fff; }
 .lpk b { display:block; font-size:1.25rem; line-height:1.1; font-variant-numeric:tabular-nums; }
@@ -2551,13 +2555,16 @@ body.hp-split .rcol { min-width:0; }
 
 /* Баруун талын цэс — pill товчнууд, тод */
 body.hp-split .navbar-wrap { position:sticky; top:0; z-index:60; background:color-mix(in srgb, var(--color-bg) 88%, transparent); backdrop-filter:blur(9px); border-bottom:1px solid var(--color-border); }
-body.hp-split .main-nav ul { display:flex; gap:6px; flex-wrap:wrap; }
-body.hp-split .main-nav ul li a { display:inline-block; font-size:.82rem; font-weight:800; padding:9px 15px; border-radius:11px;
-  background:var(--color-bg-card); border:1.5px solid var(--color-border); color:var(--color-text);
-  transition:border-color var(--transition), color var(--transition), background var(--transition); }
-body.hp-split .main-nav ul li a:hover { border-color:var(--color-accent); color:var(--color-accent); }
-body.hp-split .main-nav ul li a.active { background:var(--color-accent); border-color:var(--color-accent); color:#fff;
-  box-shadow:0 10px 20px -10px rgba(48,113,231,.7); }
+body.hp-split .main-nav ul { display:flex; gap:2px; flex-wrap:wrap; }
+body.hp-split .main-nav ul li a { display:inline-block; font-size:.88rem; font-weight:700; padding:12px 14px 14px; border-radius:0;
+  background:none; border:0; color:var(--color-text-soft); position:relative;
+  transition:color var(--transition); }
+body.hp-split .main-nav ul li a::after { content:""; position:absolute; left:12px; right:12px; bottom:6px; height:3px; border-radius:2px;
+  background:transparent; transition:background .2s; }
+body.hp-split .main-nav ul li a:hover { color:var(--color-accent); background:none; border:0; }
+body.hp-split .main-nav ul li a:hover:not(.active)::after { background:color-mix(in srgb, var(--color-accent) 35%, transparent); }
+body.hp-split .main-nav ul li a.active { background:none; border:0; color:var(--color-accent); font-weight:800; box-shadow:none; }
+body.hp-split .main-nav ul li a.active::after { background:var(--color-accent); }
 
 /* Гарчгууд — том, тод; хэсгүүд — агаартай */
 body.hp-split main .section { padding:52px 0 10px; }
