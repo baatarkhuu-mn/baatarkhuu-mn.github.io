@@ -2515,7 +2515,7 @@ body.hp-split .rcol { min-width:0; }
     linear-gradient(160deg, #0a1228, #080f20); }
 .lpan::-webkit-scrollbar { width:6px; }
 .lpan::-webkit-scrollbar-thumb { background:rgba(255,255,255,.2); border-radius:4px; }
-.lp-brand { display:flex; gap:12px; align-items:center; justify-content:center; margin-bottom:60px; }
+.lp-brand { display:flex; gap:12px; align-items:center; justify-content:center; margin-top:34px; margin-bottom:52px; }
 .lp-brand .emblem { width:70px; height:70px; flex:none; }
 .lp-brand .hb-role { font-size:.68rem; letter-spacing:.1em; color:#9DB4DC; font-weight:700; text-transform:uppercase; }
 .lp-brand .hb-name { font-size:1.35rem; color:#fff; }
