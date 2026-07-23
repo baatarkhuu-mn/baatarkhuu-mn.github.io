@@ -2737,3 +2737,6 @@ body.hp-split .polls-grid { grid-template-columns: repeat(auto-fill, minmax(min(
 /* Самбарын холбоо барих линкүүд — цайвар өнгөө хадгална */
 .lp-foot a { color: inherit; }
 .lp-foot a:hover { color: #fff; }
+
+/* Самбарын хамгийн доод — зохиогчийн эрх */
+.lp-copy { margin: 10px 0 0; padding-top: 10px; border-top: 1px solid rgba(255,255,255,.1); font-size: .62rem; color: #8FA3C8; }
