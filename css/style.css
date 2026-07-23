@@ -2547,6 +2547,10 @@ body.hp-split .rcol { min-width:0; }
 
 /* Баруун талын цэс — pill товчнууд, тод */
 body.hp-split .navbar-wrap { position:sticky; top:0; z-index:60; background:color-mix(in srgb, var(--color-bg) 88%, transparent); backdrop-filter:blur(9px); border-bottom:1px solid var(--color-border); }
+body.hp-split .navbar { min-height:auto; padding:4px 0; }
+body.hp-split .main-nav ul li a { padding:8px 13px 10px; font-size:.85rem; }
+body.hp-split .main-nav ul li a::after { bottom:4px; }
+body.hp-split .nav-tools .icon-btn, body.hp-split .lang-sw { transform:scale(.92); }
 body.hp-split .main-nav ul { display:flex; gap:2px; flex-wrap:wrap; }
 body.hp-split .main-nav ul li a { display:inline-block; font-size:.88rem; font-weight:700; padding:12px 14px 14px; border-radius:0;
   background:none; border:0; color:var(--color-text-soft); position:relative;
