@@ -1572,11 +1572,11 @@ a.news-card-clean { text-decoration: none; color: inherit; display: flex; flex-d
 .news-dots button.active { background: var(--color-accent); width: 22px; border-radius: 5px; }
 
 /* Нүүрний автомат-эргэдэг мэдээний карт (босоо: зураг дээр) */
-.hs-news .nh-card { display: flex; flex-direction: column; flex: 1; min-height: 0; height: 100%;
+.hs-news .nh-card, .hs-events .nh-card { display: flex; flex-direction: column; flex: 1; min-height: 0; height: 100%;
   background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: var(--radius);
   overflow: hidden; text-decoration: none; color: inherit;
   transition: border-color var(--transition), box-shadow var(--transition); }
-.hs-news .nh-card:hover { border-color: var(--color-primary-dark); box-shadow: var(--shadow); }
+.hs-news .nh-card:hover, .hs-events .nh-card:hover { border-color: var(--color-primary-dark); box-shadow: var(--shadow); }
 .nh-img { position: relative; flex: 1; min-height: 210px; overflow: hidden;
   background: linear-gradient(160deg, #15294e, #0b1830); display: grid; place-items: center; }
 [data-theme="light"] .nh-img { background: linear-gradient(160deg, #d6e3f7, #eef3fb); }
@@ -2374,7 +2374,7 @@ body.hp .hh-btn { font-size: clamp(1rem, 1.4vw, 1.14rem); padding: 18px 34px; fo
 @media (max-width: 900px) { .dx-cols { grid-template-columns: 1fr; } .dx-side { position: static; } .dxs-list { max-height: 320px; } }
 
 /* ---------- Нийтийн санал асуулга ---------- */
-.polls-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: start; }
+.polls-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start; }
 .poll-card { background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: 15px; padding: 18px;
   display: flex; flex-direction: column; gap: 12px; box-shadow: var(--shadow-sm); transition: transform var(--transition), box-shadow var(--transition); }
 .poll-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
@@ -2428,7 +2428,7 @@ body.hp .hh-btn { font-size: clamp(1rem, 1.4vw, 1.14rem); padding: 18px 34px; fo
 #feedback .form-card .fc-title { display: flex; align-items: center; gap: 10px; }
 
 /* Нийтэлсэн саналын картууд — гарчиг / зураг / зохиогч / лайк+сэтгэгдэл / илгээх+share */
-.fc3-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: start; }
+.fc3-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start; }
 .fc3 { background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: 15px; padding: 16px 16px 14px;
   display: flex; flex-direction: column; gap: 12px; box-shadow: var(--shadow-sm); transition: transform var(--transition), box-shadow var(--transition); }
 .fc3:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
@@ -2655,3 +2655,8 @@ body.hp-split .dx-head:first-child { margin-top:0; }
 .hs-events [data-events] .nh-card { display: flex; flex-direction: column; flex: 1; min-height: 0; height: 100%; }
 .hs-events [data-events] .news-dots { position: absolute; left: 0; right: 0; bottom: 12px; margin: 0; z-index: 3; }
 .hs-events [data-events] .nh-card .nh-body { padding-bottom: 34px; }
+
+/* Хос дэлгэц: иргэдийн саналын карт асуулгын карттай яг ижил хэмжээтэй —
+   хоёр grid хоёулаа 300–360px картаар дүүргэнэ (ямар ч өргөнд ойролцоо гарна) */
+body.hp-split .dx-main .fc3-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 360px)); justify-content: start; }
+body.hp-split .polls-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 360px)); justify-content: start; }
