@@ -2520,8 +2520,8 @@ body.hp-split .rcol { min-width:0; }
 .lp-sub { color:#C9D8F2; font-size:.78rem; line-height:1.68; margin:0 0 22px; }
 .lp-sub strong { color:#fff; }
 .lp-btns { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-bottom:26px; }
-.lp-btn { display:inline-flex; gap:8px; align-items:center; font-size:.86rem; font-weight:800; padding:12px 20px; border-radius:11px; }
-.lp-ghost { display:inline-flex; gap:8px; align-items:center; font-size:.86rem; font-weight:800; padding:12px 20px; border-radius:11px;
+.lp-btn { display:inline-flex; gap:9px; align-items:center; justify-content:center; font-size:.98rem; font-weight:800; padding:16px 26px; border-radius:12px; flex:1 1 auto; }
+.lp-ghost { display:inline-flex; gap:9px; align-items:center; justify-content:center; font-size:.98rem; font-weight:800; padding:16px 26px; border-radius:12px; flex:1 1 auto;
   border:1.5px solid rgba(255,255,255,.35); color:#fff; transition:border-color var(--transition), background var(--transition); }
 .lp-ghost:hover { border-color:#fff; background:rgba(255,255,255,.08); color:#fff; }
 .lp-kpi { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:24px; }
@@ -2663,18 +2663,18 @@ body.hp-split .polls-grid { grid-template-columns: repeat(auto-fill, minmax(min(
 
 /* Өндөр дэлгэцэд зүүн самбарын агуулгыг томруулж, хоосон зайг дүүргэнэ */
 @media (min-width: 1081px) and (min-height: 821px) {
-  .lp-brand { margin-bottom: 34px; }
+  .lp-brand { margin-bottom: 26px; }
   .lp-brand .emblem { width: 50px; height: 50px; }
-  .lp-title { font-size: clamp(1.45rem, 1.9vw, 1.8rem); margin-bottom: 18px; }
-  .lp-sub { font-size: .85rem; line-height: 1.8; margin-bottom: 28px; }
-  .lp-btn, .lp-ghost { padding: 14px 24px; font-size: .92rem; }
-  .lp-btns { gap: 12px; margin-bottom: 30px; }
-  .lp-kpi { gap: 12px; margin-bottom: 30px; }
-  .lpk { padding: 14px 16px; border-radius: 13px; }
-  .lpk b { font-size: 1.5rem; }
-  .lpk span { font-size: .68rem; margin-top: 4px; }
-  .lp-steps { padding-top: 24px; gap: 16px; }
-  .lps-n { width: 28px; height: 28px; font-size: .72rem; }
-  .lps-w b { font-size: .9rem; }
-  .lp-foot { padding-top: 16px; font-size: .72rem; }
+  .lp-title { font-size: clamp(1.45rem, 1.9vw, 1.8rem); margin-bottom: 14px; }
+  .lp-sub { font-size: .85rem; line-height: 1.75; margin-bottom: 22px; }
+  .lp-btn, .lp-ghost { padding: 17px 28px; font-size: 1.02rem; }
+  .lp-btns { gap: 10px; margin-bottom: 24px; }
+  .lp-kpi { gap: 10px; margin-bottom: 24px; }
+  .lpk { padding: 12px 15px; border-radius: 13px; }
+  .lpk b { font-size: 1.45rem; }
+  .lpk span { font-size: .67rem; margin-top: 3px; }
+  .lp-steps { padding-top: 18px; gap: 13px; }
+  .lps-n { width: 27px; height: 27px; font-size: .7rem; }
+  .lps-w b { font-size: .88rem; }
+  .lp-foot { padding-top: 12px; font-size: .72rem; }
 }
