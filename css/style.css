@@ -2570,3 +2570,25 @@ body.hp-split .dx-head:first-child { margin-top:0; }
   .lpan { position:static; height:auto; padding:30px 22px; }
   .lp-foot { margin-top:18px; }
 }
+
+/* Хос дэлгэц — утсан дээр зүүн самбарыг нэг дэлгэцэд багтааж шахна */
+@media (max-width: 640px) {
+  .lpan { padding: 24px 20px 20px; }
+  .lp-brand { margin-bottom: 16px; }
+  .lp-brand .emblem { width: 38px; height: 38px; }
+  .lp-title { font-size: 1.12rem; margin-bottom: 10px; }
+  .lp-sub { font-size: .74rem; line-height: 1.65; margin-bottom: 16px; }
+  .lp-btns { margin-bottom: 16px; gap: 8px; }
+  .lp-btn, .lp-ghost { padding: 10px 16px; font-size: .8rem; }
+  .lp-kpi { gap: 8px; margin-bottom: 16px; }
+  .lpk { padding: 8px 11px; }
+  .lpk b { font-size: 1.1rem; }
+  .lp-steps { padding-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+  .lps { gap: 8px; align-items: flex-start; }
+  .lps-n { width: 21px; height: 21px; font-size: .6rem; }
+  .lps-w b { font-size: .7rem; line-height: 1.35; }
+  .lp-foot { padding-top: 12px; font-size: .64rem; }
+  .lp-foot .lp-soc { margin-bottom: 8px; }
+  .lp-foot .lp-soc a { width: 26px; height: 26px; }
+  .lp-cp { font-size: .56rem; }
+}
