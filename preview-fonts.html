@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="mn"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Фонтын хувилбарууд</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Golos+Text:wght@400;600;700;800&family=Manrope:wght@400;600;700;800&family=Onest:wght@400;600;700;800&family=Rubik:wght@400;600;700;800&family=IBM+Plex+Sans:wght@400;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  :root { --navy:#0b1f4e; --blue:#3071E7; --sky:#EAF2FF; --ink:#0F1E38; --mut:#5A6B85; --line:#E2E9F3; }
+  * { box-sizing:border-box; margin:0; }
+  body { background:#F4F7FB; color:var(--ink); font-family:"Segoe UI",sans-serif; padding:34px 18px 60px; }
+  .wrap { max-width:980px; margin:0 auto; }
+  h1 { font-size:24px; margin-bottom:6px; }
+  .sub { color:var(--mut); font-size:14px; margin-bottom:30px; max-width:75ch; line-height:1.6; }
+  .fcard { background:#fff; border:1px solid var(--line); border-radius:16px; margin-bottom:26px; overflow:hidden; }
+  .fhead { display:flex; align-items:baseline; gap:12px; padding:14px 20px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
+  .fhead .tag { width:34px; height:34px; border-radius:10px; background:var(--blue); color:#fff; font-size:15px; font-weight:800; display:grid; place-items:center; align-self:center; font-family:"Segoe UI",sans-serif; }
+  .fhead b { font-size:17px; }
+  .fhead span { font-size:12px; color:var(--mut); font-weight:600; }
+  .rec { outline:3px solid var(--blue); outline-offset:-3px; }
+  .rec .fhead::after { content:"Санал болгож буй"; background:var(--blue); color:#fff; padding:4px 12px; border-radius:8px; font-size:11.5px; font-weight:700; margin-left:auto; align-self:center; font-family:"Segoe UI",sans-serif; }
+  .demo { padding:20px; display:grid; grid-template-columns:1.25fr 1fr; gap:22px; }
+  @media (max-width:760px){ .demo { grid-template-columns:1fr; } }
+  .demo h2 { font-size:19px; line-height:1.35; text-transform:uppercase; margin-bottom:10px; font-family:inherit; }
+  .demo p { font-size:13.5px; line-height:1.7; color:#31415E; margin-bottom:14px; }
+  .demo p strong { color:var(--blue); }
+  .btnrow { display:flex; gap:9px; flex-wrap:wrap; }
+  .b1 { background:var(--blue); color:#fff; font-size:13px; font-weight:700; padding:10px 18px; border-radius:10px; font-family:inherit; }
+  .b2 { border:1.5px solid var(--line); color:var(--ink); font-size:13px; font-weight:700; padding:10px 18px; border-radius:10px; font-family:inherit; }
+  .mini { border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
+  .mini .ttl { font-size:12.5px; font-weight:800; text-transform:uppercase; line-height:1.5; margin-bottom:9px; }
+  .nums { display:flex; gap:18px; margin-bottom:10px; }
+  .nums b { font-size:24px; letter-spacing:-.02em; }
+  .nums span { display:block; font-size:10px; color:var(--mut); font-weight:600; }
+  .cap { font-size:11px; color:var(--mut); font-weight:600; }
+  .f-inter { font-family:'Inter',sans-serif; }
+  .f-golos { font-family:'Golos Text',sans-serif; }
+  .f-manrope { font-family:'Manrope',sans-serif; }
+  .f-onest { font-family:'Onest',sans-serif; }
+  .f-rubik { font-family:'Rubik',sans-serif; }
+  .f-plex { font-family:'IBM Plex Sans',sans-serif; }
+  .f-mix { font-family:'Golos Text',sans-serif; }
+  .f-mix h2, .f-mix .ttl { font-family:'Montserrat',sans-serif; }
+</style></head>
+<body><div class="wrap">
+  <h1>Фонтын хувилбарууд</h1>
+  <p class="sub">Одоогийн сайт <b>Inter</b> (Ф1) хэрэглэж байгаа. Бүх хувилбарыг сайтын жинхэнэ бичвэр, гарчиг, тоо, товчоор харьцуулав — кирилл үсгийн дүрс, уншигдах чанараар нь сонгоорой. Бүгд үнэгүй Google Fonts тул солиход 5 минут л зарцуулна.</p>
+
+  <div class="fcard"><div class="fhead"><span class="tag">Ф1</span><b style="font-family:'Inter'">Inter — одоогийнх</b><span>харьцуулах суурь</span></div>
+    <div class="demo f-inter">
+      <div><h2>Иргэдийн санал хүсэлтийг шийдвэрлэх систем</h2><p>Иргэдийн санал, гомдол, өргөдөл олон нийтийн сүлжээнд хязгаарлагдан үлдэх бус, <strong>шийдвэр гаргах түвшинд хүрч, ил тод хянагддаг</strong> байх ёстой.</p><div class="btnrow"><span class="b1">Санал илгээх</span><span class="b2">Явц шалгах</span></div></div>
+      <div class="mini"><div class="ttl">Замын түгжрэлийг бууруулах санал</div><div class="nums"><span><b>1,248</b><span>Нийт хүсэлт</span></span><span><b>68%</b><span>Шийдвэрлэлт</span></span></div><div class="cap">Иргэн · 10 хоногийн өмнө · Зам, нүх, эвдрэл</div></div>
+    </div>
+  </div>
+
+  <div class="fcard rec"><div class="fhead"><span class="tag">Ф2</span><b style="font-family:'Golos Text'">Golos Text</b><span>кириллд зориулж бүтээгдсэн, дэлгэцэд маш цэвэр уншигддаг</span></div>
+    <div class="demo f-golos">
+      <div><h2>Иргэдийн санал хүсэлтийг шийдвэрлэх систем</h2><p>Иргэдийн санал, гомдол, өргөдөл олон нийтийн сүлжээнд хязгаарлагдан үлдэх бус, <strong>шийдвэр гаргах түвшинд хүрч, ил тод хянагддаг</strong> байх ёстой.</p><div class="btnrow"><span class="b1">Санал илгээх</span><span class="b2">Явц шалгах</span></div></div>
+      <div class="mini"><div class="ttl">Замын түгжрэлийг бууруулах санал</div><div class="nums"><span><b>1,248</b><span>Нийт хүсэлт</span></span><span><b>68%</b><span>Шийдвэрлэлт</span></span></div><div class="cap">Иргэн · 10 хоногийн өмнө · Зам, нүх, эвдрэл</div></div>
+    </div>
+  </div>
+
+  <div class="fcard"><div class="fhead"><span class="tag">Ф3</span><b style="font-family:'Manrope'">Manrope</b><span>орчин үеийн зөөлөн хэлбэр — өмнөх прототипүүдэд хэрэглэсэн</span></div>
+    <div class="demo f-manrope">
+      <div><h2>Иргэдийн санал хүсэлтийг шийдвэрлэх систем</h2><p>Иргэдийн санал, гомдол, өргөдөл олон нийтийн сүлжээнд хязгаарлагдан үлдэх бус, <strong>шийдвэр гаргах түвшинд хүрч, ил тод хянагддаг</strong> байх ёстой.</p><div class="btnrow"><span class="b1">Санал илгээх</span><span class="b2">Явц шалгах</span></div></div>
+      <div class="mini"><div class="ttl">Замын түгжрэлийг бууруулах санал</div><div class="nums"><span><b>1,248</b><span>Нийт хүсэлт</span></span><span><b>68%</b><span>Шийдвэрлэлт</span></span></div><div class="cap">Иргэн · 10 хоногийн өмнө · Зам, нүх, эвдрэл</div></div>
+    </div>
+  </div>
+
+  <div class="fcard"><div class="fhead"><span class="tag">Ф4</span><b style="font-family:'Onest'">Onest</b><span>шинэлэг, нээлттэй дүрстэй — залуу, дижитал мэдрэмж</span></div>
+    <div class="demo f-onest">
+      <div><h2>Иргэдийн санал хүсэлтийг шийдвэрлэх систем</h2><p>Иргэдийн санал, гомдол, өргөдөл олон нийтийн сүлжээнд хязгаарлагдан үлдэх бус, <strong>шийдвэр гаргах түвшинд хүрч, ил тод хянагддаг</strong> байх ёстой.</p><div class="btnrow"><span class="b1">Санал илгээх</span><span class="b2">Явц шалгах</span></div></div>
+      <div class="mini"><div class="ttl">Замын түгжрэлийг бууруулах санал</div><div class="nums"><span><b>1,248</b><span>Нийт хүсэлт</span></span><span><b>68%</b><span>Шийдвэрлэлт</span></span></div><div class="cap">Иргэн · 10 хоногийн өмнө · Зам, нүх, эвдрэл</div></div>
+    </div>
+  </div>
+
+  <div class="fcard"><div class="fhead"><span class="tag">Ф5</span><b style="font-family:'Rubik'">Rubik</b><span>зөөлөн булантай, дулаан мэдрэмжтэй</span></div>
+    <div class="demo f-rubik">
+      <div><h2>Иргэдийн санал хүсэлтийг шийдвэрлэх систем</h2><p>Иргэдийн санал, гомдол, өргөдөл олон нийтийн сүлжээнд хязгаарлагдан үлдэх бус, <strong>шийдвэр гаргах түвшинд хүрч, ил тод хянагддаг</strong> байх ёстой.</p><div class="btnrow"><span class="b1">Санал илгээх</span><span class="b2">Явц шалгах</span></div></div>
+      <div class="mini"><div class="ttl">Замын түгжрэлийг бууруулах санал</div><div class="nums"><span><b>1,248</b><span>Нийт хүсэлт</span></span><span><b>68%</b><span>Шийдвэрлэлт</span></span></div><div class="cap">Иргэн · 10 хоногийн өмнө · Зам, нүх, эвдрэл</div></div>
+    </div>
+  </div>
+
+  <div class="fcard"><div class="fhead"><span class="tag">Ф6</span><b style="font-family:'IBM Plex Sans'">IBM Plex Sans</b><span>албан ёсны, төрийн байгууллагын мэдрэмжтэй</span></div>
+    <div class="demo f-plex">
+      <div><h2>Иргэдийн санал хүсэлтийг шийдвэрлэх систем</h2><p>Иргэдийн санал, гомдол, өргөдөл олон нийтийн сүлжээнд хязгаарлагдан үлдэх бус, <strong>шийдвэр гаргах түвшинд хүрч, ил тод хянагддаг</strong> байх ёстой.</p><div class="btnrow"><span class="b1">Санал илгээх</span><span class="b2">Явц шалгах</span></div></div>
+      <div class="mini"><div class="ttl">Замын түгжрэлийг бууруулах санал</div><div class="nums"><span><b>1,248</b><span>Нийт хүсэлт</span></span><span><b>68%</b><span>Шийдвэрлэлт</span></span></div><div class="cap">Иргэн · 10 хоногийн өмнө · Зам, нүх, эвдрэл</div></div>
+    </div>
+  </div>
+
+  <div class="fcard"><div class="fhead"><span class="tag">Ф7</span><b><span style="font-family:'Montserrat'">Montserrat</span> + <span style="font-family:'Golos Text'">Golos Text</span></b><span>хослол: гарчиг нь Montserrat, бичвэр нь Golos</span></div>
+    <div class="demo f-mix">
+      <div><h2>Иргэдийн санал хүсэлтийг шийдвэрлэх систем</h2><p>Иргэдийн санал, гомдол, өргөдөл олон нийтийн сүлжээнд хязгаарлагдан үлдэх бус, <strong>шийдвэр гаргах түвшинд хүрч, ил тод хянагддаг</strong> байх ёстой.</p><div class="btnrow"><span class="b1">Санал илгээх</span><span class="b2">Явц шалгах</span></div></div>
+      <div class="mini"><div class="ttl">Замын түгжрэлийг бууруулах санал</div><div class="nums"><span><b>1,248</b><span>Нийт хүсэлт</span></span><span><b>68%</b><span>Шийдвэрлэлт</span></span></div><div class="cap">Иргэн · 10 хоногийн өмнө · Зам, нүх, эвдрэл</div></div>
+    </div>
+  </div>
+</div></body></html>
