@@ -732,9 +732,14 @@
       "Сайтаас хайх…": "Search the site…",
       "Хуулийн нэрээр хайх…": "Search by law name…",
       "Таны овог нэр": "Your full name",
+      "Овог нэр *": "Full name *",
+      "Утасны дугаар *": "Phone number *",
+      "Утасны дугаар": "Phone number",
+      "Имэйл хаяг": "Email address",
       "+976 ХХХХ-ХХХХ": "+976 XXXX-XXXX",
       "tanii@mail.mn": "you@mail.mn",
       "Тулгамдсан асуудал, санал хүсэлтээ дэлгэрэнгүй бичнэ үү…": "Describe your issue or request in detail…",
+      "Сэтгэгдлээ бичээрэй…": "Write your comment…",
     },
     dict: {
       /* ---- Чиглүүлэх / footer / нийтлэг ---- */
@@ -1248,6 +1253,18 @@
       "2025 оны бүтэн жилийн тайлан": "Full-year 2025 report",
       "Дэлгэрэнгүй санал хүсэлтээ": "Send your detailed feedback via the",
       "хуудсаар илгээгээрэй.": "page.",
+
+      /* ---- Санал илгээх маягтын төрлүүд (select) ---- */
+      "Төрөл сонгоно уу": "Choose a type",
+      "Явган хүний зам": "Pedestrian walkway",
+      "Хог, орчны бохирдол": "Waste & environmental pollution",
+      "Автобусны буудал": "Bus stop",
+      "Сургууль, цэцэрлэг": "School & kindergarten",
+      "Эмнэлэг, өрхийн эмнэлэг": "Hospital & family clinic",
+      "СӨХ, байрны орчин": "HOA & residential area",
+      "Ахмад, ХБИ-ийн хүртээмж": "Access for elderly & disabled",
+      "Хууль, бодлогын санал": "Law & policy proposal",
+      "Хувийн өргөдөл, тусламж хүсэлт": "Personal petition & request for help",
 
       /* ---- Холбоо барих (диаграм + UI) ---- */
       "Иргэн төвтэй тогтолцоо": "A citizen-centered system",
