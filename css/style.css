@@ -2762,7 +2762,8 @@ body.hp-split main .section:first-of-type, body.hp-split main > .section:first-c
 [data-theme="dark"] .scc-x:hover { border-color: #ffffff; }
 .scc-ig { background: linear-gradient(160deg, rgba(221,42,123,.13), rgba(240,148,51,.10) 45%, var(--color-bg-card) 72%); border-color: rgba(221,42,123,.32); }
 .scc-ig:hover { border-color: #dc2743; }
-.scc-dp { background: linear-gradient(160deg, rgba(200,30,45,.13), var(--color-bg-card) 62%); border-color: rgba(200,30,45,.34); }
-.scc-dp:hover { border-color: #c81e2d; }
-/* АН картын badge-ийг FB хөх биш, намын улаанаар */
-.scc-dp .sc-badge { background: #c81e2d; }
+.scc-dp { background: linear-gradient(160deg, rgba(11,31,78,.18), var(--color-bg-card) 62%); border-color: rgba(11,31,78,.4); }
+[data-theme="dark"] .scc-dp { background: linear-gradient(160deg, rgba(48,113,231,.16), var(--color-bg-card) 62%); border-color: rgba(48,113,231,.35); }
+.scc-dp:hover { border-color: #14316f; }
+/* АН картын badge — намын гүн хөхөөр */
+.scc-dp .sc-badge { background: #14316f; }
