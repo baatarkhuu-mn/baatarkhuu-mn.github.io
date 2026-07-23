@@ -2752,3 +2752,17 @@ body.hp-split .polls-grid { grid-template-columns: repeat(auto-fill, minmax(min(
 /* Дотоод хуудсын гарчгийн банерийг түр далдлав — зөвхөн цэсээрээ */
 body.hp-split .page-hero { display: none; }
 body.hp-split main .section:first-of-type, body.hp-split main > .section:first-child { padding-top: 30px; }
+
+/* Сошиал картуудыг платформоор нь ялгаж өнгөжүүлнэ */
+.scc-fb { background: linear-gradient(160deg, rgba(24,119,242,.14), var(--color-bg-card) 62%); border-color: rgba(24,119,242,.35); }
+.scc-fb:hover { border-color: #1877f2; }
+.scc-x  { background: linear-gradient(160deg, rgba(20,23,26,.16), var(--color-bg-card) 62%); border-color: rgba(20,23,26,.32); }
+[data-theme="dark"] .scc-x { background: linear-gradient(160deg, rgba(255,255,255,.10), var(--color-bg-card) 62%); border-color: rgba(255,255,255,.22); }
+.scc-x:hover  { border-color: #14171a; }
+[data-theme="dark"] .scc-x:hover { border-color: #ffffff; }
+.scc-ig { background: linear-gradient(160deg, rgba(221,42,123,.13), rgba(240,148,51,.10) 45%, var(--color-bg-card) 72%); border-color: rgba(221,42,123,.32); }
+.scc-ig:hover { border-color: #dc2743; }
+.scc-dp { background: linear-gradient(160deg, rgba(200,30,45,.13), var(--color-bg-card) 62%); border-color: rgba(200,30,45,.34); }
+.scc-dp:hover { border-color: #c81e2d; }
+/* АН картын badge-ийг FB хөх биш, намын улаанаар */
+.scc-dp .sc-badge { background: #c81e2d; }
