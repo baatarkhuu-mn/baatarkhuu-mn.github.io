@@ -1412,6 +1412,29 @@
     likedSet() { try { return new Set(JSON.parse(localStorage.getItem("fb_liked") || "[]")); } catch (_) { return new Set(); } },
     saveLiked(set) { localStorage.setItem("fb_liked", JSON.stringify([...set])); },
 
+    // ====== ЖИШЭЭ САНАЛУУД (түр — жинхэнэ санал ирэхэд өөрсдөө доош шахагдана) ======
+    DEMOS: [
+      { id: "demo-1", subject: "gerel", status: "done", name: "Иргэн", created_at: "2026-07-22T09:00:00+08:00", likes: 34,
+        message: "13-р хорооллын гудамжны гэрэл 2 сар ажиллахгүй байсныг зассан. Баярлалаа.",
+        comments: [ { body: "Манай гудамжийг ч бас зассан, талархаж байна.", created_at: "2026-07-22T12:00:00+08:00" },
+                    { body: "Түргэн шийдвэрлэсэнд баярлалаа.", created_at: "2026-07-23T08:00:00+08:00" } ] },
+      { id: "demo-2", subject: "zam", status: "routed", name: "Иргэн", created_at: "2026-07-20T10:00:00+08:00", likes: 21,
+        message: "Их сургуулийн гудамжны замын нүх дахин эвдэрсэн. Машин эвдрэх аюултай.",
+        comments: [ { body: "Би ч мөн адил санал өгсөн.", created_at: "2026-07-21T09:00:00+08:00" } ] },
+      { id: "demo-3", subject: "yavgan", status: "new", name: "Иргэн", created_at: "2026-07-18T14:00:00+08:00", likes: 12,
+        message: "Цэцэрлэгийн урд явган зам байхгүй, хүүхдүүд замаар алхаж байна. Аюултай.",
+        comments: [] },
+      { id: "demo-4", subject: "hog", status: "routed", name: "Иргэн", created_at: "2026-07-15T11:00:00+08:00", likes: 18,
+        message: "Гэр хорооллын хог тээвэрлэлт цагтаа хийгддэггүй, хуримтлагдаж байна.",
+        comments: [ { body: "Манай хэсэгт ч ийм асуудал бий.", created_at: "2026-07-16T10:00:00+08:00" } ] },
+      { id: "demo-5", subject: "buudal", status: "new", name: "Иргэн", created_at: "2026-07-12T16:00:00+08:00", likes: 9,
+        message: "Автобусны буудалд сүүдрэвч, суудал байхгүй. Настай хүмүүст хэцүү.",
+        comments: [] },
+      { id: "demo-6", subject: "surguuli", status: "done", name: "Иргэн", created_at: "2026-06-28T09:00:00+08:00", likes: 27,
+        message: "Сургуулийн орчмын гарц дээр гэрлэн дохио тавьсан. Хүүхдүүд аюулгүй боллоо.",
+        comments: [ { body: "Маш зөв шийдэл.", created_at: "2026-06-29T08:00:00+08:00" } ] },
+    ],
+
     async init() {
       const wrap = document.querySelector("[data-feed]");
       if (!wrap) return;
@@ -1419,22 +1442,27 @@
       if (!sb) { wrap.innerHTML = '<p class="feed-state">Самбар одоогоор боломжгүй байна.</p>'; return; }
       this._wrap = wrap; this._sb = sb;
       try {
-        const { data: rows, error } = await sb
-          .from("public_feedback").select("*").order("created_at", { ascending: false }).limit(100);
-        if (error) throw error;
-        if (!rows || !rows.length) {
-          wrap.innerHTML = '<p class="feed-state">Одоогоор нийтэлсэн санал алга. Та формоор санал илгээж, «олон нийтэд харуулах»-ыг сонгож болно.</p>';
-          return;
-        }
-        this._rows = rows;
+        let rows = [];
+        try {
+          const { data, error } = await sb
+            .from("public_feedback").select("*").order("created_at", { ascending: false }).limit(100);
+          if (!error && data) rows = data;
+        } catch (_) {}
+        const demos = this.DEMOS || [];
+        this._rows = rows.concat(demos);
         // Нүүр хуудас — карт хэлбэр (лайк/сэтгэгдлийн тоотой, шүүлтүүргүй)
         if (wrap.hasAttribute("data-feed-gallery")) {
           this._likeMap = {}; this._cmtMap = {};
           try { const { data: lc } = await sb.rpc("like_counts"); (lc || []).forEach((r) => { this._likeMap[r.feedback_id] = r.cnt; }); } catch (_) {}
           try {
-            const { data: cm } = await sb.from("feedback_comments").select("*").in("feedback_id", rows.map((r) => r.id)).order("created_at", { ascending: true });
-            (cm || []).forEach((c) => { (this._cmtMap[c.feedback_id] = this._cmtMap[c.feedback_id] || []).push(c); });
+            const ids = rows.map((r) => r.id);
+            if (ids.length) {
+              const { data: cm } = await sb.from("feedback_comments").select("*").in("feedback_id", ids).order("created_at", { ascending: true });
+              (cm || []).forEach((c) => { (this._cmtMap[c.feedback_id] = this._cmtMap[c.feedback_id] || []).push(c); });
+            }
           } catch (_) {}
+          // Демо тоонуудыг оноож өгнө
+          demos.forEach((d) => { this._likeMap[d.id] = d.likes; this._cmtMap[d.id] = (d.comments || []).slice(); });
           this.renderGallery(); return;
         }
         // Дэмжлэгийн тоо + коммент (нэг дор)
@@ -1526,7 +1554,7 @@
     renderGallery() {
       const wrap = this._wrap, sb = this._sb;
       // Зурагтайг эхэнд нь, дараа нь бусдыг — 6 карт хүртэл
-      const rows = this._rows.slice().sort((a, b) => ((Array.isArray(b.photos) && b.photos.length) ? 1 : 0) - ((Array.isArray(a.photos) && a.photos.length) ? 1 : 0)).slice(0, 6);
+      const rows = this._rows.slice().sort((a, b) => ((Array.isArray(b.photos) && b.photos.length) ? 1 : 0) - ((Array.isArray(a.photos) && a.photos.length) ? 1 : 0)).slice(0, 9);
       wrap.className = "fc3-grid";
       wrap.innerHTML = "";
       const shareUrl = encodeURIComponent("https://baatarkhuu.mn/holboo/#public-feed");
@@ -1543,6 +1571,7 @@
         const cmts = cmtList.length;
         const liked = this.likedSet().has(r.id);
         const shareTxt = encodeURIComponent(txt.slice(0, 100));
+        const isDemo = String(r.id).indexOf("demo-") === 0;
         const card = document.createElement("article");
         card.className = "fc3 fcv2";
         card.dataset.id = r.id;
@@ -1572,6 +1601,17 @@
         // Лайк дарах — toggle_like RPC (нэг төхөөрөмжөөс нэг удаа, дахин дарвал буцаана)
         const likeBtn = card.querySelector(".fc3-like");
         likeBtn.addEventListener("click", async () => {
+          if (isDemo) {
+            const set = this.likedSet();
+            const nowLiked = !set.has(r.id);
+            if (nowLiked) set.add(r.id); else set.delete(r.id);
+            this.saveLiked(set);
+            likeBtn.classList.toggle("on", nowLiked);
+            likeBtn.setAttribute("aria-pressed", String(nowLiked));
+            const cntEl = likeBtn.querySelector(".cnt");
+            cntEl.textContent = (parseInt(cntEl.textContent, 10) || 0) + (nowLiked ? 1 : -1);
+            return;
+          }
           likeBtn.disabled = true;
           try {
             const { data, error } = await sb.rpc("toggle_like", { p_feedback: r.id, p_client: this.clientId() });
@@ -1607,6 +1647,13 @@
           const ta = cform.querySelector("textarea");
           const body = ta.value.trim();
           if (!body) return;
+          if (isDemo) {
+            cmtList.push({ body, created_at: new Date().toISOString() });
+            renderC();
+            card.querySelector(".ccnt").textContent = cmtList.length;
+            ta.value = "";
+            return;
+          }
           const sbtn = cform.querySelector(".fc3-csend");
           sbtn.disabled = true;
           try {
@@ -2920,20 +2967,40 @@
         return Math.floor(d / 365) + " жилийн өмнө";
       } catch (_) { return ""; }
     },
+    // ====== ЖИШЭЭ АСУУЛГА (түр) ======
+    DEMO_POLLS: [
+      { id: "demo-p1", question: "Тойрогтоо хамгийн түрүүнд шийдвэрлэвэл зохих асуудал аль нь вэ?",
+        options: ["Замын түгжрэл", "Агаарын бохирдол", "Ногоон байгууламж", "Гэр хорооллын дэд бүтэц"],
+        closes_at: null, created_at: "2026-07-20T09:00:00+08:00", counts: { 0: 45, 1: 38, 2: 22, 3: 31 } },
+      { id: "demo-p2", question: "Иргэдтэй нээлттэй уулзалтыг долоо хоногийн аль өдөр зохион байгуулбал тохиромжтой вэ?",
+        options: ["Ажлын өдрийн орой", "Бямба гараг", "Ням гараг"],
+        closes_at: "2026-08-15T23:59:59+08:00", created_at: "2026-07-18T09:00:00+08:00", counts: { 0: 30, 1: 55, 2: 20 } },
+      { id: "demo-p3", question: "Гэр хорооллын дэд бүтцийг сайжруулах төслийг дэмжиж байна уу?",
+        options: ["Тийм, бүрэн дэмжинэ", "Хэсэгчлэн дэмжинэ", "Үгүй"],
+        closes_at: null, created_at: "2026-07-10T09:00:00+08:00", counts: { 0: 88, 1: 24, 2: 8 } },
+    ],
     async init() {
       const wrap = document.querySelector("[data-polls]");
       if (!wrap) return;
       const sb = window.getSB && window.getSB();
       if (!sb) return;
       try {
-        const { data: polls, error } = await sb.from("polls").select("*").eq("published", true)
-          .order("sort", { ascending: true }).order("created_at", { ascending: false }).limit(6);
-        if (error || !polls || !polls.length) return;
+        let polls = [];
+        try {
+          const { data, error } = await sb.from("polls").select("*").eq("published", true)
+            .order("sort", { ascending: true }).order("created_at", { ascending: false }).limit(6);
+          if (!error && data) polls = data;
+        } catch (_) {}
         this._counts = {};
         try {
           const { data: res } = await sb.rpc("poll_results");
           (res || []).forEach((r) => { (this._counts[r.poll_id] = this._counts[r.poll_id] || {})[r.option_idx] = Number(r.cnt); });
         } catch (_) {}
+        // Жишээ асуулга + тоонууд
+        const demos = this.DEMO_POLLS || [];
+        demos.forEach((d) => { this._counts[d.id] = Object.assign({}, d.counts); });
+        polls = polls.concat(demos);
+        if (!polls.length) return;
         const sec = document.getElementById("polls");
         if (sec) sec.style.display = "";
         wrap.innerHTML = "";
@@ -2989,7 +3056,16 @@
       const more = el.querySelector(".pc-more");
       if (more) more.addEventListener("click", () => this.fill(el, p, sb, true, true));
       if (!showRes) {
+        const isDemo = String(p.id).indexOf("demo-") === 0;
         el.querySelectorAll(".pc-opt").forEach((b) => b.addEventListener("click", async () => {
+          if (isDemo) {
+            const i = +b.dataset.i;
+            this._counts[p.id] = this._counts[p.id] || {};
+            this._counts[p.id][i] = (this._counts[p.id][i] || 0) + 1;
+            const v = this.voted(); v[p.id] = i; this.saveVoted(v);
+            this.fill(el, p, sb, true);
+            return;
+          }
           b.disabled = true;
           try {
             const { data, error } = await sb.rpc("poll_vote", { p_poll: p.id, p_option: +b.dataset.i, p_client: this.clientId() });
