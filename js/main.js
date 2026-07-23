@@ -2673,10 +2673,42 @@
     esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
     // Жишээ арга хэмжээнүүд — CMS-ийн арга хэмжээ хүрэлцэхгүй үед эргэлтийг нөхнө
     DEMOS: [
-      { demo: true, title: "Иргэдтэй нээлттэй уулзалт", event_date: "2026-07-26" },
-      { demo: true, title: "Тойргийн иргэдийн нээлттэй өдөрлөг", event_date: "2026-08-09" },
-      { demo: true, title: "Тайлангийн уулзалт — Чингэлтэй дүүрэг", event_date: "2026-08-23" },
+      { demo: true, title: "Иргэдтэй нээлттэй уулзалт", event_date: "2026-07-26",
+        description: "10-р тойргийн иргэдийн өргөдөл, санал хүсэлтийг сонсож, гэр хорооллын дэд бүтэц, тулгамдсан асуудлыг хэлэлцэнэ." },
+      { demo: true, title: "Тойргийн иргэдийн нээлттэй өдөрлөг", event_date: "2026-08-09",
+        description: "Чингэлтэй, Сүхбаатар дүүргийн иргэдэд төрийн үйлчилгээг нэг цэгээс хүргэж, санал хүсэлтийг газар дээр нь хүлээн авна." },
+      { demo: true, title: "Тайлангийн уулзалт — Чингэлтэй дүүрэг", event_date: "2026-08-23",
+        description: "Сонгогчдод хийсэн ажлын тайлан танилцуулж, иргэдийн асуултад хариулна." },
     ],
+    // Мэдээний карттай ижил хэлбэрийн эргэдэг карт (nh-card)
+    rotCard(ev, regCount) {
+      const esc = EventsCMS.esc;
+      const el = document.createElement("div");
+      el.className = "nh-card ev-rot";
+      let dateLine = "";
+      if (ev.event_date) {
+        const d = new Date(ev.event_date);
+        const ds = d.getFullYear() + "." + String(d.getMonth() + 1).padStart(2, "0") + "." + String(d.getDate()).padStart(2, "0");
+        dateLine = '<div class="ni-date"><svg class="ni-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>' + ds + "</div>";
+      }
+      const img = ev.image_url
+        ? '<img src="' + esc(ev.image_url) + '" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'/assets/img/logo.svg\';this.className=\'nh-ph\'">'
+        : '<img src="/assets/img/logo.svg" alt="" class="nh-ph">';
+      const raw = (ev.description || "").replace(/\s+/g, " ").trim();
+      const desc = raw ? '<p class="ni-excerpt">' + esc(raw.slice(0, 160)) + (raw.length > 160 ? "…" : "") + "</p>" : "";
+      const reg = regCount ? '<p class="ef-count">' + regCount + " иргэн бүртгүүлсэн</p>" : "";
+      el.innerHTML = '<div class="nh-img">' + img + '</div><div class="nh-body">' + dateLine +
+        '<h3 class="nh-title">' + esc(ev.title) + "</h3>" + desc + reg + '<div class="ef-cta"></div></div>';
+      const url = ev.demo ? "/holboo/" : "/arga-delgerengui/?id=" + encodeURIComponent(ev.id);
+      const a = document.createElement("a");
+      a.className = "btn btn-gold btn-sm";
+      a.textContent = "Бүртгүүлэх";
+      a.href = ev.demo ? "/holboo/" : (ev.register_url || url);
+      if (!ev.demo && ev.register_url) { a.target = "_blank"; a.rel = "noopener"; }
+      el.querySelector(".ef-cta").appendChild(a);
+      el.addEventListener("click", (e) => { if (e.target.closest("a,button")) return; location.href = url; });
+      return el;
+    },
     init() {
       const box = document.querySelector("[data-events]");
       if (!box) return;
@@ -2699,30 +2731,9 @@
           try { const { data: rc } = await sb.rpc("event_reg_counts"); (rc || []).forEach((r) => { regMap[r.event_id] = r.cnt; }); } catch (_) {}
           box.className = "";
           box.innerHTML = "";
-          const holder = document.createElement("div");
-          const dots = document.createElement("div"); dots.className = "efr-dots";
-          list.forEach((_, i) => {
-            const b = document.createElement("button");
-            b.type = "button"; b.className = "efr-dot"; b.setAttribute("aria-label", "Арга хэмжээ " + (i + 1));
-            b.addEventListener("click", () => { show(i); restart(); });
-            dots.appendChild(b);
-          });
-          box.appendChild(holder);
-          if (list.length > 1) box.appendChild(dots);
-          let cur = 0, timer = null;
-          const show = (i) => {
-            cur = ((i % list.length) + list.length) % list.length;
-            const ev = list[cur];
-            const card = EventsCMS.featureCard(sb, ev, (ev.id && regMap[ev.id]) || 0);
-            card.classList.add("efr-in");
-            holder.innerHTML = "";
-            holder.appendChild(card);
-            dots.querySelectorAll(".efr-dot").forEach((d, j) => d.classList.toggle("on", j === cur));
-          };
-          const restart = () => { clearInterval(timer); if (list.length > 1) timer = setInterval(() => show(cur + 1), 6000); };
-          box.addEventListener("mouseenter", () => clearInterval(timer));
-          box.addEventListener("mouseleave", restart);
-          show(0); restart();
+          // Мэдээний карттай ижил хэлбэр, ижил эргэлт (nh-card + rotateHome)
+          list.forEach((ev) => box.appendChild(EventsCMS.rotCard(ev, (ev.id && regMap[ev.id]) || 0)));
+          if (list.length > 1) NewsFeed.rotateHome(box);
         });
     },
     // Онцлох арга хэмжээ — зурагтай карт + бүртгүүлэх товч; дарахад дэлгэрэнгүй нээгдэнэ

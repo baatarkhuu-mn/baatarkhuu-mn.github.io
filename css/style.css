@@ -2623,3 +2623,19 @@ body.hp-split .dx-head:first-child { margin-top:0; }
   background: var(--color-border); transition: background var(--transition), transform var(--transition); }
 .efr-dot:hover { transform: scale(1.25); }
 .efr-dot.on { background: var(--color-accent); }
+
+/* Арга хэмжээ — мэдээний карттай ижил nh-card хэлбэр */
+.ev-rot { cursor: pointer; }
+[data-events] .nh-card .ef-cta { margin-top: 12px; }
+[data-events] .nh-card .ef-count { font-size: .78rem; color: var(--color-accent); font-weight: 700; margin: 6px 0 0; }
+
+/* Утсанд — бренд, гарчгийг голлуулж, зайг чөлөөтэй болгоно */
+@media (max-width: 640px) {
+  .lpan { padding: 30px 22px 24px; }
+  .lp-brand { justify-content: center; text-align: left; margin-bottom: 22px; }
+  .lp-title { text-align: center; margin-bottom: 13px; }
+  .lp-sub { margin-bottom: 19px; }
+  .lp-btns { justify-content: center; margin-bottom: 19px; }
+  .lp-kpi { margin-bottom: 19px; }
+  .lp-steps { padding-top: 17px; }
+}
