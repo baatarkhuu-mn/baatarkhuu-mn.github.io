@@ -2671,6 +2671,12 @@
   /* ---------- Арга хэмжээ (CMS) + бүртгэл ---------- */
   const EventsCMS = {
     esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
+    // Жишээ арга хэмжээнүүд — CMS-ийн арга хэмжээ хүрэлцэхгүй үед эргэлтийг нөхнө
+    DEMOS: [
+      { demo: true, title: "Иргэдтэй нээлттэй уулзалт", event_date: "2026-07-26" },
+      { demo: true, title: "Тойргийн иргэдийн нээлттэй өдөрлөг", event_date: "2026-08-09" },
+      { demo: true, title: "Тайлангийн уулзалт — Чингэлтэй дүүрэг", event_date: "2026-08-23" },
+    ],
     init() {
       const box = document.querySelector("[data-events]");
       if (!box) return;
@@ -2679,18 +2685,44 @@
       sb.from("events").select("*").eq("published", true)
         .order("event_date", { ascending: true, nullsFirst: false }).order("sort", { ascending: true })
         .then(async ({ data, error }) => {
-          if (error || !data || !data.length) return; // хоосон → жишээ хэвээр
-          const today = new Date(); today.setHours(0, 0, 0, 0);
-          const upcoming = data.filter((e) => !e.event_date || new Date(e.event_date) >= today);
-          // Ирээдүйн арга хэмжээ байвал тэдгээрийг (ойрынх нь түрүүнд); үгүй бол хамгийн сүүлийнхийг
-          // Зөвхөн 1 — ойрын ирэх (үгүй бол хамгийн сүүлийн) арга хэмжээ
-          const ev = (upcoming.length ? upcoming[0] : data[data.length - 1]);
-          if (!ev) return;
-          let regCount = 0;
-          try { const { data: rc } = await sb.rpc("event_reg_counts"); (rc || []).forEach((r) => { if (r.event_id === ev.id) regCount = r.cnt; }); } catch (_) {}
+          // Эргэлтийн жагсаалт: ирэх арга хэмжээнүүд → үгүй бол сүүлийнхүүд → дутууг жишээгээр нөхнө
+          let list;
+          if (error || !data || !data.length) {
+            list = EventsCMS.DEMOS.slice();
+          } else {
+            const today = new Date(); today.setHours(0, 0, 0, 0);
+            const upcoming = data.filter((e) => !e.event_date || new Date(e.event_date) >= today);
+            list = upcoming.length ? upcoming : data.slice(-3);
+            if (list.length < 2) list = list.concat(EventsCMS.DEMOS.slice(0, 3 - list.length));
+          }
+          const regMap = {};
+          try { const { data: rc } = await sb.rpc("event_reg_counts"); (rc || []).forEach((r) => { regMap[r.event_id] = r.cnt; }); } catch (_) {}
           box.className = "";
           box.innerHTML = "";
-          box.appendChild(EventsCMS.featureCard(sb, ev, regCount));
+          const holder = document.createElement("div");
+          const dots = document.createElement("div"); dots.className = "efr-dots";
+          list.forEach((_, i) => {
+            const b = document.createElement("button");
+            b.type = "button"; b.className = "efr-dot"; b.setAttribute("aria-label", "Арга хэмжээ " + (i + 1));
+            b.addEventListener("click", () => { show(i); restart(); });
+            dots.appendChild(b);
+          });
+          box.appendChild(holder);
+          if (list.length > 1) box.appendChild(dots);
+          let cur = 0, timer = null;
+          const show = (i) => {
+            cur = ((i % list.length) + list.length) % list.length;
+            const ev = list[cur];
+            const card = EventsCMS.featureCard(sb, ev, (ev.id && regMap[ev.id]) || 0);
+            card.classList.add("efr-in");
+            holder.innerHTML = "";
+            holder.appendChild(card);
+            dots.querySelectorAll(".efr-dot").forEach((d, j) => d.classList.toggle("on", j === cur));
+          };
+          const restart = () => { clearInterval(timer); if (list.length > 1) timer = setInterval(() => show(cur + 1), 6000); };
+          box.addEventListener("mouseenter", () => clearInterval(timer));
+          box.addEventListener("mouseleave", restart);
+          show(0); restart();
         });
     },
     // Онцлох арга хэмжээ — зурагтай карт + бүртгүүлэх товч; дарахад дэлгэрэнгүй нээгдэнэ
@@ -2711,8 +2743,15 @@
            ${regCount ? `<p class="ef-count">${regCount} иргэн бүртгүүлсэн</p>` : ""}
            <div class="ef-cta"></div>
          </div>`;
-      const url = "/arga-delgerengui/?id=" + encodeURIComponent(ev.id);
       const cta = el.querySelector(".ef-cta");
+      if (ev.demo) {
+        // Жишээ арга хэмжээ — дэлгэрэнгүй хуудасгүй, бүртгэл нь холбоо барих руу
+        const a = document.createElement("a");
+        a.className = "btn btn-gold"; a.href = "/holboo/"; a.textContent = "Бүртгүүлэх";
+        cta.appendChild(a);
+        return el;
+      }
+      const url = "/arga-delgerengui/?id=" + encodeURIComponent(ev.id);
       if (ev.register_url) {
         const a = document.createElement("a");
         a.className = "btn btn-gold"; a.href = ev.register_url; a.target = "_blank"; a.rel = "noopener"; a.textContent = "Бүртгүүлэх";
