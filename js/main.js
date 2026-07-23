@@ -1554,7 +1554,8 @@
     renderGallery() {
       const wrap = this._wrap, sb = this._sb;
       // Зурагтайг эхэнд нь, дараа нь бусдыг — 6 карт хүртэл
-      const rows = this._rows.slice().sort((a, b) => ((Array.isArray(b.photos) && b.photos.length) ? 1 : 0) - ((Array.isArray(a.photos) && a.photos.length) ? 1 : 0)).slice(0, 9);
+      const lim = parseInt(this._wrap.getAttribute("data-feed-limit"), 10) || 9;
+      const rows = this._rows.slice().sort((a, b) => ((Array.isArray(b.photos) && b.photos.length) ? 1 : 0) - ((Array.isArray(a.photos) && a.photos.length) ? 1 : 0)).slice(0, lim);
       wrap.className = "fc3-grid";
       wrap.innerHTML = "";
       const shareUrl = encodeURIComponent("https://baatarkhuu.mn/holboo/#public-feed");
@@ -2978,6 +2979,18 @@
       { id: "demo-p3", question: "Гэр хорооллын дэд бүтцийг сайжруулах төслийг дэмжиж байна уу?",
         options: ["Тийм, бүрэн дэмжинэ", "Хэсэгчлэн дэмжинэ", "Үгүй"],
         closes_at: null, created_at: "2026-07-10T09:00:00+08:00", counts: { 0: 88, 1: 24, 2: 8 } },
+      { id: "demo-p4", question: "Хотын нийтийн тээврийг сайжруулах хамгийн чухал арга хэмжээ аль нь вэ?",
+        options: ["Автобусны давтамж нэмэх", "Шинэ чиглэл нээх", "Цахим төлбөр", "Буудал тохижуулах"],
+        closes_at: null, created_at: "2026-07-08T09:00:00+08:00", counts: { 0: 40, 1: 25, 2: 35, 3: 18 } },
+      { id: "demo-p5", question: "Сургуулийн орчны аюулгүй байдлыг хэрхэн сайжруулах вэ?",
+        options: ["Гэрлэн дохио", "Явган гарц", "Хурд сааруулагч", "Хяналтын камер"],
+        closes_at: "2026-08-20T23:59:59+08:00", created_at: "2026-07-05T09:00:00+08:00", counts: { 0: 50, 1: 42, 2: 28, 3: 33 } },
+      { id: "demo-p6", question: "Гэр хорооллын айл өрхийн хамгийн тулгамдсан хэрэгцээ юу вэ?",
+        options: ["Цэвэр ус", "Дулаан", "Зам, гэрэлтүүлэг", "Хог зайлуулалт"],
+        closes_at: null, created_at: "2026-07-02T09:00:00+08:00", counts: { 0: 60, 1: 45, 2: 38, 3: 20 } },
+      { id: "demo-p7", question: "Ирэх онд тойрогтоо хамгийн түрүүнд ямар төсөл хэрэгжүүлбэл зохих вэ?",
+        options: ["Цэцэрлэг барих", "Эмнэлэг өргөтгөх", "Спорт талбай", "Ногоон байгууламж"],
+        closes_at: null, created_at: "2026-06-30T09:00:00+08:00", counts: { 0: 55, 1: 48, 2: 30, 3: 25 } },
     ],
     async init() {
       const wrap = document.querySelector("[data-polls]");
@@ -3010,6 +3023,23 @@
           this.fill(el, p, sb);
           wrap.appendChild(el);
         });
+        // 6-аас олон бол эхний 2 мөрийг л харуулж, «Бүгдийг үзэх» товч нэмнэ
+        const LIMIT = 6;
+        const oldBtn = wrap.parentNode.querySelector(".polls-more-wrap");
+        if (oldBtn) oldBtn.remove();
+        if (polls.length > LIMIT) {
+          wrap.classList.add("polls-clamp");
+          const mw = document.createElement("div");
+          mw.className = "polls-more-wrap";
+          const btn = document.createElement("button");
+          btn.type = "button"; btn.className = "polls-more";
+          btn.textContent = "Бүгдийг үзэх (" + polls.length + ") →";
+          btn.addEventListener("click", () => { wrap.classList.remove("polls-clamp"); mw.remove(); });
+          mw.appendChild(btn);
+          wrap.parentNode.insertBefore(mw, wrap.nextSibling);
+        } else {
+          wrap.classList.remove("polls-clamp");
+        }
       } catch (_) {}
     },
     fill(el, p, sb, open, forceRes) {

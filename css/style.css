@@ -2673,7 +2673,13 @@ body.hp-split .dx-head:first-child { margin-top:0; }
 /* Хос дэлгэц: иргэдийн саналын карт асуулгын карттай яг ижил хэмжээтэй —
    хоёр grid хоёулаа 300–360px картаар дүүргэнэ (ямар ч өргөнд ойролцоо гарна) */
 body.hp-split .dx-main .fc3-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 360px)); justify-content: start; }
-body.hp-split .polls-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 360px)); justify-content: start; }
+body.hp-split .polls-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 1120px) { body.hp-split .polls-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 700px) { body.hp-split .polls-grid { grid-template-columns: 1fr; } }
+.polls-grid.polls-clamp > *:nth-child(n+7) { display: none; }
+.polls-more-wrap { text-align: center; margin-top: 20px; }
+.polls-more { background: var(--color-bg-card); border: 1.5px solid var(--color-border); color: var(--color-accent); font-family: inherit; font-weight: 800; font-size: .9rem; padding: 12px 26px; border-radius: 12px; cursor: pointer; transition: border-color var(--transition), background var(--transition); }
+.polls-more:hover { border-color: var(--color-accent); background: var(--color-accent-soft); }
 
 /* Өндөр дэлгэцэд зүүн самбарын агуулгыг томруулж, хоосон зайг дүүргэнэ */
 @media (min-width: 1081px) and (min-height: 821px) {
