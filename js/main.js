@@ -3023,20 +3023,20 @@
           this.fill(el, p, sb);
           wrap.appendChild(el);
         });
-        // 6-аас олон бол эхний 2 мөрийг л харуулж, «Бүгдийг үзэх» товч нэмнэ
+        // 6-аас олон бол эхний 2 мөрийг л харуулж, гарчгийн баруун талд «Бүгдийг үзэх» холбоос нэмнэ
         const LIMIT = 6;
-        const oldBtn = wrap.parentNode.querySelector(".polls-more-wrap");
-        if (oldBtn) oldBtn.remove();
+        const head = document.querySelector("#polls .dx-head");
+        const oldLink = head && head.querySelector(".polls-more");
+        if (oldLink) oldLink.remove();
         if (polls.length > LIMIT) {
           wrap.classList.add("polls-clamp");
-          const mw = document.createElement("div");
-          mw.className = "polls-more-wrap";
-          const btn = document.createElement("button");
-          btn.type = "button"; btn.className = "polls-more";
-          btn.textContent = "Бүгдийг үзэх (" + polls.length + ") →";
-          btn.addEventListener("click", () => { wrap.classList.remove("polls-clamp"); mw.remove(); });
-          mw.appendChild(btn);
-          wrap.parentNode.insertBefore(mw, wrap.nextSibling);
+          if (head) {
+            const a = document.createElement("a");
+            a.href = "#"; a.className = "dx-all polls-more";
+            a.textContent = "Бүгдийг үзэх →";
+            a.addEventListener("click", (e) => { e.preventDefault(); wrap.classList.remove("polls-clamp"); a.remove(); });
+            head.appendChild(a);
+          }
         } else {
           wrap.classList.remove("polls-clamp");
         }
