@@ -2503,7 +2503,8 @@ body.hp-split .splitx { display:grid; grid-template-columns:440px minmax(0,1fr);
 body.hp-split .rcol { min-width:0; }
 
 /* Зүүн зогсонги самбар */
-.lpan { position:sticky; top:0; height:100vh; overflow-y:auto; color:#fff; padding:38px 42px;
+/* height 125vh — desktop zoom 0.8-ийг нөхөж дэлгэц бүтэн дүүргэнэ */
+.lpan { position:sticky; top:0; height:125vh; overflow-y:auto; color:#fff; padding:38px 42px;
   display:flex; flex-direction:column;
   background:
     linear-gradient(168deg, rgba(11,31,78,.9) 0%, rgba(20,49,111,.92) 60%, rgba(28,72,176,.9) 100%),
