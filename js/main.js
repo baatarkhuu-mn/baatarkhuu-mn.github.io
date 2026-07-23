@@ -449,10 +449,9 @@
       const setLL = (lat, lng) => { latIn.value = (+lat).toFixed(6); lngIn.value = (+lng).toFixed(6); };
       const pinMsg = (lat, lng) => { if (geoStatus) geoStatus.innerHTML = `Pin: <strong>${(+lat).toFixed(5)}, ${(+lng).toFixed(5)}</strong> — газрын зураг дээр чирж засна уу`; };
       const resetGeo = () => {
-        if (geoStatus) geoStatus.textContent = "Байршил тогтоогоогүй";
-        if (geoMap) { geoMap.style.display = "none"; geoMap.innerHTML = ""; }
+        if (geoStatus) geoStatus.innerHTML = "Газрын зураг дээр дарж эсвэл pin-ийг чирж байршлаа тодорхойлно уу";
         if (latIn) latIn.value = ""; if (lngIn) lngIn.value = "";
-        gMap = null; gMarker = null;
+        showMap(UB[0], UB[1]); // зургийг нууж бус, UB төв рүү буцаана (тогтмол харагдана)
       };
       const showMap = (lat, lng) => {
         if (!geoMap) return;
@@ -492,6 +491,12 @@
             { enableHighAccuracy: true, timeout: 12000 }
           );
         });
+      }
+
+      /* --- Газрын зургийг тогтмол харуулна (UB төв, pin чирж тодорхойлно) --- */
+      if (geoMap) {
+        if (geoStatus) geoStatus.innerHTML = "Газрын зураг дээр дарж эсвэл pin-ийг чирж байршлаа тодорхойлно уу";
+        showMap(UB[0], UB[1]);
       }
 
       /* --- Үсгийн тоолуур (агуулга 0/1000) --- */
@@ -1129,6 +1134,7 @@
         "Capture directly from your phone · Photos up to 8MB, videos up to 50MB · up to 5 total",
       "Асуудлын байршил": "Issue location",
       "Байршлаа тогтоох": "Set your location",
+      "Газрын зураг дээр дарж эсвэл pin-ийг чирж байршлаа тодорхойлно уу": "Click on the map or drag the pin to set your location",
       "Байршил тогтоогоогүй": "Location not set",
       "Гишүүний ажилд өгөх таны үнэлгээ": "Your rating of the member's work",
       "(заавал биш)": "(optional)",
