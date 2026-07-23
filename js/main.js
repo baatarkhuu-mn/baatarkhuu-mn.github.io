@@ -752,6 +752,9 @@
       "Иргэдийн нийтэлсэн саналууд": "Citizens' published feedback",
       "Санал илгээх →": "Submit feedback →",
       "Явц шалгах →": "Track progress →",
+      "Явц шалгах": "Track progress",
+      "Нийт хүсэлт": "Total requests",
+      "Хариуцсан байгууллагад илгээсэн": "Forwarded to agencies",
       "Бүгдийг харах →": "View all →",
       "Санал хүсэлт илгээх": "Submit a request",
       "Асуудлаа зураг, бичлэг, байршлын мэдээлэлтэй нь илгээнэ": "Send your issue with photos, videos and location",
@@ -2916,13 +2919,20 @@
     },
     async init() {
       const box = document.querySelector("[data-feed-dashboard]");
-      if (!box) return;
+      const minis = document.querySelectorAll("[data-lkpi]");
+      if (!box && !minis.length) return;
       const sb = window.getSB && window.getSB();
       if (!sb) return;
       try {
         const { data: s, error } = await sb.rpc("feedback_stats");
         if (error || !s) return;
         const pct = s.total ? Math.round(((s.resolved || 0) / s.total) * 100) : 0;
+        // Зүүн самбарын мини KPI (хос дэлгэцийн зохион байгуулалт)
+        minis.forEach((el) => {
+          const k = el.dataset.lkpi;
+          el.textContent = k === "pct" ? pct + "%" : (s[k] == null ? 0 : s[k]).toLocaleString("en-US");
+        });
+        if (!box) return;
         const cards = [
           { k: "total",    c: "fbd-blue",   n: s.total,    l: "Нийт хүсэлт" },
           { k: "routed",   c: "fbd-amber",  n: s.routed,   l: "Хариуцсан байгууллагад илгээсэн" },
