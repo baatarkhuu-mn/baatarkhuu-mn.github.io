@@ -2520,9 +2520,9 @@ body.hp-split .rcol { min-width:0; }
 .lp-brand .hb-role { font-size:.68rem; letter-spacing:.1em; color:#9DB4DC; font-weight:700; text-transform:uppercase; }
 .lp-brand .hb-name { font-size:1.35rem; color:#fff; }
 .lp-title { font-size:clamp(1.5rem, 2vw, 1.9rem); line-height:1.28; color:#fff; margin:auto 0 16px; text-align:center; }
-.lp-sub { color:#C9D8F2; font-size:.78rem; line-height:1.68; margin:auto 0 22px; text-align:center; }
+.lp-sub { color:#C9D8F2; font-size:.78rem; line-height:1.68; margin:0 0 20px; text-align:center; }
 .lp-sub strong { color:#fff; }
-.lp-btns { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:auto; margin-bottom:26px; }
+.lp-btns { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin:0 0 26px; }
 .lp-btn { display:inline-flex; gap:9px; align-items:center; justify-content:center; font-size:.9rem; font-weight:800; padding:16px 20px; border-radius:13px; flex:1 1 0; min-width:0; text-transform:uppercase; letter-spacing:.02em; white-space:nowrap;
   background:linear-gradient(120deg, #2563EB, #3B82F6 55%, #60A5FA); color:#fff; border:0;
   box-shadow:0 18px 36px -12px rgba(59,130,246,.8), inset 0 1px 0 rgba(255,255,255,.3); }
@@ -2545,7 +2545,7 @@ body.hp-split .rcol { min-width:0; }
   font-size:.68rem; font-weight:800; display:grid; place-items:center; }
 .lps-w b { font-size:.82rem; color:#fff; display:block; }
 .lps-d { display:none; }
-.lp-foot { margin-top:auto; padding-top:12px; border-top:1px solid rgba(255,255,255,.16); font-size:.68rem; color:#C9D8F2; }
+.lp-foot { margin-top:0; padding-top:12px; border-top:1px solid rgba(255,255,255,.16); font-size:.68rem; color:#C9D8F2; }
 .lp-foot .lp-soc { display:flex; gap:8px; margin-bottom:10px; }
 .lp-foot .lp-soc a { width:30px; height:30px; border-radius:9px; background:rgba(255,255,255,.13); display:grid; place-items:center; color:#fff; transition:background var(--transition); }
 .lp-foot .lp-soc a:hover { background:var(--color-accent); }
@@ -2767,3 +2767,9 @@ body.hp-split main .section:first-of-type, body.hp-split main > .section:first-c
 .scc-dp:hover { border-color: #14316f; }
 /* АН картын badge — намын гүн хөхөөр */
 .scc-dp .sc-badge { background: #14316f; }
+
+/* Зүүн самбарын уриа эшлэл (нэргүй, голлосон) */
+.lp-quote { margin: auto 0; text-align: center; }
+.lpq-mark { font-family: Georgia, 'Times New Roman', serif; font-size: 2.4rem; line-height: .5; color: var(--color-accent); display: block; }
+.lpq-text { font-size: 1.08rem; font-weight: 800; line-height: 1.5; color: #ffffff; margin: 10px 0 14px; }
+.lpq-line { display: inline-block; width: 46px; height: 3px; border-radius: 2px; background: var(--color-accent); }
