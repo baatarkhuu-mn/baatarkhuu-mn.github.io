@@ -3270,6 +3270,8 @@
   // Хөвөгч "Санал хүсэлт" товч — холбоо барих хуудаснаас бусад бүх хуудсанд
   function injectFeedbackFab() {
     if (location.pathname.includes("holboo")) return;
+    // Нүүр хуудсанд зүүн самбарын «Санал илгээх» товч байнга харагддаг тул FAB илүүц
+    if (document.body.classList.contains("hp-split")) return;
     const a = document.createElement("a");
     a.href = "/holboo/";
     a.className = "fab-feedback";
@@ -3279,7 +3281,7 @@
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    Theme.init(); Nav.init(); Search.init(); TextSize.init(); Reveal.init();
+    Theme.init(); Nav.init(); Search.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
     Share.init(); trackVisit(); injectFeedbackFab(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); NewsPost.init(); LawPost.init(); EventPost.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); VideoHero.init(); ReportsCMS.init(); ReportPost.init(); ProjectsCMS.init(); ProjectPost.init(); LawsCMS.init(); FeedbackStats.init(); PollsCMS.init(); EventsCMS.init(); Settings.init(); ReportStats.init();
   });
