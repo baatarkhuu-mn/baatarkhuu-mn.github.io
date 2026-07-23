@@ -611,7 +611,14 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .law-board { display: grid; grid-template-columns: repeat(auto-fit, minmax(232px, 1fr)); gap: 14px; align-items: start; }
 .law-col { background: var(--color-bg-soft); border: 1px solid var(--color-border); border-radius: 14px; padding: 12px; }
 .law-col-head { display: flex; align-items: center; gap: 8px; padding: 2px 2px 12px; }
-.law-col-head .badge-status { white-space: normal; line-height: 1.3; font-size: .85rem; font-weight: 800; padding: 7px 14px; }
+.law-col-head .badge-status { white-space: normal; line-height: 1.3; font-size: .92rem; font-weight: 800; padding: 8px 15px;
+  text-transform: uppercase; letter-spacing: .02em; color: var(--color-text); }
+[data-theme="light"] .law-col-head .badge-status { color: #14233f; }
+.law-col-head .badge-status::before { width: 16px; height: 16px; }
+.law-col-head .status-passed::before { background: var(--color-success); }
+.law-col-head .status-review::before { background: var(--color-warning); }
+.law-col-head .status-support::before { background: var(--color-primary-light); }
+.law-col-head .status-draft::before, .law-col-head .status-notstarted::before { background: var(--color-text-soft); }
 .law-col-head .lc-n { margin-left: auto; min-width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px;
   background: var(--color-accent); color: #fff; font-size: 1.05rem; font-weight: 800; padding: 0 8px; }
 .law-col-body { display: flex; flex-direction: column; gap: 10px; }
