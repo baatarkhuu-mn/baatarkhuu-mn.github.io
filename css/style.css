@@ -2512,7 +2512,7 @@ body.hp-split .rcol { min-width:0; }
     linear-gradient(168deg, #0b1f4e, #14316f 60%, #1c48b0); }
 .lpan::-webkit-scrollbar { width:6px; }
 .lpan::-webkit-scrollbar-thumb { background:rgba(255,255,255,.2); border-radius:4px; }
-.lp-brand { display:flex; gap:12px; align-items:center; justify-content:center; margin-bottom:44px; }
+.lp-brand { display:flex; gap:12px; align-items:center; justify-content:center; margin-bottom:60px; }
 .lp-brand .emblem { width:56px; height:56px; flex:none; }
 .lp-brand .hb-role { font-size:.68rem; letter-spacing:.1em; color:#9DB4DC; font-weight:700; text-transform:uppercase; }
 .lp-brand .hb-name { font-size:1.35rem; color:#fff; }
@@ -2663,17 +2663,17 @@ body.hp-split .polls-grid { grid-template-columns: repeat(auto-fill, minmax(min(
 
 /* Өндөр дэлгэцэд зүүн самбарын агуулгыг томруулж, хоосон зайг дүүргэнэ */
 @media (min-width: 1081px) and (min-height: 821px) {
-  .lp-brand { margin-bottom: 44px; }
+  .lp-brand { margin-bottom: 68px; }
   .lp-brand .emblem { width: 60px; height: 60px; }
   .lp-title { font-size: clamp(1.6rem, 2.1vw, 2rem); margin-bottom: 16px; }
-  .lp-sub { font-size: .84rem; line-height: 1.7; margin-bottom: 20px; }
+  .lp-sub { font-size: .83rem; line-height: 1.66; margin-bottom: 16px; }
   .lp-btn, .lp-ghost { padding: 17px 28px; font-size: 1.02rem; }
-  .lp-btns { gap: 10px; margin-bottom: 24px; }
-  .lp-kpi { gap: 10px; margin-bottom: 24px; }
+  .lp-btns { gap: 10px; margin-bottom: 18px; }
+  .lp-kpi { gap: 10px; margin-bottom: 18px; }
   .lpk { padding: 12px 15px; border-radius: 13px; }
   .lpk b { font-size: 1.45rem; }
   .lpk span { font-size: .67rem; margin-top: 3px; }
-  .lp-steps { padding-top: 16px; gap: 11px; }
+  .lp-steps { padding-top: 13px; gap: 9px; }
   .lps-n { width: 27px; height: 27px; font-size: .7rem; }
   .lps-w b { font-size: .88rem; }
   .lp-foot { padding-top: 12px; font-size: .72rem; }
