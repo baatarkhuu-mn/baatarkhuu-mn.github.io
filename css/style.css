@@ -2639,3 +2639,19 @@ body.hp-split .dx-head:first-child { margin-top:0; }
   .lp-kpi { margin-bottom: 19px; }
   .lp-steps { padding-top: 17px; }
 }
+
+/* Хос дэлгэц: өргөн дэлгэцэд цэс pill хэлбэрээр байнга ил, hamburger-гүй */
+@media (min-width: 1081px) {
+  body.hp-split .nav-toggle { display: none; }
+  body.hp-split .navbar { justify-content: flex-start; gap: 14px; }
+  body.hp-split .main-nav { position: static; max-height: none; overflow: visible; width: auto;
+    background: none; border: none; box-shadow: none; right: auto; order: 1; }
+  body.hp-split .main-nav ul { flex-direction: row; padding: 0; gap: 6px; flex-wrap: wrap; }
+  body.hp-split .nav-tools { order: 2; margin-left: auto; }
+}
+
+/* Арга хэмжээний эргэлт — яг мэдээнийх шиг: карт өндрөө дүүргэж, цэгүүд нь картын доод хэсэгт */
+.hs-events [data-events] { flex-direction: column; position: relative; }
+.hs-events [data-events] .nh-card { display: flex; flex-direction: column; flex: 1; min-height: 0; height: 100%; }
+.hs-events [data-events] .news-dots { position: absolute; left: 0; right: 0; bottom: 12px; margin: 0; z-index: 3; }
+.hs-events [data-events] .nh-card .nh-body { padding-bottom: 34px; }
