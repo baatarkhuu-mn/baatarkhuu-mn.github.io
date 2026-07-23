@@ -802,7 +802,7 @@
       "Хамгийн их дэмжигдсэн": "Most supported",
       "Асуудал бүхэн шийдэлтэй.": "Every problem has a solution.",
       "Хамтдаа шийдье.": "Let's solve it together.",
-      "Иргэдийн санал шийдвэр гаргах түвшинд хүрч, ил тод хянагддаг цогц систем.": "A complete system where citizens' feedback reaches the decision level and is tracked transparently.",
+      "Иргэдийн санал хүсэлтийг нэгтгэн бүртгэж, шийдвэрлэлтийн явцыг бодит хугацаанд харах боломжтой иргэн төвтэй систем.": "A citizen-centered system that consolidates public feedback and lets you track the resolution progress in real time.",
       "Санал хүсэлтээ бидэнтэй хуваалцаарай": "Share your feedback with us",
       "Та доорх сувгуудаар бидэнтэй холбогдож, санал, хүсэлт, асуудлаа илгээх боломжтой. Бид таны дуу хоолойг сонсож, хамтран ажиллахдаа үргэлж нээлттэй.": "You can reach us through the channels below to send your feedback, requests and issues. We always listen and stay open to working together.",
       "Хаяг": "Address",
