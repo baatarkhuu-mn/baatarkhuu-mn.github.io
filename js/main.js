@@ -805,6 +805,8 @@
       "Сэтгэгдэл": "Comments",
       "Сэтгэгдэл бичих": "Write a comment",
       "Хамгийн их дэмжигдсэн": "Most supported",
+      "Санал асуулгын дүн": "Poll results",
+      "Бүгдийг үзэх →": "View all →",
       "Асуудал бүхэн шийдэлтэй.": "Every problem has a solution.",
       "Хамтдаа шийдье.": "Let's solve it together.",
       "Иргэдийн санал хүсэлтийг нэгтгэн бүртгэж, шийдвэрлэлтийн явцыг бодит хугацаанд харах боломжтой иргэн төвтэй систем.": "A citizen-centered system that consolidates public feedback and lets you track the resolution progress in real time.",
@@ -1672,6 +1674,41 @@
       this.renderTopFeed();
     },
     // Хажуугийн самбар — хамгийн их дэмжигдсэн саналууд (лайк, дараа нь сэтгэгдэл, дараа нь шинэ)
+    // Дэлгэрэнгүй түүх — «Хамгийн их дэмжигдсэн»-ээс дарахад нээгдэнэ
+    openStory(r) {
+      const sb = this._sb;
+      let url = "";
+      if (sb && Array.isArray(r.photos) && r.photos.length) {
+        try { url = sb.storage.from("feedback-public").getPublicUrl(r.photos[0]).data.publicUrl; } catch (_) {}
+      }
+      const subj = this.SUBJ[r.subject] || r.subject || "Санал";
+      const author = r.name ? String(r.name) : "Иргэн";
+      const likes = (this._likeMap && this._likeMap[r.id]) || 0;
+      const cmts = (this._cmtMap && this._cmtMap[r.id]) ? this._cmtMap[r.id] : [];
+      const ov = document.createElement("div");
+      ov.className = "story-ov";
+      ov.innerHTML =
+        '<div class="story-md" role="dialog" aria-modal="true">' +
+          '<button type="button" class="story-x" aria-label="Хаах"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M18 6 6 18M6 6l12 12"/></svg></button>' +
+          (url ? '<div class="story-im"><img src="' + url + '" alt="" />' + this.statusChip(r) + '</div>'
+               : '<div class="story-im story-noimg">' + this.subjSvg(r.subject, 52) + this.statusChip(r) + '</div>') +
+          '<div class="story-bd">' +
+            '<h3>' + this.esc((r.message || "").split("\n")[0] || subj) + '</h3>' +
+            '<div class="story-meta"><span>' + this.esc(author) + ' · ' + this.esc(this.ago(r.created_at)) + '</span><span class="fc3-badge">' + this.esc(subj) + '</span></div>' +
+            '<p class="story-msg">' + this.esc(r.message || "") + '</p>' +
+            (r.response ? '<div class="story-resp"><b>Хариу:</b> ' + this.esc(r.response) + '</div>' : "") +
+            '<div class="story-stats">' + this.IC_LIKE + ' <b>' + likes + '</b><span class="story-sp"></span>' + this.IC_CMT + ' <b>' + cmts.length + '</b></div>' +
+            (cmts.length ? '<div class="story-cmts">' + cmts.map((c) => '<div class="fc3-c"><b>Зочин</b><small>' + this.esc(this.ago(c.created_at)) + '</small><p>' + this.esc(c.body) + '</p></div>').join("") + '</div>' : "") +
+          '</div>' +
+        '</div>';
+      const close = () => { ov.remove(); document.removeEventListener("keydown", onEsc); };
+      const onEsc = (e) => { if (e.key === "Escape") close(); };
+      ov.addEventListener("click", (e) => { if (e.target === ov) close(); });
+      ov.querySelector(".story-x").addEventListener("click", close);
+      document.addEventListener("keydown", onEsc);
+      document.body.appendChild(ov);
+    },
+
     renderTopFeed() {
       const box = document.querySelector("[data-top-feed]");
       if (!box) return;
@@ -1690,14 +1727,7 @@
           '<span class="dxs-n">' + (i + 1) + '</span>' +
           '<span class="dxs-t">' + this.esc(txt) + '</span>' +
           '<span class="dxs-likes">' + this.IC_LIKE.replace('class="ri"', 'class="mi"') + likeOf(r) + '</span>';
-        el.addEventListener("click", () => {
-          const card = document.querySelector('.fc3[data-id="' + r.id + '"]');
-          if (card) {
-            card.scrollIntoView({ behavior: "smooth", block: "center" });
-            card.classList.add("flash");
-            setTimeout(() => card.classList.remove("flash"), 1800);
-          }
-        });
+        el.addEventListener("click", () => this.openStory(r));
         box.appendChild(el);
       });
       if (!box.children.length) box.innerHTML = '<p class="feed-state">Одоогоор санал алга.</p>';
@@ -1880,9 +1910,10 @@
     },
 
     // Нүүрний мэдээг автоматаар сольж харуулах (нэг нэгээр, fade)
-    rotateHome(home) {
+    rotateHome(home, auto) {
       const items = Array.prototype.filter.call(home.children, (n) => n.nodeType === 1 && !(n.classList && n.classList.contains("news-dots")));
       if (items.length <= 1) return;
+      const noAuto = auto === false;
       let cur = 0, timer = null;
       let dots = home.querySelector(":scope > .news-dots");
       if (!dots) { dots = document.createElement("div"); dots.className = "news-dots"; home.appendChild(dots); }
@@ -1891,7 +1922,7 @@
         const a = items[n]; a.classList.remove("nf-in"); void a.offsetWidth; a.classList.add("nf-in");
         Array.prototype.forEach.call(dots.children, (d, i) => d.classList.toggle("active", i === n));
       };
-      const start = () => { if (!timer) timer = setInterval(() => { cur = (cur + 1) % items.length; show(cur); }, 5000); };
+      const start = () => { if (noAuto) return; if (!timer) timer = setInterval(() => { cur = (cur + 1) % items.length; show(cur); }, 5000); };
       const stop = () => { if (timer) { clearInterval(timer); timer = null; } };
       const restart = () => { stop(); start(); };
       dots.innerHTML = "";
@@ -2851,7 +2882,7 @@
           box.innerHTML = "";
           // Мэдээний карттай ижил хэлбэр, ижил эргэлт (nh-card + rotateHome)
           list.forEach((ev) => box.appendChild(EventsCMS.rotCard(ev, (ev.id && regMap[ev.id]) || 0)));
-          if (list.length > 1) NewsFeed.rotateHome(box);
+          if (list.length > 1) NewsFeed.rotateHome(box, false); // гараар л солино
         });
     },
     // Онцлох арга хэмжээ — зурагтай карт + бүртгүүлэх товч; дарахад дэлгэрэнгүй нээгдэнэ
@@ -2993,7 +3024,7 @@
         closes_at: null, created_at: "2026-06-30T09:00:00+08:00", counts: { 0: 55, 1: 48, 2: 30, 3: 25 } },
     ],
     async init() {
-      const wrap = document.querySelector("[data-polls]");
+      const wrap = document.querySelector("[data-polls], [data-polls-featured]");
       if (!wrap) return;
       const sb = window.getSB && window.getSB();
       if (!sb) return;
@@ -3017,30 +3048,49 @@
         const sec = document.getElementById("polls");
         if (sec) sec.style.display = "";
         wrap.innerHTML = "";
-        polls.forEach((p) => {
-          const el = document.createElement("article");
-          el.className = "poll-card";
-          this.fill(el, p, sb);
-          wrap.appendChild(el);
-        });
-        // 6-аас олон бол эхний 2 мөрийг л харуулж, гарчгийн баруун талд «Бүгдийг үзэх» холбоос нэмнэ
-        const LIMIT = 6;
-        const head = document.querySelector("#polls .dx-head");
-        const oldLink = head && head.querySelector(".polls-more");
-        if (oldLink) oldLink.remove();
-        if (polls.length > LIMIT) {
-          wrap.classList.add("polls-clamp");
-          if (head) {
-            const a = document.createElement("a");
-            a.href = "#"; a.className = "dx-all polls-more";
-            a.textContent = "Бүгдийг үзэх →";
-            a.addEventListener("click", (e) => { e.preventDefault(); wrap.classList.remove("polls-clamp"); a.remove(); });
-            head.appendChild(a);
-          }
+        if (wrap.hasAttribute("data-polls-featured")) {
+          // Нүүр: зөвхөн НЭГ асуулга + хажууд нь график
+          const p0 = polls[0];
+          const card = document.createElement("article");
+          card.className = "poll-card";
+          this.fill(card, p0, sb);
+          wrap.appendChild(card);
+          wrap.appendChild(this.chartCard(p0));
         } else {
-          wrap.classList.remove("polls-clamp");
+          // Холбоо барих: бүх асуулга
+          polls.forEach((p) => {
+            const el = document.createElement("article");
+            el.className = "poll-card";
+            this.fill(el, p, sb);
+            wrap.appendChild(el);
+          });
         }
       } catch (_) {}
+    },
+    // Асуулгын дүнг график хэлбэрээр (хэвтээ баар)
+    chartCard(p) {
+      const opts = Array.isArray(p.options) ? p.options : [];
+      const cmap = this._counts[p.id] || {};
+      const counts = opts.map((_, i) => cmap[i] || 0);
+      const total = counts.reduce((a, b) => a + b, 0);
+      const max = Math.max.apply(null, counts.concat([1]));
+      const el = document.createElement("article");
+      el.className = "fc3 pch";
+      el.innerHTML =
+        '<div class="pch-t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>Санал асуулгын дүн</div>' +
+        opts.map((o, i) => {
+          const pct = total ? Math.round((counts[i] / total) * 100) : 0;
+          const w = Math.round((counts[i] / max) * 100);
+          return '<div class="pch-row">' +
+            '<span class="pch-l">' + this.esc(o) + '</span>' +
+            '<div class="pch-bar"><i style="width:0" data-w="' + w + '"></i></div>' +
+            '<b class="pch-v">' + pct + '% <small>(' + counts[i] + ')</small></b>' +
+          '</div>';
+        }).join("") +
+        '<div class="pch-ft"><span>Нийт санал</span><b>' + total + '</b></div>';
+      // Баарууд ачаалахад урсаж гарна
+      setTimeout(() => { el.querySelectorAll(".pch-bar i").forEach((b) => { b.style.width = b.dataset.w + "%"; }); }, 300);
+      return el;
     },
     fill(el, p, sb, open, forceRes) {
       const opts = Array.isArray(p.options) ? p.options : [];
@@ -3160,12 +3210,14 @@
         }).join("");
         // Эцсийн тоо аль хэдийн харагдаж байгаа; дэлгэцэд орж ирэхэд 0-оос count-up хийнэ
         const nums = box.querySelectorAll(".fbd-n");
-        let started = false;
-        const run = () => { if (started) return; started = true; nums.forEach((el) => this.count(el, parseInt(el.dataset.target, 10) || 0)); };
-        if ("IntersectionObserver" in window) {
-          const io = new IntersectionObserver((ents, obs) => { ents.forEach((e) => { if (e.isIntersecting) { run(); obs.disconnect(); } }); }, { threshold: 0.2 });
-          io.observe(box);
-        }
+        // Сайт нээгдэх бүрт автоматаар тоолж эхэлнэ
+        nums.forEach((el) => { el.textContent = "0"; });
+        setTimeout(() => { nums.forEach((el) => this.count(el, parseInt(el.dataset.target, 10) || 0)); }, 350);
+        // rAF ажиллахгүй орчинд эцсийн утгыг баталгаажуулна
+        setTimeout(() => { nums.forEach((el) => {
+          const t = parseInt(el.dataset.target, 10) || 0;
+          el.textContent = t.toLocaleString("en-US") + (el.dataset.suffix || "");
+        }); }, 1900);
       } catch (_) {}
     },
   };
