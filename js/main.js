@@ -131,7 +131,7 @@
 
       // Header scroll shadow + нүүрэнд navbar-ыг hero өнгөрсний дараа гаргах
       const header = document.querySelector(".site-header");
-      const hero = document.querySelector(".home-hero");
+      const hero = document.querySelector(".home-hero, .home-hero2");
       const isHome = document.body.classList.contains("hp");
       if (header) {
         const onScroll = () => {
@@ -1730,6 +1730,19 @@
         el.addEventListener("click", () => this.openStory(r));
         box.appendChild(el);
       });
+      // Эхний 4-ийг л харуулж, бусдыг товчоор дэлгэнэ
+      const items = box.querySelectorAll(".dxs-item");
+      if (items.length > 4) {
+        items.forEach((it, i) => { if (i >= 4) it.style.display = "none"; });
+        const more = document.createElement("button");
+        more.type = "button"; more.className = "dxs-more";
+        more.textContent = "Цааш үзэх (" + (items.length - 4) + ") ↓";
+        more.addEventListener("click", () => {
+          items.forEach((it) => { it.style.display = ""; });
+          more.remove();
+        });
+        box.appendChild(more);
+      }
       if (!box.children.length) box.innerHTML = '<p class="feed-state">Одоогоор санал алга.</p>';
     },
     openLightbox(url, caption) {
@@ -3067,29 +3080,37 @@
         }
       } catch (_) {}
     },
-    // Асуулгын дүнг график хэлбэрээр (хэвтээ баар)
+    // Асуулгын дүнг pie графикоор
+    PIE_COLORS: ["#3071E7", "#F59E0B", "#16A34A", "#8B5CF6", "#0EA5E9", "#DC2626", "#14B8A6", "#F472B6"],
     chartCard(p) {
       const opts = Array.isArray(p.options) ? p.options : [];
       const cmap = this._counts[p.id] || {};
       const counts = opts.map((_, i) => cmap[i] || 0);
       const total = counts.reduce((a, b) => a + b, 0);
-      const max = Math.max.apply(null, counts.concat([1]));
+      const cols = this.PIE_COLORS;
+      // conic-gradient сегментүүд
+      let acc = 0;
+      const segs = [];
+      opts.forEach((o, i) => {
+        const frac = total ? counts[i] / total : (i === 0 ? 1 : 0);
+        const from = acc * 360, to = (acc + frac) * 360;
+        if (frac > 0) segs.push(cols[i % cols.length] + " " + from.toFixed(1) + "deg " + to.toFixed(1) + "deg");
+        acc += frac;
+      });
+      const grad = segs.length ? "conic-gradient(" + segs.join(", ") + ")" : "conic-gradient(var(--color-bg-soft) 0deg 360deg)";
       const el = document.createElement("article");
       el.className = "fc3 pch";
       el.innerHTML =
-        '<div class="pch-t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>Санал асуулгын дүн</div>' +
-        opts.map((o, i) => {
-          const pct = total ? Math.round((counts[i] / total) * 100) : 0;
-          const w = Math.round((counts[i] / max) * 100);
-          return '<div class="pch-row">' +
-            '<span class="pch-l">' + this.esc(o) + '</span>' +
-            '<div class="pch-bar"><i style="width:0" data-w="' + w + '"></i></div>' +
-            '<b class="pch-v">' + pct + '% <small>(' + counts[i] + ')</small></b>' +
-          '</div>';
-        }).join("") +
-        '<div class="pch-ft"><span>Нийт санал</span><b>' + total + '</b></div>';
-      // Баарууд ачаалахад урсаж гарна
-      setTimeout(() => { el.querySelectorAll(".pch-bar i").forEach((b) => { b.style.width = b.dataset.w + "%"; }); }, 300);
+        '<div class="pch-t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M21.2 15.9A10 10 0 1 1 8 2.8"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>Санал асуулгын дүн</div>' +
+        '<div class="pch-wrap">' +
+          '<div class="pch-pie" style="background:' + grad + '"><span class="pch-hole"><b>' + total + '</b><small>санал</small></span></div>' +
+          '<div class="pch-leg">' +
+            opts.map((o, i) => {
+              const pct = total ? Math.round((counts[i] / total) * 100) : 0;
+              return '<div class="pch-lg"><i style="background:' + cols[i % cols.length] + '"></i><span>' + this.esc(o) + '</span><b>' + pct + '%</b><small>(' + counts[i] + ')</small></div>';
+            }).join("") +
+          '</div>' +
+        '</div>';
       return el;
     },
     fill(el, p, sb, open, forceRes) {
