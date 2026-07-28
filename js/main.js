@@ -2893,9 +2893,9 @@
           try { const { data: rc } = await sb.rpc("event_reg_counts"); (rc || []).forEach((r) => { regMap[r.event_id] = r.cnt; }); } catch (_) {}
           box.className = "";
           box.innerHTML = "";
-          // Мэдээний карттай ижил хэлбэр, ижил эргэлт (nh-card + rotateHome)
-          list.forEach((ev) => box.appendChild(EventsCMS.rotCard(ev, (ev.id && regMap[ev.id]) || 0)));
-          if (list.length > 1) NewsFeed.rotateHome(box, false); // гараар л солино
+          // Каруселгүй — зөвхөн ойрын НЭГ арга хэмжээ (эргэлт, цэг байхгүй)
+          const ev0 = list[0];
+          if (ev0) box.appendChild(EventsCMS.rotCard(ev0, (ev0.id && regMap[ev0.id]) || 0));
         });
     },
     // Онцлох арга хэмжээ — зурагтай карт + бүртгүүлэх товч; дарахад дэлгэрэнгүй нээгдэнэ
