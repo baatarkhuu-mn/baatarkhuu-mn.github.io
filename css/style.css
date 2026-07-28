@@ -805,14 +805,6 @@ body.am-lock { overflow: hidden; }
 .page-hero .container::before { content: ""; width: 5px; height: 26px; border-radius: 3px; background: var(--color-accent); flex: none;
   box-shadow: 0 0 14px -2px var(--color-accent); }
 .page-hero .breadcrumb { margin-top: 0; margin-left: auto; }
-/* Банер ч цагаан тексттэй — хоёр горимд ижил гүн дижитал өнгө */
-[data-theme="light"] .page-hero {
-  background:
-    radial-gradient(ellipse 60% 110% at 80% 0%, rgba(48,113,231,.16), transparent 60%),
-    radial-gradient(ellipse 55% 90% at 8% 100%, rgba(48,113,231,.2), transparent 60%),
-    linear-gradient(150deg, #0b1430, #0c1838);
-  border-bottom: 1px solid #14233f;
-}
 /* Дижитал торон хээ — тор хээг арилгав */
 .page-hero::before { display: none; }
 .page-hero::after {
@@ -2855,12 +2847,6 @@ body.hp-split #public-feed { padding-top: 18px; }
 .story-sp { width: 14px; }
 .story-cmts { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
 
-/* Нүүр: navbar hero дээгүүр байх үед цэс цагаанаар */
-body.hp:not(.nav-on) .main-nav a { color: #f2f6fc; }
-body.hp:not(.nav-on) .main-nav a.active { color: #ffffff; }
-body.hp:not(.nav-on) .main-nav a:hover { background: rgba(255,255,255,.12); color: #fff; }
-body.hp:not(.nav-on) .nav-tools .icon-btn { color: #f2f6fc; }
-body.hp:not(.nav-on) .lang-sw { border-color: rgba(255,255,255,.3); }
 
 /* Pie график */
 .pch-wrap { display: flex; gap: 22px; align-items: center; flex-wrap: wrap; }
@@ -2882,3 +2868,12 @@ body.hp:not(.nav-on) .lang-sw { border-color: rgba(255,255,255,.3); }
   font-family: inherit; font-size: .78rem; font-weight: 800; padding: 11px; cursor: pointer;
   transition: background var(--transition); }
 .dxs-more:hover { background: var(--color-accent); color: #fff; }
+
+/* Footer — цэнхэр бичиг/дүрсийг цагаанаар */
+.site-footer, [data-theme="light"] .site-footer { color: rgba(255,255,255,.86); }
+.site-footer a, [data-theme="light"] .site-footer a { color: rgba(255,255,255,.86); }
+.site-footer a:hover, [data-theme="light"] .site-footer a:hover { color: #ffffff; }
+.site-footer .f-brand .f-role { color: #ffffff; opacity: .9; }
+.site-footer .fc-ic { color: #ffffff; opacity: .85; }
+.site-footer .footer-social a { color: #ffffff; }
+.site-footer .footer-bottom, .site-footer .footer-bottom span { color: rgba(255,255,255,.7); }
