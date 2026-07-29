@@ -1556,8 +1556,10 @@
     renderGallery() {
       const wrap = this._wrap, sb = this._sb;
       // Зурагтайг эхэнд нь, дараа нь бусдыг — 6 карт хүртэл
+      const paged = this._wrap.hasAttribute("data-page-size");
       const lim = parseInt(this._wrap.getAttribute("data-feed-limit"), 10) || 9;
-      const rows = this._rows.slice().sort((a, b) => ((Array.isArray(b.photos) && b.photos.length) ? 1 : 0) - ((Array.isArray(a.photos) && a.photos.length) ? 1 : 0)).slice(0, lim);
+      let rows = this._rows.slice().sort((a, b) => ((Array.isArray(b.photos) && b.photos.length) ? 1 : 0) - ((Array.isArray(a.photos) && a.photos.length) ? 1 : 0));
+      if (!paged) rows = rows.slice(0, lim);
       wrap.className = "fc3-grid";
       wrap.innerHTML = "";
       const shareUrl = encodeURIComponent("https://baatarkhuu.mn/holboo/#public-feed");
@@ -1671,6 +1673,7 @@
         wrap.appendChild(card);
       });
       if (!wrap.children.length) wrap.innerHTML = '<p class="feed-state">Одоогоор нийтэлсэн санал алга.</p>';
+      else if (paged) Pager.apply(wrap); // олон санал → хуудаслалт
       this.renderTopFeed();
     },
     // Хажуугийн самбар — хамгийн их дэмжигдсэн саналууд (лайк, дараа нь сэтгэгдэл, дараа нь шинэ)
@@ -3045,7 +3048,7 @@
         let polls = [];
         try {
           const { data, error } = await sb.from("polls").select("*").eq("published", true)
-            .order("sort", { ascending: true }).order("created_at", { ascending: false }).limit(6);
+            .order("sort", { ascending: true }).order("created_at", { ascending: false }).limit(60);
           if (!error && data) polls = data;
         } catch (_) {}
         this._counts = {};
@@ -3070,13 +3073,14 @@
           wrap.appendChild(card);
           wrap.appendChild(this.chartCard(p0));
         } else {
-          // Холбоо барих: бүх асуулга
+          // Холбоо барих: бүх асуулга + хуудаслалт
           polls.forEach((p) => {
             const el = document.createElement("article");
             el.className = "poll-card";
             this.fill(el, p, sb);
             wrap.appendChild(el);
           });
+          if (wrap.hasAttribute("data-page-size")) Pager.apply(wrap);
         }
       } catch (_) {}
     },

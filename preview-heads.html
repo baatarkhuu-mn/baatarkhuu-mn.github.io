@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex" />
+<title>Гарчгийн дизайны саналууд — PH / S хувилбарууд</title>
+<style>
+  :root {
+    --ink: #0f1b33; --mut: #5b6b85; --line: #e3e9f2; --blue: #3071e7; --navy: #14316f;
+    --soft: #f4f7fb;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', 'Segoe UI', 'Roboto', 'Noto Sans', Arial, sans-serif; background: #fbfcfe; color: var(--ink); line-height: 1.55; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 40px 20px 80px; }
+  .intro h1 { font-size: 1.6rem; margin-bottom: 8px; }
+  .intro p { color: var(--mut); max-width: 720px; }
+  .group { margin-top: 46px; }
+  .group > h2 { font-size: 1.15rem; text-transform: uppercase; letter-spacing: .06em; color: var(--navy);
+    border-bottom: 2px solid var(--line); padding-bottom: 10px; margin-bottom: 24px; }
+  .prop { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; margin-bottom: 26px; background: #fff; }
+  .prop-tag { display: flex; align-items: center; gap: 12px; padding: 12px 18px; background: var(--soft); border-bottom: 1px solid var(--line); }
+  .prop-tag b { display: inline-flex; align-items: center; justify-content: center; min-width: 46px; height: 30px; padding: 0 10px;
+    background: var(--navy); color: #fff; border-radius: 8px; font-size: .85rem; letter-spacing: .04em; }
+  .prop-tag span { font-size: .9rem; color: var(--mut); }
+  .prop-tag .rec { margin-left: auto; font-size: .78rem; font-weight: 700; color: #16a34a; background: #e9f7ee; border: 1px solid #bfe6cd; padding: 4px 10px; border-radius: 999px; }
+  .demo { padding: 0; }
+
+  /* ============ БҮЛЭГ 1: Дотоод хуудасны толгой зурвас ============ */
+  .ph { position: relative; }
+  .ph .cont { max-width: 1000px; margin: 0 auto; padding: 0 22px; }
+
+  /* PH1 — одоогийн */
+  .ph1 { padding: 18px 0; background: linear-gradient(90deg, rgba(48,113,231,.10), rgba(48,113,231,.02) 55%), linear-gradient(180deg, #f0f5fc, #f6f9fd); border-bottom: 1px solid var(--line); }
+  .ph1 .cont { display: flex; align-items: center; gap: 14px; }
+  .ph1 .cont::before { content: ""; width: 5px; height: 26px; border-radius: 3px; background: var(--blue); }
+  .ph1 h3 { font-size: 1.35rem; }
+  .ph .crumb { margin-left: auto; font-size: .78rem; color: var(--mut); }
+  .ph .crumb b { color: var(--blue); font-weight: 600; }
+
+  /* PH2 — минимал цагаан */
+  .ph2 { padding: 30px 0 22px; background: #fff; border-bottom: 1px solid var(--line); }
+  .ph2 .crumb2 { font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--mut); margin-bottom: 6px; }
+  .ph2 .crumb2 b { color: var(--blue); font-weight: 600; }
+  .ph2 h3 { font-size: 1.8rem; font-weight: 800; letter-spacing: -.01em; }
+
+  /* PH3 — шөнийн хотын зурвас */
+  .ph3 { padding: 34px 0; background: linear-gradient(rgba(10,18,38,.72), rgba(10,18,38,.72)), url('assets/img/hero-city.jpg') center 35% / cover no-repeat; }
+  .ph3 .cont { display: flex; align-items: center; gap: 14px; }
+  .ph3 h3 { color: #fff; font-size: 1.6rem; font-weight: 800; }
+  .ph3 .crumb { color: rgba(255,255,255,.65); }
+  .ph3 .crumb b { color: #9dbdf5; }
+
+  /* PH4 — голлосон, доогуур зураастай */
+  .ph4 { padding: 30px 0 24px; background: #fff; border-bottom: 1px solid var(--line); text-align: center; }
+  .ph4 h3 { font-size: 1.6rem; font-weight: 800; display: inline-block; }
+  .ph4 h3::after { content: ""; display: block; width: 46px; height: 4px; border-radius: 2px; background: var(--blue); margin: 10px auto 0; }
+  .ph4 .crumb4 { font-size: .78rem; color: var(--mut); margin-top: 8px; }
+  .ph4 .crumb4 b { color: var(--blue); font-weight: 600; }
+
+  /* PH5 — навы градиент зурвас */
+  .ph5 { padding: 26px 0; background: linear-gradient(120deg, #10264f, #14316f 60%, #1c4494); }
+  .ph5 .cont { display: flex; align-items: center; gap: 14px; }
+  .ph5 .cont::before { content: ""; width: 5px; height: 28px; border-radius: 3px; background: #6ea8ff; }
+  .ph5 h3 { color: #fff; font-size: 1.5rem; font-weight: 800; }
+  .ph5 .crumb { color: rgba(255,255,255,.6); }
+  .ph5 .crumb b { color: #9dbdf5; }
+
+  /* ============ БҮЛЭГ 2: Нүүрний хэсгийн гарчгууд ============ */
+  .sec { padding: 26px 22px; background: #fff; }
+  .s-link { margin-left: auto; font-size: .85rem; font-weight: 600; color: var(--blue); text-decoration: none; white-space: nowrap; }
+
+  /* S1 — одоогийн */
+  .s1 { display: flex; align-items: baseline; gap: 14px; }
+  .s1 h3 { font-size: 1.55rem; text-transform: uppercase; letter-spacing: .02em; }
+
+  /* S2 — хажуугийн шугам + дэд тайлбар */
+  .s2 { display: flex; align-items: center; gap: 14px; }
+  .s2 .bar { width: 5px; height: 40px; border-radius: 3px; background: var(--blue); flex: none; }
+  .s2 h3 { font-size: 1.45rem; text-transform: uppercase; letter-spacing: .02em; }
+  .s2 small { display: block; font-size: .84rem; color: var(--mut); font-weight: 400; text-transform: none; letter-spacing: 0; margin-top: 3px; }
+
+  /* S3 — бүдэг дугаартай */
+  .s3 { display: flex; align-items: center; gap: 14px; }
+  .s3 .num { font-size: 2.6rem; font-weight: 800; color: rgba(48,113,231,.16); line-height: 1; letter-spacing: -.02em; }
+  .s3 h3 { font-size: 1.45rem; text-transform: uppercase; letter-spacing: .02em; }
+
+  /* S4 — тэмдэгтийн хайрцагтай */
+  .s4 { display: flex; align-items: center; gap: 13px; }
+  .s4 .ico { width: 42px; height: 42px; border-radius: 12px; background: rgba(48,113,231,.1); color: var(--blue);
+    display: inline-flex; align-items: center; justify-content: center; flex: none; }
+  .s4 h3 { font-size: 1.45rem; text-transform: uppercase; letter-spacing: .02em; }
+
+  /* S5 — голлосон, хоёр талдаа шугамтай */
+  .s5 { text-align: center; }
+  .s5 .row { display: flex; align-items: center; gap: 18px; }
+  .s5 .row::before, .s5 .row::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  .s5 h3 { font-size: 1.45rem; text-transform: uppercase; letter-spacing: .04em; }
+  .s5 .s-link { margin: 10px auto 0; display: inline-block; }
+
+  .foot { margin-top: 50px; padding: 22px; border: 1px dashed #c9d6ea; border-radius: 14px; background: var(--soft); color: var(--mut); font-size: .92rem; }
+  .foot b { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="intro">
+    <h1>Гарчгийн дизайны саналууд</h1>
+    <p>Бүлэг 1 — дотоод хуудасны (Намтар, Мэдээ гэх мэт) толгой зурвас. Бүлэг 2 — нүүрний хэсгийн гарчгууд (УДАХГҮЙ БОЛОХ, ӨӨР БОДЛОГО, ИРГЭДИЙН НИЙТЭЛСЭН САНАЛУУД…). Сонголтоо үсгээр хариулаарай, ж: «PH2, S2».</p>
+  </div>
+
+  <div class="group">
+    <h2>Бүлэг 1 — Дотоод хуудасны толгой зурвас</h2>
+
+    <div class="prop">
+      <div class="prop-tag"><b>PH1</b><span>Одоогийн — харьцуулах зорилгоор</span></div>
+      <div class="demo ph ph1"><div class="cont"><h3>Намтар</h3><span class="crumb">Нүүр / <b>Намтар</b></span></div></div>
+    </div>
+
+    <div class="prop">
+      <div class="prop-tag"><b>PH2</b><span>Минимал цагаан — жижиг зам дээр нь, том тод гарчиг</span><span class="rec">Санал болгож буй</span></div>
+      <div class="demo ph ph2"><div class="cont"><div class="crumb2">Нүүр / <b>Намтар</b></div><h3>Намтар</h3></div></div>
+    </div>
+
+    <div class="prop">
+      <div class="prop-tag"><b>PH3</b><span>Шөнийн хотын зурвас — нүүрний hero-той ижил хэв маяг</span></div>
+      <div class="demo ph ph3"><div class="cont"><h3>Намтар</h3><span class="crumb">Нүүр / <b>Намтар</b></span></div></div>
+    </div>
+
+    <div class="prop">
+      <div class="prop-tag"><b>PH4</b><span>Голлосон — доогуур богино зураастай, хамгийн агаартай</span></div>
+      <div class="demo ph ph4"><h3>Намтар</h3><div class="crumb4">Нүүр / <b>Намтар</b></div></div>
+    </div>
+
+    <div class="prop">
+      <div class="prop-tag"><b>PH5</b><span>Навы градиент зурвас — header/footer-ийн өнгөтэй ижил</span></div>
+      <div class="demo ph ph5"><div class="cont"><h3>Намтар</h3><span class="crumb">Нүүр / <b>Намтар</b></span></div></div>
+    </div>
+  </div>
+
+  <div class="group">
+    <h2>Бүлэг 2 — Нүүрний хэсгийн гарчгууд</h2>
+
+    <div class="prop">
+      <div class="prop-tag"><b>S1</b><span>Одоогийн — харьцуулах зорилгоор</span></div>
+      <div class="demo sec"><div class="s1"><h3>Удахгүй болох</h3><a class="s-link" href="#">Өмнө хийсэн уулзалт, төслүүд →</a></div></div>
+    </div>
+
+    <div class="prop">
+      <div class="prop-tag"><b>S2</b><span>Хажуугийн шугам + нэг мөр дэд тайлбар</span><span class="rec">Санал болгож буй</span></div>
+      <div class="demo sec"><div class="s2"><span class="bar"></span><h3>Удахгүй болох<small>Арга хэмжээ, уулзалтын зар</small></h3><a class="s-link" href="#">Өмнө хийсэн уулзалт, төслүүд →</a></div></div>
+    </div>
+
+    <div class="prop">
+      <div class="prop-tag"><b>S3</b><span>Бүдэг том дугаартай — хэсэг бүр 01, 02, 03…</span></div>
+      <div class="demo sec"><div class="s3"><span class="num">01</span><h3>Удахгүй болох</h3><a class="s-link" href="#">Өмнө хийсэн уулзалт, төслүүд →</a></div></div>
+    </div>
+
+    <div class="prop">
+      <div class="prop-tag"><b>S4</b><span>Тэмдэгтийн хайрцагтай — хэсэг бүр өөрийн тэмдэгттэй</span></div>
+      <div class="demo sec"><div class="s4"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="21" height="21"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span><h3>Удахгүй болох</h3><a class="s-link" href="#">Өмнө хийсэн уулзалт, төслүүд →</a></div></div>
+    </div>
+
+    <div class="prop">
+      <div class="prop-tag"><b>S5</b><span>Голлосон — хоёр талдаа нарийн шугамтай, линк доор нь</span></div>
+      <div class="demo sec"><div class="s5"><div class="row"><h3>Удахгүй болох</h3></div><a class="s-link" href="#">Өмнө хийсэн уулзалт, төслүүд →</a></div></div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <b>Хариулах загвар:</b> Бүлэг тус бүрээс нэгийг сонгоод үсгээр нь бичээрэй — жишээ нь «PH2, S2». Санал болгож буй хослол: <b>PH2 + S2</b> (минимал чиглэлтэй тохирно). Хүсвэл «PH3-ын зургийг бүдэгрүүл» гэх мэт тохируулга нэмж хэлж болно.
+  </div>
+</div>
+</body>
+</html>
