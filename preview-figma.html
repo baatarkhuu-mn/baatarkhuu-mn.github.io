@@ -54,6 +54,31 @@
     --acc: #2f6bff; --acc-soft: rgba(47,107,255,.08); --rad: 10px; --shadow: 4px 4px 0 #16181d;
     --hero-tint: rgba(14,16,24,.76); --btn-grad: linear-gradient(120deg, #2f6bff, #2f6bff); }
 
+  .site[data-d="9"] { --bg: #f3f6f2; --bg2: #e9efe8; --card: #ffffff; --line: #dde6dc; --text: #17281f; --mut: #64796c;
+    --acc: #0c8a5f; --acc-soft: rgba(12,138,95,.1); --rad: 14px; --shadow: 0 10px 26px -16px rgba(12,80,55,.25);
+    --hero-tint: rgba(8,40,28,.8); --hero-tint2: rgba(14,120,80,.5); --btn-grad: linear-gradient(120deg, #0a6e4c, #0c8a5f); }
+
+  .site[data-d="10"] { --bg: #141519; --bg2: #1a1b20; --card: #1e2026; --line: rgba(255,255,255,.07); --text: #f2f3f5;
+    --mut: #9aa0ab; --acc: #ff7a1a; --acc-soft: rgba(255,122,26,.12); --rad: 14px; --shadow: 0 16px 34px -18px rgba(0,0,0,.7);
+    --hero-tint: rgba(10,10,12,.78); --hero-tint2: rgba(255,122,26,.35); --btn-grad: linear-gradient(120deg, #e85f00, #ff7a1a); }
+
+  .site[data-d="11"] { --bg: #f0f6fd; --bg2: #e4eefb; --card: rgba(255,255,255,.72); --line: rgba(255,255,255,.9);
+    --text: #14304f; --mut: #5e7896; --acc: #2b7fff; --acc-soft: rgba(43,127,255,.1); --rad: 18px;
+    --shadow: 0 16px 38px -18px rgba(80,130,200,.35); --hero-tint: rgba(140,175,225,.3); --hero-tint2: rgba(18,42,88,.6);
+    --btn-grad: linear-gradient(120deg, #2b7fff, #62a4ff); }
+
+  .site[data-d="12"] { --bg: #191231; --bg2: #1f1740; --card: #251b4d; --line: rgba(255,255,255,.09); --text: #efeafc;
+    --mut: #a99cc9; --acc: #ff8a5c; --acc-soft: rgba(255,138,92,.13); --rad: 16px; --shadow: 0 16px 36px -18px rgba(0,0,0,.65);
+    --hero-tint: rgba(30,15,60,.62); --hero-tint2: rgba(255,180,100,.35); --btn-grad: linear-gradient(120deg, #ff6a4d, #ffb35c); }
+
+  .site[data-d="13"] { --bg: #faf5ef; --bg2: #f3ebdf; --card: #ffffff; --line: #eadfd2; --text: #33261e; --mut: #85735f;
+    --acc: #c05b3c; --acc-soft: rgba(192,91,60,.1); --rad: 12px; --shadow: 0 10px 26px -16px rgba(120,70,40,.22);
+    --hero-tint: rgba(60,30,15,.72); --hero-tint2: rgba(192,91,60,.45); --btn-grad: linear-gradient(120deg, #a8492c, #c05b3c); }
+
+  .site[data-d="14"] { --bg: #000000; --bg2: #0a0a0b; --card: #0d0d0f; --line: rgba(255,255,255,.13); --text: #ffffff;
+    --mut: #8f939c; --acc: #22d3ee; --acc-soft: rgba(34,211,238,.1); --rad: 12px; --shadow: none;
+    --hero-tint: rgba(0,0,0,.8); --hero-tint2: rgba(34,211,238,.22); --btn-grad: linear-gradient(120deg, #22d3ee, #67e8f9); }
+
   .cont { max-width: 1060px; margin: 0 auto; padding: 0 20px; }
   .sec { padding: 40px 0; }
   .sec-soft { background: var(--bg2); }
@@ -138,6 +163,46 @@
   .site[data-d="8"] .card { border-width: 1.5px; }
   .site[data-d="8"] .btn-g { border-width: 2px; }
   .site[data-d="8"] .foot { background: #16181d; }
+  /* Д9: ногооны шатлал */
+  .site[data-d="9"] .st1 { background: linear-gradient(130deg, #075c3e, #0a6e4c); }
+  .site[data-d="9"] .st2 { background: linear-gradient(130deg, #0a6e4c, #0c8a5f); }
+  .site[data-d="9"] .st3 { background: linear-gradient(130deg, #0c8a5f, #27a877); }
+  .site[data-d="9"] .st4 { background: linear-gradient(130deg, #27a877, #5ec49a); }
+  .site[data-d="9"] .foot { background: #0d241b; }
+  /* Д10: гранит + улбар */
+  .site[data-d="10"] .st { background: var(--card); border: 1px solid var(--line); }
+  .site[data-d="10"] .st b { color: #ff7a1a; }
+  .site[data-d="10"] .st2 b { color: #ffb31a; } .site[data-d="10"] .st3 b { color: #ff5c48; } .site[data-d="10"] .st4 b { color: #ffd166; }
+  .site[data-d="10"] .st i { color: var(--mut); opacity: 1; }
+  .site[data-d="10"] .foot { background: #0c0d10; }
+  /* Д11: цасан шил — бүдэгрүүлсэн тунгалаг картууд */
+  .site[data-d="11"] .card, .site[data-d="11"] .st { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  .site[data-d="11"] .st { background: rgba(255,255,255,.6); border: 1px solid rgba(255,255,255,.9); color: var(--text); box-shadow: var(--shadow); }
+  .site[data-d="11"] .st b { color: #2b7fff; }
+  .site[data-d="11"] .st2 b { color: #0e9f6e; } .site[data-d="11"] .st3 b { color: #d97706; } .site[data-d="11"] .st4 b { color: #7c3aed; }
+  .site[data-d="11"] .st i { color: var(--mut); opacity: 1; }
+  .site[data-d="11"] .foot { background: #274a7d; }
+  /* Д12: нар жаргах градиент карт */
+  .site[data-d="12"] .st1 { background: linear-gradient(130deg, #7b2ff7, #a45cff); }
+  .site[data-d="12"] .st2 { background: linear-gradient(130deg, #d6408f, #ff5f8f); }
+  .site[data-d="12"] .st3 { background: linear-gradient(130deg, #ff6a4d, #ff8a5c); }
+  .site[data-d="12"] .st4 { background: linear-gradient(130deg, #ffa53c, #ffc371); }
+  .site[data-d="12"] .btn-m { color: #241005; }
+  .site[data-d="12"] .foot { background: #120c26; }
+  /* Д13: терракота цаас */
+  .site[data-d="13"] .st { background: var(--card); border: 1px solid var(--line); color: var(--text); box-shadow: var(--shadow); }
+  .site[data-d="13"] .st b { color: #c05b3c; }
+  .site[data-d="13"] .st2 b { color: #6b7f3a; } .site[data-d="13"] .st3 b { color: #b08536; } .site[data-d="13"] .st4 b { color: #7a5240; }
+  .site[data-d="13"] .st i { color: var(--mut); opacity: 1; }
+  .site[data-d="13"] .foot { background: #33261e; }
+  /* Д14: хар шил + циан */
+  .site[data-d="14"] .st { background: var(--card); border: 1px solid var(--line); }
+  .site[data-d="14"] .st b { color: #22d3ee; }
+  .site[data-d="14"] .st2 b { color: #a3e635; } .site[data-d="14"] .st3 b { color: #fbbf24; } .site[data-d="14"] .st4 b { color: #f0f0f2; }
+  .site[data-d="14"] .st i { color: var(--mut); opacity: 1; }
+  .site[data-d="14"] .btn-m { color: #06222a; }
+  .site[data-d="14"] .ev .reg { color: #06222a; }
+  .site[data-d="14"] .foot { background: #000; border-top: 1px solid var(--line); }
 
   .ctas { display: flex; gap: 12px; justify-content: center; margin-top: 22px; flex-wrap: wrap; }
   .btn-m { padding: 15px 44px; border-radius: calc(var(--rad) - 2px); background: var(--btn-grad); color: #fff; font-weight: 800;
@@ -230,6 +295,8 @@
     padding: 14px 22px; color: #e8e9ec; }
   .fg-top h1 { font-size: 1.05rem; margin-bottom: 3px; }
   .fg-top p { color: #9a9ca3; font-size: .82rem; }
+  .fg-new { display: inline-block; background: #16a34a; color: #fff; font-size: .68rem; font-weight: 700;
+    padding: 2px 8px; border-radius: 20px; margin-left: 8px; vertical-align: 2px; }
   .board { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(430px, 100%), 1fr)); gap: 40px; padding: 34px 26px 70px; max-width: 1500px; margin: 0 auto; }
   .frame-label { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
   .frame-label b { color: #fff; font-size: .95rem; }
@@ -241,7 +308,7 @@
 </style>
 </head>
 <body>
-<div class="fg-top"><h1>Дизайны самбар — 8 хувилбар зэрэгцээ</h1><p>Нүүрний бүх агуулга хэвээрээ, зөвхөн өнгө/дизайн өөр. Таалагдсанаа хэлээрэй, ж: «Д5». Хослуулж ч болно: «Д5, гэхдээ Д2-ын алтан өнгөтэй».</p></div>
+<div class="fg-top"><h1>Дизайны самбар — 14 хувилбар зэрэгцээ<span class="fg-new">+6 цоо шинэ</span></h1><p>Эхний 6 нь цоо шинэ чиглэлүүд. Нүүрний бүх агуулга хэвээрээ, зөвхөн өнгө/дизайн өөр. Таалагдсанаа хэлээрэй, ж: «Д12». Хослуулж ч болно: «Д12, гэхдээ цагаан суурьтай».</p></div>
 <div id="tpl"><div class="site" data-d="1">
     <!-- Навбар -->
     <div class="nav"><div class="cont"><b>Ц.БААТАРХҮҮ</b><u class="on" href="#">Нүүр</u><u>Намтар</u><u>Хууль</u><u>Төслүүд</u><u>Мэдээ</u><u>Видео</u><u>Тайлан</u><u>Холбоо барих</u></div></div>
@@ -346,6 +413,12 @@
 
 <script>
   var variants = [
+    ["9", "Д9 — Ой ногоон", "ШИНЭ · маргад өргөлт"],
+    ["10", "Д10 — Гранит улбар", "ШИНЭ · эрч хүчтэй"],
+    ["11", "Д11 — Цасан шил", "ШИНЭ · тунгалаг тансаг"],
+    ["12", "Д12 — Нар жаргах", "ШИНЭ · үдшийн градиент"],
+    ["13", "Д13 — Терракота", "ШИНЭ · дулаан шавар"],
+    ["14", "Д14 — Хар циан", "ШИНЭ · туйлын минимал"],
     ["1", "Д1 — Цэвэр цагаан", "Төрийн нээлттэй, цэвэр"],
     ["2", "Д2 — Навы + алт", "Сүлдний алттай, албаны"],
     ["3", "Д3 — Редакцийн минимал", "Дөрвөлжин, хэвлэлийн"],
