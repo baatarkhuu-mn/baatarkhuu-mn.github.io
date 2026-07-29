@@ -2775,7 +2775,7 @@ body.hp-split #public-feed { padding-top: 18px; }
 .hh2-in { position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; min-height: 200px; }
 .hh2-brand { position: absolute; inset: 0; display: flex; gap: 16px; align-items: center; justify-content: center; margin: 0;
   opacity: 0; animation: hh2Swap 6s ease infinite; }
-.hh2-brand .emblem { width: 92px; height: 92px; flex: none; }
+.hh2-brand .emblem { width: 120px; height: 120px; flex: none; }
 .hh2-brand .hb-role { font-size: .88rem; letter-spacing: .1em; color: #C9D8F2; font-weight: 700; text-transform: uppercase; }
 .hh2-brand .hb-name { font-size: 2.05rem; color: #fff; }
 .hh2-title { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 0 24px;
