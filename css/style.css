@@ -2934,8 +2934,8 @@ body.fx-digital .navbar-wrap, [data-theme="light"] body.fx-digital .navbar-wrap 
   background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.16); color: rgba(255,255,255,.9); }
 [data-theme="light"] .navbar-wrap .nav-search-input { color: #fff; }
 
-/* Хамбургерын унжлага цэс — navy header-тэй ижил (цайвар горимд цагаан дээр цагаан болохоос сэргийлнэ) */
-[data-theme="light"] body.hp .main-nav.open,
-[data-theme="light"] .main-nav.open {
-  background: #0d1731; border-color: rgba(255,255,255,.14);
-}
+/* Хамбургерын унжлага цэс — самбар нь горимоо дагана: цагаан үед бараан бичиг, бараан үед цагаан бичиг.
+   (Хэвтээ цэсний цагаан линкийн дүрэм зөвхөн navy мөрөнд үйлчилж, унжлага самбарт үйлчлэхгүй.) */
+[data-theme="light"] .main-nav.open a { color: var(--color-text); }
+[data-theme="light"] .main-nav.open a:hover { background: var(--color-bg-soft); color: var(--color-primary-light); }
+[data-theme="light"] .main-nav.open a.active { color: var(--color-primary); }
