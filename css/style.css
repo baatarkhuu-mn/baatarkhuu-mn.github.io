@@ -788,31 +788,17 @@ body.am-lock { overflow: hidden; }
 .att-red   { background: linear-gradient(135deg, #c53434, #e05656); }
 .att-navy  { background: linear-gradient(135deg, #13245a, #2a3f8f); }
 
-/* ---------- 14. Page hero (дотоод хуудас) ---------- */
+/* ---------- 14. Page hero (дотоод хуудас) — PH2 минимал: зам дээр нь, том тод гарчиг ---------- */
 .page-hero {
-  position: relative; overflow: hidden; color: var(--color-text);
-  padding: 18px 0; border-bottom: 1px solid var(--color-border);
-  background:
-    linear-gradient(90deg, var(--color-accent-soft), transparent 60%),
-    var(--color-bg-soft);
+  color: var(--color-text);
+  padding: 30px 0 22px; border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg);
 }
-[data-theme="light"] .page-hero {
-  background:
-    linear-gradient(90deg, rgba(48,113,231,.10), rgba(48,113,231,.02) 55%),
-    linear-gradient(180deg, #f0f5fc, #f6f9fd);
-}
-.page-hero .container { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-.page-hero .container::before { content: ""; width: 5px; height: 26px; border-radius: 3px; background: var(--color-accent); flex: none;
-  box-shadow: 0 0 14px -2px var(--color-accent); }
-.page-hero .breadcrumb { margin-top: 0; margin-left: auto; }
-/* Дижитал торон хээ — тор хээг арилгав */
-.page-hero::before { display: none; }
-.page-hero::after {
-  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
-}
-.page-hero > .container { position: relative; z-index: 1; }
-.page-hero h1 { color: var(--color-text); font-size: clamp(1.3rem, 2.4vw, 1.7rem); margin: 0; }
+.page-hero .container { display: flex; flex-direction: column-reverse; align-items: flex-start; gap: 7px; }
+.page-hero .breadcrumb { margin: 0; font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--color-accent); }
+.page-hero .breadcrumb a { color: var(--color-text-soft); font-weight: 500; }
+.page-hero .breadcrumb a:hover { color: var(--color-accent); }
+.page-hero h1 { color: var(--color-text); font-size: clamp(1.5rem, 2.6vw, 1.9rem); font-weight: 800; letter-spacing: -.01em; margin: 0; }
 .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: .8rem; margin-top: 6px; color: var(--color-text-soft); }
 .breadcrumb a { color: var(--color-text-soft); }
 .breadcrumb a:hover { color: var(--color-accent); }
@@ -2325,7 +2311,6 @@ body.hp .hh-btn { font-size: clamp(1rem, 1.4vw, 1.14rem); padding: 18px 34px; fo
 .dx-head:first-child { margin-top: 0; }
 .dx-head h2 { margin: 0; font-size: clamp(1.05rem, 1.8vw, 1.3rem); color: var(--color-text); text-transform: uppercase; letter-spacing: .05em;
   display: flex; align-items: center; gap: 12px; }
-.dx-head h2::before { content: ""; width: 5px; height: 22px; border-radius: 3px; background: var(--color-accent); flex: none; }
 .dx-all { white-space: nowrap; font-size: .85rem; font-weight: 600; color: var(--color-accent); }
 .dx-all:hover { text-decoration: underline; }
 .dx-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
@@ -2879,7 +2864,8 @@ body.hp-split #public-feed { padding-top: 18px; }
 .site-footer .footer-bottom, .site-footer .footer-bottom span { color: rgba(255,255,255,.7); }
 
 /* Мэдээ/арга хэмжээний «дэлгэрэнгүй» линк гарчгийн мөрөнд баруун талд */
-.hs-head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.hs-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.hs-head h2, .vhero-head h2 { display: flex; align-items: center; gap: 13px; }
 .hs-head .dx-all { white-space: nowrap; }
 
 /* Нүүрний секц хоорондын зайг шахах */
@@ -2887,3 +2873,8 @@ body.hp .section { padding: 42px 0; }
 body.hp .home-hero2 { padding-bottom: 36px; }
 body.hp .stats-cta { margin-top: 24px; }
 @media (max-width: 640px) { body.hp .section { padding: 34px 0; } }
+
+/* S4 — хэсгийн гарчгийн тэмдэгтийн хайрцаг */
+.hs-ico { width: 42px; height: 42px; border-radius: 12px; background: var(--color-accent-soft); color: var(--color-accent);
+  display: inline-flex; align-items: center; justify-content: center; flex: none; }
+.dx-head .hs-ico { width: 38px; height: 38px; border-radius: 11px; }
