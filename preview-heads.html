@@ -110,6 +110,18 @@
   .u4 .u-row { align-items: flex-start; }
   .u4 h3::after { content: ""; display: block; width: 40px; height: 4px; border-radius: 2px; background: var(--blue); margin-top: 8px; }
 
+  /* ============ БҮЛЭГ 4: Томруулсан, ялгарах стандарт ============ */
+  .v-demo { display: flex; flex-direction: column; gap: 30px; padding: 28px 22px; background: #fff; }
+  .v-row { display: flex; align-items: center; gap: 14px; }
+  .v-row h3 { font-size: 1.55rem; font-weight: 800; text-transform: uppercase; letter-spacing: .02em; }
+
+  .v2 .v-row { align-items: flex-start; }
+  .v2 h3::after { content: ""; display: block; width: 44px; height: 4px; border-radius: 2px; background: var(--blue); margin-top: 9px; }
+
+  .v3 h3 { background: linear-gradient(100deg, #14316f, #3071e7 70%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+  .v4 .v-row::before { content: ""; width: 5px; height: 30px; border-radius: 3px; background: linear-gradient(180deg, #3071e7, #6ea8ff); flex: none; }
+
   .foot { margin-top: 50px; padding: 22px; border: 1px dashed #c9d6ea; border-radius: 14px; background: var(--soft); color: var(--mut); font-size: .92rem; }
   .foot b { color: var(--ink); }
 </style>
@@ -220,8 +232,49 @@
     </div>
   </div>
 
+  <div class="group">
+    <h2>Бүлэг 4 — Томруулсан, ялгарах стандарт</h2>
+    <p style="color:var(--mut); margin:-10px 0 22px; font-size:.92rem;">U1 арай жижиг санагдсан тул хэмжээг томруулж (1.3rem → 1.55rem), ялгарах 4 хувилбар. Аль нь ч сонгогдсон бүх хуудсанд нэг ижил стандартаар хэрэгжинэ.</p>
+
+    <div class="prop">
+      <div class="prop-tag"><b>V1</b><span>Том минимал — зүгээр л томруулсан, чимэглэлгүй</span></div>
+      <div class="v-demo v1">
+        <div class="v-row"><h3>Удахгүй болох</h3><a class="s-link" href="#">Өмнө хийсэн уулзалт, төслүүд →</a></div>
+        <div class="v-row"><h3>Иргэдийн нийтэлсэн саналууд</h3><a class="s-link" href="#">Бүгдийг харах →</a></div>
+        <div class="v-row"><h3>Сүүлийн үеийн видео мэдээ</h3></div>
+      </div>
+    </div>
+
+    <div class="prop">
+      <div class="prop-tag"><b>V2</b><span>Том + доогуур богино цэнхэр зураас — PH2 толгойтой нэг хэв маяг</span><span class="rec">Санал болгож буй</span></div>
+      <div class="v-demo v2">
+        <div class="v-row"><h3>Удахгүй болох</h3><a class="s-link" href="#">Өмнө хийсэн уулзалт, төслүүд →</a></div>
+        <div class="v-row"><h3>Иргэдийн нийтэлсэн саналууд</h3><a class="s-link" href="#">Бүгдийг харах →</a></div>
+        <div class="v-row"><h3>Сүүлийн үеийн видео мэдээ</h3></div>
+      </div>
+    </div>
+
+    <div class="prop">
+      <div class="prop-tag"><b>V3</b><span>Том + хөх градиент бичвэр — чимэглэлгүй ч өнгөөрөө ялгарна</span></div>
+      <div class="v-demo v3">
+        <div class="v-row"><h3>Удахгүй болох</h3><a class="s-link" href="#">Өмнө хийсэн уулзалт, төслүүд →</a></div>
+        <div class="v-row"><h3>Иргэдийн нийтэлсэн саналууд</h3><a class="s-link" href="#">Бүгдийг харах →</a></div>
+        <div class="v-row"><h3>Сүүлийн үеийн видео мэдээ</h3></div>
+      </div>
+    </div>
+
+    <div class="prop">
+      <div class="prop-tag"><b>V4</b><span>Том + зүүн градиент зураас — хуучин зураасны сайжруулсан том хувилбар</span></div>
+      <div class="v-demo v4">
+        <div class="v-row"><h3>Удахгүй болох</h3><a class="s-link" href="#">Өмнө хийсэн уулзалт, төслүүд →</a></div>
+        <div class="v-row"><h3>Иргэдийн нийтэлсэн саналууд</h3><a class="s-link" href="#">Бүгдийг харах →</a></div>
+        <div class="v-row"><h3>Сүүлийн үеийн видео мэдээ</h3></div>
+      </div>
+    </div>
+  </div>
+
   <div class="foot">
-    <b>Хариулах загвар:</b> Бүлэг 3-аас нэгийг сонгоод үсгээр нь бичээрэй — жишээ нь «U2». Сонгосон загвар нүүрний болон холбоо барихын бүх хэсгийн гарчигт нэг ижил стандартаар хэрэгжинэ. Санал болгож буй: <b>U2</b> (одоо байгаа зураастай загварыг л бүгдэд нь жигдлэх тул хамгийн бага өөрчлөлт). Хамгийн минимал нь <b>U1</b>.
+    <b>Хариулах загвар:</b> Бүлэг 4-өөс нэгийг сонгоод үсгээр нь бичээрэй — жишээ нь «V2». Сонгосон загвар бүх хуудасны хэсгийн гарчигт нэг ижил стандартаар хэрэгжинэ. Санал болгож буй: <b>V2</b> (том, ялгарна, PH2 толгойтой нэг хэв маяг болно).
   </div>
 </div>
 </body>
