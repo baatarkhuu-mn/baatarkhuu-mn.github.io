@@ -68,10 +68,22 @@
   .nav u { text-decoration: none; color: var(--mut); font-size: .85rem; }
   .nav u.on { color: var(--acc); font-weight: 700; }
 
-  /* Hero */
+  /* Hero — хувилбар бүрт ӨӨР өнгөт тинт, ялгаа илт мэдрэгдэнэ */
   .hero { position: relative; text-align: center; padding: 64px 20px 46px; overflow: hidden;
-    background: linear-gradient(var(--hero-tint), var(--hero-tint)), url('assets/img/hero-city.jpg') center 40% / cover no-repeat; }
-  .site[data-d="3"] .hero { filter: none; }
+    background: linear-gradient(160deg, var(--hero-tint), var(--hero-tint2, var(--hero-tint))), url('assets/img/hero-city.jpg') center 40% / cover no-repeat; }
+  .site[data-d="1"] { --hero-tint: rgba(10,20,45,.78); --hero-tint2: rgba(37,99,235,.55); }
+  .site[data-d="2"] { --hero-tint: rgba(5,9,26,.8); --hero-tint2: rgba(140,100,25,.55); }
+  .site[data-d="3"] { --hero-tint: rgba(18,18,22,.88); --hero-tint2: rgba(18,18,22,.82); }
+  .site[data-d="4"] { --hero-tint: rgba(44,38,120,.8); --hero-tint2: rgba(99,102,241,.5); }
+  .site[data-d="5"] { --hero-tint: rgba(2,5,16,.65); --hero-tint2: rgba(30,90,220,.45); }
+  .site[data-d="6"] { --hero-tint: rgba(48,32,10,.78); --hero-tint2: rgba(140,100,40,.55); }
+  .site[data-d="7"] { --hero-tint: rgba(8,26,66,.85); --hero-tint2: rgba(30,99,233,.6); }
+  .site[data-d="8"] { --hero-tint: rgba(12,13,18,.88); --hero-tint2: rgba(12,13,18,.8); }
+  /* Навбарын дээд өнгөт зурвас + гарчгийн өнгө хувилбар бүрт */
+  .nav { border-top: 4px solid var(--acc); }
+  .site[data-d="2"] .h-std, .site[data-d="6"] .h-std { color: var(--acc); }
+  .site[data-d="3"] .h-std { border-bottom: 3px solid #121212; padding-bottom: 6px; }
+  .site[data-d="8"] .h-std { background: #16181d; color: #fff; padding: 5px 14px; }
   .hero .emb { width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,.12); display: inline-flex;
     align-items: center; justify-content: center; margin-bottom: 10px; }
   .hero .emb img { width: 34px; }

@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="robots" content="noindex" />
 <title>Гарчгийн дизайны саналууд — PH / S хувилбарууд</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;800&family=Noto+Serif:wght@700&display=swap" />
 <style>
   :root {
     --ink: #0f1b33; --mut: #5b6b85; --line: #e3e9f2; --blue: #3071e7; --navy: #14316f;
@@ -121,6 +123,18 @@
   .v3 h3 { background: linear-gradient(100deg, #14316f, #3071e7 70%); -webkit-background-clip: text; background-clip: text; color: transparent; }
 
   .v4 .v-row::before { content: ""; width: 5px; height: 30px; border-radius: 3px; background: linear-gradient(180deg, #3071e7, #6ea8ff); flex: none; }
+
+  /* ============ БҮЛЭГ 5: Фонтоор ялгарах (цэнхэр багатай) ============ */
+  .sh-demo { display: flex; flex-direction: column; gap: 30px; padding: 28px 22px; background: #fff; }
+  .sh-row { display: flex; align-items: center; gap: 14px; }
+
+  .sh1 h3 { font-size: 1.55rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--ink); }
+
+  .sh2 h3 { font-family: 'Manrope', 'Inter', sans-serif; font-size: 1.7rem; font-weight: 300; text-transform: uppercase; letter-spacing: .09em; color: var(--ink); }
+
+  .sh3 h3 { font-family: 'Noto Serif', Georgia, serif; font-size: 1.55rem; font-weight: 700; letter-spacing: 0; color: var(--ink); }
+
+  .sh4 h3 { font-size: 1.05rem; font-weight: 700; text-transform: uppercase; letter-spacing: .22em; color: #3c4a63; }
 
   .foot { margin-top: 50px; padding: 22px; border: 1px dashed #c9d6ea; border-radius: 14px; background: var(--soft); color: var(--mut); font-size: .92rem; }
   .foot b { color: var(--ink); }
@@ -273,8 +287,49 @@
     </div>
   </div>
 
+  <div class="group">
+    <h2>Бүлэг 5 — Фонтоор ялгарах (цэнхэр багатай)</h2>
+    <p style="color:var(--mut); margin:-10px 0 22px; font-size:.92rem;">V3-ийн градиент цэнхэр их санагдсан тул эдгээр хувилбарт гарчиг ЭНГИЙН хар (харанхуй горимд цагаан) өнгөтэй байж, зөвхөн үсгийн хэлбэрээрээ ялгарна.</p>
+
+    <div class="prop">
+      <div class="prop-tag"><b>Ш1</b><span>Хар тод — том үсэг, өргөнсгөсөн зай, цэнхэр огт үгүй</span><span class="rec">Санал болгож буй</span></div>
+      <div class="sh-demo sh1">
+        <div class="sh-row"><h3>Удахгүй болох</h3><a class="s-link" href="#">Өмнө хийсэн уулзалт, төслүүд →</a></div>
+        <div class="sh-row"><h3>Иргэдийн нийтэлсэн саналууд</h3><a class="s-link" href="#">Бүгдийг харах →</a></div>
+        <div class="sh-row"><h3>Сүүлийн үеийн видео мэдээ</h3></div>
+      </div>
+    </div>
+
+    <div class="prop">
+      <div class="prop-tag"><b>Ш2</b><span>Нимгэн том — light жинтэй, агаартай, дэгжин</span></div>
+      <div class="sh-demo sh2">
+        <div class="sh-row"><h3>Удахгүй болох</h3><a class="s-link" href="#">Өмнө хийсэн уулзалт, төслүүд →</a></div>
+        <div class="sh-row"><h3>Иргэдийн нийтэлсэн саналууд</h3><a class="s-link" href="#">Бүгдийг харах →</a></div>
+        <div class="sh-row"><h3>Сүүлийн үеийн видео мэдээ</h3></div>
+      </div>
+    </div>
+
+    <div class="prop">
+      <div class="prop-tag"><b>Ш3</b><span>Сериф — сонин хэвлэлийн сонгодог гарнитур, жижиг үсгээрээ</span></div>
+      <div class="sh-demo sh3">
+        <div class="sh-row"><h3>Удахгүй болох</h3><a class="s-link" href="#">Өмнө хийсэн уулзалт, төслүүд →</a></div>
+        <div class="sh-row"><h3>Иргэдийн нийтэлсэн саналууд</h3><a class="s-link" href="#">Бүгдийг харах →</a></div>
+        <div class="sh-row"><h3>Сүүлийн үеийн видео мэдээ</h3></div>
+      </div>
+    </div>
+
+    <div class="prop">
+      <div class="prop-tag"><b>Ш4</b><span>Өргөн зайтай жижиг — архитектурын цомхон маяг, хамгийн намуухан</span></div>
+      <div class="sh-demo sh4">
+        <div class="sh-row"><h3>Удахгүй болох</h3><a class="s-link" href="#">Өмнө хийсэн уулзалт, төслүүд →</a></div>
+        <div class="sh-row"><h3>Иргэдийн нийтэлсэн саналууд</h3><a class="s-link" href="#">Бүгдийг харах →</a></div>
+        <div class="sh-row"><h3>Сүүлийн үеийн видео мэдээ</h3></div>
+      </div>
+    </div>
+  </div>
+
   <div class="foot">
-    <b>Хариулах загвар:</b> Бүлэг 4-өөс нэгийг сонгоод үсгээр нь бичээрэй — жишээ нь «V2». Сонгосон загвар бүх хуудасны хэсгийн гарчигт нэг ижил стандартаар хэрэгжинэ. Санал болгож буй: <b>V2</b> (том, ялгарна, PH2 толгойтой нэг хэв маяг болно).
+    <b>Хариулах загвар:</b> Бүлэг 5-аас нэгийг сонгоод үсгээр нь бичээрэй — жишээ нь «Ш1». Сонгосон загвар бүх хуудасны хэсгийн гарчигт нэг ижил стандартаар хэрэгжиж, одоогийн градиент цэнхэрийг орлоно. Санал болгож буй: <b>Ш1</b> (тод, цэнхэргүй, хамгийн уншигдамтгай).
   </div>
 </div>
 </body>
