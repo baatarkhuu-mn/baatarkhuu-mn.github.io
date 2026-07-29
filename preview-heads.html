@@ -98,6 +98,18 @@
   .s5 h3 { font-size: 1.45rem; text-transform: uppercase; letter-spacing: .04em; }
   .s5 .s-link { margin: 10px auto 0; display: inline-block; }
 
+  /* ============ БҮЛЭГ 3: Нэгдсэн стандарт ============ */
+  .u-demo { display: flex; flex-direction: column; gap: 26px; padding: 26px 22px; background: #fff; }
+  .u-row { display: flex; align-items: center; gap: 14px; }
+  .u-row h3 { font-size: 1.3rem; font-weight: 800; text-transform: uppercase; letter-spacing: .03em; }
+
+  .u2 .u-row::before { content: ""; width: 5px; height: 24px; border-radius: 3px; background: var(--blue); flex: none; }
+
+  .u3 .u-row { border-bottom: 1px solid var(--line); padding-bottom: 12px; }
+
+  .u4 .u-row { align-items: flex-start; }
+  .u4 h3::after { content: ""; display: block; width: 40px; height: 4px; border-radius: 2px; background: var(--blue); margin-top: 8px; }
+
   .foot { margin-top: 50px; padding: 22px; border: 1px dashed #c9d6ea; border-radius: 14px; background: var(--soft); color: var(--mut); font-size: .92rem; }
   .foot b { color: var(--ink); }
 </style>
@@ -167,8 +179,49 @@
     </div>
   </div>
 
+  <div class="group">
+    <h2>Бүлэг 3 — Нэгдсэн стандарт (бүх гарчиг ижил загварт)</h2>
+    <p style="color:var(--mut); margin:-10px 0 22px; font-size:.92rem;">Одоо зарим гарчиг зураастай, зарим нь том жижиг холилдсон тул доорх хувилбаруудад бүх хэсгийн гарчгийг НЭГ ижил хэмжээ, нэг загварт оруулж үзүүлэв. Хувилбар бүрд 3 өөр хэсгийн гарчгийг жишээгээр харуулав.</p>
+
+    <div class="prop">
+      <div class="prop-tag"><b>U1</b><span>Цэвэр минимал — зураасгүй, бүгд ижил хэмжээтэй том үсэг</span></div>
+      <div class="u-demo u1">
+        <div class="u-row"><h3>Удахгүй болох</h3><a class="s-link" href="#">Өмнө хийсэн уулзалт, төслүүд →</a></div>
+        <div class="u-row"><h3>Иргэдийн нийтэлсэн саналууд</h3><a class="s-link" href="#">Бүгдийг харах →</a></div>
+        <div class="u-row"><h3>Сүүлийн үеийн видео мэдээ</h3></div>
+      </div>
+    </div>
+
+    <div class="prop">
+      <div class="prop-tag"><b>U2</b><span>Бүгд зүүн цэнхэр зураастай — одоогийн жижиг гарчгийн загварыг стандарт болгох</span><span class="rec">Санал болгож буй</span></div>
+      <div class="u-demo u2">
+        <div class="u-row"><h3>Удахгүй болох</h3><a class="s-link" href="#">Өмнө хийсэн уулзалт, төслүүд →</a></div>
+        <div class="u-row"><h3>Иргэдийн нийтэлсэн саналууд</h3><a class="s-link" href="#">Бүгдийг харах →</a></div>
+        <div class="u-row"><h3>Сүүлийн үеийн видео мэдээ</h3></div>
+      </div>
+    </div>
+
+    <div class="prop">
+      <div class="prop-tag"><b>U3</b><span>Хөндлөн шугамтай — гарчиг бүр нарийн зураасан суурин дээр</span></div>
+      <div class="u-demo u3">
+        <div class="u-row"><h3>Удахгүй болох</h3><a class="s-link" href="#">Өмнө хийсэн уулзалт, төслүүд →</a></div>
+        <div class="u-row"><h3>Иргэдийн нийтэлсэн саналууд</h3><a class="s-link" href="#">Бүгдийг харах →</a></div>
+        <div class="u-row"><h3>Сүүлийн үеийн видео мэдээ</h3></div>
+      </div>
+    </div>
+
+    <div class="prop">
+      <div class="prop-tag"><b>U4</b><span>Доогуур богино зураастай — PH2 толгойтой ижил хэв маяг</span></div>
+      <div class="u-demo u4">
+        <div class="u-row"><h3>Удахгүй болох</h3><a class="s-link" href="#">Өмнө хийсэн уулзалт, төслүүд →</a></div>
+        <div class="u-row"><h3>Иргэдийн нийтэлсэн саналууд</h3><a class="s-link" href="#">Бүгдийг харах →</a></div>
+        <div class="u-row"><h3>Сүүлийн үеийн видео мэдээ</h3></div>
+      </div>
+    </div>
+  </div>
+
   <div class="foot">
-    <b>Хариулах загвар:</b> Бүлэг тус бүрээс нэгийг сонгоод үсгээр нь бичээрэй — жишээ нь «PH2, S2». Санал болгож буй хослол: <b>PH2 + S2</b> (минимал чиглэлтэй тохирно). Хүсвэл «PH3-ын зургийг бүдэгрүүл» гэх мэт тохируулга нэмж хэлж болно.
+    <b>Хариулах загвар:</b> Бүлэг 3-аас нэгийг сонгоод үсгээр нь бичээрэй — жишээ нь «U2». Сонгосон загвар нүүрний болон холбоо барихын бүх хэсгийн гарчигт нэг ижил стандартаар хэрэгжинэ. Санал болгож буй: <b>U2</b> (одоо байгаа зураастай загварыг л бүгдэд нь жигдлэх тул хамгийн бага өөрчлөлт). Хамгийн минимал нь <b>U1</b>.
   </div>
 </div>
 </body>
