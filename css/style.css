@@ -2877,3 +2877,7 @@ body.hp-split #public-feed { padding-top: 18px; }
 .site-footer .fc-ic { color: #ffffff; opacity: .85; }
 .site-footer .footer-social a { color: #ffffff; }
 .site-footer .footer-bottom, .site-footer .footer-bottom span { color: rgba(255,255,255,.7); }
+
+/* Мэдээ/арга хэмжээний «дэлгэрэнгүй» линк гарчгийн мөрөнд баруун талд */
+.hs-head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.hs-head .dx-all { white-space: nowrap; }
