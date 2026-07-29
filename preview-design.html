@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="robots" content="noindex" />
-<title>Дизайны өнгөний саналууд — Д1–Д4 (нүүр бүтнээрээ)</title>
+<title>Дизайны өнгөний саналууд — Д1–Д8 (нүүр бүтнээрээ)</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'Inter', 'Segoe UI', 'Roboto', 'Noto Sans', Arial, sans-serif; line-height: 1.55; background: #0d1117; }
@@ -35,6 +35,23 @@
   .site[data-d="4"] { --bg: #eef2f7; --bg2: #e6ecf4; --card: #ffffff; --line: transparent; --text: #1c2b41; --mut: #64748b;
     --acc: #4f46e5; --acc-soft: rgba(79,70,229,.09); --rad: 22px; --shadow: 0 18px 40px -20px rgba(45,55,120,.25);
     --hero-tint: rgba(22,20,60,.7); --btn-grad: linear-gradient(120deg, #4f46e5, #6366f1); }
+
+  .site[data-d="5"] { --bg: #060b1e; --bg2: #0a1128; --card: rgba(255,255,255,.045); --line: rgba(110,168,255,.16);
+    --text: #e9eefb; --mut: #93a3c6; --acc: #4f8dff; --acc-soft: rgba(79,141,255,.13); --rad: 16px;
+    --shadow: 0 0 28px -10px rgba(79,141,255,.35); --hero-tint: rgba(4,8,22,.6);
+    --btn-grad: linear-gradient(120deg, #2563eb, #4f8dff); }
+
+  .site[data-d="6"] { --bg: #faf7f1; --bg2: #f3eee3; --card: #ffffff; --line: #e6ddc9; --text: #2a2620; --mut: #7a715f;
+    --acc: #9a7b2d; --acc-soft: rgba(154,123,45,.1); --rad: 12px; --shadow: 0 10px 26px -16px rgba(90,74,38,.25);
+    --hero-tint: rgba(28,22,10,.68); --btn-grad: linear-gradient(120deg, #8a6a2f, #b8923c); }
+
+  .site[data-d="7"] { --bg: #f4f8ff; --bg2: #e8f0fe; --card: #ffffff; --line: #d5e3fa; --text: #0e2a5c; --mut: #5b73a0;
+    --acc: #1e63e9; --acc-soft: rgba(30,99,233,.09); --rad: 16px; --shadow: 0 12px 28px -18px rgba(30,99,233,.3);
+    --hero-tint: rgba(8,24,60,.7); --btn-grad: linear-gradient(120deg, #1e63e9, #4a8bf5); }
+
+  .site[data-d="8"] { --bg: #fcfcfd; --bg2: #f4f4f6; --card: #ffffff; --line: #16181d; --text: #16181d; --mut: #5a5e6a;
+    --acc: #2f6bff; --acc-soft: rgba(47,107,255,.08); --rad: 10px; --shadow: 4px 4px 0 #16181d;
+    --hero-tint: rgba(14,16,24,.76); --btn-grad: linear-gradient(120deg, #2f6bff, #2f6bff); }
 
   .cont { max-width: 1060px; margin: 0 auto; padding: 0 20px; }
   .sec { padding: 40px 0; }
@@ -85,6 +102,29 @@
   /* Д2: шилэн карт */
   .site[data-d="2"] .st { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); }
   .site[data-d="2"] .st b { color: #e0b653; }
+  /* Д5: гэрэлтсэн шилэн карт */
+  .site[data-d="5"] .st { background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow); }
+  .site[data-d="5"] .st b { color: #4f8dff; }
+  .site[data-d="5"] .st2 b { color: #34d399; } .site[data-d="5"] .st3 b { color: #fbbf24; } .site[data-d="5"] .st4 b { color: #a78bfa; }
+  .site[data-d="5"] .st i { color: var(--mut); opacity: 1; }
+  /* Д6: цагаан карт, хүрэл өнгийн тоо */
+  .site[data-d="6"] .st { background: var(--card); border: 1px solid var(--line); color: var(--text); box-shadow: var(--shadow); }
+  .site[data-d="6"] .st b { color: #9a7b2d; }
+  .site[data-d="6"] .st2 b { color: #4d7c0f; } .site[data-d="6"] .st3 b { color: #b45309; } .site[data-d="6"] .st4 b { color: #6d28d9; }
+  .site[data-d="6"] .st i { color: var(--mut); opacity: 1; }
+  /* Д7: дан цэнхэр аялгуу — 4 өнгийн цэнхэр шатлал */
+  .site[data-d="7"] .st1 { background: linear-gradient(130deg, #123f9e, #1e63e9); }
+  .site[data-d="7"] .st2 { background: linear-gradient(130deg, #1e63e9, #3b82f6); }
+  .site[data-d="7"] .st3 { background: linear-gradient(130deg, #3b82f6, #60a5fa); }
+  .site[data-d="7"] .st4 { background: linear-gradient(130deg, #60a5fa, #93c5fd); }
+  /* Д8: бэхэн хүрээ + булангийн битүү сүүдэр */
+  .site[data-d="8"] .st { background: var(--card); border: 1.5px solid var(--line); color: var(--text); box-shadow: var(--shadow); }
+  .site[data-d="8"] .st b { color: var(--acc); }
+  .site[data-d="8"] .st2 b { color: #0a8754; } .site[data-d="8"] .st3 b { color: #c05e00; } .site[data-d="8"] .st4 b { color: #7132d6; }
+  .site[data-d="8"] .st i { color: var(--mut); opacity: 1; }
+  .site[data-d="8"] .card { border-width: 1.5px; }
+  .site[data-d="8"] .btn-g { border-width: 2px; }
+  .site[data-d="8"] .foot { background: #16181d; }
 
   .ctas { display: flex; gap: 12px; justify-content: center; margin-top: 22px; flex-wrap: wrap; }
   .btn-m { padding: 15px 44px; border-radius: calc(var(--rad) - 2px); background: var(--btn-grad); color: #fff; font-weight: 800;
@@ -159,6 +199,9 @@
   .site[data-d="2"] .foot { background: #080e24; }
   .site[data-d="3"] .foot { background: #121212; }
   .site[data-d="4"] .foot { background: #1c2b41; }
+  .site[data-d="5"] .foot { background: #030614; border-top: 1px solid var(--line); }
+  .site[data-d="6"] .foot { background: #2a2620; }
+  .site[data-d="7"] .foot { background: #0e2a5c; }
   .foot .cont { display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap; font-size: .82rem; }
 
   @media (max-width: 860px) {
@@ -175,6 +218,10 @@
     <button data-v="2">Д2 — Навы + алт</button>
     <button data-v="3">Д3 — Редакцийн минимал</button>
     <button data-v="4">Д4 — Зөөлөн индиго</button>
+    <button data-v="5">Д5 — Шөнийн гэрэлт</button>
+    <button data-v="6">Д6 — Айвори + хүрэл</button>
+    <button data-v="7">Д7 — Дан цэнхэр</button>
+    <button data-v="8">Д8 — Бэхэн хүрээ</button>
     <span class="pick-note" id="note">Д1: Цагаан суурь, цэнхэр өргөлт — төрийн цэвэр, нээлттэй төрх. Агуулга, бүтэц огт өөрчлөгдөөгүй, зөвхөн өнгө ба хэлбэр.</span>
   </div>
 
@@ -284,7 +331,11 @@
     "1": "Д1: Цагаан суурь, цэнхэр өргөлт — төрийн цэвэр, нээлттэй төрх. Агуулга, бүтэц огт өөрчлөгдөөгүй, зөвхөн өнгө ба хэлбэр.",
     "2": "Д2: Гүн навы суурь, алтан өргөлт (төрийн сүлдний өнгө) — тансаг, албаны төрх. Шилэн картууд.",
     "3": "Д3: Редакцийн минимал — дөрвөлжин булан, нимгэн хүрээ, сүүдэргүй. Сонины хэв маяг, хамгийн цомхон.",
-    "4": "Д4: Зөөлөн саарал-цэнхэр суурь, индиго өргөлт — их зайтай, бөөрөнхий булан, зөөлөн сүүдэр. Орчин үеийн аппын төрх."
+    "4": "Д4: Зөөлөн саарал-цэнхэр суурь, индиго өргөлт — их зайтай, бөөрөнхий булан, зөөлөн сүүдэр. Орчин үеийн аппын төрх.",
+    "5": "Д5: Одоогийн шөнийн навыг өнгөлсөн хувилбар — гүн харанхуй суурь, гэрэлтсэн цэнхэр хүрээ, шилэн картууд. Танил төрхөө хадгална.",
+    "6": "Д6: Дулаан айвори цаасан суурь, хүрэл-алтан өргөлт — нухацтай, баримт бичгийн төрх. Сүлдний алттай уялдана.",
+    "7": "Д7: Ганц цэнхэр аялгуу — цайвар цэнхэр суурь, бүх өнгө нэг цэнхрийн шатлал. Хамгийн нэгдмэл, тайван.",
+    "8": "Д8: Бэхэн хар хүрээ, булангийн битүү сүүдэр, цомхон булан — хэвлэлийн график маяг. Хамгийн өвөрмөц ялгарна."
   };
   document.querySelectorAll(".picker button").forEach(function (b) {
     b.addEventListener("click", function () {

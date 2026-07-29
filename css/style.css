@@ -2874,12 +2874,22 @@ body.hp .home-hero2 { padding-bottom: 36px; }
 body.hp .stats-cta { margin-top: 24px; }
 @media (max-width: 640px) { body.hp .section { padding: 34px 0; } }
 
-/* U1 — бүх хуудасны хэсгийн гарчиг нэг стандарт: зураасгүй, ижил хэмжээ, том үсэг */
+/* V3 — бүх хуудасны хэсгийн гарчиг нэг стандарт: том, хөх градиент бичвэр */
 .hs-head h2, .dx-head h2, .vhero-head h2, .section-head h2, .flow-section .section-head h2,
-.contact2-info h2, .std-h2 {
-  font-size: clamp(1.15rem, 1.9vw, 1.3rem); font-weight: 800;
-  text-transform: uppercase; letter-spacing: .03em;
+.contact2-info h2, .std-h2, .ro-title {
+  font-size: clamp(1.3rem, 2.2vw, 1.55rem); font-weight: 800;
+  text-transform: uppercase; letter-spacing: .02em;
+  background: linear-gradient(100deg, #cfe0fb, #6ea8ff 55%, #eef4ff);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
 }
+[data-theme="light"] .hs-head h2, [data-theme="light"] .dx-head h2, [data-theme="light"] .vhero-head h2,
+[data-theme="light"] .section-head h2, [data-theme="light"] .contact2-info h2,
+[data-theme="light"] .std-h2, [data-theme="light"] .ro-title {
+  background: linear-gradient(100deg, #14316f, #3071e7 70%);
+  -webkit-background-clip: text; background-clip: text;
+}
+/* Харанхуй судалтай flow хэсэгт градиентгүй цагаанаар */
+.flow-section .section-head h2, [data-theme="light"] .flow-section .section-head h2 { background: none; color: #fff; }
 .dx-head h2::before { display: none; }
 .section-head h2::after, .fx-digital .section-head h2::after { display: none; }
 .section-head { margin-bottom: 34px; }
