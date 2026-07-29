@@ -2911,31 +2911,12 @@ body.hp .stats-cta { margin-top: 24px; }
 .section-head h2::after, .fx-digital .section-head h2::after { display: none; }
 .section-head { margin-bottom: 34px; }
 
-/* Header (баннер + цэс) — footer шиг гүн navy, хоёр горимд ижил */
-.site-header, [data-theme="light"] .site-header {
+/* Брендтэй дээд зурвас — footer шиг гүн navy, хоёр горимд ижил. Цэсний мөр хуучин шилэн хэвээр. */
+.hero-banner, [data-theme="light"] .hero-banner {
   background:
     radial-gradient(ellipse 50% 130% at 85% 0%, rgba(48,113,231,.12), transparent 60%),
     radial-gradient(ellipse 40% 110% at 8% 100%, rgba(48,113,231,.14), transparent 60%),
     linear-gradient(160deg, #0a1228, #080f20);
 }
-.hero-banner, [data-theme="light"] .hero-banner { background: transparent; }
 .hb-name, [data-theme="light"] .hb-name { color: #fff; }
 .hb-role, [data-theme="light"] .hb-role { color: rgba(255,255,255,.72); }
-.navbar-wrap, [data-theme="light"] .navbar-wrap,
-body.fx-digital .navbar-wrap, [data-theme="light"] body.fx-digital .navbar-wrap {
-  background: rgba(9,16,36,.88);
-  backdrop-filter: blur(18px) saturate(135%); -webkit-backdrop-filter: blur(18px) saturate(135%);
-  border-bottom: 1px solid rgba(255,255,255,.08);
-}
-[data-theme="light"] .main-nav a { color: rgba(255,255,255,.88); }
-[data-theme="light"] .main-nav a:hover { background: rgba(255,255,255,.08); color: #fff; }
-[data-theme="light"] .main-nav a.active { color: #9dbdf5; }
-[data-theme="light"] .navbar-wrap .icon-btn, [data-theme="light"] .navbar-wrap .lang-sw {
-  background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.16); color: rgba(255,255,255,.9); }
-[data-theme="light"] .navbar-wrap .nav-search-input { color: #fff; }
-
-/* Хамбургерын унжлага цэс — самбар нь горимоо дагана: цагаан үед бараан бичиг, бараан үед цагаан бичиг.
-   (Хэвтээ цэсний цагаан линкийн дүрэм зөвхөн navy мөрөнд үйлчилж, унжлага самбарт үйлчлэхгүй.) */
-[data-theme="light"] .main-nav.open a { color: var(--color-text); }
-[data-theme="light"] .main-nav.open a:hover { background: var(--color-bg-soft); color: var(--color-primary-light); }
-[data-theme="light"] .main-nav.open a.active { color: var(--color-primary); }
