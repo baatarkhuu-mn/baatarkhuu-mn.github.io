@@ -2873,3 +2873,10 @@ body.hp .section { padding: 42px 0; }
 body.hp .home-hero2 { padding-bottom: 36px; }
 body.hp .stats-cta { margin-top: 24px; }
 @media (max-width: 640px) { body.hp .section { padding: 34px 0; } }
+
+/* U1 — бүх хэсгийн гарчиг нэг стандарт: зураасгүй, ижил хэмжээ, том үсэг */
+.hs-head h2, .dx-head h2, .vhero-head h2 {
+  font-size: clamp(1.15rem, 1.9vw, 1.3rem); font-weight: 800;
+  text-transform: uppercase; letter-spacing: .03em;
+}
+.dx-head h2::before { display: none; }
