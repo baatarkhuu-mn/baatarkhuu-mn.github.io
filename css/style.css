@@ -2926,3 +2926,8 @@ body.hp .fc3-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 @media (max-width: 520px) { body.hp .fc3-grid { grid-template-columns: 1fr; } }
 body.hp .fcv2 .fc3-media { height: auto; aspect-ratio: 1.08 / 1; }
 
+
+/* Нүүр: хажуугийн «Хамгийн их дэмжигдсэн» — одоогийн хэлбэрээрээ, галерейн өндрийг доош дүүрэн эзэлнэ */
+body.hp .dx-cols { align-items: stretch; }
+body.hp .dx-side { position: static; }
+body.hp [data-top-feed] { max-height: none; }
