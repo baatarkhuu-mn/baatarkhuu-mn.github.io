@@ -1538,8 +1538,10 @@
     IC_CMT: '<svg class="ri" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
     IC_PIN: '<svg class="mi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>',
     statusChip(r) {
+      // Админы 7 төлөвийг нийтэд 4 бүлгээр харуулна (in_progress = Явцад, cancelled = Цуцлагдсан)
+      if (r.status === "cancelled") return '<span class="fc2-status fc2-st-cancel"><i class="st-dot"></i>Цуцлагдсан</span>';
       const done = r.status === "done" || r.status === "resolved" || !!r.response;
-      const routed = r.status === "routed" || r.status === "processing" || r.status === "responded" || !!r.org;
+      const routed = r.status === "routed" || r.status === "processing" || r.status === "responded" || r.status === "in_progress" || !!r.org;
       if (done) return '<span class="fc2-status fc2-st-done"><i class="st-dot"></i>Шийдвэрлэгдсэн</span>';
       if (routed) return '<span class="fc2-status fc2-st-prog"><i class="st-dot"></i>Явцад</span>';
       return '<span class="fc2-status fc2-st-new"><i class="st-dot"></i>Хүлээн авсан</span>';
