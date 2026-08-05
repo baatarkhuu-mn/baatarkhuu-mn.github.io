@@ -2259,26 +2259,49 @@
         });
         body.appendChild(wrap);
       };
+      // Мессенжер маягийн «бичиж байна…» индикатор
+      const typing = () => {
+        const t = document.createElement("div");
+        t.className = "cbx-msg cbx-bot cbx-typing";
+        t.innerHTML = "<i></i><i></i><i></i>";
+        body.appendChild(t); scrollEnd();
+        return t;
+      };
       const ask = (idx) => {
         const it = ChatBot.QA[idx];
         const old = body.querySelector(".cbx-menu");
         if (old) old.remove();
+        const oldHint = body.querySelector(".cbx-hint");
+        if (oldHint) oldHint.remove();
         const u = document.createElement("div");
         u.className = "cbx-msg cbx-user"; u.textContent = it.q;
-        body.appendChild(u);
-        bot("<p>" + it.a + "</p>" + (it.link ? '<a class="cbx-link" href="' + it.link + '">' + it.lt + " →</a>" : ""));
-        const hint = document.createElement("div");
-        hint.className = "cbx-hint"; hint.textContent = "Өөр асуулт сонгох:";
-        body.appendChild(hint);
-        menu();
-        scrollEnd();
+        body.appendChild(u); scrollEnd();
+        const t = typing();
+        setTimeout(() => {
+          t.remove();
+          bot("<p>" + it.a + "</p>" + (it.link ? '<a class="cbx-link" href="' + it.link + '">' + it.lt + " →</a>" : ""));
+          const ans = body.lastElementChild;
+          scrollEnd();
+          setTimeout(() => {
+            const hint = document.createElement("div");
+            hint.className = "cbx-hint"; hint.textContent = "Өөр асуулт сонгох:";
+            body.appendChild(hint);
+            menu();
+            // хариулт харагдацад үлдэнэ, цэс нь доор нь
+            body.scrollTop = Math.max(0, ans.offsetTop - body.offsetTop - 10);
+          }, 700);
+        }, 900);
       };
       const toggle = (open) => {
         panel.classList.toggle("open", open);
         fab.setAttribute("aria-expanded", String(open));
         if (open && !body.children.length) {
-          bot("<p>Сайн байна уу! Би энэ сайтын туслах бот байна. Доорх асуултуудаас сонгоно уу.</p>");
-          menu();
+          const t = typing();
+          setTimeout(() => {
+            t.remove();
+            bot("<p>Сайн байна уу! Би энэ сайтын туслах бот байна. Доорх асуултуудаас сонгоно уу.</p>");
+            menu();
+          }, 650);
         }
       };
       fab.addEventListener("click", () => toggle(!panel.classList.contains("open")));
