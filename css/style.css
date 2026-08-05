@@ -124,7 +124,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 /* ---------- 3. Layout туслахууд ---------- */
 .container { width: 100%; max-width: var(--container); margin-inline: auto; padding-inline: 20px; }
 
-.section { padding: 96px 0; }
+.section { padding: 48px 0; }
 .section.hero-top { padding-top: 38px; }
 .section-soft { background: var(--color-bg-soft); border-block: 1px solid var(--color-border); }
 [data-theme="light"] .section-soft { border-block: none; }
@@ -981,7 +981,7 @@ a.news-card-clean { text-decoration: none; color: inherit; display: flex; flex-d
 }
 
 @media (max-width: 640px) {
-  .section { padding: 52px 0; }
+  .section { padding: 36px 0; }
   .grid-3, .grid-4, .grid-2 { grid-template-columns: 1fr; }
   .stats { grid-template-columns: repeat(2, 1fr); gap: 14px; }
   .footer-grid { grid-template-columns: 1fr; }
@@ -2931,3 +2931,18 @@ body.hp .fcv2 .fc3-media { height: auto; aspect-ratio: 1.35 / 1; }
 body.hp .dx-cols { align-items: stretch; }
 body.hp .dx-side { position: static; }
 body.hp [data-top-feed] { max-height: none; }
+
+/* Жижиг дэлгэцэд статистикийн хавтан: ам дөрвөлжингөө орхиж, намхан жигд карт */
+@media (max-width: 860px) {
+  .fbd-card { aspect-ratio: auto; min-height: 150px; }
+}
+@media (max-width: 430px) {
+  .feed-dashboard { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .fbd-card { min-height: 128px; padding: 16px 12px; }
+  .fbd-n { font-size: 1.65rem; }
+}
+/* Утсанд pie графикийг тохируулж багасгах */
+@media (max-width: 640px) {
+  .pch-pie { width: 168px; height: 168px; }
+  .pch-hole { width: 92px; height: 92px; }
+}
