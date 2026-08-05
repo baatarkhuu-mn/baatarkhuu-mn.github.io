@@ -1285,8 +1285,8 @@ a.news-card-clean { text-decoration: none; color: inherit; display: flex; flex-d
 .pm-note.pn-attach { top: 421px; }
 .pm-note.pn-submit { top: 541px; }
 .fb-guide:has(.phone-mock.annotated) .guide-steps { display: none; }
-@media (max-width: 1024px) {
-  /* Таблет, гар утсанд чимэглэлийн утсыг нууж, текст зааврыг үзүүлнэ (нарийн баганад гонзгойрохоос сэргийлнэ) */
+@media (max-width: 1199px) {
+  /* iPad (босоо, хэвтээ аль ч) болон гар утсанд чимэглэлийн утсыг нууж, текст зааврыг үзүүлнэ */
   .phone-mock.annotated { display: none; }
   .pm-note { display: none; }
   .fb-guide:has(.phone-mock.annotated) .guide-steps { display: flex; }
@@ -1308,7 +1308,7 @@ a.news-card-clean { text-decoration: none; color: inherit; display: flex; flex-d
   width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(160deg, var(--color-primary-dark), var(--color-primary));
   color: #fff; display: grid; place-items: center; font-weight: 700; font-size: .88rem; box-shadow: var(--glow-blue); }
 .guide-steps li b { color: var(--color-text); font-weight: 700; }
-@media (max-width: 1024px) {
+@media (max-width: 1199px) {
   .fb-split { grid-template-columns: 1fr; gap: 30px; }
   #feedback .fb-guide { position: static; top: auto; }
 }
