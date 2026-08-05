@@ -2229,7 +2229,7 @@
     init() {
       const fab = document.createElement("button");
       fab.type = "button"; fab.className = "cbx-fab"; fab.setAttribute("aria-label", "Туслах чат нээх");
-      fab.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="26" height="26"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M2 14h2M20 14h2M15 13v2M9 13v2"/></svg>';
+      fab.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="34" height="34"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M2 14h2M20 14h2M15 13v2M9 13v2"/></svg>';
       const panel = document.createElement("div");
       panel.className = "cbx-panel";
       panel.setAttribute("role", "dialog"); panel.setAttribute("aria-label", "Туслах чат");
