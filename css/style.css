@@ -2794,11 +2794,9 @@ body.hp-split #public-feed { padding-top: 18px; }
   50% { opacity: 0; transform: translateY(-10px) scale(.98); }
   100% { opacity: 0; transform: translateY(12px) scale(.97); }
 }
-/* Хөдөлгөөн багасгах тохиргоотой төхөөрөмжид: шилжилт хөдөлгөөнгүй, зөвхөн ээлжлэн харагдана */
-@keyframes hh2SwapFlat { 0%, 47% { opacity: 1; } 53%, 100% { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) {
-  .hh2-brand { animation: hh2SwapFlat 6s linear infinite; }
-  .hh2-title { animation: hh2SwapFlat 6s linear infinite; animation-delay: -3s; }
+  .hh2-brand { animation: none; opacity: 0; visibility: hidden; }
+  .hh2-title { animation: none; opacity: 1; }
 }
 .hh2-sub { color: #C9D8F2; font-size: .95rem; line-height: 1.7; max-width: 600px; margin: 0; }
 .hh2-sub strong { color: #fff; }
