@@ -2229,12 +2229,12 @@
     init() {
       const fab = document.createElement("button");
       fab.type = "button"; fab.className = "cbx-fab"; fab.setAttribute("aria-label", "Туслах чат нээх");
-      fab.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="24" height="24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h5"/></svg>';
+      fab.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="26" height="26"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M2 14h2M20 14h2M15 13v2M9 13v2"/></svg>';
       const panel = document.createElement("div");
       panel.className = "cbx-panel";
       panel.setAttribute("role", "dialog"); panel.setAttribute("aria-label", "Туслах чат");
       panel.innerHTML =
-        '<div class="cbx-head"><span class="cbx-ttl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="17" height="17"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Туслах</span>' +
+        '<div class="cbx-head"><span class="cbx-ttl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M2 14h2M20 14h2M15 13v2M9 13v2"/></svg>Туслах</span>' +
         '<button type="button" class="cbx-x" aria-label="Хаах">&times;</button></div>' +
         '<div class="cbx-body"></div>';
       document.body.appendChild(fab);
