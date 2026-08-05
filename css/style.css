@@ -2924,7 +2924,7 @@ body.hp .stats-cta { margin-top: 24px; }
 /* Нүүр: саналын галерей 2 эгнээ × 2 карт, зураг нь ам дөрвөлжин маягтай */
 body.hp .fc3-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 @media (max-width: 520px) { body.hp .fc3-grid { grid-template-columns: 1fr; } }
-body.hp .fcv2 .fc3-media { height: auto; aspect-ratio: 1.08 / 1; }
+body.hp .fcv2 .fc3-media { height: auto; aspect-ratio: 1.35 / 1; }
 
 
 /* Нүүр: хажуугийн «Хамгийн их дэмжигдсэн» — одоогийн хэлбэрээрээ, галерейн өндрийг доош дүүрэн эзэлнэ */
