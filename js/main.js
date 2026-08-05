@@ -2192,6 +2192,99 @@
     },
   };
 
+  /* ---------- Туслах мини чатбот (бэлэн асуулт-хариулт, AI-гүй) ---------- */
+  const ChatBot = {
+    QA: [
+      { q: "Санал хүсэлтээ хэрхэн илгээх вэ?",
+        a: "Холбоо барих хуудасны маягтаар асуудлын төрөл, байршлаа сонгож, асуудлаа дэлгэрэнгүй бичээд зураг хавсарган илгээнэ.",
+        link: "/holboo/#feedback", lt: "Санал илгээх маягт нээх" },
+      { q: "Саналын шийдвэрлэлтийн явцыг хэрхэн шалгах вэ?",
+        a: "Санал илгээхэд олгогдсон кодоо «Явц шалгах» хэсэгт оруулж, саналынхаа төлөвийг хянана.",
+        link: "/holboo/#track", lt: "Явц шалгах" },
+      { q: "Гишүүнтэй хэрхэн холбогдох вэ?",
+        a: "Утас, и-мэйл, оффисын хаяг зэрэг холбоо барих бүх мэдээлэл Холбоо барих хуудсанд бий.",
+        link: "/holboo/#contact", lt: "Холбоо барих мэдээлэл" },
+      { q: "Уулзалт, арга хэмжээнд хэрхэн бүртгүүлэх вэ?",
+        a: "Нүүр хуудасны «Удахгүй болох» хэсэгт ойрын уулзалтын мэдээлэл гарна. «Бүртгүүлэх» товчоор урьдчилан бүртгүүлнэ.",
+        link: "/", lt: "Нүүр хуудас руу очих" },
+      { q: "Санал асуулгад хэрхэн оролцох вэ?",
+        a: "Нүүр хуудасны асуулгад сонголтоо хийгээд санал өгнө. Бүх санал асуулга Холбоо барих хуудсанд байгаа.",
+        link: "/holboo/#polls", lt: "Бүх санал асуулга" },
+      { q: "Иргэдийн нийтэлсэн саналыг хаанаас үзэх вэ?",
+        a: "Нүүр хуудасны «Иргэдийн нийтэлсэн саналууд» хэсэгт шийдвэрлэлтийн төлөвтэйгөө харагдана. Лайк дарж, сэтгэгдэл бичиж болно.",
+        link: "/#public-feed", lt: "Саналууд үзэх" },
+      { q: "Гишүүний намтар",
+        a: "Боловсрол, ажилласан туршлага, улс төрийн намтрыг Намтар хуудсаас дэлгэрэнгүй үзнэ.",
+        link: "/namtar/", lt: "Намтар үзэх" },
+      { q: "Санаачилсан хуулиуд",
+        a: "Санаачилсан болон дэмжсэн хуулийн төслүүд товч танилцуулгатайгаа Хууль хуудсанд бий.",
+        link: "/huuli/", lt: "Хууль үзэх" },
+      { q: "Хэрэгжүүлж буй төслүүд",
+        a: "Тойрогт хэрэгжүүлж буй болон хэрэгжсэн төслүүдийг төлөв, явцтай нь Төслүүд хуудсаас харна.",
+        link: "/tusul/", lt: "Төслүүд үзэх" },
+      { q: "Ажлын тайлан хаана байдаг вэ?",
+        a: "Сар бүрийн болон жилийн тайланг Тайлан хуудсаас үзэж, PDF хэлбэрээр татаж болно.",
+        link: "/tailan/", lt: "Тайлан үзэх" }
+    ],
+    init() {
+      const fab = document.createElement("button");
+      fab.type = "button"; fab.className = "cbx-fab"; fab.setAttribute("aria-label", "Туслах чат нээх");
+      fab.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="24" height="24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h5"/></svg>';
+      const panel = document.createElement("div");
+      panel.className = "cbx-panel";
+      panel.setAttribute("role", "dialog"); panel.setAttribute("aria-label", "Туслах чат");
+      panel.innerHTML =
+        '<div class="cbx-head"><span class="cbx-ttl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="17" height="17"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Туслах</span>' +
+        '<button type="button" class="cbx-x" aria-label="Хаах">&times;</button></div>' +
+        '<div class="cbx-body"></div>';
+      document.body.appendChild(fab);
+      document.body.appendChild(panel);
+      const body = panel.querySelector(".cbx-body");
+      const scrollEnd = () => { body.scrollTop = body.scrollHeight; };
+      const bot = (html) => {
+        const d = document.createElement("div");
+        d.className = "cbx-msg cbx-bot"; d.innerHTML = html;
+        body.appendChild(d);
+      };
+      const menu = () => {
+        const wrap = document.createElement("div");
+        wrap.className = "cbx-menu";
+        ChatBot.QA.forEach((it, idx) => {
+          const b = document.createElement("button");
+          b.type = "button"; b.className = "cbx-q"; b.textContent = it.q;
+          b.addEventListener("click", () => ask(idx));
+          wrap.appendChild(b);
+        });
+        body.appendChild(wrap);
+      };
+      const ask = (idx) => {
+        const it = ChatBot.QA[idx];
+        const old = body.querySelector(".cbx-menu");
+        if (old) old.remove();
+        const u = document.createElement("div");
+        u.className = "cbx-msg cbx-user"; u.textContent = it.q;
+        body.appendChild(u);
+        bot("<p>" + it.a + "</p>" + (it.link ? '<a class="cbx-link" href="' + it.link + '">' + it.lt + " →</a>" : ""));
+        const hint = document.createElement("div");
+        hint.className = "cbx-hint"; hint.textContent = "Өөр асуулт сонгох:";
+        body.appendChild(hint);
+        menu();
+        scrollEnd();
+      };
+      const toggle = (open) => {
+        panel.classList.toggle("open", open);
+        fab.setAttribute("aria-expanded", String(open));
+        if (open && !body.children.length) {
+          bot("<p>Сайн байна уу! Би энэ сайтын туслах бот байна. Доорх асуултуудаас сонгоно уу.</p>");
+          menu();
+        }
+      };
+      fab.addEventListener("click", () => toggle(!panel.classList.contains("open")));
+      panel.querySelector(".cbx-x").addEventListener("click", () => toggle(false));
+      document.addEventListener("keydown", (e) => { if (e.key === "Escape" && panel.classList.contains("open")) toggle(false); });
+    }
+  };
+
   /* ---------- 17. Карусель (хажуу гүйлгэх + дугаар) ---------- */
   const Carousel = {
     init() {
@@ -3522,6 +3615,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     Theme.init(); Nav.init(); Search.init(); Reveal.init();
     Counters.init(); Video.init(); Rating.init(); Forms.init(); Filter.init();
-    Share.init(); trackVisit(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); NewsPost.init(); LawPost.init(); EventPost.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); VideoHero.init(); ReportsCMS.init(); ReportPost.init(); ProjectsCMS.init(); ProjectPost.init(); LawsCMS.init(); FeedbackStats.init(); PollsCMS.init(); EventsCMS.init(); Settings.init(); ReportStats.init();
+    Share.init(); trackVisit(); I18n.init(); Misc.init(); PublicFeed.init(); Tabs.init(); Attendance.init(); NewsFeed.init(); NewsPost.init(); LawPost.init(); EventPost.init(); Pager.init(); Carousel.init(); Laws.init(); Tracker.init(); VideoCMS.init(); VideoHero.init(); ReportsCMS.init(); ReportPost.init(); ProjectsCMS.init(); ProjectPost.init(); LawsCMS.init(); FeedbackStats.init(); PollsCMS.init(); EventsCMS.init(); Settings.init(); ReportStats.init(); ChatBot.init();
   });
 })();
