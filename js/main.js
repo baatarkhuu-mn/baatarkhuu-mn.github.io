@@ -1733,9 +1733,9 @@
         el.addEventListener("click", () => this.openStory(r));
         box.appendChild(el);
       });
-      // Эхний 4-ийг л харуулж, бусдыг товчоор дэлгэнэ (нүүрэнд хураахгүй, бүгдийг ил)
+      // Эхний 4-ийг л харуулж, бусдыг товчоор дэлгэнэ
       const items = box.querySelectorAll(".dxs-item");
-      if (items.length > 4 && !document.body.classList.contains("hp")) {
+      if (items.length > 4) {
         items.forEach((it, i) => { if (i >= 4) it.style.display = "none"; });
         const more = document.createElement("button");
         more.type = "button"; more.className = "dxs-more";
