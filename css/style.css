@@ -984,12 +984,7 @@ a.news-card-clean { text-decoration: none; color: inherit; display: flex; flex-d
   .section { padding: 36px 0; }
   .grid-3, .grid-4, .grid-2 { grid-template-columns: 1fr; }
   .stats { grid-template-columns: repeat(2, 1fr); gap: 14px; }
-  .footer-grid { grid-template-columns: 1fr 1fr; gap: 18px 16px; }
-  .footer-grid .f-brand { grid-column: 1 / -1; }
-  .site-footer { padding: 22px 0 0; }
-  .site-footer h4 { margin-bottom: 7px; font-size: .9rem; }
-  .footer-links li { margin-bottom: 4px; font-size: .84rem; }
-  .footer-bottom { margin-top: 14px; padding: 10px 0; }
+  .footer-grid { grid-template-columns: 1fr; }
   .form-row { grid-template-columns: 1fr; }
   .law-item { grid-template-columns: 1fr; text-align: left; }
   .law-item .law-actions { justify-content: flex-start; }
