@@ -473,30 +473,37 @@
           geoMap.innerHTML = `<iframe src="https://www.google.com/maps?q=${lat},${lng}&z=17&output=embed" title="Байршил" loading="lazy" style="width:100%;height:100%;border:0;display:block"></iframe>`;
         });
       };
-      if (geoBtn) {
-        geoBtn.addEventListener("click", () => {
-          if (!navigator.geolocation) {
-            if (geoStatus) geoStatus.textContent = "Газрын зураг дээр дарж pin тавина уу.";
+      // Төхөөрөмжийн байршлыг тогтоох: эхлээд өндөр нарийвчлалаар, амжилтгүй бол энгийнээр дахин оролдоно
+      const locate = () => {
+        if (!navigator.geolocation) {
+          if (geoStatus) geoStatus.textContent = "Энэ төхөөрөмж байршил дэмжихгүй — газрын зураг дээр дарж pin тавина уу.";
+          showMap(UB[0], UB[1]); return;
+        }
+        if (geoStatus) geoStatus.textContent = "Байршил тогтоож байна…";
+        const ok = (pos) => { const lat = pos.coords.latitude, lng = pos.coords.longitude; setLL(lat, lng); showMap(lat, lng); pinMsg(lat, lng); };
+        navigator.geolocation.getCurrentPosition(ok, (err) => {
+          if (err.code === 1) {
+            if (geoStatus) geoStatus.textContent = "Байршлын зөвшөөрөл олгоогүй байна — хөтчийн тохиргооноос зөвшөөрөөд дахин дарна уу, эсвэл газрын зураг дээр дарж pin тавина уу.";
             showMap(UB[0], UB[1]); return;
           }
-          geoStatus.textContent = "⏳ Байршил тогтоож байна…";
-          navigator.geolocation.getCurrentPosition(
-            (pos) => { const { latitude: lat, longitude: lng } = pos.coords; setLL(lat, lng); showMap(lat, lng); pinMsg(lat, lng); },
-            (err) => {
-              geoStatus.textContent = err.code === 1
-                ? "Зөвшөөрөл олгоогүй — газрын зураг дээр дарж pin тавина уу."
-                : "GPS аваагүй — газрын зураг дээр дарж pin тавина уу.";
-              showMap(UB[0], UB[1]);
-            },
-            { enableHighAccuracy: true, timeout: 12000 }
-          );
-        });
-      }
+          // GPS олдсонгүй/хугацаа хэтэрсэн — энгийн нарийвчлалаар дахин оролдоно
+          navigator.geolocation.getCurrentPosition(ok, () => {
+            if (geoStatus) geoStatus.textContent = "Байршил тогтоож чадсангүй — газрын зураг дээр дарж pin тавина уу.";
+            showMap(UB[0], UB[1]);
+          }, { enableHighAccuracy: false, timeout: 10000, maximumAge: 60000 });
+        }, { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 });
+      };
+      if (geoBtn) geoBtn.addEventListener("click", locate);
 
-      /* --- Газрын зургийг тогтмол харуулна (UB төв, pin чирж тодорхойлно) --- */
+      /* --- Газрын зургийг тогтмол харуулна; зөвшөөрөл өмнө нь өгөгдсөн бол шууд төхөөрөмжийн байршилд төвлөнө --- */
       if (geoMap) {
         if (geoStatus) geoStatus.innerHTML = "Газрын зураг дээр дарж эсвэл pin-ийг чирж байршлаа тодорхойлно уу";
         showMap(UB[0], UB[1]);
+        if (navigator.permissions && navigator.permissions.query) {
+          navigator.permissions.query({ name: "geolocation" }).then((st) => {
+            if (st.state === "granted") locate();
+          }).catch(() => {});
+        }
       }
 
       /* --- Үсгийн тоолуур (агуулга 0/1000) --- */

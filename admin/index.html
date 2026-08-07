@@ -8,7 +8,7 @@
   <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "light");</script>
   <title>Админ — Санал хүсэлт | Ц.Баатархүү</title>
   <link rel="icon" type="image/svg+xml" href="/assets/img/logo.svg" />
-  <link rel="stylesheet" href="/css/style.css?v=20260727o" />
+  <link rel="stylesheet" href="/css/style.css?v=20260727p" />
   <style>
     /* ===== Админ: цайвар, албан ёсны ХӨХ сэдэв (зөвхөн энэ хуудсанд; сайтад нөлөөлөхгүй) ===== */
     [data-theme] {
@@ -110,7 +110,12 @@
     .fb-modal-x:hover { border-color:var(--color-accent); color:var(--color-accent); }
     #fb-modal-body { padding:18px 20px; }
     .fb-photos { display:flex; gap:8px; flex-wrap:wrap; margin:12px 0; }
-    .fb-photos img { width:90px; height:90px; object-fit:cover; border-radius:var(--radius-sm); border:1px solid var(--color-border); cursor:pointer; }
+    .fb-photos img { width:90px; height:90px; object-fit:cover; border-radius:var(--radius-sm); border:1px solid var(--color-border); cursor:pointer; display:block; }
+    .fb-att { position:relative; }
+    .fb-att-vid { width:90px; height:90px; border-radius:var(--radius-sm); border:1px solid var(--color-border); display:grid; place-items:center; background:#0b1830; color:#fff; cursor:pointer; }
+    .fb-att-dl { position:absolute; right:4px; bottom:4px; width:26px; height:26px; border-radius:8px; border:0; cursor:pointer; display:grid; place-items:center; background:rgba(10,18,40,.78); color:#fff; }
+    .fb-att-dl:hover { background:var(--color-primary); }
+    .fb-att-dl:disabled { opacity:.5; cursor:wait; }
     .fb-foot { display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between; margin-top:12px;
       padding-top:12px; border-top:1px solid var(--color-border); }
     .fb-contact a { color:var(--color-primary-light); font-size:.88rem; margin-right:14px; }
@@ -807,7 +812,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="/js/supabase-config.js?v=20260727o"></script>
+  <script src="/js/supabase-config.js?v=20260727p"></script>
   <script>
   (function () {
     const SUBJECT_LABEL = { gerel:"Гэрэлтүүлэг", zam:"Зам, нүх, эвдрэл", yavgan:"Явган хүний зам", hog:"Хог, орчны бохирдол", buudal:"Автобусны буудал", surguuli:"Сургууль, цэцэрлэг", emnelg:"Эмнэлэг, өрхийн эмнэлэг", soh:"СӨХ, байрны орчин", hurteemj:"Ахмад, ХБИ хүртээмж", huuli:"Хууль, бодлогын санал", urgudul:"Хувийн өргөдөл, тусламж", sanal:"Санал", gomdol:"Гомдол", asuudal:"Тулгамдсан асуудал", uulzalt:"Уулзалтын хүсэлт", busad:"Бусад" };
@@ -1109,10 +1114,41 @@
           r.photos.forEach(async (p) => {
             const url = await photoUrl(p, r.is_public);
             if (!url) return;
-            const img = document.createElement("img");
-            img.src = url; img.alt = "Хавсаргасан зураг"; img.loading = "lazy";
-            img.addEventListener("click", () => openLightbox(url));
-            box.appendChild(img);
+            const att = document.createElement("div");
+            att.className = "fb-att";
+            const isVid = /\.(mp4|mov|webm|m4v|avi)(\?|$)/i.test(p);
+            if (isVid) {
+              const v = document.createElement("div");
+              v.className = "fb-att-vid"; v.title = "Бичлэг үзэх";
+              v.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" width="28" height="28"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>';
+              v.addEventListener("click", () => window.open(url, "_blank"));
+              att.appendChild(v);
+            } else {
+              const img = document.createElement("img");
+              img.src = url; img.alt = "Хавсаргасан зураг"; img.loading = "lazy";
+              img.addEventListener("click", () => openLightbox(url));
+              att.appendChild(img);
+            }
+            // Татаж авах товч (зураг, бичлэг хоёуланд)
+            const dl = document.createElement("button");
+            dl.type = "button"; dl.className = "fb-att-dl"; dl.title = "Татаж авах";
+            dl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><path d="M12 3v12M6 11l6 6 6-6M4 21h16"/></svg>';
+            dl.addEventListener("click", async (ev) => {
+              ev.stopPropagation();
+              dl.disabled = true;
+              try {
+                const resp = await fetch(url);
+                const blob = await resp.blob();
+                const a = document.createElement("a");
+                a.href = URL.createObjectURL(blob);
+                a.download = (p.split("/").pop() || "havsralt").split("?")[0];
+                document.body.appendChild(a); a.click(); a.remove();
+                setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+              } catch (_) { window.open(url, "_blank"); }
+              dl.disabled = false;
+            });
+            att.appendChild(dl);
+            box.appendChild(att);
           });
         }
 
