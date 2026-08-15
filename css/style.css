@@ -2712,7 +2712,7 @@ body.hp-split .polls-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
 /* ---------- Асуулгын карт (pc2) — мокапын дагуу: асуулт + шууд нээлттэй сонголт/дүн + нэг мөр хөл ---------- */
 .fc3.pc2 { padding: 0; }
-.pc2 .pc-media { border-radius: 0; height: 160px; margin: 0; }
+.pc2 .pc-media { border-radius: 0; height: 250px; margin: 0; }
 .pc2 .pc-bd { padding: 16px 18px 15px; display: flex; flex-direction: column; gap: 12px; }
 .pc2 .fc3-t { font-size: .88rem; }
 .pc2 .pc-panel { display: flex; flex-direction: column; gap: 9px; }
@@ -2853,18 +2853,18 @@ body.hp-split #public-feed { padding-top: 18px; }
 
 
 /* Pie график */
-.pch-wrap { display: flex; gap: 26px; align-items: center; flex-wrap: wrap; flex: 1; }
-.pch-pie { position: relative; flex: none; width: 212px; height: 212px; border-radius: 50%;
+.pch-wrap { display: flex; gap: 36px; align-items: center; justify-content: center; flex-wrap: wrap; flex: 1; }
+.pch-pie { position: relative; flex: none; width: 256px; height: 256px; border-radius: 50%;
   display: grid; place-items: center; box-shadow: 0 12px 28px -14px rgba(15,30,56,.4); }
-.pch-hole { width: 114px; height: 114px; border-radius: 50%; background: var(--color-bg-card);
+.pch-hole { width: 136px; height: 136px; border-radius: 50%; background: var(--color-bg-card);
   display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.pch-hole b { font-size: 1.5rem; line-height: 1.1; color: var(--color-text); }
-.pch-hole small { font-size: .62rem; font-weight: 700; color: var(--color-text-soft); }
-.pch-leg { flex: 1; min-width: 170px; display: flex; flex-direction: column; gap: 9px; }
-.pch-lg { display: flex; gap: 9px; align-items: center; font-size: .82rem; font-weight: 600; color: var(--color-text); }
-.pch-lg i { flex: none; width: 12px; height: 12px; border-radius: 4px; }
-.pch-lg span { flex: 1; min-width: 0; line-height: 1.3; }
-.pch-lg b { font-weight: 800; }
+.pch-hole b { font-size: 2rem; line-height: 1.1; color: var(--color-text); }
+.pch-hole small { font-size: .74rem; font-weight: 700; color: var(--color-text-soft); }
+.pch-leg { flex: 1 1 200px; min-width: 0; max-width: 100%; display: flex; flex-direction: column; gap: 13px; }
+.pch-lg { display: flex; gap: 11px; align-items: center; font-size: .98rem; font-weight: 600; color: var(--color-text); }
+.pch-lg i { flex: none; width: 14px; height: 14px; border-radius: 4px; }
+.pch-lg span { flex: 1 1 auto; min-width: 0; line-height: 1.3; margin-right: 8px; }
+.pch-lg b { font-weight: 800; font-size: 1.05rem; }
 .pch-lg small { color: var(--color-text-soft); }
 
 /* Sidebar «Цааш үзэх» */
@@ -2944,8 +2944,8 @@ body.hp [data-top-feed] { max-height: none; }
 }
 /* Утсанд pie графикийг тохируулж багасгах */
 @media (max-width: 640px) {
-  .pch-pie { width: 168px; height: 168px; }
-  .pch-hole { width: 92px; height: 92px; }
+  .pch-pie { width: 190px; height: 190px; }
+  .pch-hole { width: 102px; height: 102px; }
 }
 
 /* Туслах мини чатбот */
