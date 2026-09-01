@@ -8,7 +8,7 @@
   <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "light");</script>
   <title>Админ — Санал хүсэлт | Ц.Баатархүү</title>
   <link rel="icon" type="image/svg+xml" href="/assets/img/logo.svg" />
-  <link rel="stylesheet" href="/css/style.css?v=20260728a" />
+  <link rel="stylesheet" href="/css/style.css?v=20260901a" />
   <style>
     /* ===== Админ: цайвар, албан ёсны ХӨХ сэдэв (зөвхөн энэ хуудсанд; сайтад нөлөөлөхгүй) ===== */
     [data-theme] {
@@ -475,6 +475,7 @@
         <div class="toolbar-main">
           <div class="field"><input type="text" id="f-q" placeholder="Нэр, агуулгаар хайх…" /></div>
           <button id="refresh-btn" class="btn btn-ghost btn-sm">Сэргээх</button>
+          <button id="fixphotos-btn" class="btn btn-ghost btn-sm" title="Нийтэд ил боловч зураг нь хаалттай санд үлдсэн саналуудыг олж засна">Зураг засах</button>
           <button id="export-btn" class="btn btn-gold btn-sm">Excel татах</button>
         </div>
         <div class="toolbar-filters">
@@ -576,7 +577,7 @@
             <p class="form-note" style="margin-bottom:16px">Facebook Reel эсвэл YouTube бичлэгийн <strong>холбоосыг</strong> хуулж тавина. Жишээ: <code>https://www.facebook.com/reel/123…</code> эсвэл <code>https://youtu.be/abc…</code></p>
             <form id="video-form">
               <input type="hidden" id="v-id" />
-              <div class="form-group"><label for="v-url">Видеоны холбоос <span style="color:var(--color-danger)">*</span></label><input type="url" id="v-url" required placeholder="https://www.facebook.com/reel/… эсвэл https://youtu.be/…" /></div>
+              <div class="form-group"><label for="v-url">Видеоны холбоос <span style="color:var(--color-danger)">*</span></label><input type="url" id="v-url" required placeholder="https://www.facebook.com/reel/… эсвэл https://youtu.be/…" /><small style="color:var(--color-text-soft);font-size:.72rem">«Хуваалцах» товчны богино холбоос (facebook.com/share/…) ажиллахгүй — постоо нээгээд хаягийн мөрний бүтэн холбоосыг хуулна уу.</small></div>
               <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
                 <div class="form-group"><label for="v-platform">Платформ</label>
                   <select id="v-platform"><option value="facebook">Facebook Reel</option><option value="youtube">YouTube</option></select>
@@ -812,7 +813,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="/js/supabase-config.js?v=20260728a"></script>
+  <script src="/js/supabase-config.js?v=20260901a"></script>
   <script>
   (function () {
     const SUBJECT_LABEL = { gerel:"Гэрэлтүүлэг", zam:"Зам, нүх, эвдрэл", yavgan:"Явган хүний зам", hog:"Хог, орчны бохирдол", buudal:"Автобусны буудал", surguuli:"Сургууль, цэцэрлэг", emnelg:"Эмнэлэг, өрхийн эмнэлэг", soh:"СӨХ, байрны орчин", hurteemj:"Ахмад, ХБИ хүртээмж", huuli:"Хууль, бодлогын санал", urgudul:"Хувийн өргөдөл, тусламж", sanal:"Санал", gomdol:"Гомдол", asuudal:"Тулгамдсан асуудал", uulzalt:"Уулзалтын хүсэлт", busad:"Бусад" };
@@ -843,12 +844,35 @@
       const { data } = await sb.storage.from("feedback-photos").createSignedUrl(path, 3600);
       return data ? data.signedUrl : "";
     }
-    // Нийтэд ил саналын зураг public сангаас, бусад нь хаалттай сангаас
+    // Нийтэд ил саналын зураг public сангаас, бусад нь хаалттай сангаас.
+    // Нийтийн санд байхгүй бол (хуучин өгөгдөл — зөөгдөөгүй үлдсэн) хаалттай сангаас нь харуулна.
     async function photoUrl(path, isPublic) {
       if (isPublic) {
-        try { return sb.storage.from("feedback-public").getPublicUrl(path).data.publicUrl; } catch (_) { return ""; }
+        let u = "";
+        try { u = sb.storage.from("feedback-public").getPublicUrl(path).data.publicUrl; } catch (_) {}
+        if (u) { try { const res = await fetch(u, { method: "HEAD" }); if (res.ok) return u; } catch (_) {} }
       }
       return await signedUrl(path);
+    }
+
+    /* Зургийг сангуудын хооронд зөөх (татаж → хуулж → эхийг устгана).
+       Иргэн «нийтэд харуулах»-ыг сонгоогүй бол зураг хаалттай "feedback-photos" санд
+       ордог. Админ дараа нь «Нийтэд ил болгох» дархад ӨМНӨ НЬ зөвхөн is_public багана
+       солигддог байсан тул зураг хаалттай санд үлдэж, сайт дээр эвдэрч харагддаг байсан.
+       Одоо төлөв солих бүрд зургийг зохих сан руу нь зөөнө. */
+    async function movePhotos(paths, from, to) {
+      let moved = 0;
+      for (const p of (paths || [])) {
+        try {
+          const { data: blob, error: dlErr } = await sb.storage.from(from).download(p);
+          if (dlErr || !blob) continue; // эх санд алга — аль хэдийн зөөгдсөн байж болно
+          const { error: upErr } = await sb.storage.from(to).upload(p, blob, { contentType: blob.type || "image/jpeg", upsert: true });
+          if (upErr) continue;
+          try { await sb.storage.from(from).remove([p]); } catch (_) {} // устгах эрх байхгүй ч зүгээр
+          moved++;
+        } catch (_) {}
+      }
+      return moved;
     }
 
     function computeStats(rows) {
@@ -1071,6 +1095,11 @@
           const btn = e.currentTarget; btn.disabled = true;
           const next = !r.is_public;
           if (next && !confirm("Энэ саналыг нийтэд ил болгох уу? Асуудал, зураг, дүүрэг/хороо, үнэлгээ нь сайтад харагдана (нэр/утас/имэйл/байршил харагдахгүй).")) { btn.disabled = false; return; }
+          // Зургийг зохих сан руу нь зөөнө — эс бөгөөс сайт дээр эвдэрсэн зураг гарна
+          if (r.photos && r.photos.length) {
+            btn.textContent = "Зураг зөөж байна…";
+            await movePhotos(r.photos, next ? "feedback-photos" : "feedback-public", next ? "feedback-public" : "feedback-photos");
+          }
           const { error } = await sb.from("feedback").update({ is_public: next }).eq("id", r.id);
           if (error) { alert("Алдаа: " + error.message); btn.disabled = false; return; }
           r.is_public = next;
@@ -1373,6 +1402,37 @@
 
     $("#refresh-btn").addEventListener("click", loadFeedback);
     $("#export-btn").addEventListener("click", exportXLSX);
+
+    /* Нэг удаагийн засвар — өмнө нь «Нийтэд ил болгох» дархад зураг зөөгддөггүй байсан тул
+       нийтэд ил хэд хэдэн саналын зураг хаалттай санд үлдэж, сайт дээр эвдэрч харагдаж байсан.
+       Энэ товч тэдгээрийг олж нийтийн сан руу зөөнө. Дарахад л хангалттай, дахин дахин
+       дарж болно (аль хэдийн зөв байгааг нь алгасна). */
+    $("#fixphotos-btn").addEventListener("click", async () => {
+      const btn = $("#fixphotos-btn");
+      const rows = allRows.filter((r) => r.is_public && Array.isArray(r.photos) && r.photos.length);
+      if (!rows.length) { alert("Нийтэд ил, зурагтай санал алга."); return; }
+      btn.disabled = true;
+      let checked = 0, fixed = 0, failed = 0;
+      for (const r of rows) {
+        for (const p of r.photos) {
+          checked++;
+          btn.textContent = "Шалгаж байна… " + checked;
+          let ok = false;
+          try {
+            const u = sb.storage.from("feedback-public").getPublicUrl(p).data.publicUrl;
+            const res = await fetch(u, { method: "HEAD" });
+            ok = res.ok;
+          } catch (_) {}
+          if (ok) continue; // нийтийн санд байна — засах шаардлагагүй
+          const moved = await movePhotos([p], "feedback-photos", "feedback-public");
+          if (moved) fixed++; else failed++;
+        }
+      }
+      btn.disabled = false; btn.textContent = "Зураг засах";
+      alert("Шалгасан зураг: " + checked + "\nЗассан: " + fixed +
+            (failed ? "\nОлдсонгүй (эх файл устсан байж болзошгүй): " + failed : ""));
+      if (fixed) loadFeedback();
+    });
     ["#f-q", "#f-status", "#f-subject", "#f-sort"].forEach((s) => {
       $(s).addEventListener(s === "#f-q" ? "input" : "change", applyFilters);
     });
@@ -1597,8 +1657,14 @@
       const btn = videoForm.querySelector('button[type="submit"]'); btn.disabled = true; btn.textContent = "Хадгалж байна…";
       try {
         const id = $("#v-id").value;
+        const vUrl = $("#v-url").value.trim();
+        // facebook.com/share/… холбоосыг FB-ийн видео плагин таньдаггүй —
+        // сайт дээр "Video Unavailable" гэсэн хар дэлгэц гардаг тул хадгалахгүй.
+        if (/facebook\.com\/share\//i.test(vUrl)) {
+          throw new Error("Facebook «share» холбоос ажиллахгүй. Постоо Facebook дээр нээгээд хаягийн мөрөнд гарах бүтэн холбоосыг (facebook.com/reel/… эсвэл facebook.com/…/videos/…) хуулж оруулна уу.");
+        }
         const rec = {
-          url: $("#v-url").value.trim(), platform: $("#v-platform").value,
+          url: vUrl, platform: $("#v-platform").value,
           title: $("#v-title").value.trim() || null, excerpt: $("#v-excerpt").value.trim() || null,
           video_date: $("#v-date").value.trim() || null,
           orientation: $("#v-orientation").value, featured: $("#v-featured").checked,

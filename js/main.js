@@ -30,6 +30,28 @@
     });
   }
 
+  /* ---------- Facebook видеог embed хийж болох эсэх ----------
+     facebook.com/share/… төрлийн богино холбоосыг FB-ийн видео плагин ТАНИХГҮЙ бөгөөд
+     "Video Unavailable" гэсэн хар дэлгэц гаргадаг. Ийм холбоосыг тоглуулагчид өгөхгүй,
+     оронд нь Facebook дээр нээх линк харуулна. Админ жинхэнэ /reel/ буюу /videos/
+     холбоосыг оруулбал хэвийн embed болно. */
+  function fbEmbeddable(url) {
+    const u = String(url || "");
+    if (!u) return false;
+    return !/facebook\.com\/share\//i.test(u);
+  }
+  /* Зураг ачаалагдаагүй үед (устсан, эсвэл хаалттай санд үлдсэн) эвдэрсэн дүрсний
+     оронд логоны байрлуулагч харуулна. thumbnail-ийн HTML мөрөнд шууд нэмнэ. */
+  const IMG_ERR_FALLBACK = ' onerror="this.onerror=null;this.src=\'/assets/img/logo.svg\';if(this.parentNode&&this.parentNode.classList)this.parentNode.classList.add(\'fr-thumb-ph\')"';
+  // Embed хийгдэхгүй видеоны оронд харуулах хайрцаг (Facebook дээр нээх)
+  function videoFallback(url, title) {
+    const e = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    return '<a class="vfallback" href="' + e(url) + '" target="_blank" rel="noopener">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="34" height="34"><path d="M4 5h11a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><path d="m17 10 5-3v10l-5-3"/></svg>' +
+      '<span class="vf-t">' + e(title || "Видео") + '</span>' +
+      '<span class="vf-b">Facebook дээр үзэх</span></a>';
+  }
+
   /* ---------- Хуваалцах мөр (видео/мэдээний карт дээр — өөрийн хаягаар нийтлэх) ----------
      Facebook/X/Telegram нь тухайн хэрэглэгчийн өөрийнх нь хаягийн share цонхыг нээж,
      өөрийн ханан дээр нийтлэх боломж олгоно. Хуулах товч холбоосыг clipboard руу хуулна. */
@@ -1611,7 +1633,16 @@
           '</div>' +
           '</div>';
         const media = card.querySelector(".fc3-media");
-        if (url) media.addEventListener("click", () => this.openLightbox(url, subj));
+        // Зураг ачаалагдахгүй бол (жишээ нь хаалттай санд үлдсэн хуучин зураг) эвдэрсэн
+        // дүрс харуулахын оронд сэдвийн дүрс тэмдэг рүү шилжүүлнэ.
+        let hasImg = !!url;
+        const imgEl = media.querySelector("img");
+        if (imgEl) imgEl.addEventListener("error", () => {
+          hasImg = false;
+          imgEl.remove();
+          media.insertAdjacentHTML("afterbegin", '<span class="fc3-icoph" aria-hidden="true">' + this.subjSvg(r.subject, 44) + '</span>');
+        });
+        media.addEventListener("click", () => { if (hasImg) this.openLightbox(url, subj); });
         // Лайк дарах — toggle_like RPC (нэг төхөөрөмжөөс нэг удаа, дахин дарвал буцаана)
         const likeBtn = card.querySelector(".fc3-like");
         likeBtn.addEventListener("click", async () => {
@@ -1713,6 +1744,14 @@
             (cmts.length ? '<div class="story-cmts">' + cmts.map((c) => '<div class="fc3-c"><b>Зочин</b><small>' + this.esc(this.ago(c.created_at)) + '</small><p>' + this.esc(c.body) + '</p></div>').join("") + '</div>' : "") +
           '</div>' +
         '</div>';
+      // Зураг олдоогүй бол сэдвийн дүрс рүү шилжүүлнэ (эвдэрсэн зураг харагдахгүй)
+      const storyIm = ov.querySelector(".story-im img");
+      if (storyIm) storyIm.addEventListener("error", () => {
+        const box = storyIm.parentNode;
+        storyIm.remove();
+        box.classList.add("story-noimg");
+        box.insertAdjacentHTML("afterbegin", this.subjSvg(r.subject, 52));
+      });
       const close = () => { ov.remove(); document.removeEventListener("keydown", onEsc); };
       const onEsc = (e) => { if (e.key === "Escape") close(); };
       ov.addEventListener("click", (e) => { if (e.target === ov) close(); });
@@ -1789,7 +1828,7 @@
       const photos = r.photos || [];
       if (photos.length) { try { photoUrl = sb.storage.from("feedback-public").getPublicUrl(photos[0]).data.publicUrl; } catch (_) {} }
       const thumb = photoUrl
-        ? `<a class="fr-thumb" href="${photoUrl}" target="_blank" rel="noopener" aria-label="Хавсаргасан зураг"><img src="${photoUrl}" alt="Иргэний хавсаргасан зураг" loading="lazy"></a>`
+        ? `<a class="fr-thumb" href="${photoUrl}" target="_blank" rel="noopener" aria-label="Хавсаргасан зураг"><img src="${photoUrl}" alt="Иргэний хавсаргасан зураг" loading="lazy"${IMG_ERR_FALLBACK}></a>`
         : `<div class="fr-thumb fr-thumb-ph"><img src="/assets/img/logo.svg" alt=""></div>`;
       el.innerHTML =
         thumb +
@@ -2517,7 +2556,7 @@
             const photos = r.photos || [];
             if (r.is_public && photos.length) { try { photoUrl = sb.storage.from("feedback-public").getPublicUrl(photos[0]).data.publicUrl; } catch (_) {} }
             const thumb = photoUrl
-              ? '<a class="fr-thumb" href="' + photoUrl + '" target="_blank" rel="noopener" aria-label="Хавсаргасан зураг"><img src="' + photoUrl + '" alt="Хавсаргасан зураг" loading="lazy"></a>'
+              ? '<a class="fr-thumb" href="' + photoUrl + '" target="_blank" rel="noopener" aria-label="Хавсаргасан зураг"><img src="' + photoUrl + '" alt="Хавсаргасан зураг" loading="lazy"' + IMG_ERR_FALLBACK + '></a>'
               : '<div class="fr-thumb fr-thumb-ph"><img src="/assets/img/logo.svg" alt=""></div>';
             out.innerHTML =
               '<article class="feed-row tr-feedrow visible">' +
@@ -2606,6 +2645,9 @@
     ytId(url) { const m = String(url).match(/(?:v=|youtu\.be\/|\/embed\/|\/shorts\/)([\w-]{11})/); return m ? m[1] : ""; },
     reelEmbed(v) {
       const esc = VideoCMS.esc;
+      if (v.platform !== "youtube" && !fbEmbeddable(v.url)) {
+        return `<div class="reel-embed reveal visible">${videoFallback(v.url, v.title)}</div>`;
+      }
       const src = v.platform === "youtube"
         ? "https://www.youtube.com/embed/" + VideoCMS.ytId(v.url)
         : "https://www.facebook.com/plugins/video.php?href=" + encodeURIComponent(v.url) + "&show_text=false&width=320";
@@ -2623,7 +2665,9 @@
         // Facebook — fb-video SDK видеог АВТОМАТААР жинхэнэ хэмжээгээр нь дүрсэлнэ (хар зайгүй).
         // SDK гаргаж чадахгүй бол parseFB доторх нөөц iframe рүү шилжинэ (data-ar = нөөц харьцаа).
         const ar = v.orientation === "landscape" ? "16 / 9" : (v.orientation === "square" ? "1 / 1" : "9 / 16");
-        media = `<div class="fb-wrap" data-href="${esc(v.url)}" data-ar="${ar}"><div class="fb-video" data-href="${esc(v.url)}" data-show-text="false" data-width="auto"></div></div>`;
+        media = fbEmbeddable(v.url)
+          ? `<div class="fb-wrap" data-href="${esc(v.url)}" data-ar="${ar}"><div class="fb-video" data-href="${esc(v.url)}" data-show-text="false" data-width="auto"></div></div>`
+          : `<div class="fb-wrap" style="aspect-ratio:${ar}">${videoFallback(v.url, v.title)}</div>`;
       }
       const share = `<div class="vc-share">${shareBar(v.url || location.href, v.title || "Видео")}</div>`;
       return `<article class="video-card${featured ? " video-featured" : ""} reveal visible">${media}${body}${share}</article>`;
@@ -2653,7 +2697,11 @@
         // Зүүн онцлох тоглуулагч + баруун жагсаалт. FB reel embed тогтмол бус өндөртэй тул
         // тогтмол хайрцагт голлуулж (center-crop) эвдрэлээс сэргийлнэ.
         const vids = sortByContentDate(data).slice(0, 6);
-        let fi = vids.findIndex((v) => v.featured); if (fi < 0) fi = 0;
+        // Онцлох байрт embed хийгдэхгүй холбоос (facebook.com/share/…) тавихгүй —
+        // тавибал том тоглуулагч дээр "Video Unavailable" гарч ирдэг.
+        let fi = vids.findIndex((v) => v.featured && fbEmbeddable(v.url));
+        if (fi < 0) fi = vids.findIndex((v) => fbEmbeddable(v.url));
+        if (fi < 0) fi = 0;
         wrap.innerHTML =
           '<div class="vhh-wrap">' +
             '<div class="vhh-feat">' +
@@ -2677,8 +2725,11 @@
         const items = Array.from(wrap.querySelectorAll(".vhh-litem"));
         const loadFeat = (i) => {
           const v = vids[i]; if (!v) return;
-          const badge = i === fi ? '<span class="vhh-badge">★ Онцлох</span>' : '';
-          media.innerHTML = badge + '<div class="fb-video" data-href="' + esc(v.url) + '" data-show-text="false" data-width="auto"></div>';
+          // ★ Онцлох тэмдэг зөвхөн үнэхээр «онцлох» гэж тэмдэглэсэн видеонд
+          const badge = v.featured ? '<span class="vhh-badge">★ Онцлох</span>' : '';
+          media.innerHTML = badge + (fbEmbeddable(v.url)
+            ? '<div class="fb-video" data-href="' + esc(v.url) + '" data-show-text="false" data-width="auto"></div>'
+            : videoFallback(v.url, v.title));
           ttl.textContent = v.title || "Видео";
           dt.textContent = v.video_date || "";
           // Тоглож буй видеог жагсаалтад давхардуулж харуулахгүй
@@ -2690,6 +2741,7 @@
         const inners = Array.from(wrap.querySelectorAll(".vhh-list .vhh-inner"));
         const loadThumb = (el) => {
           if (el.dataset.loaded) return; el.dataset.loaded = "1";
+          if (!fbEmbeddable(el.dataset.href)) { el.innerHTML = videoFallback(el.dataset.href, ""); return; }
           el.innerHTML = '<div class="fb-video" data-href="' + el.dataset.href + '" data-show-text="false" data-width="auto"></div>';
           VideoCMS.parseFB();
         };
