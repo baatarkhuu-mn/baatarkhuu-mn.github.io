@@ -3,18 +3,35 @@ name: Facebook → сайт синк
 on:
   schedule:
     - cron: "17 */3 * * *"   # 3 цаг тутам
-  workflow_dispatch: {}       # гараар ажиллуулах товч
+  workflow_dispatch:          # гараар ажиллуулах товч
+    inputs:
+      mode:
+        description: "sync = Facebook синк, telegram-test = ботыг шалгах (Apify зардалгүй)"
+        type: choice
+        options: [sync, telegram-test]
+        default: sync
 
 jobs:
   sync:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - name: Telegram тест
+        if: inputs.mode == 'telegram-test'
+        env:
+          TG: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          CHAT: ${{ secrets.TELEGRAM_ID }}
+        run: |
+          r=$(curl -s "https://api.telegram.org/bot$TG/sendMessage" --data-urlencode "chat_id=$CHAT" --data-urlencode "text=✅ baatarkhuu.mn бот холбогдлоо. Шинэ Facebook пост сайтад орох бүрт энд мэдэгдэл ирнэ.")
+          echo "$r" | grep -q '"ok":true' && echo "Telegram OK" || { echo "$r"; exit 1; }
       - uses: actions/checkout@v4
+        if: inputs.mode != 'telegram-test'
       - uses: actions/setup-node@v4
+        if: inputs.mode != 'telegram-test'
         with:
           node-version: 20
       - run: node scripts/fb-sync.mjs
+        if: inputs.mode != 'telegram-test'
         env:
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
