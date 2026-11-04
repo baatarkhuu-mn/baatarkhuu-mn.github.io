@@ -748,9 +748,12 @@
       document.querySelectorAll("[data-year]").forEach((el) => (el.textContent = new Date().getFullYear()));
 
       // Идэвхтэй цэсийг тэмдэглэх
-      const path = location.pathname.split("/").pop() || "/";
+      // "/namtar/" болон "/namtar.html" → "/namtar/"; дэд хуудсанд "Нүүр" идэвхгүй
+      const cur = location.pathname.replace(/index\.html$/, "").replace(/\.html$/, "/") || "/";
       document.querySelectorAll(".main-nav a").forEach((a) => {
-        if (a.getAttribute("href") === path) a.classList.add("active");
+        const h = a.getAttribute("href");
+        if (h === cur) a.classList.add("active");
+        else if (h === "/" && cur !== "/") a.classList.remove("active");
       });
     },
   };
