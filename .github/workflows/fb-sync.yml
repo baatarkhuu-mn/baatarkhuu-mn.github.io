@@ -1,0 +1,25 @@
+name: Facebook → сайт синк
+
+on:
+  schedule:
+    - cron: "17 */3 * * *"   # 3 цаг тутам
+  workflow_dispatch: {}       # гараар ажиллуулах товч
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node scripts/fb-sync.mjs
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          SUPABASE_URL: https://qtmueuyxqfgekbacymiu.supabase.co
+          FB_PAGE_URL: https://www.facebook.com/ts.baatarkhuu
+          RESULTS_LIMIT: "10"
