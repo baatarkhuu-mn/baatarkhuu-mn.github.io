@@ -1446,28 +1446,7 @@
     likedSet() { try { return new Set(JSON.parse(localStorage.getItem("fb_liked") || "[]")); } catch (_) { return new Set(); } },
     saveLiked(set) { localStorage.setItem("fb_liked", JSON.stringify([...set])); },
 
-    // ====== ЖИШЭЭ САНАЛУУД (түр — жинхэнэ санал ирэхэд өөрсдөө доош шахагдана) ======
-    DEMOS: [
-      { id: "demo-1", subject: "gerel", status: "done", name: "Иргэн", created_at: "2026-07-22T09:00:00+08:00", likes: 34,
-        message: "13-р хорооллын гудамжны гэрэл 2 сар ажиллахгүй байсныг зассан. Баярлалаа.",
-        comments: [ { body: "Манай гудамжийг ч бас зассан, талархаж байна.", created_at: "2026-07-22T12:00:00+08:00" },
-                    { body: "Түргэн шийдвэрлэсэнд баярлалаа.", created_at: "2026-07-23T08:00:00+08:00" } ] },
-      { id: "demo-2", subject: "zam", status: "routed", name: "Иргэн", created_at: "2026-07-20T10:00:00+08:00", likes: 21,
-        message: "Их сургуулийн гудамжны замын нүх дахин эвдэрсэн. Машин эвдрэх аюултай.",
-        comments: [ { body: "Би ч мөн адил санал өгсөн.", created_at: "2026-07-21T09:00:00+08:00" } ] },
-      { id: "demo-3", subject: "yavgan", status: "new", name: "Иргэн", created_at: "2026-07-18T14:00:00+08:00", likes: 12,
-        message: "Цэцэрлэгийн урд явган зам байхгүй, хүүхдүүд замаар алхаж байна. Аюултай.",
-        comments: [] },
-      { id: "demo-4", subject: "hog", status: "routed", name: "Иргэн", created_at: "2026-07-15T11:00:00+08:00", likes: 18,
-        message: "Гэр хорооллын хог тээвэрлэлт цагтаа хийгддэггүй, хуримтлагдаж байна.",
-        comments: [ { body: "Манай хэсэгт ч ийм асуудал бий.", created_at: "2026-07-16T10:00:00+08:00" } ] },
-      { id: "demo-5", subject: "buudal", status: "new", name: "Иргэн", created_at: "2026-07-12T16:00:00+08:00", likes: 9,
-        message: "Автобусны буудалд сүүдрэвч, суудал байхгүй. Настай хүмүүст хэцүү.",
-        comments: [] },
-      { id: "demo-6", subject: "surguuli", status: "done", name: "Иргэн", created_at: "2026-06-28T09:00:00+08:00", likes: 27,
-        message: "Сургуулийн орчмын гарц дээр гэрлэн дохио тавьсан. Хүүхдүүд аюулгүй боллоо.",
-        comments: [ { body: "Маш зөв шийдэл.", created_at: "2026-06-29T08:00:00+08:00" } ] },
-    ],
+    DEMOS: [], // жишээ (зохиомол) санал устгасан — зөвхөн иргэдийн жинхэнэ санал харагдана
 
     async init() {
       const wrap = document.querySelector("[data-feed]");
@@ -1482,8 +1461,8 @@
             .from("public_feedback").select("*").order("created_at", { ascending: false }).limit(100);
           if (!error && data) rows = data;
         } catch (_) {}
-        const demos = this.DEMOS || [];
-        this._rows = rows.concat(demos);
+        const demos = [];
+        this._rows = rows;
         // Нүүр хуудас — карт хэлбэр (лайк/сэтгэгдлийн тоотой, шүүлтүүргүй)
         if (wrap.hasAttribute("data-feed-gallery")) {
           this._likeMap = {}; this._cmtMap = {};
@@ -3016,15 +2995,8 @@
   /* ---------- Арга хэмжээ (CMS) + бүртгэл ---------- */
   const EventsCMS = {
     esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
-    // Жишээ арга хэмжээнүүд — CMS-ийн арга хэмжээ хүрэлцэхгүй үед эргэлтийг нөхнө
-    DEMOS: [
-      { demo: true, title: "Иргэдтэй нээлттэй уулзалт", event_date: "2026-07-26",
-        description: "10-р тойргийн иргэдийн өргөдөл, санал хүсэлтийг сонсож, гэр хорооллын дэд бүтэц, тулгамдсан асуудлыг хэлэлцэнэ." },
-      { demo: true, title: "Тойргийн иргэдийн нээлттэй өдөрлөг", event_date: "2026-08-09",
-        description: "Чингэлтэй, Сүхбаатар дүүргийн иргэдэд төрийн үйлчилгээг нэг цэгээс хүргэж, санал хүсэлтийг газар дээр нь хүлээн авна." },
-      { demo: true, title: "Тайлангийн уулзалт — Чингэлтэй дүүрэг", event_date: "2026-08-23",
-        description: "Сонгогчдод хийсэн ажлын тайлан танилцуулж, иргэдийн асуултад хариулна." },
-    ],
+    DEMOS: [], // зохиомол арга хэмжээ устгасан
+    isPast(ev) { if (!ev || !ev.event_date) return false; const t = new Date(); t.setHours(0, 0, 0, 0); return new Date(ev.event_date) < t; },
     // Мэдээний карттай ижил хэлбэрийн эргэдэг карт (nh-card)
     rotCard(ev, regCount) {
       const esc = EventsCMS.esc;
@@ -3046,10 +3018,18 @@
         '<h3 class="nh-title">' + esc(ev.title) + "</h3>" + desc + reg + '<div class="ef-cta"></div></div>';
       const url = ev.demo ? "/holboo/" : "/arga-delgerengui/?id=" + encodeURIComponent(ev.id);
       const a = document.createElement("a");
-      a.className = "btn btn-gold btn-sm";
-      a.textContent = "Бүртгүүлэх";
-      a.href = ev.demo ? "/holboo/" : (ev.register_url || url);
-      if (!ev.demo && ev.register_url) { a.target = "_blank"; a.rel = "noopener"; }
+      if (EventsCMS.isPast(ev)) {
+        // Өнгөрсөн арга хэмжээ — бүртгэлгүй, зөвхөн дэлгэрэнгүй
+        const b = document.createElement("span");
+        b.textContent = "Болж өнгөрсөн";
+        b.style.cssText = "display:inline-block;margin-right:12px;font-size:.8rem;font-weight:700;color:var(--color-text-soft)";
+        el.querySelector(".ef-cta").appendChild(b);
+        a.className = "btn btn-outline btn-sm"; a.textContent = "Дэлгэрэнгүй"; a.href = url;
+      } else {
+        a.className = "btn btn-gold btn-sm"; a.textContent = "Бүртгүүлэх";
+        a.href = ev.register_url || url;
+        if (ev.register_url) { a.target = "_blank"; a.rel = "noopener"; }
+      }
       el.querySelector(".ef-cta").appendChild(a);
       el.addEventListener("click", (e) => { if (e.target.closest("a,button")) return; location.href = url; });
       return el;
@@ -3063,15 +3043,15 @@
         .order("event_date", { ascending: true, nullsFirst: false }).order("sort", { ascending: true })
         .then(async ({ data, error }) => {
           // Эргэлтийн жагсаалт: ирэх арга хэмжээнүүд → үгүй бол сүүлийнхүүд → дутууг жишээгээр нөхнө
-          let list;
-          if (error || !data || !data.length) {
-            list = EventsCMS.DEMOS.slice();
-          } else {
-            const today = new Date(); today.setHours(0, 0, 0, 0);
-            const upcoming = data.filter((e) => !e.event_date || new Date(e.event_date) >= today);
-            list = upcoming.length ? upcoming : data.slice(-3);
-            if (list.length < 2) list = list.concat(EventsCMS.DEMOS.slice(0, 3 - list.length));
+          // Зөвхөн ирэх арга хэмжээ "Удахгүй болох"; байхгүй бол сүүлд болсныг "өнгөрсөн" гэж харуулна
+          let list = [], past = false;
+          if (!error && data && data.length) {
+            const upcoming = data.filter((e) => !EventsCMS.isPast(e));
+            if (upcoming.length) list = upcoming;
+            else { list = [data[data.length - 1]]; past = true; }
           }
+          const hd = document.querySelector(".hs-events .hs-head h2");
+          if (hd && past) hd.textContent = "СҮҮЛД БОЛСОН";
           const regMap = {};
           try { const { data: rc } = await sb.rpc("event_reg_counts"); (rc || []).forEach((r) => { regMap[r.event_id] = r.cnt; }); } catch (_) {}
           box.className = "";
@@ -3079,6 +3059,7 @@
           // Каруселгүй — зөвхөн ойрын НЭГ арга хэмжээ (эргэлт, цэг байхгүй)
           const ev0 = list[0];
           if (ev0) box.appendChild(EventsCMS.rotCard(ev0, (ev0.id && regMap[ev0.id]) || 0));
+          else box.innerHTML = '<p class="feed-state">Ойрын хугацаанд товлогдсон арга хэмжээ алга. Шинэ уулзалт товлогдмогц энд гарна.</p>';
         });
     },
     // Онцлох арга хэмжээ — зурагтай карт + бүртгүүлэх товч; дарахад дэлгэрэнгүй нээгдэнэ
@@ -3129,6 +3110,7 @@
       const esc = EventsCMS.esc;
       const wrap = document.createElement("div");
       wrap.className = "ef-reg";
+      if (EventsCMS.isPast(ev)) { wrap.innerHTML = '<p class="ef-count">Энэ арга хэмжээ болж өнгөрсөн тул бүртгэл хаагдсан.</p>'; return wrap; }
       if (ev.register_url) {
         wrap.innerHTML = `<a href="${esc(ev.register_url)}" target="_blank" rel="noopener" class="btn btn-gold">Бүртгүүлэх</a>`;
         return wrap;
@@ -3195,30 +3177,7 @@
         return Math.floor(d / 365) + " жилийн өмнө";
       } catch (_) { return ""; }
     },
-    // ====== ЖИШЭЭ АСУУЛГА (түр) ======
-    DEMO_POLLS: [
-      { id: "demo-p1", question: "Тойрогтоо хамгийн түрүүнд шийдвэрлэвэл зохих асуудал аль нь вэ?",
-        options: ["Замын түгжрэл", "Агаарын бохирдол", "Ногоон байгууламж", "Гэр хорооллын дэд бүтэц"],
-        closes_at: null, created_at: "2026-07-20T09:00:00+08:00", counts: { 0: 45, 1: 38, 2: 22, 3: 31 } },
-      { id: "demo-p2", question: "Иргэдтэй нээлттэй уулзалтыг долоо хоногийн аль өдөр зохион байгуулбал тохиромжтой вэ?",
-        options: ["Ажлын өдрийн орой", "Бямба гараг", "Ням гараг"],
-        closes_at: "2026-08-15T23:59:59+08:00", created_at: "2026-07-18T09:00:00+08:00", counts: { 0: 30, 1: 55, 2: 20 } },
-      { id: "demo-p3", question: "Гэр хорооллын дэд бүтцийг сайжруулах төслийг дэмжиж байна уу?",
-        options: ["Тийм, бүрэн дэмжинэ", "Хэсэгчлэн дэмжинэ", "Үгүй"],
-        closes_at: null, created_at: "2026-07-10T09:00:00+08:00", counts: { 0: 88, 1: 24, 2: 8 } },
-      { id: "demo-p4", question: "Хотын нийтийн тээврийг сайжруулах хамгийн чухал арга хэмжээ аль нь вэ?",
-        options: ["Автобусны давтамж нэмэх", "Шинэ чиглэл нээх", "Цахим төлбөр", "Буудал тохижуулах"],
-        closes_at: null, created_at: "2026-07-08T09:00:00+08:00", counts: { 0: 40, 1: 25, 2: 35, 3: 18 } },
-      { id: "demo-p5", question: "Сургуулийн орчны аюулгүй байдлыг хэрхэн сайжруулах вэ?",
-        options: ["Гэрлэн дохио", "Явган гарц", "Хурд сааруулагч", "Хяналтын камер"],
-        closes_at: "2026-08-20T23:59:59+08:00", created_at: "2026-07-05T09:00:00+08:00", counts: { 0: 50, 1: 42, 2: 28, 3: 33 } },
-      { id: "demo-p6", question: "Гэр хорооллын айл өрхийн хамгийн тулгамдсан хэрэгцээ юу вэ?",
-        options: ["Цэвэр ус", "Дулаан", "Зам, гэрэлтүүлэг", "Хог зайлуулалт"],
-        closes_at: null, created_at: "2026-07-02T09:00:00+08:00", counts: { 0: 60, 1: 45, 2: 38, 3: 20 } },
-      { id: "demo-p7", question: "Ирэх онд тойрогтоо хамгийн түрүүнд ямар төсөл хэрэгжүүлбэл зохих вэ?",
-        options: ["Цэцэрлэг барих", "Эмнэлэг өргөтгөх", "Спорт талбай", "Ногоон байгууламж"],
-        closes_at: null, created_at: "2026-06-30T09:00:00+08:00", counts: { 0: 55, 1: 48, 2: 30, 3: 25 } },
-    ],
+    DEMO_POLLS: [], // зохиомол санал асуулга, саналын тоо устгасан
     async init() {
       const wrap = document.querySelector("[data-polls], [data-polls-featured]");
       if (!wrap) return;
@@ -3237,7 +3196,7 @@
           (res || []).forEach((r) => { (this._counts[r.poll_id] = this._counts[r.poll_id] || {})[r.option_idx] = Number(r.cnt); });
         } catch (_) {}
         // Жишээ асуулга + тоонууд
-        const demos = this.DEMO_POLLS || [];
+        const demos = [];
         demos.forEach((d) => { this._counts[d.id] = Object.assign({}, d.counts); });
         polls = polls.concat(demos);
         if (!polls.length) return;
@@ -3535,7 +3494,8 @@
 
   /* ---------- Хуваалцах + эможи реакц (дэлгэрэнгүй хуудсанд) ---------- */
   function engageBlock(type, id) {
-    const url = encodeURIComponent(location.href);
+    // Мэдээг хуваалцахад зурагтай урьдчилсан харагдацтай /s/<id>/ хуудсыг ашиглана
+    const url = encodeURIComponent(type === "news" && id ? "https://baatarkhuu.mn/s/" + id + "/" : location.href);
     const title = encodeURIComponent(document.title);
     return `<div class="post-engage">
       <div class="post-react" data-reactions="${type}:${id}"></div>
