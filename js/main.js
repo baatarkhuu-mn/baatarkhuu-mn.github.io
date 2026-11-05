@@ -1361,6 +1361,33 @@
       /* ---- Видео ---- */
       "Цэндийн Баатархүүгийн үйл ажиллагааны видео бичлэгүүд.": "Video recordings of Tsendiin Baatarkhuu's activities.",
 
+      /* ---- 2026-11: нэмэлт орчуулга (Намтар, санал асуулга, тайлан, туслах) ---- */
+      "СҮҮЛД БОЛСОН": "RECENTLY HELD",
+      "ТИЙМ": "YES",
+      "ҮГҮЙ": "NO",
+      "санал": "votes",
+      "Хугацаа — Дууссан": "Deadline — Ended",
+      "Хуваалцах:": "Share:",
+      "Туслах": "Assistant",
+      "2026 оны 6 сарын тайлан": "June 2026 report",
+      "2026 оны 5 сарын тайлан": "May 2026 report",
+      "2026 оны 4 сарын тайлан": "April 2026 report",
+      "Баатархүү": "Baatarkhuu",
+      "Ажилласан байдал, боловсрол": "Career and education",
+      "Хэнтий аймаг, Өндөрхаан хот": "Öndörkhaan, Khentii Province",
+      "1981 оны 11 дүгээр сарын 14": "14 November 1981",
+      "1989–1999 · Хэнтий аймаг, Өндөрхаан хот, 2-р дунд сургууль": "1989–1999 · Secondary School No. 2, Öndörkhaan, Khentii Province",
+      "Хан-Уул дээд сургууль": "Khan-Uul Institute",
+      "Математик, бизнесийн эдийн засаг (бакалавр)": "Mathematics and Business Economics (Bachelor's)",
+      "1999–2003 · МУИС, Нийгмийн шинжлэх ухааны сургууль — Улс төр судлаач (бакалавр)": "1999–2003 · National University of Mongolia, School of Social Sciences — Political Science (Bachelor's)",
+      "2005–2007 · Удирдлагын академи": "2005–2007 · Academy of Management",
+      "2012–2013 · Нийслэлийн Засаг даргын Нийгмийн хөгжил хариуцсан орлогч": "2012–2013 · Deputy Governor of Ulaanbaatar for Social Development",
+      "2020–2024 онд Ардчилсан намын Ерөнхий нарийн бичгийн даргын алба хашиж байв.": "From 2020 to 2024 he served as Secretary General of the Democratic Party.",
+      "2023–2024 · Harvard ManageMentor — удирдлагын онлайн хөтөлбөр": "2023–2024 · Harvard ManageMentor — online management program",
+      "Одоо": "Now",
+      "Бүтээл": "Works",
+      "Ном": "Book",
+
       /* ---- Төлөв / шошго давхар ---- */
       "Дэлгэрэнгүй": "Details",
     },
@@ -1394,11 +1421,17 @@
       let mn = this.orig.get(node);
       if (mn === undefined) {
         const k0 = (node.nodeValue || "").trim();
-        if (!(k0 && this.dict[k0])) return;   // орчуулагдахааргүй текст — алгасах
+        if (!(k0 && (this.dict[k0] || this.rx(k0)))) return;   // орчуулагдахааргүй текст — алгасах
         mn = node.nodeValue; this.orig.set(node, mn);
       }
       const key = mn.trim();
-      node.nodeValue = (this.lang === "en" && this.dict[key]) ? mn.replace(key, this.dict[key]) : mn;
+      const tr = this.dict[key] || this.rx(key);
+      node.nodeValue = (this.lang === "en" && tr) ? mn.replace(key, tr) : mn;
+    },
+    // Тоотой хэллэг ("5 санал" г.м.) — толь бичигт нэг бүрчлэн нэмэх боломжгүй
+    rx(s) {
+      const m = /^(\d+) санал$/.exec(s);
+      return m ? m[1] + (m[1] === "1" ? " vote" : " votes") : "";
     },
     scan(root) {
       const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
