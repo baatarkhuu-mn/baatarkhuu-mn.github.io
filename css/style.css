@@ -3010,3 +3010,46 @@ body.hp [data-top-feed] { max-height: none; }
 .np-cover.fit-contain img { width: auto; max-width: 100%; border-radius: 0; }
 .vfallback .vf-logo { width: 56px; height: auto; opacity: .5; }
 .vhh-lmedia .vfallback .vf-logo { width: 30px; }
+
+/* ================= 2026-11 засвар: цэс, статистик, хэмжээ, уншигдах байдал ================= */
+/* #5 Нүүр — компьютер дээр бүтэн цэс шууд харагдана (☰-гүй) */
+@media (min-width: 961px) {
+  body.hp .navbar { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+  body.hp .nav-toggle { display: none; }
+  body.hp .main-nav { position: static; max-height: none; overflow: visible; width: auto; background: none; border: none; box-shadow: none; right: auto; }
+  body.hp .main-nav ul { flex-direction: row; padding: 0; gap: 6px; }
+  body.hp .main-nav a { padding: 13px 20px; font-size: 1.08rem; font-weight: 600; }
+}
+
+/* #8 Статистик хавтан — солонгон өнгийн оронд албан ёсны нэг хэв (өнгө зөвхөн дүрс/зураас дээр) */
+.fbd-card { aspect-ratio: auto; min-height: 168px; background: var(--color-bg-card) !important; border: 1px solid var(--color-border);
+  box-shadow: none !important; color: var(--color-text); border-top: 3px solid var(--fbd-c, #3071E7); }
+.fbd-card::after { display: none; }
+.fbd-ic, .fbd-ic svg { color: var(--fbd-c, #3071E7); }
+.fbd-n { color: var(--color-text); font-size: 2.6rem; }
+.fbd-l { color: var(--color-text-soft); }
+.fbd-blue { --fbd-c: #3071E7; }
+.fbd-amber { --fbd-c: #D9A43A; }
+.fbd-green { --fbd-c: #2FA866; }
+.fbd-purple { --fbd-c: #6E8FD6; }
+
+/* #9 Нүүрний иргэдийн санал — зургийг намсгаж блокыг авсаархан болгоно */
+body.hp .fcv2 .fc3-media { aspect-ratio: 16 / 9; }
+
+/* #10 Утсан дээр — жижиг бичгийг 12px-ээс доошгүй, товшилтын талбайг томруулна */
+@media (max-width: 760px) {
+  .dxs-likes, .dxs-n, .fc2-status, .fc3-badge, .pc-cnt, .pc-st, .vhh-d, .vhh-lt { font-size: 12px; }
+}
+.news-dots, .efr-dots { gap: 0; }
+.news-dots button, .efr-dot { box-sizing: content-box; border: 8px solid transparent !important; background-clip: padding-box; }
+.hs-news .news-dots, .hs-events [data-events] .news-dots { bottom: 4px; }
+.dx-all { display: inline-block; padding-block: 10px; margin-block: -10px; }
+.site-footer ul a { display: inline-block; padding-block: 6px; }
+
+/* #15 Харанхуй горим — цэнхэр бичгийг тод болгож уншигдахуйц болгоно (4.5:1-ээс дээш) */
+:root:not([data-theme="light"]) :is(.breadcrumb, .breadcrumb span, .dx-all, .card-link, .sc-ghost, .btn-outline, .dxs-more,
+  .rc-cat, .bar-val, .bp-eyebrow, .dxs-likes, .dxs-n, .fc3-badge, .lc-src, .proj-cat, .rc-hint, .rc-policy, .suffix, .vfallback .vf-b) { color: #5B8FF0; }
+
+/* #16 Гараар (Tab) шилжихэд аль товч дээр байгааг тод харуулна */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible { outline: 2px solid #5B8FF0 !important; outline-offset: 2px; }
+[data-theme="light"] :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible { outline-color: #2159C9 !important; }
