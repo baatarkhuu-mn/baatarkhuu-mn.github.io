@@ -2998,3 +2998,15 @@ body.hp [data-top-feed] { max-height: none; }
   .cbx-panel { right: 16px; left: 16px; width: auto; bottom: 80px; }
 }
 @media print { .cbx-fab, .cbx-panel { display: none !important; } }
+
+/* ---------- Thumbnail: хэлбэр зөрүүтэй/жижиг зургийг бүтнээр голлуулах (js: fitThumb) ---------- */
+.fit-contain { position: relative; isolation: isolate; }
+.fit-contain::before { content: ""; position: absolute; inset: -30px; z-index: -1;
+  background: var(--thumb) center / cover no-repeat; filter: blur(22px) brightness(.62) saturate(1.1); }
+[data-theme="light"] .fit-contain::before { filter: blur(22px) brightness(.95) saturate(1.05); opacity: .85; }
+.fit-contain img { object-fit: contain !important; }
+.card .card-media.fit-contain .placeholder, .fit-contain .placeholder { display: none; }
+.np-cover.fit-contain { overflow: hidden; border-radius: var(--radius-lg); display: flex; justify-content: center; }
+.np-cover.fit-contain img { width: auto; max-width: 100%; border-radius: 0; }
+.vfallback .vf-logo { width: 56px; height: auto; opacity: .5; }
+.vhh-lmedia .vfallback .vf-logo { width: 30px; }
