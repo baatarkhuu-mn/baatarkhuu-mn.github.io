@@ -3532,6 +3532,7 @@
         const nums = box.querySelectorAll(".fbd-n");
         // Дэлгэцэнд орж ирэхэд: тоо 0-оос өсөж, зураас дүүрнэ (дараалан)
         nums.forEach((el) => { el.textContent = "0"; });
+        box.classList.add("fbd-anim"); // хөдөлгөөн зөвхөн JS бэлэн үед (хуучин кэштэй хослолд картууд нуугдахгүй)
         const start = () => {
           box.querySelectorAll(".fbd-card").forEach((card, i) => setTimeout(() => card.classList.add("in"), i * 120));
           nums.forEach((el) => this.count(el, parseInt(el.dataset.target, 10) || 0));
