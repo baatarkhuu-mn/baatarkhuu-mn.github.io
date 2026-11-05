@@ -3053,3 +3053,27 @@ body.hp .fcv2 .fc3-media { aspect-ratio: 16 / 9; }
 /* #16 Гараар (Tab) шилжихэд аль товч дээр байгааг тод харуулна */
 :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible { outline: 2px solid #5B8FF0 !important; outline-offset: 2px; }
 [data-theme="light"] :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible { outline-color: #2159C9 !important; }
+
+/* ================= Хуулийн дэлгэрэнгүй — албан баримт бичгийн толгой + явцын шат ================= */
+.lp-doc { position: relative; overflow: hidden; text-align: center; padding: clamp(28px, 5vw, 46px) clamp(18px, 4vw, 40px) clamp(22px, 3vw, 30px);
+  margin: 6px 0 26px; border-radius: 18px; background: var(--color-bg-card); border: 1px solid var(--color-border); }
+.lp-doc::before { content: ""; position: absolute; inset: 10px; border: 1px solid var(--color-border); border-radius: 12px; pointer-events: none; }
+.lp-emb { width: 64px; height: auto; margin: 0 auto 12px; display: block; }
+.lp-kick { font-size: .74rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--color-text-soft); }
+.lp-title { margin: 12px auto 18px; max-width: 30ch; }
+.lp-doc .np-badges { justify-content: center; margin-bottom: 0; }
+.lp-steps { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin: 0 0 28px; padding: 0; counter-reset: s; }
+.lp-steps li { position: relative; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; font-size: .8rem; color: var(--color-text-soft); }
+.lp-steps li::before { content: ""; position: absolute; top: 15px; left: -50%; width: 100%; height: 2px; background: var(--color-border); z-index: 0; }
+.lp-steps li:first-child::before { display: none; }
+.lp-steps li.done::before, .lp-steps li.now::before { background: #3071E7; }
+.lp-dot { position: relative; z-index: 1; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: .82rem;
+  background: var(--color-bg); border: 2px solid var(--color-border); color: var(--color-text-soft); }
+.lp-steps li.done .lp-dot { background: #3071E7; border-color: #3071E7; color: #fff; }
+.lp-steps li.now .lp-dot { border-color: #3071E7; color: #3071E7; box-shadow: 0 0 0 5px rgba(48,113,231,.16); }
+.lp-steps li.now .lp-lbl { color: var(--color-text); font-weight: 700; }
+@media (max-width: 560px) { .lp-steps li { font-size: .7rem; } }
+
+/* Хуулийн карт — зүүн талд статусын өнгөт зураас, баруун доод буланд төрийн сүлдний бүдэг тэмдэг */
+.law-card { position: relative; overflow: hidden; }
+.law-card::after { content: ""; position: absolute; right: -14px; bottom: -14px; width: 74px; height: 74px; background: url("/assets/img/logo.svg") center / contain no-repeat; opacity: .06; pointer-events: none; }
