@@ -3038,7 +3038,7 @@ body.hp .fcv2 .fc3-media { aspect-ratio: 16 / 9; }
 
 /* #10 Утсан дээр — жижиг бичгийг 12px-ээс доошгүй, товшилтын талбайг томруулна */
 @media (max-width: 760px) {
-  .dxs-likes, .dxs-n, .fc2-status, .fc3-badge, .pc-cnt, .pc-st, .vhh-d, .vhh-lt { font-size: 12px; }
+  .dxs-likes, .dxs-n, .fc2-status, .fc3-badge, .pc-cnt, .pc-st, .vhh-d, .vhh-lt { font-size: 12px !important; }
 }
 .news-dots, .efr-dots { gap: 0; }
 .news-dots button, .efr-dot { box-sizing: content-box; border: 8px solid transparent !important; background-clip: padding-box; }
