@@ -1385,6 +1385,9 @@
       "2020–2024 онд Ардчилсан намын Ерөнхий нарийн бичгийн даргын алба хашиж байв.": "From 2020 to 2024 he served as Secretary General of the Democratic Party.",
       "2023–2024 · Harvard ManageMentor — удирдлагын онлайн хөтөлбөр": "2023–2024 · Harvard ManageMentor — online management program",
       "Одоо": "Now",
+      "Монгол Улсын Их Хурал": "State Great Khural of Mongolia",
+      "Хуулийн төслийн эх бичиг (УИХ-ын албан ёсны сайт):": "Original draft (official Parliament website):",
+      "Эх бичгийг үзэх ↗": "View original ↗",
       "Бүтээл": "Works",
       "Ном": "Book",
 
@@ -2173,16 +2176,25 @@
       const role = (LawsCMS.ROLE && LawsCMS.ROLE[l.category]) || "Санаачлагч";
       const dateChip = l.date_label ? `<span class="np-role">${LawPost.CAL}${esc(l.date_label)}</span>` : "";
       const badges = `<div class="np-badges"><span class="badge-status ${statusCls}">${esc(statusLabel)}</span><span class="np-role">Оролцоо: ${esc(role)}</span>${dateChip}</div>`;
+      const STEPS = ["drafting", "submitted", "discussion", "passed"];
+      const at = STEPS.indexOf(status);
+      const steps = at < 0 ? "" : `<ol class="lp-steps" aria-label="Явц">${STEPS.map((s, i) =>
+        `<li class="${i < at ? "done" : i === at ? "now" : ""}"><span class="lp-dot">${i < at ? "✓" : i + 1}</span><span class="lp-lbl">${esc(LawsCMS.LABEL[s])}</span></li>`).join("")}</ol>`;
       const topic = l.topic ? `<p class="np-lead">${esc(l.topic)}</p>` : "";
       const body = articleBodyHtml(l.summary || "", esc);
       const pdf = l.pdf_url
-        ? `<div class="np-sources"><span class="np-src-label">Хуулийн эх бичиг:</span><a class="btn btn-primary btn-sm" href="${esc(l.pdf_url)}" target="_blank" rel="noopener">PDF / эх бичгийг үзэх →</a></div>`
+        ? `<div class="np-sources"><span class="np-src-label">Хуулийн төслийн эх бичиг (УИХ-ын албан ёсны сайт):</span><a class="btn btn-primary btn-sm" href="${esc(l.pdf_url)}" target="_blank" rel="noopener">Эх бичгийг үзэх ↗</a></div>`
         : "";
       return `<nav class="breadcrumb" aria-label="Замчлал"><a href="/">Нүүр</a><span>/</span><a href="/huuli/">Хууль</a></nav>
-        ${badges}
-        <h1 class="np-title">${esc(l.title)}</h1>
+        <header class="lp-doc">
+          <img class="lp-emb" src="/assets/img/logo.svg" alt="" />
+          <div class="lp-kick">Монгол Улсын Их Хурал</div>
+          <h1 class="np-title lp-title">${esc(l.title)}</h1>
+          ${badges}
+        </header>
+        ${steps}
         ${topic}
-        <div class="np-body article-body">${body || '<p class="np-state">Дэлгэрэнгүй тайлбар оруулаагүй байна.</p>'}</div>
+        <div class="np-body article-body">${body}</div>
         ${pdf}
         ${engageBlock("law", l.id)}
         <a class="np-back" href="/huuli/">← Бүх хууль рүү буцах</a>`;
@@ -2541,11 +2553,10 @@
         };
         items.forEach((it) => {
           it.setAttribute("tabindex", "0");
-          // Карт дээр дарангуут эх сурвалж (хуулийн эх бичиг) руу шинэ цонхонд үсэрнэ
+          // Карт дээр дарангуут сайтын доторх дэлгэрэнгүй хуудас нээгдэнэ (эх сурвалжийн товч тэнд бий)
           const openSource = () => {
-            const a = it.querySelector(".law-actions a[href]");
-            const src = (a && a.getAttribute("href")) || it.dataset.source || "";
-            if (src) { window.open(src, "_blank", "noopener"); return true; }
+            const id = it.dataset.id;
+            if (id) { location.href = "/huuli-delgerengui/?id=" + encodeURIComponent(id); return true; }
             return false;
           };
           it.addEventListener("click", (e) => {
@@ -3506,7 +3517,7 @@
       const role = LawsCMS.ROLE[l.category] || "Санаачлагч";
       const meta = [l.date_label, role].filter(Boolean).join(" · ");
       const src = l.pdf_url
-        ? '<span class="lc-src">Эх сурвалж ↗</span>'
+        ? '<span class="lc-src">Дэлгэрэнгүй →</span>'
         : '<span class="lc-src lc-src-muted">Дэлгэрэнгүй →</span>';
       return '<article class="law-card law-item is-clickable" data-item data-id="' + esc(l.id) +
         '" data-title="' + esc(l.title) + '" data-category="' + esc(l.category || "own") +
@@ -3522,7 +3533,7 @@
       const role = LawsCMS.ROLE[l.category] || "Санаачлагч";
       const meta = [l.date_label, role, l.topic].filter(Boolean).map((m) => `<span>${esc(m)}</span>`).join("");
       const pdf = l.pdf_url ? `<a class="btn btn-ghost btn-sm" href="${esc(l.pdf_url)}" target="_blank" rel="noopener">PDF</a>` : "";
-      const more = l.pdf_url ? `<span class="law-more">Эх сурвалж ↗</span>` : `<span class="law-more">Дэлгэрэнгүй →</span>`;
+      const more = `<span class="law-more">Дэлгэрэнгүй →</span>`;
       const cls = LawsCMS.CLS[status] || "status-review";
       return `<article class="law-item is-clickable" data-id="${esc(l.id)}" data-item data-title="${esc(l.title)}" data-category="${esc(l.category || "own")}" data-status="${esc(status)}" data-summary="${esc(l.summary || "")}">
         <div class="law-status-bar badge-status ${cls}">${esc(LawsCMS.LABEL[status] || status)}</div>
