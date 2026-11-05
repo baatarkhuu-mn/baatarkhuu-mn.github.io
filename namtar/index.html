@@ -35,29 +35,23 @@
     .bp-eyebrow::before { content: ""; width: 26px; height: 2px; border-radius: 2px; background: currentColor; }
 
     /* Гүйлгэлтийн явц (header доор) */
-    .bp-progress { position: fixed; left: 0; top: 0; z-index: 1100; height: 3px; width: 100%; transform-origin: 0 50%; transform: scaleX(0);
-      background: linear-gradient(90deg, var(--color-accent), var(--color-primary-light)); box-shadow: 0 0 12px rgba(48,113,231,.5); }
+    .bp-progress { display: none; }
 
     /* --- Толгой --- */
     .bp-head { position: relative; overflow: hidden; padding: clamp(60px, 9vw, 116px) 0 clamp(44px, 6vw, 70px);
       background: radial-gradient(70% 90% at 15% 0%, var(--color-accent-soft), transparent 60%), linear-gradient(180deg, var(--color-bg-soft), var(--color-bg)); }
-    .bp-glyph { position: absolute; right: -60px; top: -40px; width: clamp(240px, 34vw, 460px); opacity: .06; pointer-events: none; animation: bp-breathe 9s ease-in-out infinite alternate; }
-    @keyframes bp-breathe { from { transform: scale(1); } to { transform: scale(1.05) rotate(-2deg); } }
+    .bp-glyph { position: absolute; right: -60px; top: -40px; width: clamp(240px, 34vw, 460px); opacity: .05; pointer-events: none; }
     .bp-head-grid { display: grid; grid-template-columns: auto 1fr; gap: clamp(26px, 4vw, 52px); align-items: center; position: relative; }
     .bp-avatar { position: relative; width: clamp(150px, 17vw, 200px); aspect-ratio: 1; }
     .bp-avatar-in { position: relative; width: 100%; height: 100%; border-radius: 50%; overflow: hidden; z-index: 1;
       box-shadow: 0 0 0 4px var(--color-bg), 0 0 0 6px var(--color-accent), var(--shadow-lg);
-      clip-path: circle(0% at 50% 50%); transition: clip-path 1.3s var(--ease) .1s; }
-    .bp-avatar-in img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; transform: scale(1.18); filter: saturate(.7) brightness(1.08); transition: transform 2.4s var(--ease) .1s, filter 2.4s var(--ease) .1s; }
-    .bp-head.on .bp-avatar-in { clip-path: circle(50% at 50% 50%); }
-    .bp-head.on .bp-avatar-in img { transform: scale(1.02); filter: none; }
-    .bp-ping { position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--color-accent); opacity: 0; }
-    .bp-head.on .bp-ping { animation: bp-ring 3.2s ease-out 1.4s infinite; }
-    @keyframes bp-ring { 0% { transform: scale(.95); opacity: .55; } 100% { transform: scale(1.45); opacity: 0; } }
+      opacity: 0; transition: opacity .9s var(--ease) .1s; }
+    .bp-avatar-in img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; }
+    .bp-head.on .bp-avatar-in { opacity: 1; }
     .bp-name { margin: 14px 0 0; font-family: var(--disp); font-weight: 800; font-size: clamp(2.3rem, 5.6vw, 4.2rem); line-height: 1.02; letter-spacing: -.025em; color: var(--color-text); }
     .bp-name .w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .08em; }
-    .bp-name .w i { display: inline-block; font-style: normal; transform: translateY(105%); transition: transform 1.05s var(--ease); transition-delay: var(--d,0s); }
-    .bp-head.on .bp-name .w i { transform: none; }
+    .bp-name .w i { display: inline-block; font-style: normal; opacity: 0; transition: opacity .9s var(--ease) .15s; }
+    .bp-head.on .bp-name .w i { opacity: 1; }
     .bp-lead { margin-top: 18px; max-width: 64ch; font-size: clamp(1rem, 1.3vw, 1.08rem); line-height: 1.75; color: var(--color-text-soft); }
 
     /* --- Баримт картууд --- */
@@ -85,7 +79,7 @@
       background: var(--color-bg); border: 2px solid var(--color-border); color: var(--color-text-soft); transition: border-color .6s, color .6s, box-shadow .6s, transform .6s var(--ease); }
     .bp-med svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
     .bp-ti.lit .bp-med { border-color: var(--color-accent); color: var(--color-accent); box-shadow: 0 0 0 6px var(--color-accent-soft); transform: scale(1.06); }
-    .bp-ti.now.lit .bp-med::after { content: ""; position: absolute; width: 52px; height: 52px; border-radius: 50%; border: 2px solid var(--color-accent); animation: bp-ring 2.6s ease-out infinite; }
+    .bp-ti.now.lit .bp-med { background: var(--color-accent); color: #fff; }
     .bp-card { padding: clamp(22px, 2.6vw, 30px); border-radius: 18px; background: var(--color-bg-card); border: 1px solid var(--color-border); box-shadow: var(--shadow-sm);
       opacity: 0; transform: translateX(-40px); transition: opacity .9s var(--ease), transform .9s var(--ease), box-shadow .5s, border-color .5s; }
     .bp-ti:nth-child(odd of .bp-ti) .bp-card { transform: translateX(40px); }
@@ -130,14 +124,35 @@
     .bp-ti:nth-child(odd of .bp-ti) .bp-ghost { grid-column: 1; justify-self: end; padding: 0 clamp(16px, 3vw, 40px) 0 0; }
     .bp-ti.lit .bp-ghost { opacity: 1; }
     .bp-ti.lit .bp-card { border-color: color-mix(in srgb, var(--color-accent) 28%, var(--color-border)); }
-    .bp-cue { display: inline-flex; align-items: center; gap: 10px; margin-top: 26px; font-size: .72rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--color-text-soft); }
-    .bp-cue:hover { color: var(--color-accent); }
-    .bp-cue .mouse { width: 20px; height: 30px; border-radius: 12px; border: 2px solid currentColor; display: grid; justify-items: center; padding-top: 5px; }
-    .bp-cue .mouse i { width: 3px; height: 6px; border-radius: 2px; background: currentColor; animation: bp-wheel 1.8s ease-in-out infinite; }
-    @keyframes bp-wheel { 0% { transform: translateY(0); opacity: 1; } 70% { transform: translateY(8px); opacity: 0; } 100% { opacity: 0; } }
     @media (max-width: 900px) { .bp-fact.feat { grid-column: 1 / -1; } }
-    @media (max-width: 720px) { .bp-ghost { display: none; } .bp-cue { display: none; } }
+    @media (max-width: 720px) { .bp-ghost { display: none; } }
 
+
+    /* --- Ном: бодит ном шиг 3D хавтас — гүйлгэхэд аажуухан эргэж нүүрээ харуулна --- */
+    .bp-books { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(28px, 5vw, 64px); padding: 8px 0 30px; }
+    .bk { margin: 0; text-align: center; perspective: 1100px; }
+    .bk-3d { position: relative; width: min(200px, 78%); aspect-ratio: 2 / 3; margin: 0 auto; transform-style: preserve-3d;
+      transform: rotateY(var(--ry, 22deg)) translateY(var(--ty, 0px)); transition: transform .5s var(--ease); }
+    .bk:hover .bk-3d { transform: rotateY(0deg) translateY(-12px); }
+    .bk-face { position: absolute; inset: 0; border-radius: 3px 7px 7px 3px; overflow: hidden; backface-visibility: hidden;
+      background: linear-gradient(160deg, var(--c1), var(--c2)); color: #EBDDB0;
+      display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 18% 12% 11%;
+      box-shadow: inset 6px 0 8px -4px rgba(0,0,0,.55), inset -1px 0 0 rgba(255,255,255,.08); transform: translateZ(14px); }
+    .bk-face::before { content: ""; position: absolute; inset: 9px 9px 9px 13px; border: 1px solid rgba(235,221,176,.42); border-radius: 2px 4px 4px 2px; pointer-events: none; }
+    .bk-face img { width: 30%; height: auto; }
+    .bk-face b { font-family: var(--disp); font-weight: 800; font-size: clamp(.95rem, 1.5vw, 1.15rem); line-height: 1.22; letter-spacing: .03em; text-transform: uppercase; color: #F4E7BE; }
+    .bk-face span { font-size: .62rem; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; opacity: .78; }
+    .bk-spine { position: absolute; top: 0; bottom: 0; left: 0; width: 28px; transform-origin: left center; transform: rotateY(-90deg) translateX(-14px);
+      background: linear-gradient(90deg, var(--c2), var(--c1)); filter: brightness(.72); border-radius: 3px 0 0 3px; }
+    .bk-pages { position: absolute; top: 4px; bottom: 4px; right: 0; width: 26px; transform-origin: right center; transform: rotateY(90deg) translateX(13px);
+      background: repeating-linear-gradient(90deg, #f1ece0 0 2px, #d8d1c0 2px 3px); }
+    .bk-back { position: absolute; inset: 0; border-radius: 7px 3px 3px 7px; background: var(--c2); transform: translateZ(-14px) rotateY(180deg); }
+    .bk-sh { width: 62%; height: 18px; margin: 16px auto 0; border-radius: 50%; background: radial-gradient(closest-side, rgba(0,0,0,.45), transparent); }
+    .bk figcaption { margin-top: 8px; }
+    .bk figcaption h3 { font-size: 1.05rem; font-weight: 700; line-height: 1.35; }
+    .bk figcaption p { margin-top: 4px; font-size: .86rem; color: var(--color-text-soft); }
+    @media (max-width: 720px) { .bp-books { grid-template-columns: 1fr; gap: 40px; } .bk-3d { width: 170px; } }
+    @media (prefers-reduced-motion: reduce) { .bk-3d { transform: rotateY(18deg) !important; } }
 
     @media (max-width: 900px) {
       .bp-facts { grid-template-columns: 1fr 1fr; }
@@ -151,7 +166,6 @@
       .bp-ti .bp-card, .bp-ti:nth-child(odd of .bp-ti) .bp-card { grid-column: 2; transform: translateY(24px); }
       .bp-med { grid-column: 1; margin-top: 18px; width: 44px; height: 44px; }
       .bp-ti { margin-bottom: 26px; }
-      .bp-ti.now.lit .bp-med::after { width: 44px; height: 44px; }
     }
     @media (max-width: 720px) { .bp-human { grid-template-columns: 1fr; } }
     @media (prefers-reduced-motion: reduce) {
@@ -209,14 +223,12 @@
       <img class="bp-glyph" src="/assets/img/logo.svg" alt="" aria-hidden="true" />
       <div class="bp-wrap bp-head-grid">
         <div class="bp-avatar">
-          <span class="bp-ping" aria-hidden="true"></span>
           <div class="bp-avatar-in"><img src="/assets/img/namtar-portrait.jpg" alt="Ц.Баатархүү" /></div>
         </div>
         <div>
           <span class="bp-eyebrow bp-rv" style="--d:.1s">Намтар</span>
           <h1 class="bp-name"><span class="w"><i style="--d:.15s">Цэндийн</i></span> <span class="w"><i style="--d:.27s">Баатархүү</i></span></h1>
           <p class="bp-lead bp-rv" style="--d:.55s">Цэндийн Баатархүү нь 1981 оны 11 дүгээр сарын 14-нд Хэнтий аймагт төрсөн. Улс төрч, бизнес эрхлэгч бөгөөд 2024 оны УИХ-ын сонгуулиар сонгуулийн 10-р тойрог — Чингэлтэй, Сүхбаатар дүүргээс Улсын Их Хурлын гишүүнээр сонгогдсон.</p>
-          <a class="bp-cue bp-rv" style="--d:.8s" href="#bp-tl"><span class="mouse"><i></i></span>Замнал</a>
         </div>
       </div>
     </section>
@@ -269,7 +281,7 @@
                 <li>«МИГ даатгал» ХХК-д Төлөөлөн Удирдах Зөвлөлийн гишүүн</li>
                 <li>MLC Business School болон MLC Content компанийн үүсгэн байгуулагч, Удирдах зөвлөлийн дарга</li>
                 <li>«20K Programmer» — IT инженер бэлтгэх Олон Улсын хөтөлбөрийн Монгол дахь удирдагч</li>
-                <li>Болгарт төвтэй SoftUni Global…</li>
+                <li>Болгарт төвтэй SoftUni Global-ийн Монгол дахь төлөөлөгч</li>
                 <li>2023–2024 · Harvard ManageMentor — удирдлагын онлайн хөтөлбөр</li>
               </ul></div>
           </article>
@@ -287,10 +299,19 @@
 
         <!-- ===== BOOKS / HUMAN SIDE ===== -->
         <div class="bp-sechd bp-rv"><span class="bp-eyebrow">Бүтээл</span><h2>Ном бүтээл</h2></div>
-        <div class="bp-human">
-          <div class="bp-hc bp-rv"><svg class="art" viewBox="0 0 64 64"><path pathLength="1" d="M10 14c7-3 15-3 22 2 7-5 15-5 22-2v36c-7-3-15-3-22 2-7-5-15-5-22-2z"/><path pathLength="1" d="M32 16v36"/><path pathLength="1" class="pg" d="M16 24h10M16 30h10M38 24h10M38 30h10"/></svg><h3>«Зөв ярих ухаан»</h3><p>Ном</p></div>
-          <div class="bp-hc bp-rv" style="--d:.1s"><svg class="art" viewBox="0 0 64 64"><path pathLength="1" d="M32 8L56 52H8z"/><path pathLength="1" d="M32 24l10 18H22z"/><circle class="dot" cx="32" cy="8" r="3"/></svg><h3>«Ажил хэргийн гурвалжин»</h3><p>Ном</p></div>
-          <div class="bp-hc bp-rv" style="--d:.2s"><svg class="art" viewBox="0 0 64 64"><path pathLength="1" d="M8 52c8-2 10-10 18-12s10-12 18-14 8-10 12-14"/><path pathLength="1" d="M48 8h8v8"/><circle class="dot" cx="26" cy="40" r="3"/><circle class="dot" cx="44" cy="26" r="3"/></svg><h3>«Манлайллын мөрдлөг»</h3><p>Ном</p></div>
+        <div class="bp-books">
+          <figure class="bk bp-rv">
+            <div class="bk-3d" style="--c1:#16305e;--c2:#0a1834"><div class="bk-back"></div><div class="bk-spine"></div><div class="bk-pages"></div><div class="bk-face"><img src="/assets/img/logo.svg" alt="" /><b>Зөв ярих ухаан</b><span>Ц. Баатархүү</span></div></div><div class="bk-sh"></div>
+            <figcaption><h3>«Зөв ярих ухаан»</h3><p>Ном</p></figcaption>
+          </figure>
+          <figure class="bk bp-rv" style="--d:.1s">
+            <div class="bk-3d" style="--c1:#5a1f2b;--c2:#2c0d14"><div class="bk-back"></div><div class="bk-spine"></div><div class="bk-pages"></div><div class="bk-face"><img src="/assets/img/logo.svg" alt="" /><b>Ажил хэргийн гурвалжин</b><span>Ц. Баатархүү</span></div></div><div class="bk-sh"></div>
+            <figcaption><h3>«Ажил хэргийн гурвалжин»</h3><p>Ном</p></figcaption>
+          </figure>
+          <figure class="bk bp-rv" style="--d:.2s">
+            <div class="bk-3d" style="--c1:#1f4a3c;--c2:#0c241c"><div class="bk-back"></div><div class="bk-spine"></div><div class="bk-pages"></div><div class="bk-face"><img src="/assets/img/logo.svg" alt="" /><b>Манлайллын мөрдлөг</b><span>Ц. Баатархүү</span></div></div><div class="bk-sh"></div>
+            <figcaption><h3>«Манлайллын мөрдлөг»</h3><p>Ном</p></figcaption>
+          </figure>
         </div>
       </div>
     </div>
@@ -356,6 +377,16 @@
       var reach = 10 + p * h;
       if (!reduce) items.forEach(function (it) { var g = it.querySelector(".bp-ghost"); if (!g) return; var b = it.getBoundingClientRect(); g.style.setProperty("--py", Math.max(-36, Math.min(36, (b.top + b.height / 2 - innerHeight / 2) * -0.06)).toFixed(1) + "px"); });
       items.forEach(function (it) { var m = it.querySelector(".bp-med"); it.classList.toggle("lit", m.offsetTop + it.offsetTop + 26 <= reach); });
+      turnBooks();
+    }
+    var books = document.querySelectorAll(".bk-3d");
+    function turnBooks() {
+      if (reduce) return;
+      books.forEach(function (b) {
+        var r = b.getBoundingClientRect(), p = Math.max(0, Math.min(1, (innerHeight - r.top) / (innerHeight * .75)));
+        b.style.setProperty("--ry", (44 - p * 30).toFixed(1) + "deg");
+        b.style.setProperty("--ty", ((1 - p) * 30).toFixed(1) + "px");
+      });
     }
     function req() { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }
     addEventListener("scroll", req, { passive: true }); addEventListener("resize", req); req();
