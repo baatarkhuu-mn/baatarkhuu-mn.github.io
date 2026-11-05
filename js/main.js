@@ -1148,7 +1148,7 @@
       "УДАХГҮЙ БОЛОХ": "UPCOMING",
       "Өмнө хийсэн уулзалт, төслүүд →": "Past meetings & projects →",
       "Байр суурь": "Standpoint",
-      "ӨӨР БОДЛОГО": "A DIFFERENT POLICY",
+      "СҮҮЛИЙН МЭДЭЭ": "LATEST NEWS",
       "Бүх мэдээ үзэх →": "View all news →",
       "Иргэн төвтэй систем": "Citizen-centered system",
       "Иргэдээ сонсох нэгдсэн систем": "A unified system to hear citizens",
