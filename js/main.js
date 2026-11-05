@@ -47,10 +47,47 @@
   function videoFallback(url, title) {
     const e = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
     return '<a class="vfallback" href="' + e(url) + '" target="_blank" rel="noopener">' +
-      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="34" height="34"><path d="M4 5h11a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><path d="m17 10 5-3v10l-5-3"/></svg>' +
+      '<img class="vf-logo" src="/assets/img/logo.svg" alt="">' +
       '<span class="vf-t">' + e(title || "Видео") + '</span>' +
       '<span class="vf-b">Facebook дээр үзэх</span></a>';
   }
+
+  /* ---------- Thumbnail-ийг зөв байрлуулах ----------
+     Facebook-ийн зураг ихэвчлэн босоо (3:4) бөгөөд жижиг (~400px). Хэвтээ хайрцагт "cover"-оор
+     тайрахад толгой/текст нь тасарч, сунгагдаж бүдгэрдэг. Тиймээс хэлбэр нь хайрцагтаа хол
+     зөрүүтэй зургийг бүтнээр нь голлуулж, ард нь тухайн зургийн бүдгэрүүлсэн хувилбарыг дэвсгэр
+     болгоно. Хэт жижиг (<200px) зургийг Сүлд логогоор сольдог. */
+  const THUMB_BOX = ".card-media, .ni-img, .nh-img, .fc3-media, .np-cover";
+  const LOGO = "/assets/img/logo.svg";
+  function thumbToLogo(img, box) {
+    if (box.classList.contains("np-cover")) { box.remove(); return; }
+    if (box.classList.contains("card-media")) { img.remove(); return; }
+    img.src = LOGO;
+    img.className = box.classList.contains("ni-img") ? "ni-ph" : box.classList.contains("nh-img") ? "nh-ph" : "";
+    if (!img.className) box.classList.add("fr-thumb-ph");
+  }
+  function fitThumb(img, tries) {
+    if (!img || img.dataset.fit || !img.complete || !img.naturalWidth) return;
+    const box = img.parentElement && img.parentElement.closest(THUMB_BOX);
+    if (!box || img.closest(".placeholder") || img.src.indexOf("logo.svg") !== -1 || img.matches(".ni-ph, .nh-ph")) return;
+    const w = img.naturalWidth, h = img.naturalHeight, bw = box.clientWidth, bh = box.clientHeight;
+    if (!bw || (!bh && !box.classList.contains("np-cover"))) { // нуугдмал (слайд г.м.) — дараа дахин
+      if ((tries || 0) < 20) setTimeout(() => fitThumb(img, (tries || 0) + 1), 400);
+      return;
+    }
+    img.dataset.fit = "1";
+    if (w < 200 || h < 150) { thumbToLogo(img, box); return; }
+    const isCover = box.classList.contains("np-cover");
+    const off = isCover ? (w < bw || h > w * 1.05) : Math.abs(Math.log((w / h) / (bw / bh))) > 0.3;
+    if (!off) return;
+    box.style.setProperty("--thumb", 'url("' + (img.currentSrc || img.src).replace(/"/g, "%22") + '")');
+    box.classList.add("fit-contain");
+    if (isCover) img.style.height = Math.min(h, 560) + "px";
+  }
+  document.addEventListener("load", (e) => { if (e.target && e.target.tagName === "IMG") fitThumb(e.target); }, true);
+  const fitAll = () => document.querySelectorAll(".card-media img, .ni-img img, .nh-img img, .fc3-media img, .np-cover img").forEach((i) => fitThumb(i));
+  if (document.readyState !== "loading") setTimeout(fitAll, 0); else document.addEventListener("DOMContentLoaded", fitAll);
+  window.addEventListener("load", fitAll);
 
   /* ---------- Хуваалцах мөр (видео/мэдээний карт дээр — өөрийн хаягаар нийтлэх) ----------
      Facebook/X/Telegram нь тухайн хэрэглэгчийн өөрийнх нь хаягийн share цонхыг нээж,
