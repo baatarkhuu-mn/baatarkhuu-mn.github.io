@@ -6,15 +6,17 @@ on:
   workflow_dispatch:          # гараар ажиллуулах товч
     inputs:
       mode:
-        description: "sync = Facebook синк, telegram-test = ботыг шалгах (Apify зардалгүй)"
+        description: "sync = Facebook синк, pages = хуваалцах зураг/хуудсыг шинэчлэх (Apify зардалгүй), telegram-test = ботыг шалгах"
         type: choice
-        options: [sync, telegram-test]
+        options: [sync, pages, telegram-test]
         default: sync
 
 jobs:
   sync:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    permissions:
+      contents: write        # хуваалцах хуудсуудыг (s/) хадгалж commit хийнэ
     steps:
       - name: Telegram тест
         if: inputs.mode == 'telegram-test'
@@ -31,7 +33,7 @@ jobs:
         with:
           node-version: 20
       - run: node scripts/fb-sync.mjs
-        if: inputs.mode != 'telegram-test'
+        if: inputs.mode != 'telegram-test' && inputs.mode != 'pages'
         env:
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
@@ -40,3 +42,18 @@ jobs:
           SUPABASE_URL: https://qtmueuyxqfgekbacymiu.supabase.co
           FB_PAGE_URL: https://www.facebook.com/ts.baatarkhuu
           RESULTS_LIMIT: "10"
+      - name: Хуваалцах хуудас (Facebook preview)
+        if: inputs.mode != 'telegram-test'
+        run: node scripts/share-pages.mjs
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_URL: https://qtmueuyxqfgekbacymiu.supabase.co
+      - name: Өөрчлөлтийг хадгалах
+        if: inputs.mode != 'telegram-test'
+        run: |
+          git config user.name "baatarkhuu-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A s index.html namtar huuli tusul medee video tailan holboo medee-delgerengui huuli-delgerengui tusul-delgerengui arga-delgerengui tailan-delgerengui
+          if git diff --cached --quiet; then echo "Өөрчлөлт алга"; exit 0; fi
+          git commit -m "Хуваалцах хуудсууд шинэчлэв"
+          git pull --rebase origin main && git push origin HEAD:main
