@@ -10,7 +10,7 @@ const SITE = "https://baatarkhuu.mn";
 const SB_URL = (process.env.SUPABASE_URL || "https://qtmueuyxqfgekbacymiu.supabase.co").replace(/\/$/, "");
 const SB_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 const ROOT = process.env.SITE_ROOT || process.cwd();
-const IMG = `${SITE}/assets/img/member-hero.jpg`;
+const IMG = `${SITE}/assets/img/og-share.jpg`;
 const SITE_NAME = "Ц.Баатархүү — УИХ-ын гишүүн";
 
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -33,7 +33,7 @@ function ogBlock({ title, desc, url, type }) {
     `  <meta property="og:url" content="${esc(url)}" />`,
     `  <meta property="og:image" content="${IMG}" />`,
     `  <meta property="og:image:width" content="1200" />`,
-    `  <meta property="og:image:height" content="799" />`,
+    `  <meta property="og:image:height" content="628" />`,
     `  <meta property="og:image:alt" content="Ц.Баатархүү — УИХ-ын гишүүн" />`,
     `  <meta name="twitter:card" content="summary_large_image" />`,
     "  <!-- /og:auto -->",
