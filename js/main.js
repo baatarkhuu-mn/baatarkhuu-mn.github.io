@@ -52,6 +52,32 @@
       '<span class="vf-b">Facebook дээр үзэх</span></a>';
   }
 
+  /* ---------- Facebook видео — SDK-гүй, шууд plugin iframe ----------
+     FB SDK-ийн fb-video 0x0 хэмжээтэй болж видео харагдахгүй болсон тул албан plugin
+     хаягийг iframe-ээр шууд оруулна (FB өөрийн thumbnail, тоглуулах товчтой харагдана).
+     Дэлгэцэнд ойртох үед л ачаална (хуудас хурдан). */
+  function fbIframe(url, w, h) {
+    const src = "https://www.facebook.com/plugins/video.php?href=" + encodeURIComponent(url) + "&show_text=false&width=" + Math.round(w);
+    return '<iframe class="fb-ifr" src="' + src + '" width="' + Math.round(w) + '" height="' + Math.round(h) + '" scrolling="no" loading="lazy"' +
+      ' allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen title="Видео"></iframe>';
+  }
+  function mountFB(root) {
+    if (!root || !root.querySelectorAll) return;
+    const els = Array.from(root.querySelectorAll(".fb-mount:not([data-m])"));
+    if (root.classList && root.classList.contains("fb-mount") && !root.dataset.m) els.push(root);
+    const go = (el) => {
+      if (el.dataset.m) return;
+      const w = Math.round(el.clientWidth); if (!w) return;
+      el.dataset.m = "1";
+      el.innerHTML = fbIframe(el.dataset.href, w, Math.round(w * 16 / 9));
+    };
+    if (!("IntersectionObserver" in window)) { els.forEach(go); return; }
+    const io = new IntersectionObserver((es) => es.forEach((e) => {
+      if (e.isIntersecting) { go(e.target); if (e.target.dataset.m) io.unobserve(e.target); }
+    }), { rootMargin: "500px 0px" });
+    els.forEach((el) => io.observe(el));
+  }
+
   /* ---------- Thumbnail-ийг зөв байрлуулах ----------
      Facebook-ийн зураг ихэвчлэн босоо (3:4) бөгөөд жижиг (~400px). Хэвтээ хайрцагт "cover"-оор
      тайрахад толгой/текст нь тасарч, сунгагдаж бүдгэрдэг. Тиймээс хэлбэр нь хайрцагтаа хол
@@ -85,6 +111,8 @@
     if (isCover) img.style.height = Math.min(h, 560) + "px";
   }
   document.addEventListener("load", (e) => { if (e.target && e.target.tagName === "IMG") fitThumb(e.target); }, true);
+  // Нүүрний мэдээний карусель — далд слайдын зургийг урьдчилан ачаална (солигдоход хоосон харагдахгүй)
+  setTimeout(() => document.querySelectorAll('.hs-news img[loading="lazy"], .hs-events img[loading="lazy"]').forEach((i) => { i.loading = "eager"; }), 2500);
   const fitAll = () => document.querySelectorAll(".card-media img, .ni-img img, .nh-img img, .fc3-media img, .np-cover img").forEach((i) => fitThumb(i));
   if (document.readyState !== "loading") setTimeout(fitAll, 0); else document.addEventListener("DOMContentLoaded", fitAll);
   window.addEventListener("load", fitAll);
@@ -318,11 +346,13 @@
       const nums = document.querySelectorAll("[data-count]");
       if (!nums.length) return;
       const animate = (el) => {
-        const target = parseFloat(el.dataset.count);
+        // Зорилтот утгыг кадр бүрт уншина — бодит өгөгдөл (ReportStats) хожуу ирвэл түүгээр төгсөнө
+        const tgt = () => parseFloat(el.dataset.count) || 0;
         const dur = 1400; const start = performance.now();
         const step = (now) => {
           const p = Math.min((now - start) / dur, 1);
           const eased = 1 - Math.pow(1 - p, 3);
+          const target = tgt();
           el.textContent = Math.floor(eased * target).toLocaleString("mn-MN");
           if (p < 1) requestAnimationFrame(step);
           else el.textContent = target.toLocaleString("mn-MN");
@@ -1386,6 +1416,29 @@
       "2023–2024 · Harvard ManageMentor — удирдлагын онлайн хөтөлбөр": "2023–2024 · Harvard ManageMentor — online management program",
       "Одоо": "Now",
       "Монгол Улсын Их Хурал": "State Great Khural of Mongolia",
+      "Хамтран санаачлагч": "Co-initiator",
+      "Ажлын хэсгийн гишүүн": "Working group member",
+      "Байнгын хорооны илтгэгч": "Standing committee rapporteur",
+      "Санал боловсруулагч": "Proposal drafter",
+      "Оролцоо:": "Role:",
+      "Болж өнгөрсөн": "Past event",
+      "Байгаль орчин": "Environment",
+      "Цахим": "Digital",
+      "Төлөвлөж буй": "Planned",
+      "Жил бүр": "Every year",
+      "Улаанбаатар хот": "Ulaanbaatar",
+      "Чингэлтэй дүүрэг": "Chingeltei District",
+      "Өнөөдөр": "Today",
+      "Видео": "Video",
+      "Зочин": "Guest",
+      "Холбоос:": "Link:",
+      "Эх сурвалж:": "Source:",
+      "Эх сурвалжийг үзэх →": "View source →",
+      "Энэ мэдээлэлд хэрхэн хандаж байна?": "How do you feel about this?",
+      "← Бүх хууль рүү буцах": "← Back to all laws",
+      "← Бүх төсөл рүү буцах": "← Back to all projects",
+      "← Бүх мэдээ рүү буцах": "← Back to all news",
+      "Хуулийн төслийн эх бичиг (УИХ-ын албан ёсны сайт)": "Original draft (official Parliament website)",
       "Хуулийн төслийн эх бичиг (УИХ-ын албан ёсны сайт):": "Original draft (official Parliament website):",
       "Эх бичгийг үзэх ↗": "View original ↗",
       "Бүтээл": "Works",
@@ -1432,9 +1485,28 @@
       node.nodeValue = (this.lang === "en" && tr) ? mn.replace(key, tr) : mn;
     },
     // Тоотой хэллэг ("5 санал" г.м.) — толь бичигт нэг бүрчлэн нэмэх боломжгүй
-    rx(s) {
-      const m = /^(\d+) санал$/.exec(s);
-      return m ? m[1] + (m[1] === "1" ? " vote" : " votes") : "";
+    MONTHS: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+    rx(s, deep) {
+      let m;
+      const M = this.MONTHS, pl = (k, one, many) => k + " " + (k === "1" ? one : many);
+      if ((m = /^(\d+) санал$/.exec(s))) return pl(m[1], "vote", "votes");
+      if ((m = /^(\d{4}) оны (\d{1,2})-р сарын (\d{1,2}) өдөр$/.exec(s)) && M[+m[2] - 1]) return M[+m[2] - 1] + " " + (+m[3]) + ", " + m[1];
+      if ((m = /^(\d{4}) оны (\d{1,2})-р сар$/.exec(s)) && M[+m[2] - 1]) return M[+m[2] - 1] + " " + m[1];
+      if ((m = /^(\d{4}) оноос$/.exec(s))) return "Since " + m[1];
+      if ((m = /^(\d+) хоногийн өмнө$/.exec(s))) return pl(m[1], "day ago", "days ago");
+      if ((m = /^(\d+) сарын өмнө$/.exec(s))) return pl(m[1], "month ago", "months ago");
+      if ((m = /^(\d+) жилийн өмнө$/.exec(s))) return pl(m[1], "year ago", "years ago");
+      if ((m = /^Цааш үзэх \((\d+)\) ↓$/.exec(s))) return "Show more (" + m[1] + ") ↓";
+      if (deep) return "";
+      // Нийлмэл бичвэр: "огноо · үүрэг", "Хууль / Байгаль орчин", "Оролцоо: Санаачлагч"
+      const one = (x) => this.dict[x] || this.rx(x, true) || x;
+      for (const sep of [" · ", " / "]) {
+        if (s.indexOf(sep) < 0) continue;
+        const parts = s.split(sep), tr = parts.map(one);
+        if (tr.some((x, i) => x !== parts[i])) return tr.join(sep);
+      }
+      if ((m = /^([^:]{2,30}:) (.+)$/.exec(s)) && this.dict[m[1]]) return this.dict[m[1]] + " " + one(m[2]);
+      return "";
     },
     scan(root) {
       const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
@@ -2684,6 +2756,7 @@
             if (featuredEl) { // онцлох хэсэг байвал тусгаарлана; үгүй бол бүгдийг жагсаана
               const feat = data.find((v) => v.featured) || data[0];
               featuredEl.innerHTML = VideoCMS.card(feat, true);
+              mountFB(featuredEl);
               const rest = data.filter((v) => v !== feat);
               arr = rest.length ? rest : data;
               guardTouchEmbeds(featuredEl);
@@ -2691,11 +2764,11 @@
             const lim = parseInt(listEl.dataset.videoLimit || "0", 10);
             if (lim) arr = arr.slice(0, lim);
             listEl.innerHTML = arr.map((v) => VideoCMS.card(v)).join("");
-            VideoCMS.parseFB();
+            mountFB(listEl);
             guardTouchEmbeds(listEl);
             if (!lim) { // видео хуудас — 10-аар хуудаслана
               Pager.apply(listEl);
-              if (listEl._pagerNav) listEl._pagerNav.addEventListener("click", () => setTimeout(() => { VideoCMS.parseFB(); guardTouchEmbeds(listEl); }, 200));
+              if (listEl._pagerNav) listEl._pagerNav.addEventListener("click", () => setTimeout(() => { mountFB(listEl); guardTouchEmbeds(listEl); }, 200));
             }
           }
           if (reelsEl) { // Нүүрний карусель — reel плагин (тогтсон хэмжээ, гүйдэг)
@@ -2729,7 +2802,7 @@
         // SDK гаргаж чадахгүй бол parseFB доторх нөөц iframe рүү шилжинэ (data-ar = нөөц харьцаа).
         const ar = v.orientation === "landscape" ? "16 / 9" : (v.orientation === "square" ? "1 / 1" : "9 / 16");
         media = fbEmbeddable(v.url)
-          ? `<div class="fb-wrap" data-href="${esc(v.url)}" data-ar="${ar}"><div class="fb-video" data-href="${esc(v.url)}" data-show-text="false" data-width="auto"></div></div>`
+          ? `<div class="fb-wrap fb-mount" data-href="${esc(v.url)}"></div>`
           : `<div class="fb-wrap" style="aspect-ratio:${ar}">${videoFallback(v.url, v.title)}</div>`;
       }
       const share = `<div class="vc-share">${shareBar(v.url || location.href, v.title || "Видео")}</div>`;
@@ -2791,13 +2864,13 @@
           // ★ Онцлох тэмдэг зөвхөн үнэхээр «онцлох» гэж тэмдэглэсэн видеонд
           const badge = v.featured ? '<span class="vhh-badge">★ Онцлох</span>' : '';
           media.innerHTML = badge + (fbEmbeddable(v.url)
-            ? '<div class="fb-video" data-href="' + esc(v.url) + '" data-show-text="false" data-width="auto"></div>'
+            ? '<div class="fb-wrap fb-mount" data-href="' + esc(v.url) + '"></div>'
             : videoFallback(v.url, v.title));
+          mountFB(media);
           ttl.textContent = v.title || "Видео";
           dt.textContent = v.video_date || "";
           // Тоглож буй видеог жагсаалтад давхардуулж харуулахгүй
           items.forEach((b, j) => { b.classList.toggle("on", j === i); b.style.display = j === i ? "none" : ""; });
-          VideoCMS.parseFB();
         };
         items.forEach((b) => b.addEventListener("click", () => loadFeat(+b.dataset.i)));
         // Жагсаалтын thumbnail-уудыг (постер) харагдах үед lazy ачаална.
@@ -2805,8 +2878,7 @@
         const loadThumb = (el) => {
           if (el.dataset.loaded) return; el.dataset.loaded = "1";
           if (!fbEmbeddable(el.dataset.href)) { el.innerHTML = videoFallback(el.dataset.href, ""); return; }
-          el.innerHTML = '<div class="fb-video" data-href="' + el.dataset.href + '" data-show-text="false" data-width="auto"></div>';
-          VideoCMS.parseFB();
+          el.innerHTML = fbIframe(el.dataset.href, 128, 228); // жижиг thumbnail — дарахад онцлох тоглуулагчид нээгдэнэ
         };
         const loadVisible = () => {
           inners.forEach((el) => {
@@ -3449,17 +3521,27 @@
         box.innerHTML = cards.map((c) => {
           const val = (c.n == null ? 0 : c.n);
           const suf = c.suffix || "";
+          // Доод зураас — нийт хүсэлтэд эзлэх хувь (нийт = 100%, хувь = өөрөө)
+          const w = c.k === "total" ? 100 : c.k === "pct" ? val : (s.total ? Math.round((val / s.total) * 100) : 0);
           return '<div class="fbd-card ' + c.c + '"><span class="fbd-ic">' + this.IC[c.k] + '</span>' +
             '<div class="fbd-txt"><div class="fbd-n" data-target="' + val + '"' + (suf ? ' data-suffix="' + suf + '"' : '') + '>' + val.toLocaleString("en-US") + suf + '</div>' +
-            '<div class="fbd-l">' + c.l + '</div></div></div>';
+            '<div class="fbd-l">' + c.l + '</div></div>' +
+            '<div class="fbd-bar" aria-hidden="true"><i style="--w:' + Math.max(0, Math.min(100, w)) + '%"></i></div></div>';
         }).join("");
         // Эцсийн тоо аль хэдийн харагдаж байгаа; дэлгэцэд орж ирэхэд 0-оос count-up хийнэ
         const nums = box.querySelectorAll(".fbd-n");
-        // Сайт нээгдэх бүрт автоматаар тоолж эхэлнэ
+        // Дэлгэцэнд орж ирэхэд: тоо 0-оос өсөж, зураас дүүрнэ (дараалан)
         nums.forEach((el) => { el.textContent = "0"; });
-        setTimeout(() => { nums.forEach((el) => this.count(el, parseInt(el.dataset.target, 10) || 0)); }, 350);
-        // rAF ажиллахгүй орчинд эцсийн утгыг баталгаажуулна
-        setTimeout(() => { nums.forEach((el) => {
+        const start = () => {
+          box.querySelectorAll(".fbd-card").forEach((card, i) => setTimeout(() => card.classList.add("in"), i * 120));
+          nums.forEach((el) => this.count(el, parseInt(el.dataset.target, 10) || 0));
+        };
+        if ("IntersectionObserver" in window) {
+          const io = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) { io.disconnect(); start(); } }, { threshold: .35 });
+          io.observe(box);
+        } else setTimeout(start, 350);
+        // rAF ажиллахгүй орчинд эцсийн утгыг баталгаажуулна (дэлгэцэнд гарсны дараа)
+        setTimeout(() => { if (!box.querySelector(".fbd-card.in")) return; nums.forEach((el) => {
           const t = parseInt(el.dataset.target, 10) || 0;
           el.textContent = t.toLocaleString("en-US") + (el.dataset.suffix || "");
         }); }, 1900);
